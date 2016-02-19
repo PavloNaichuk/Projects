@@ -1,12 +1,12 @@
 #include <iostream>
-#include <string>
-#include <cstdlib>
-#include "Board.h"
 #include <ctime>
 #include <vector>
+#include "Board.h"
 
 void DungeonCrawl()
 {
+	srand(time(NULL));
+
 	const int kUpArrow = 56;
 	const int kDownArrow = 53;
 	const int kLeftArrow = 52;
@@ -47,13 +47,22 @@ void DungeonCrawl()
 		}
 		if ((newRow != row) || (newCol != col))
 		{
-			if (board.GetCellState(newRow, newCol) == Board::State_9)
+			if (board.GetCellState(newRow, newCol) == Board::State_Trap)
 			{
 				board.SetCellState(row, col, Board::State_0);
 				board.SetCellState(newRow, newCol, Board::State_1);
 				board.Print();
-				
-				std::cout << "You win!" << "\n";
+
+				std::cout << "You lost!" << "\n";
+				break;
+			}
+			else if (board.GetCellState(newRow, newCol) == Board::State_9)
+			{
+				board.SetCellState(row, col, Board::State_0);
+				board.SetCellState(newRow, newCol, Board::State_1);
+				board.Print();
+
+				std::cout << "You won!" << "\n";
 				break;
 			}
 			else
@@ -62,6 +71,7 @@ void DungeonCrawl()
 				board.SetCellState(newRow, newCol, Board::State_1);
 				board.Print();
 			}
+
 			row = newRow;
 			col = newCol;
 		}

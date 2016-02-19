@@ -9,7 +9,8 @@ public:
 	{
 		State_0 = 0,
 		State_1,
-		State_9
+		State_9, 
+		State_Trap
 	};
 
 	Board();

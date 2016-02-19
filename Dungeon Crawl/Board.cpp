@@ -18,6 +18,8 @@ void Board::Print() const
 				std::cout << '1';
 			else if (mCells[row][col] == State_9)
 				std::cout << '9';
+			else if (mCells[row][col] == State_Trap)
+				std::cout << '*';
 			std::cout << ' ';
 		}
 		std::cout << "\n";
@@ -45,4 +47,18 @@ void Board::Reset()
 	}
 	mCells[0][0] = State_1;
 	mCells[kSize - 1][kSize - 1] = State_9;
+
+	const int kNumTraps = 5;
+	int trapIndex = kNumTraps;
+	while (trapIndex > 0)
+	{
+		int row = rand() % kSize;
+		int col = rand() % kSize;
+
+		if (mCells[row][col] == State_0)
+		{
+			mCells[row][col] = State_Trap;
+			--trapIndex;
+		}
+	}
 }
