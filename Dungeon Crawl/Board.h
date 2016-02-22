@@ -7,10 +7,11 @@ class Board
 public:
 	enum State
 	{
-		State_0 = 0,
-		State_1,
-		State_9, 
-		State_Trap
+		State_Free = 0,
+		State_Player,
+		State_Finish, 
+		State_Trap,
+		State_Monster
 	};
 
 	Board();

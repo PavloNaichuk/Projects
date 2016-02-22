@@ -12,14 +12,16 @@ void Board::Print() const
 	{
 		for (int col = 0; col < kSize; ++col)
 		{
-			if (mCells[row][col] == State_0)
+			if (mCells[row][col] == State_Free)
 				std::cout << '0';
-			else if (mCells[row][col] == State_1)
+			else if (mCells[row][col] == State_Player)
 				std::cout << '1';
-			else if (mCells[row][col] == State_9)
+			else if (mCells[row][col] == State_Finish)
 				std::cout << '9';
 			else if (mCells[row][col] == State_Trap)
 				std::cout << '*';
+			else if (mCells[row][col] == State_Monster)
+				std::cout << '!';
 			std::cout << ' ';
 		}
 		std::cout << "\n";
@@ -42,11 +44,11 @@ void Board::Reset()
 	{
 		for (int col = 0; col < kSize; ++col)
 		{
-			mCells[row][col] = State_0;
+			mCells[row][col] = State_Free;
 		}
 	}
-	mCells[0][0] = State_1;
-	mCells[kSize - 1][kSize - 1] = State_9;
+	mCells[0][0] = State_Player;
+	mCells[kSize - 1][kSize - 1] = State_Finish;
 
 	const int kNumTraps = 5;
 	int trapIndex = kNumTraps;
@@ -55,10 +57,24 @@ void Board::Reset()
 		int row = rand() % kSize;
 		int col = rand() % kSize;
 
-		if (mCells[row][col] == State_0)
+		if (mCells[row][col] == State_Free)
 		{
 			mCells[row][col] = State_Trap;
 			--trapIndex;
+		}
+	}
+
+	const int kNumMonsters = 5;
+	int monsterIndex = kNumMonsters;
+	while (monsterIndex > 0)
+	{
+		int row = rand() % kSize;
+		int col = rand() % kSize;
+
+		if (mCells[row][col] == State_Free)
+		{
+			mCells[row][col] = State_Monster;
+			--monsterIndex;
 		}
 	}
 }

@@ -3,6 +3,25 @@
 #include <vector>
 #include "Board.h"
 
+std::vector<std::pair<int, int>> GetMonsterMoves(const Board& board, int row, int col)
+{
+	std::vector<std::pair<int, int>> moves;
+
+	if ((row > 0) && (board.GetCellState(row - 1, col) == Board::State_Free))
+		moves.push_back(std::make_pair(row - 1, col));
+	
+	if ((row < kSize - 1) && (board.GetCellState(row + 1, col) == Board::State_Free))
+		moves.push_back(std::make_pair(row + 1, col));
+	
+	if ((col > 0) && (board.GetCellState(row, col - 1) == Board::State_Free))
+		moves.push_back(std::make_pair(row, col - 1));
+	
+	if ((col < kSize - 1) && (board.GetCellState(row, col + 1) == Board::State_Free))
+		moves.push_back(std::make_pair(row, col + 1));
+
+	return moves;
+}
+
 void DungeonCrawl()
 {
 	srand(time(NULL));
@@ -12,68 +31,110 @@ void DungeonCrawl()
 	const int kLeftArrow = 52;
 	const int kRightArrow = 54;
 
-	int row = 0;
-	int col = 0;
+	int playerRow = 0;
+	int playerCol = 0;
 
 	Board board;
 	board.Print();
 
-	while (true)
+	bool play = true;
+	while (play)
 	{
+		std::cout << "Player move:\n";
 		const int key = std::cin.get();
+		std::cin.get();
 
-		int newRow = row;
-		int newCol = col;
+		int playerNewRow = playerRow;
+		int playerNewCol = playerCol;
 
 		if (key == kLeftArrow)
 		{
-			if (col > 0)
-				newCol = col - 1;
+			if (playerCol > 0)
+				playerNewCol = playerCol - 1;
 		}
 		else if (key == kUpArrow)
 		{
-			if (row > 0)
-				newRow = row - 1;
+			if (playerRow > 0)
+				playerNewRow = playerRow - 1;
 		}
 		else if (key == kRightArrow)
 		{
-			if (col < kSize - 1)
-				newCol = col + 1;
+			if (playerCol < kSize - 1)
+				playerNewCol = playerCol + 1;
 		}
 		else if (key == kDownArrow)
 		{
-			if (row < kSize - 1)
-				newRow = row + 1;
+			if (playerRow < kSize - 1)
+				playerNewRow = playerRow + 1;
 		}
-		if ((newRow != row) || (newCol != col))
+		if ((playerNewRow != playerRow) || (playerNewCol != playerCol))
 		{
-			if (board.GetCellState(newRow, newCol) == Board::State_Trap)
+			if (board.GetCellState(playerNewRow, playerNewCol) == Board::State_Trap ||
+				board.GetCellState(playerNewRow, playerNewCol) == Board::State_Monster)
 			{
-				board.SetCellState(row, col, Board::State_0);
-				board.SetCellState(newRow, newCol, Board::State_1);
+				board.SetCellState(playerRow, playerCol, Board::State_Free);
+				board.SetCellState(playerNewRow, playerNewCol, Board::State_Player);
 				board.Print();
 
 				std::cout << "You lost!" << "\n";
 				break;
 			}
-			else if (board.GetCellState(newRow, newCol) == Board::State_9)
+			else if (board.GetCellState(playerNewRow, playerNewCol) == Board::State_Finish)
 			{
-				board.SetCellState(row, col, Board::State_0);
-				board.SetCellState(newRow, newCol, Board::State_1);
+				board.SetCellState(playerRow, playerCol, Board::State_Free);
+				board.SetCellState(playerNewRow, playerNewCol, Board::State_Player);
 				board.Print();
 
 				std::cout << "You won!" << "\n";
 				break;
 			}
-			else
+			else 
 			{
-				board.SetCellState(row, col, Board::State_0);
-				board.SetCellState(newRow, newCol, Board::State_1);
+				board.SetCellState(playerRow, playerCol, Board::State_Free);
+				board.SetCellState(playerNewRow, playerNewCol, Board::State_Player);
 				board.Print();
+
+				playerRow = playerNewRow;
+				playerCol = playerNewCol;
 			}
 
-			row = newRow;
-			col = newCol;
+			std::vector<std::pair<int, int>> monsterCells;
+			for (int monsterRow = 0; monsterRow < kSize; ++monsterRow)
+			{
+				for (int monsterCol = 0; monsterCol < kSize; ++monsterCol)
+				{
+					if (board.GetCellState(monsterRow, monsterCol) == Board::State_Monster)
+					{
+						monsterCells.push_back(std::make_pair(monsterRow, monsterCol));
+					}
+				}
+			}
+
+			for (size_t index = 0; index < monsterCells.size(); ++index)
+			{
+				int monsterRow = monsterCells[index].first;
+				int monsterCol = monsterCells[index].second;
+
+				if (board.GetCellState(monsterRow, monsterCol) == Board::State_Monster)
+				{
+					std::vector<std::pair<int, int>> moves = GetMonsterMoves(board, monsterRow, monsterCol);
+					size_t moveIndex = std::rand() % moves.size();
+					const std::pair<int, int>& move = moves[moveIndex];
+
+					board.SetCellState(monsterRow, monsterCol, Board::State_Free);
+					board.SetCellState(move.first, move.second, Board::State_Monster);
+
+					std::cout << (index + 1) << " monster move:\n";
+					board.Print();
+
+					if ((move.first == playerRow) && (move.second == playerCol))
+					{
+						std::cout << "You lost!" << "\n";
+						play = false;
+						break;
+					}
+				}
+			}
 		}
 	}
 	system("pause");
