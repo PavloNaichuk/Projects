@@ -1,5 +1,6 @@
 #include "Board.h"
 #include <iostream>
+#include <fstream>
 
 Board::Board()
 {
@@ -76,5 +77,35 @@ void Board::Reset()
 			mCells[row][col] = State_Monster;
 			--monsterIndex;
 		}
+	}
+}
+
+void Board::Save(const char* fileName) const
+{	
+	std::ofstream file(fileName);
+	if (file)
+	{
+		for (int row = 0; row < kSize; ++row)
+		{
+			for (int col = 0; col < kSize; ++col)
+				file << mCells[row][col];
+		}
+	}
+}
+
+void Board::Load(const char* fileName)
+{
+	std::ifstream file(fileName);
+	if (file)
+	{
+		for (int row = 0; row < kSize; ++row)
+		{
+			for (int col = 0; col < kSize; ++col)
+			{
+				int state;
+				file >> state;
+				mCells[row][col] = (State)state;
+			}
+		}		
 	}
 }

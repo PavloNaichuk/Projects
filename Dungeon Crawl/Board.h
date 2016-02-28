@@ -21,6 +21,9 @@ public:
 	void SetCellState(int row, int col, State state);
 	void Reset();
 
+	void Save(const char* fileName) const;
+	void Load(const char* fileName);
+
 private:
 	State mCells[kSize][kSize];
 };
