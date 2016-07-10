@@ -1,8 +1,11 @@
 #ifndef CARDBOARDWIDGET_H
 #define CARDBOARDWIDGET_H
 
-#include "CardBoard.h"
 #include <QWidget>
+#include <QTimer>
+
+class GameLogic;
+class CardBoard;
 
 class CardBoardWidget : public QWidget
 {
@@ -10,6 +13,7 @@ class CardBoardWidget : public QWidget
 
 public:
     CardBoardWidget(QWidget* parent = 0);
+    ~CardBoardWidget();
 
     enum
     {
@@ -19,15 +23,18 @@ public:
 
     const CardBoard* getCardBoard() const;
     void setCardBoard(CardBoard* cardBoard);
-
     void paintEvent(QPaintEvent* paintEvent);
-
-private:
-    CardBoard* mCardBoard;
 
 protected:
     virtual void resizeEvent(QResizeEvent* event);
     virtual void mousePressEvent(QMouseEvent* event);
+
+public slots:
+    void updateGameLogic();
+
+private:
+    GameLogic* mGameLogic;
+    QTimer* mTimer;
 };
 
 #endif // CARDBOARDWIDGET_H

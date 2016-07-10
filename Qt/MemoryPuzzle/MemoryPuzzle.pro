@@ -19,10 +19,20 @@ SOURCES += main.cpp\
     Card.cpp \
     CardBoard.cpp \
     CardBoardWidget.cpp \
-    LevelGenerator.cpp
+    LevelGenerator.cpp \
+    SelectFirstCardState.cpp \
+    SelectSecondCardState.cpp \
+    GameState.cpp \
+    GameLogic.cpp \
+    WaitBeforeClosingState.cpp
 
 HEADERS  += MemoryPuzzle.h \
     Card.h \
     CardBoard.h \
     CardBoardWidget.h \
-    LevelGenerator.h
+    LevelGenerator.h \
+    SelectFirstCardState.h \
+    SelectSecondCardState.h \
+    GameState.h \
+    GameLogic.h \
+    WaitBeforeClosingState.h

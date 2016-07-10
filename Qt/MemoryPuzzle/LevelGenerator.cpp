@@ -34,7 +34,7 @@ Card* LevelGenerator::create()
         for (int col = 0; col < CardBoard::kNumCols; ++col)
         {
             QRect cardRect(col * cellWidth + offset, row * cellHeight + offset, cardWidth, cardHeight);
-            QColor color = (index % 2 != 0) ? Qt::yellow : Qt::blue;
+            QColor color = ((row + col) % 2 != 0) ? Qt::yellow : Qt::blue;
 
             cards[index] = Card(color, cardValues[index], cardRect, false);
             ++index;

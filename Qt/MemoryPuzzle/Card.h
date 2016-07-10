@@ -10,6 +10,13 @@ public:
     Card();
     Card(const QColor& color, const char value, const QRect& rect, const bool isOpened);
 
+    enum State
+    {
+        Closed,
+        TempOpened,
+        Opened
+    };
+
     void setColor(const QColor& color);
     const QColor& getColor() const;
 
