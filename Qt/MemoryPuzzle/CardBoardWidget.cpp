@@ -51,6 +51,7 @@ void CardBoardWidget::paintEvent(QPaintEvent* paintEvent)
 {
     QPainter painter(this);
     painter.setFont(QFont("Arial", 50));
+    painter.setPen(QPen(Qt::black, 4, Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin));
 
     CardBoard* cardBoard = mGameLogic->getCardBoard();
     for (int row = 0; row < CardBoard::kNumRows; ++row)
@@ -58,15 +59,22 @@ void CardBoardWidget::paintEvent(QPaintEvent* paintEvent)
         for (int col = 0; col < CardBoard::kNumCols; ++col)
         {
             const Card& card = cardBoard->GetCard(row, col);
-            if (card.isOpened())
-            {
-                painter.fillRect(card.getRect(), Qt::white);
-                painter.drawText(card.getRect(), Qt::AlignCenter, QString(card.getValue()));
+            const QRect& cardRect = card.getRect();
 
-            }
-            else
+            if (card.getState() == Card::TempOpened)
             {
-                painter.fillRect(card.getRect(), card.getColor());
+                painter.drawRect(cardRect.x(), cardRect.y(), cardRect.width(), cardRect.height());
+                painter.fillRect(cardRect, Qt::white);
+                painter.drawText(cardRect, Qt::AlignCenter, QString(card.getValue()));
+            }
+            else if (card.getState() == Card::Opened)
+            {
+                painter.fillRect(cardRect, Qt::white);
+                painter.drawText(cardRect, Qt::AlignCenter, QString(card.getValue()));
+            }
+            else if (card.getState() == Card::Closed)
+            {
+                painter.fillRect(cardRect, card.getColor());
             }
         }
     }

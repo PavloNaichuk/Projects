@@ -23,13 +23,16 @@ void SelectSecondCardState::update()
         Card* firstCard = mGameLogic->getSelectedFirstCard();
         assert(firstCard != nullptr);
 
-        secondCard->setOpened(true);
         if (firstCard->getValue() == secondCard->getValue())
         {
+            firstCard->setState(Card::Opened);
+            secondCard->setState(Card::Opened);
+
             mGameLogic->setCurrentState(mGameLogic->getSelectFirstCardState());
         }
         else
         {
+            secondCard->setState(Card::TempOpened);
             mGameLogic->setCurrentState(mGameLogic->getWaitBeforeClosingState());
         }
     }
@@ -51,6 +54,6 @@ void SelectSecondCardState::handleMousePress(int x, int y)
     CardBoard* cardBoard = mGameLogic->getCardBoard();
 
     Card* secondCard = &cardBoard->GetCard(row, col);
-    if (secondCard != mGameLogic->getSelectedFirstCard())
+    if (secondCard->getState() == Card::Closed)
         mGameLogic->setSelectedSecondCard(secondCard);
 }

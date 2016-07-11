@@ -34,9 +34,9 @@ void CardBoard::save(const QString& fileName) const
             QString color = card.getColor().name();
             char value = card.getValue();
             const QRect& rect = card.getRect();
-            bool isOpened = card.isOpened();
+            int state = card.getState();
 
-            out << color << ';' << value << ';' << rect.x() << ',' << rect.y() << ','<< rect.width() << ',' << rect.height() << ';' << isOpened << ";\n";
+            out << color << ';' << value << ';' << rect.x() << ',' << rect.y() << ','<< rect.width() << ',' << rect.height() << ';' << state << ";\n";
         }
     }
 }
@@ -64,9 +64,9 @@ void CardBoard::load(const QString& fileName)
             QColor color(stringList.at(0));
             char value(stringList.at(1).at(0).toLatin1());
             QRect rect(stringRect.at(0).toInt(), stringRect.at(1).toInt(), stringRect.at(2).toInt(), stringRect.at(3).toInt());
-            bool isOpened(stringList.at(3) == "true");
+            int state(stringList.at(3).toInt());
 
-            mCards[row][col] = Card(color, value, rect, isOpened);
+            mCards[row][col] = Card(color, value, rect, (Card::State)state);
             ++col;
         }
     }

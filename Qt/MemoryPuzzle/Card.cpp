@@ -3,14 +3,14 @@
 Card::Card()
     : mColor(Qt::black)
     , mValue('\0')
-    , mIsOpened(false)
+    , mState(Closed)
 {}
 
-Card::Card(const QColor& color, const char value, const QRect& rect, const bool isOpened)
+Card::Card(const QColor& color, const char value, const QRect& rect, Card::State state)
     : mColor(color)
     , mValue(value)
     , mRect(rect)
-    , mIsOpened(isOpened)
+    , mState(state)
 {
 }
 
@@ -44,12 +44,12 @@ const QRect& Card::getRect() const
     return mRect;
 }
 
-void Card::setOpened(bool isOpened)
+void Card::setState(State state)
 {
-    mIsOpened = isOpened;
+    mState = state;
 }
-bool Card::isOpened() const
+Card::State Card::getState() const
 {
-    return mIsOpened;
+    return mState;
 }
 

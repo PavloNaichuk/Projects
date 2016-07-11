@@ -18,10 +18,10 @@ void WaitBeforeClosingState::update()
 {
     if (mTime.elapsed() > 500)
     {
-        mGameLogic->getSelectedFirstCard()->setOpened(false);
+        mGameLogic->getSelectedFirstCard()->setState(Card::Closed);
         mGameLogic->setSelectedFirstCard(nullptr);
 
-        mGameLogic->getSelectedSecondCard()->setOpened(false);
+        mGameLogic->getSelectedSecondCard()->setState(Card::Closed);
         mGameLogic->setSelectedSecondCard(nullptr);
 
         mGameLogic->setCurrentState(mGameLogic->getSelectFirstCardState());
