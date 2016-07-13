@@ -8,6 +8,9 @@
 
 #include "GameLogic.h"
 #include "GameState.h"
+#include "ClosedCardRenderer.h"
+#include "OpenedCardRenderer.h"
+#include "TempOpenedCardRenderer.h"
 
 CardBoardWidget::CardBoardWidget(QWidget* parent)
     : QWidget(parent)
@@ -28,6 +31,10 @@ CardBoardWidget::CardBoardWidget(QWidget* parent)
 
     connect(mTimer, SIGNAL(timeout()), this, SLOT(updateGameLogic()));
     mTimer->start(100);
+
+    mCardRenderers[Card::Closed] = new ClosedCardRenderer();
+    mCardRenderers[Card::TempOpened] = new TempOpenedCardRenderer();
+    mCardRenderers[Card::Opened] = new OpenedCardRenderer();
 }
 
 CardBoardWidget::~CardBoardWidget()
@@ -35,6 +42,9 @@ CardBoardWidget::~CardBoardWidget()
     mTimer->stop();
     delete mTimer;
     delete mGameLogic;
+    delete mCardRenderers[Card::Closed];
+    delete mCardRenderers[Card::TempOpened];
+    delete mCardRenderers[Card::Opened];
 }
 
 const CardBoard* CardBoardWidget::getCardBoard() const
@@ -47,7 +57,7 @@ void CardBoardWidget::setCardBoard(CardBoard* cardBoard)
     mGameLogic->setCardBoard(cardBoard);
 }
 
-void CardBoardWidget::paintEvent(QPaintEvent* paintEvent)
+void CardBoardWidget::paintEvent(QPaintEvent* /*paintEvent*/)
 {
     QPainter painter(this);
     painter.setFont(QFont("Arial", 50));
@@ -59,29 +69,13 @@ void CardBoardWidget::paintEvent(QPaintEvent* paintEvent)
         for (int col = 0; col < CardBoard::kNumCols; ++col)
         {
             const Card& card = cardBoard->GetCard(row, col);
-            const QRect& cardRect = card.getRect();
-
-            if (card.getState() == Card::TempOpened)
-            {
-                painter.drawRect(cardRect.x(), cardRect.y(), cardRect.width(), cardRect.height());
-                painter.fillRect(cardRect, Qt::white);
-                painter.drawText(cardRect, Qt::AlignCenter, QString(card.getValue()));
-            }
-            else if (card.getState() == Card::Opened)
-            {
-                painter.fillRect(cardRect, Qt::white);
-                painter.drawText(cardRect, Qt::AlignCenter, QString(card.getValue()));
-            }
-            else if (card.getState() == Card::Closed)
-            {
-                painter.fillRect(cardRect, card.getColor());
-            }
+            mCardRenderers[card.getState()]->Render(&painter, &card);
         }
     }
     painter.end();
 }
 
-void CardBoardWidget::resizeEvent(QResizeEvent* event)
+void CardBoardWidget::resizeEvent(QResizeEvent* /*event*/)
 {
     CardBoard* cardBoard = mGameLogic->getCardBoard();
     cardBoard->resizeBoard(width(), height());

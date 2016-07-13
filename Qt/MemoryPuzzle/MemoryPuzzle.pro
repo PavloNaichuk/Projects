@@ -24,7 +24,11 @@ SOURCES += main.cpp\
     SelectSecondCardState.cpp \
     GameState.cpp \
     GameLogic.cpp \
-    WaitBeforeClosingState.cpp
+    WaitBeforeClosingState.cpp \
+    CardRenderer.cpp \
+    ClosedCardRenderer.cpp \
+    TempOpenedCardRenderer.cpp \
+    OpenedCardRenderer.cpp
 
 HEADERS  += MemoryPuzzle.h \
     Card.h \
@@ -35,4 +39,8 @@ HEADERS  += MemoryPuzzle.h \
     SelectSecondCardState.h \
     GameState.h \
     GameLogic.h \
-    WaitBeforeClosingState.h
+    WaitBeforeClosingState.h \
+    CardRenderer.h \
+    ClosedCardRenderer.h \
+    TempOpenedCardRenderer.h \
+    OpenedCardRenderer.h

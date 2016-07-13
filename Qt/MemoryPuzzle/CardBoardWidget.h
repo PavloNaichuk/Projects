@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 
+class CardRenderer;
 class GameLogic;
 class CardBoard;
 
@@ -35,6 +36,7 @@ public slots:
 private:
     GameLogic* mGameLogic;
     QTimer* mTimer;
+    CardRenderer* mCardRenderers[3];
 };
 
 #endif // CARDBOARDWIDGET_H

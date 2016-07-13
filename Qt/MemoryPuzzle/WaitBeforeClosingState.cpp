@@ -33,6 +33,6 @@ void WaitBeforeClosingState::exit()
      mGameLogic->setRedrawBoard(true);
 }
 
-void WaitBeforeClosingState::handleMousePress(int x, int y)
+void WaitBeforeClosingState::handleMousePress(int /*x*/, int /*y*/)
 {
 }
