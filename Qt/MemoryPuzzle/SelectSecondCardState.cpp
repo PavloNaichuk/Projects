@@ -32,7 +32,7 @@ void SelectSecondCardState::update()
         }
         else
         {
-            secondCard->setState(Card::TempOpened);
+            secondCard->setState(Card::Selected);
             mGameLogic->setCurrentState(mGameLogic->getWaitBeforeClosingState());
         }
     }

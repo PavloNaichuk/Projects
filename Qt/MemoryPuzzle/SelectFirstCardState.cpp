@@ -17,7 +17,7 @@ void SelectFirstCardState::update()
 {
     if (mGameLogic->getSelectedFirstCard() != nullptr)
     {
-        mGameLogic->getSelectedFirstCard()->setState(Card::TempOpened);
+        mGameLogic->getSelectedFirstCard()->setState(Card::Selected);
         mGameLogic->setCurrentState(mGameLogic->getSelectSecondCardState());
     }
 }

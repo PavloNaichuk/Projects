@@ -27,8 +27,9 @@ SOURCES += main.cpp\
     WaitBeforeClosingState.cpp \
     CardRenderer.cpp \
     ClosedCardRenderer.cpp \
-    TempOpenedCardRenderer.cpp \
-    OpenedCardRenderer.cpp
+    OpenedCardRenderer.cpp \
+    CardRendererDecorator.cpp \
+    SelectedCardRenderer.cpp
 
 HEADERS  += MemoryPuzzle.h \
     Card.h \
@@ -42,5 +43,6 @@ HEADERS  += MemoryPuzzle.h \
     WaitBeforeClosingState.h \
     CardRenderer.h \
     ClosedCardRenderer.h \
-    TempOpenedCardRenderer.h \
-    OpenedCardRenderer.h
+    OpenedCardRenderer.h \
+    CardRendererDecorator.h \
+    SelectedCardRenderer.h

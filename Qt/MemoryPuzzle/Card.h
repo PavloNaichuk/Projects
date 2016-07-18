@@ -10,7 +10,7 @@ public:
     enum State
     {
         Closed,
-        TempOpened,
+        Selected,
         Opened
     };
 

@@ -10,7 +10,7 @@
 #include "GameState.h"
 #include "ClosedCardRenderer.h"
 #include "OpenedCardRenderer.h"
-#include "TempOpenedCardRenderer.h"
+#include "SelectedCardRenderer.h"
 
 CardBoardWidget::CardBoardWidget(QWidget* parent)
     : QWidget(parent)
@@ -33,8 +33,8 @@ CardBoardWidget::CardBoardWidget(QWidget* parent)
     mTimer->start(100);
 
     mCardRenderers[Card::Closed] = new ClosedCardRenderer();
-    mCardRenderers[Card::TempOpened] = new TempOpenedCardRenderer();
     mCardRenderers[Card::Opened] = new OpenedCardRenderer();
+    mCardRenderers[Card::Selected] = new SelectedCardRenderer(mCardRenderers[Card::Opened]);
 }
 
 CardBoardWidget::~CardBoardWidget()
@@ -43,7 +43,7 @@ CardBoardWidget::~CardBoardWidget()
     delete mTimer;
     delete mGameLogic;
     delete mCardRenderers[Card::Closed];
-    delete mCardRenderers[Card::TempOpened];
+    delete mCardRenderers[Card::Selected];
     delete mCardRenderers[Card::Opened];
 }
 
