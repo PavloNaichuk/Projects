@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     ClosedCardRenderer.cpp \
     OpenedCardRenderer.cpp \
     CardRendererDecorator.cpp \
-    SelectedCardRenderer.cpp
+    SelectedCardRenderer.cpp \
+    MainWidget.cpp
 
 HEADERS  += MemoryPuzzle.h \
     Card.h \
@@ -45,4 +46,5 @@ HEADERS  += MemoryPuzzle.h \
     ClosedCardRenderer.h \
     OpenedCardRenderer.h \
     CardRendererDecorator.h \
-    SelectedCardRenderer.h
+    SelectedCardRenderer.h \
+    MainWidget.h
