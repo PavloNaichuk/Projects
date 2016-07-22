@@ -1,6 +1,8 @@
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
+#include <QObject>
+
 class Card;
 class CardBoard;
 class GameState;
@@ -8,8 +10,10 @@ class SelectFirstCardState;
 class SelectSecondCardState;
 class WaitBeforeClosingState;
 
-class GameLogic
+class GameLogic : public QObject
 {
+    Q_OBJECT
+
 public:
     GameLogic();
     ~GameLogic();
@@ -39,7 +43,17 @@ public:
     SelectSecondCardState* getSelectSecondCardState();
     WaitBeforeClosingState* getWaitBeforeClosingState();
 
+    int getTotalScore() const;
+
+signals:
+    void scoreChanged();
+
+private slots:
+    void selectionCompleted(bool success);
+
 private:
+    int calcScore() const;
+
     CardBoard* mCardBoard;
     int mCardBoardWidth;
     int mCardBoardHeight;
@@ -53,6 +67,8 @@ private:
     SelectSecondCardState* mSelectSecondCardState;
     WaitBeforeClosingState* mWaitBeforeClosingState;
     GameState* mCurrentState;
+    int mTotalScore;
+    unsigned mNumAttempts;
 };
 
 #endif // GAMELOGIC_H

@@ -2,6 +2,7 @@
 #include "CardBoard.h"
 #include "MainWidget.h"
 #include "LevelGenerator.h"
+#include "GameLogic.h"
 #include <QApplication>
 #include <memory>
 
@@ -17,7 +18,8 @@ int MemoryPuzzle::runGame(int argc, char *argv[])
     QString fileName("D:/level.txt");
     cardBoard.save(fileName);
 
-    MainWidget mainWidget;
+    GameLogic gameLogic;
+    MainWidget mainWidget(&gameLogic);
     mainWidget.setCardBoard(&cardBoard);
     mainWidget.show();
 

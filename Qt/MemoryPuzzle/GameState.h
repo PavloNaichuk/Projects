@@ -1,10 +1,13 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-class GameState
+#include <QObject>
+
+class GameState : public QObject
 {
+    Q_OBJECT
+
 public:
-    virtual ~GameState(){}
     virtual void enter() = 0;
     virtual void update() = 0;
     virtual void exit() = 0;

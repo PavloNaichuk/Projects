@@ -28,11 +28,14 @@ void SelectSecondCardState::update()
             firstCard->setState(Card::Opened);
             secondCard->setState(Card::Opened);
 
+            emit selectionChanged(true);
             mGameLogic->setCurrentState(mGameLogic->getSelectFirstCardState());
         }
         else
         {
             secondCard->setState(Card::Selected);
+
+            emit selectionChanged(false);
             mGameLogic->setCurrentState(mGameLogic->getWaitBeforeClosingState());
         }
     }

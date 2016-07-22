@@ -12,9 +12,9 @@
 #include "OpenedCardRenderer.h"
 #include "SelectedCardRenderer.h"
 
-CardBoardWidget::CardBoardWidget(QWidget* parent)
+CardBoardWidget::CardBoardWidget(GameLogic* gameLogic, QWidget* parent)
     : QWidget(parent)
-    , mGameLogic(new GameLogic())
+    , mGameLogic(gameLogic)
     , mTimer(new QTimer())
 {
     setWindowTitle("Memory Puzzle");

@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QLabel>
 
+class GameLogic;
 class CardBoard;
 class CardBoardWidget;
 
@@ -13,16 +14,18 @@ class MainWidget : public QWidget
     Q_OBJECT
 
 public:
-    MainWidget(QWidget* parent = 0);
+    MainWidget(GameLogic* gameLogic, QWidget* parent = 0);
     ~MainWidget();
 
     void setCardBoard(CardBoard* cardBoard);
     const CardBoard* getCardBoard() const;
 
 private slots:
-    void timeUpdate();
+    void updateTime();
+    void updateScore();
 
 private:
+    GameLogic* mGameLogic;
     QTime* mTime;
     QTimer* mTimer;
     CardBoardWidget* mCardBoardWidget;

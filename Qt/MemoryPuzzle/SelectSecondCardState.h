@@ -7,6 +7,8 @@ class GameLogic;
 
 class SelectSecondCardState : public GameState
 {
+    Q_OBJECT
+
 public:
     SelectSecondCardState(GameLogic* gameLogic);
 
@@ -14,6 +16,9 @@ public:
     void update();
     void exit();
     void handleMousePress(int x, int y);
+
+signals:
+    void selectionChanged(bool success);
 
 private:
     GameLogic* mGameLogic;

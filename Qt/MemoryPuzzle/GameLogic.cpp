@@ -14,11 +14,15 @@ GameLogic::GameLogic()
     , mSelectSecondCardState(nullptr)
     , mWaitBeforeClosingState(nullptr)
     , mCurrentState(nullptr)
+    , mTotalScore(0)
+    , mNumAttempts(0)
 {
     mSelectFirstCardState = new SelectFirstCardState(this);
     mSelectSecondCardState = new SelectSecondCardState(this);
     mWaitBeforeClosingState = new WaitBeforeClosingState(this);
     mCurrentState = mSelectFirstCardState;
+
+    connect(mSelectSecondCardState, SIGNAL(selectionChanged(bool)), this, SLOT(selectionCompleted(bool)));
 }
 
 GameLogic::~GameLogic()
@@ -113,4 +117,38 @@ SelectSecondCardState* GameLogic::getSelectSecondCardState()
 WaitBeforeClosingState* GameLogic::getWaitBeforeClosingState()
 {
     return mWaitBeforeClosingState;
+}
+
+int GameLogic::getTotalScore() const
+{
+    return mTotalScore;
+}
+
+void GameLogic::selectionCompleted(bool success)
+{
+    ++mNumAttempts;
+    if (success)
+    {
+        mTotalScore += calcScore();
+
+        emit scoreChanged();
+        mNumAttempts = 0;
+    }
+}
+
+int GameLogic::calcScore() const
+{
+    if (mNumAttempts == 1)
+        return 5;
+
+    if (mNumAttempts == 2)
+        return 4;
+
+    if (mNumAttempts == 3)
+        return 3;
+
+    if (mNumAttempts == 4)
+        return 2;
+
+    return 1;
 }

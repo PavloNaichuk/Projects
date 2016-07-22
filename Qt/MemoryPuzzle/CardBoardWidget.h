@@ -13,7 +13,7 @@ class CardBoardWidget : public QWidget
     Q_OBJECT
 
 public:
-    CardBoardWidget(QWidget* parent = 0);
+    CardBoardWidget(GameLogic* gameLogic, QWidget* parent = 0);
     ~CardBoardWidget();
 
     enum

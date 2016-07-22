@@ -2,27 +2,28 @@
 #include "CardBoard.h"
 #include "CardBoardWidget.h"
 #include "LevelGenerator.h"
+#include "GameLogic.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-MainWidget::MainWidget(QWidget* parent)
+MainWidget::MainWidget(GameLogic* gameLogic, QWidget* parent)
     : QWidget(parent)
+    , mGameLogic(gameLogic)
     , mTime(new QTime(0,0))
     , mTimer(new QTimer())
-    , mCardBoardWidget(new CardBoardWidget())
+    , mCardBoardWidget(new CardBoardWidget(gameLogic))
 
 {
     mLevelLabel = new QLabel("Level: 1");
-    mScoreLabel = new QLabel("Score:");
+    mScoreLabel = new QLabel(QString("Score: %1").arg(mGameLogic->getTotalScore()));
 
-    mTimeLabel = new QLabel();
+    mTimeLabel = new QLabel(QString("Time: ") + mTime->toString("hh:mm:ss"));
     mTimeLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    mTimeLabel->setText(QString("Time: ") + mTime->toString("hh:mm:ss"));
 
     mTime->start();
     mTimer->start(1000);
-    connect(mTimer, SIGNAL(timeout()), this, SLOT(timeUpdate()));
+    connect(mTimer, SIGNAL(timeout()), this, SLOT(updateTime()));
 
     QHBoxLayout* hLayout = new QHBoxLayout;
     hLayout->addWidget(mLevelLabel);
@@ -40,6 +41,8 @@ MainWidget::MainWidget(QWidget* parent)
 
     resize(800, 600);
     setLayout(vLayout);
+
+    connect(mGameLogic, SIGNAL(scoreChanged()), this, SLOT(updateScore()));
 }
 
 MainWidget::~MainWidget()
@@ -62,10 +65,15 @@ const CardBoard* MainWidget::getCardBoard() const
     return mCardBoardWidget->getCardBoard();
 }
 
-void MainWidget::timeUpdate()
+void MainWidget::updateTime()
 {
     int elapsedTimeMs = mTime->elapsed();
     int elapsedTimeSec = elapsedTimeMs / 1000;
+
     mTimeLabel->setText(QString("Time: ") + QTime(0, 0, elapsedTimeSec).toString("hh:mm:ss"));
 }
 
+void MainWidget::updateScore()
+{
+    mScoreLabel->setText(QString("Score: %1").arg(mGameLogic->getTotalScore()));
+}
