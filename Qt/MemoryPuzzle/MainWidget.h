@@ -1,8 +1,6 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include <QTime>
-#include <QTimer>
 #include <QLabel>
 
 class GameLogic;
@@ -20,15 +18,21 @@ public:
     void setCardBoard(CardBoard* cardBoard);
     const CardBoard* getCardBoard() const;
 
+signals:
+    void gameMenuRequested();
+
 private slots:
-    void updateTime();
-    void updateScore();
+    void levelUpdated();
+    void scoreUpdated(int);
+    void timeUpdated(int);
 
 private:
-    GameLogic* mGameLogic;
-    QTime* mTime;
-    QTimer* mTimer;
+    void keyPressEvent(QKeyEvent* event);
+
+private:
     CardBoardWidget* mCardBoardWidget;
+    GameLogic* mGameLogic;
+
     QLabel* mLevelLabel;
     QLabel* mScoreLabel;
     QLabel* mTimeLabel;

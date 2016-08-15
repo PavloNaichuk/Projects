@@ -1,8 +1,11 @@
 #include "MemoryPuzzle.h"
+#include <QApplication>
 
 int main(int argc, char* argv[])
 {
+    QApplication app(argc, argv);
     MemoryPuzzle memoryPuzzle;
-    return memoryPuzzle.runGame(argc, argv);
+    memoryPuzzle.runGame();
+    return app.exec();
 }
 

@@ -9,6 +9,8 @@ class GameState;
 class SelectFirstCardState;
 class SelectSecondCardState;
 class WaitBeforeClosingState;
+class QTime;
+class QTimer;
 
 class GameLogic : public QObject
 {
@@ -44,15 +46,26 @@ public:
     WaitBeforeClosingState* getWaitBeforeClosingState();
 
     int getTotalScore() const;
+    int getCurrentLevel() const;
+    int getElapsedTime() const;
+
+    void replayLevel();
+    void nextLevel();
+
+    void startGame();
 
 signals:
-    void scoreChanged();
+    void levelCompleted();
+    void scoreChanged(int);
+    void timeChanged(int);
 
 private slots:
     void selectionCompleted(bool success);
+    void timeUpdate();
 
 private:
     int calcScore() const;
+    void setScore(int);
 
     CardBoard* mCardBoard;
     int mCardBoardWidth;
@@ -67,8 +80,16 @@ private:
     SelectSecondCardState* mSelectSecondCardState;
     WaitBeforeClosingState* mWaitBeforeClosingState;
     GameState* mCurrentState;
+
     int mTotalScore;
+    unsigned mCurrentLevel;
     unsigned mNumAttempts;
+    unsigned mNumOpenedCards;
+
+    QTime* mTime;
+    QTimer* mTimer;
+    QTime* mTotalTime;
+    QTime* mSinceStart;
 };
 
 #endif // GAMELOGIC_H

@@ -1,29 +1,71 @@
 #include "MemoryPuzzle.h"
-#include "CardBoard.h"
+
 #include "MainWidget.h"
 #include "LevelGenerator.h"
-#include "GameLogic.h"
-#include <QApplication>
+#include "GameMenuWidget.h"
+#include <QtDebug>
 #include <memory>
 
-int MemoryPuzzle::runGame(int argc, char *argv[])
+int MemoryPuzzle::runGame()
 {
-    QApplication app(argc, argv);
+    mCards = LevelGenerator::create();
+    mCardBoard = new CardBoard(mCards);
 
-    //QString fileName("D:/alphabet.txt");
-    //CardBoard* cardBoard = new CardBoard(fileName);
+    mLevelCompletedWidget = new LevelCompletedWidget();
 
-    std::unique_ptr<Card> cards(LevelGenerator::create());
-    CardBoard cardBoard(cards.get());
-    QString fileName("D:/level.txt");
-    cardBoard.save(fileName);
+    connect(mLevelCompletedWidget, SIGNAL(nextLevel()), this, SLOT(loadNextLevel()));
+    connect(mLevelCompletedWidget, SIGNAL(replayLevel()), this, SLOT(replayLevel()));
+    connect(mLevelCompletedWidget, SIGNAL(exitGame()), this, SLOT(exitGame()));
 
-    GameLogic gameLogic;
-    MainWidget mainWidget(&gameLogic);
-    mainWidget.setCardBoard(&cardBoard);
-    mainWidget.show();
+    mGameLogic = new GameLogic();
 
-    return app.exec();
+    mMainWidget = new MainWidget(mGameLogic);
+    connect(mMainWidget, SIGNAL(gameMenuRequested()), this, SLOT(openGameMenu()));
+    connect(mGameLogic, SIGNAL(levelCompleted()), this, SLOT(levelCompleted()));
+    mMainWidget->setCardBoard(mCardBoard);
+    mMainWidget->show();
+
+    mGameLogic->startGame();
+
+    mGameMenu = new GameMenuWidget();
+    connect(mGameMenu, SIGNAL(exitGame()), this, SLOT(exitGame()));
+
+    return 0;
 }
+
+void MemoryPuzzle::levelCompleted()
+{
+    mLevelCompletedWidget->show();
+}
+
+void MemoryPuzzle::loadNextLevel()
+{
+    mGameLogic->nextLevel();
+    delete mCards;
+    delete mCardBoard;
+    mCards = LevelGenerator::create();
+    mCardBoard = new CardBoard(mCards);
+    mMainWidget->setCardBoard(mCardBoard);
+}
+
+
+void MemoryPuzzle::replayLevel()
+{
+    delete mCardBoard;
+    mCardBoard = new CardBoard(mCards);
+    mMainWidget->setCardBoard(mCardBoard);
+}
+
+void MemoryPuzzle::exitGame()
+{
+    mMainWidget->close();
+}
+
+void MemoryPuzzle::openGameMenu()
+{
+    // gameMenu
+    mGameMenu->show();
+}
+
 
 

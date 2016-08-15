@@ -41,7 +41,6 @@ CardBoardWidget::~CardBoardWidget()
 {
     mTimer->stop();
     delete mTimer;
-    delete mGameLogic;
     delete mCardRenderers[Card::Closed];
     delete mCardRenderers[Card::Selected];
     delete mCardRenderers[Card::Opened];
@@ -55,9 +54,10 @@ const CardBoard* CardBoardWidget::getCardBoard() const
 void CardBoardWidget::setCardBoard(CardBoard* cardBoard)
 {
     mGameLogic->setCardBoard(cardBoard);
+    resizeEvent(nullptr);
 }
 
-void CardBoardWidget::paintEvent(QPaintEvent* /*paintEvent*/)
+void CardBoardWidget::paintEvent(QPaintEvent* /*event*/)
 {
     QPainter painter(this);
     painter.setFont(QFont("Arial", 50));

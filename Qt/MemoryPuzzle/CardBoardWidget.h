@@ -24,9 +24,9 @@ public:
 
     const CardBoard* getCardBoard() const;
     void setCardBoard(CardBoard* cardBoard);
-    void paintEvent(QPaintEvent* paintEvent);
 
 protected:
+    virtual void paintEvent(QPaintEvent* event);
     virtual void resizeEvent(QResizeEvent* event);
     virtual void mousePressEvent(QMouseEvent* event);
 

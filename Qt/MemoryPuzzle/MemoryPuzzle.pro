@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     OpenedCardRenderer.cpp \
     CardRendererDecorator.cpp \
     SelectedCardRenderer.cpp \
-    MainWidget.cpp
+    MainWidget.cpp \
+    LevelCompletedWidget.cpp \
+    GameMenuWidget.cpp
 
 HEADERS  += MemoryPuzzle.h \
     Card.h \
@@ -47,4 +49,6 @@ HEADERS  += MemoryPuzzle.h \
     OpenedCardRenderer.h \
     CardRendererDecorator.h \
     SelectedCardRenderer.h \
-    MainWidget.h
+    MainWidget.h \
+    LevelCompletedWidget.h \
+    GameMenuWidget.h
