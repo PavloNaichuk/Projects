@@ -6,6 +6,7 @@ LevelCompletedWidget::LevelCompletedWidget(QWidget* parent)
     : QWidget(parent)
 {
     setWindowTitle("Level Completed");
+    setWindowModality(Qt::WindowModal);
 
     mNextLevelButton = new QPushButton("&Next Level");
     mReplayLevelButton = new QPushButton("&Replay Current Level");

@@ -3,8 +3,8 @@
 #include "SelectSecondCardState.h"
 #include "WaitBeforeClosingState.h"
 #include "CardBoard.h"
-#include <QTime>
-#include <QTimer>
+#include "GameTimer.h"
+
 #include <QtDebug>
 
 GameLogic::GameLogic()
@@ -22,9 +22,7 @@ GameLogic::GameLogic()
     , mNumAttempts(0)
     , mNumOpenedCards(0)
     , mCurrentLevel(1)
-    , mTime(new QTime)
-    , mTimer(new QTimer)
-    , mSinceStart(new QTime)
+    , mGameTimer(new GameTimer)
 {
     mSelectFirstCardState = new SelectFirstCardState(this);
     mSelectSecondCardState = new SelectSecondCardState(this);
@@ -32,7 +30,7 @@ GameLogic::GameLogic()
     mCurrentState = mSelectFirstCardState;
 
     connect(mSelectSecondCardState, SIGNAL(selectionChanged(bool)), this, SLOT(selectionCompleted(bool)));
-    connect(mTimer, SIGNAL(timeout()), this, SLOT(timeUpdate()));
+    connect(mGameTimer, SIGNAL(timeChanged(int)), this, SLOT(timeUpdate(int)));
 }
 
 GameLogic::~GameLogic()
@@ -40,9 +38,7 @@ GameLogic::~GameLogic()
     delete mSelectFirstCardState;
     delete mSelectSecondCardState;
     delete mWaitBeforeClosingState;
-    delete mTime;
-    delete mTimer;
-    delete mSinceStart;
+    delete mGameTimer;
 }
 
 CardBoard* GameLogic::getCardBoard()
@@ -52,7 +48,6 @@ CardBoard* GameLogic::getCardBoard()
 
 void GameLogic::setCardBoard(CardBoard* cardBoard)
 {
-    mTime->restart();
     mCardBoard = cardBoard;
     mTotalScore = 0;
 }
@@ -151,26 +146,35 @@ void GameLogic::setScore(int score)
 
 void GameLogic::replayLevel()
 {
+    mGameTimer->start();
     setScore(0);
-    startGame();
 }
 
 void GameLogic::nextLevel()
 {
+    mGameTimer->start();
     setScore(0);
     ++mCurrentLevel;
-    startGame();
 }
 
-int GameLogic::getElapsedTime() const
+void GameLogic::pause()
 {
-    int elapsedTimeSec = mTime->elapsed() / 1000;
-    return elapsedTimeSec;
+    mGameTimer->pause();
+}
+void GameLogic::resume()
+{
+    mGameTimer->resume();
 }
 
 void GameLogic::startGame()
 {
-    mTimer->start(1000);
+    mGameTimer->start();
+}
+
+void GameLogic::update()
+{
+    mCurrentState->update();
+    mGameTimer->update();
 }
 
 void GameLogic::selectionCompleted(bool success)
@@ -186,14 +190,14 @@ void GameLogic::selectionCompleted(bool success)
         {
             emit levelCompleted();
             mNumOpenedCards = 0;
+            mGameTimer->pause();
         }
         mNumAttempts = 0;
     }
 }
-void GameLogic::timeUpdate()
+void GameLogic::timeUpdate(int elapsedMs)
 {
-    qDebug() << "Time:" << mTimer;
-    emit timeChanged(getElapsedTime());
+    emit timeChanged(elapsedMs);
 }
 
 int GameLogic::calcScore() const

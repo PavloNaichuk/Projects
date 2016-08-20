@@ -52,4 +52,3 @@ Card::State Card::getState() const
 {
     return mState;
 }
-

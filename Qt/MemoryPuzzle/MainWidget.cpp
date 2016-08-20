@@ -13,12 +13,21 @@ MainWidget::MainWidget(GameLogic* gameLogic, QWidget* parent)
     , mCardBoardWidget(new CardBoardWidget(gameLogic))
 {
     setWindowTitle("Memory Puzzle");
+    setWindowModality(Qt::WindowModal);
+
+    QFont textFont("Times", 12, QFont::Bold);
 
     mLevelLabel = new QLabel(QString("Level: %1").arg(mGameLogic->getCurrentLevel()));
-    mScoreLabel = new QLabel(QString("Score: %1").arg(mGameLogic->getTotalScore()));
+    mLevelLabel->setAlignment(Qt::AlignLeft);
+    mLevelLabel->setFont(textFont);
 
-    mTimeLabel = new QLabel(QString("Time: " + QTime(0, 0, mGameLogic->getElapsedTime()).toString("hh:mm:ss")));
-    mTimeLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mScoreLabel = new QLabel(QString("Score: %1").arg(mGameLogic->getTotalScore()));
+    mScoreLabel->setAlignment(Qt::AlignCenter);
+    mScoreLabel->setFont(textFont);
+
+    mTimeLabel = new QLabel(QString("Time: %1").arg(QTime(0, 0, 0).toString("hh:mm:ss")));
+    mTimeLabel->setAlignment(Qt::AlignRight);
+    mTimeLabel->setFont(textFont);
 
     QHBoxLayout* hLayout = new QHBoxLayout;
     hLayout->addWidget(mLevelLabel);
@@ -36,7 +45,6 @@ MainWidget::MainWidget(GameLogic* gameLogic, QWidget* parent)
 
     resize(800, 600);
     setLayout(vLayout);
-
     connect(mGameLogic, SIGNAL(scoreChanged(int)), this, SLOT(scoreUpdated(int)));
     connect(mGameLogic, SIGNAL(timeChanged(int)), this, SLOT(timeUpdated(int)));
 }
@@ -70,9 +78,11 @@ void MainWidget::scoreUpdated(int score)
     mScoreLabel->setText(QString("Score: %1").arg(score));
 }
 
-void MainWidget::timeUpdated(int time)
+void MainWidget::timeUpdated(int elapsedMs)
 {
-    mTimeLabel->setText(QString("Time: " + QTime(0, 0, time).toString("hh:mm:ss")));
+    QTime time = QTime::fromMSecsSinceStartOfDay(elapsedMs);
+    QString timeString = QString("Time: %1").arg(time.toString("hh:mm:ss"));
+    mTimeLabel->setText(timeString);
 }
 
 void MainWidget::keyPressEvent(QKeyEvent* event)

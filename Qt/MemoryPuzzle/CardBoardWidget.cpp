@@ -95,9 +95,7 @@ void CardBoardWidget::mousePressEvent(QMouseEvent* event)
 
 void CardBoardWidget::updateGameLogic()
 {
-    GameState* currentState = mGameLogic->getCurrentState();
-    currentState->update();
-
+    mGameLogic->update();
     if (mGameLogic->redrawBoard())
     {
         update();

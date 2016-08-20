@@ -6,6 +6,7 @@ GameMenuWidget::GameMenuWidget(QWidget* parent)
     : QWidget(parent)
 {
     setWindowTitle("Game Menu");
+    setWindowModality(Qt::WindowModal);
 
     mResumeButton = new QPushButton("&Resume");
     mExitGameButton = new QPushButton("&Exit Game");

@@ -1,13 +1,13 @@
 #ifndef MEMORYPUZZLE_H
 #define MEMORYPUZZLE_H
 
-#include "LevelCompletedWidget.h"
-#include "MainWidget.h"
-#include "CardBoard.h"
-#include "GameLogic.h"
+#include <QObject>
 
+class MainWidget;
+class CardBoard;
+class GameLogic;
+class Card;
 class QKeyEvent;
-class GameMenuWidget;
 class QTime;
 
 class MemoryPuzzle : public QObject
@@ -22,14 +22,13 @@ private slots:
     void loadNextLevel();
     void replayLevel();
     void exitGame();
+    void resumeGame();
     void openGameMenu();
 
 private:
     MainWidget* mMainWidget;
     GameLogic* mGameLogic;
     CardBoard* mCardBoard;
-    LevelCompletedWidget* mLevelCompletedWidget;
-    GameMenuWidget* mGameMenu;
     Card* mCards;
 };
 

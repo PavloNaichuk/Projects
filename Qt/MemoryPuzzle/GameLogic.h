@@ -2,6 +2,8 @@
 #define GAMELOGIC_H
 
 #include <QObject>
+#include <QTime>
+#include <QTimer>
 
 class Card;
 class CardBoard;
@@ -9,8 +11,7 @@ class GameState;
 class SelectFirstCardState;
 class SelectSecondCardState;
 class WaitBeforeClosingState;
-class QTime;
-class QTimer;
+class GameTimer;
 
 class GameLogic : public QObject
 {
@@ -47,12 +48,14 @@ public:
 
     int getTotalScore() const;
     int getCurrentLevel() const;
-    int getElapsedTime() const;
 
     void replayLevel();
     void nextLevel();
+    void pause();
+    void resume();
 
     void startGame();
+    void update();
 
 signals:
     void levelCompleted();
@@ -61,7 +64,7 @@ signals:
 
 private slots:
     void selectionCompleted(bool success);
-    void timeUpdate();
+    void timeUpdate(int elapsedMs);
 
 private:
     int calcScore() const;
@@ -86,10 +89,7 @@ private:
     unsigned mNumAttempts;
     unsigned mNumOpenedCards;
 
-    QTime* mTime;
-    QTimer* mTimer;
-    QTime* mTotalTime;
-    QTime* mSinceStart;
+    GameTimer* mGameTimer;
 };
 
 #endif // GAMELOGIC_H
