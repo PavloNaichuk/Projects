@@ -1,16 +1,16 @@
 #ifndef GAMEMENUWIDGET_H
 #define GAMEMENUWIDGET_H
 
-#include <QWidget>
+#include <QDialog>
 
 class QPushButton;
 
-class GameMenuWidget : public QWidget
+class GameMenuWidget : public QDialog
 {
     Q_OBJECT
 
 public:
-    GameMenuWidget(QWidget* parent = 0);
+    GameMenuWidget(QDialog* parent = 0);
     ~GameMenuWidget();
 
 signals:

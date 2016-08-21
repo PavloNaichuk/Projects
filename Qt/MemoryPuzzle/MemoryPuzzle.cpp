@@ -22,18 +22,17 @@ int MemoryPuzzle::runGame()
 
     mMainWidget->setCardBoard(mCardBoard);
     mMainWidget->show();
-
     mGameLogic->startGame();
     return 0;
 }
 
 void MemoryPuzzle::levelCompleted()
 {
-    LevelCompletedWidget* levelCompletedWidget = new LevelCompletedWidget();
-    connect(levelCompletedWidget, SIGNAL(nextLevel()), this, SLOT(loadNextLevel()));
-    connect(levelCompletedWidget, SIGNAL(replayLevel()), this, SLOT(replayLevel()));
-    connect(levelCompletedWidget, SIGNAL(exitGame()), this, SLOT(exitGame()));
-    levelCompletedWidget->show();
+    LevelCompletedWidget levelCompletedWidget;
+    connect(&levelCompletedWidget, SIGNAL(nextLevel()), this, SLOT(loadNextLevel()));
+    connect(&levelCompletedWidget, SIGNAL(replayLevel()), this, SLOT(replayLevel()));
+    connect(&levelCompletedWidget, SIGNAL(exitGame()), this, SLOT(exitGame()));
+    levelCompletedWidget.exec();
 }
 
 void MemoryPuzzle::loadNextLevel()
@@ -66,9 +65,10 @@ void MemoryPuzzle::resumeGame()
 
 void MemoryPuzzle::openGameMenu()
 {
-    GameMenuWidget* gameMemu = new GameMenuWidget();
-    connect(gameMemu, SIGNAL(exitGame()), this, SLOT(exitGame()));
-    connect(gameMemu, SIGNAL(resume()), this, SLOT(resumeGame()));
     mGameLogic->pause();
-    gameMemu->show();
+
+    GameMenuWidget gameMemu;
+    connect(&gameMemu, SIGNAL(exitGame()), this, SLOT(exitGame()));
+    connect(&gameMemu, SIGNAL(resume()), this, SLOT(resumeGame()));
+    gameMemu.exec();
 }

@@ -2,11 +2,12 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
-GameMenuWidget::GameMenuWidget(QWidget* parent)
-    : QWidget(parent)
+GameMenuWidget::GameMenuWidget(QDialog* parent)
+    : QDialog(parent)
 {
     setWindowTitle("Game Menu");
-    setWindowModality(Qt::WindowModal);
+    setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
+    setModal(true);
 
     mResumeButton = new QPushButton("&Resume");
     mExitGameButton = new QPushButton("&Exit Game");

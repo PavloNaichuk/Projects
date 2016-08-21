@@ -2,11 +2,12 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
-LevelCompletedWidget::LevelCompletedWidget(QWidget* parent)
-    : QWidget(parent)
+LevelCompletedWidget::LevelCompletedWidget(QDialog* parent)
+    : QDialog(parent)
 {
     setWindowTitle("Level Completed");
-    setWindowModality(Qt::WindowModal);
+    setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
+    setModal(true);
 
     mNextLevelButton = new QPushButton("&Next Level");
     mReplayLevelButton = new QPushButton("&Replay Current Level");
@@ -18,6 +19,7 @@ LevelCompletedWidget::LevelCompletedWidget(QWidget* parent)
     layout->addWidget(mExitGameButton);
     setLayout(layout);
 
+    resize(350, 100);
     connect(mNextLevelButton, SIGNAL(clicked()), this, SLOT(nextLevelClicked()));
     connect(mReplayLevelButton, SIGNAL(clicked()), this, SLOT(replayLevelClicked()));
     connect(mExitGameButton, SIGNAL(clicked()), this, SLOT(exitGameClicked()));

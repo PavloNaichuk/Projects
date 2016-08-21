@@ -1,15 +1,15 @@
 #pragma once
 
-#include <QWidget>
+#include <QDialog>
 
 class QPushButton;
 
-class LevelCompletedWidget : public QWidget
+class LevelCompletedWidget : public QDialog
 {
     Q_OBJECT
 
 public:
-   LevelCompletedWidget(QWidget* parent = 0);
+   LevelCompletedWidget(QDialog* parent = 0);
     ~LevelCompletedWidget();
 
 signals:
