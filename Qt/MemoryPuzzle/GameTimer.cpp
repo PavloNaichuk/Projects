@@ -35,7 +35,7 @@ void GameTimer::resume()
 
 void GameTimer::update()
 {
-    if (!mPaused)
+    if (!mPaused && mStarted)
     {
         mElapsedMs += mTime.elapsed();
         mTime.restart();

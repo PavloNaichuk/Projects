@@ -7,8 +7,6 @@ class MainWidget;
 class CardBoard;
 class GameLogic;
 class Card;
-class QKeyEvent;
-class QTime;
 
 class MemoryPuzzle : public QObject
 {
@@ -23,7 +21,9 @@ private slots:
     void replayLevel();
     void exitGame();
     void resumeGame();
+    void startGame();
     void openGameMenu();
+    void showHelp();
 
 private:
     MainWidget* mMainWidget;

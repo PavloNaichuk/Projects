@@ -16,14 +16,17 @@ public:
 signals:
     void resume();
     void exitGame();
+    void showHelp();
 
 public slots:
     void resumeClicked();
     void exitGameClicked();
+    void showHelpClicked();
 
 private:
     QPushButton* mResumeButton;
     QPushButton* mExitGameButton;
+    QPushButton* mShowHelpButton;
 };
 
 #endif // GAMEMENUWIDGET_H

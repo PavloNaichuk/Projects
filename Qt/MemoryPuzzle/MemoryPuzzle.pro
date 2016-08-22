@@ -33,7 +33,9 @@ SOURCES += main.cpp\
     MainWidget.cpp \
     LevelCompletedWidget.cpp \
     GameMenuWidget.cpp \
-    GameTimer.cpp
+    GameTimer.cpp \
+    StartGameMenuWidget.cpp \
+    HelpWidget.cpp
 
 HEADERS  += MemoryPuzzle.h \
     Card.h \
@@ -53,4 +55,6 @@ HEADERS  += MemoryPuzzle.h \
     MainWidget.h \
     LevelCompletedWidget.h \
     GameMenuWidget.h \
-    GameTimer.h
+    GameTimer.h \
+    StartGameMenuWidget.h \
+    HelpWidget.h

@@ -1,7 +1,9 @@
 #include "MemoryPuzzle.h"
 #include "LevelGenerator.h"
 #include "GameMenuWidget.h"
+#include "StartGameMenuWidget.h"
 #include "LevelCompletedWidget.h"
+#include "HelpWidget.h"
 #include "MainWidget.h"
 #include "CardBoard.h"
 #include "GameLogic.h"
@@ -11,7 +13,6 @@
 
 int MemoryPuzzle::runGame()
 {
-
     mCards = LevelGenerator::create();
     mCardBoard = new CardBoard(mCards);
 
@@ -22,7 +23,13 @@ int MemoryPuzzle::runGame()
 
     mMainWidget->setCardBoard(mCardBoard);
     mMainWidget->show();
-    mGameLogic->startGame();
+
+    StartGameMenuWidget startGameMenu;
+    connect(&startGameMenu, SIGNAL(startGame()), this, SLOT(startGame()));
+    connect(&startGameMenu, SIGNAL(exitGame()), this, SLOT(exitGame()));
+    connect(&startGameMenu, SIGNAL(showHelp()), this, SLOT(showHelp()));
+    startGameMenu.exec();
+
     return 0;
 }
 
@@ -63,12 +70,26 @@ void MemoryPuzzle::resumeGame()
     mGameLogic->resume();
 }
 
+void MemoryPuzzle::startGame()
+{
+    mGameLogic->startGame();
+}
+
 void MemoryPuzzle::openGameMenu()
 {
     mGameLogic->pause();
 
     GameMenuWidget gameMemu;
-    connect(&gameMemu, SIGNAL(exitGame()), this, SLOT(exitGame()));
     connect(&gameMemu, SIGNAL(resume()), this, SLOT(resumeGame()));
+    connect(&gameMemu, SIGNAL(exitGame()), this, SLOT(exitGame()));
+    connect(&gameMemu, SIGNAL(showHelp()), this, SLOT(showHelp()));
     gameMemu.exec();
 }
+
+void MemoryPuzzle::showHelp()
+{
+    HelpWidget helpWidget;
+    helpWidget.exec();
+}
+
+
