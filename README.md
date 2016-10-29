@@ -7,4 +7,7 @@ Wrote application as a pad project, similar in functionality to Total Commander 
 - copy, move/rename, delete files and create a new folder
 - navigate through file system
 - open a file through an associated application
+
+<b>Excel Exporter (Java (Swing), C#)</b>   
+Wrote application as part of bachelor's thesis to export student grades to Excel file for printing. User interface was written in Java (Swing), which allowed to specify student grades and subjects. The export to Excel format was done by launching extra C# application from Java code by passing student data through the command line arguments.
   
