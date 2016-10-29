@@ -4,7 +4,7 @@ Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I w
 A 4x4 board is full of overturned cards. There is a pair for each card. The player flips over two cards. If they match, then they stay overturned. Otherwise they flip back. The player needs to overturn all the cards in the fewest moves to win.
 ![Alt text](/Images/MemoryPuzzle/GameStart.jpg?raw=true "")
 ![Alt text](/Images/MemoryPuzzle/OpenedCards.jpg?raw=true "")
-![Alt text](/Images/MemoryPuzzle/LevelComleted.jpg?raw=true "")
+![Alt text](/Images/MemoryPuzzle/LevelCompleted.jpg?raw=true "")
 ![Alt text](/Images/MemoryPuzzle/Help.jpg?raw=true "")
 
 <b>Tic Tac Toe (C++)</b>  
