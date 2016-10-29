@@ -1,11 +1,11 @@
 Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I worked on in my spare time. 
 
 <b>Tic Tac Toe (C++)</b>  
-Console version of a popular Tic Tac Toe game. 
-The game allows player to select game mode: either play versus another player or PC.  
-Keyboard settings:  
-'1' - select "Player VS Player" mode  
-'2' - select "Player VS PC" mode
+Console version of a popular Tic Tac Toe game. Tic-tac-toe is a game for two players who take turns to mark free cells in a 3x3 board with X and O. The player who manages to place three of their marks in a horizontal, vertical, or diagonal row wins the game. In case none of the player manages to accomplish that, the game ends in a draw.  
+
+In current implementation, the player is able to select to play versus another player or PC.   
+When the game is finished, the player is offered to play the game again.  
+In case user provides invalid keyboard input, he or she is required to repeat the operation. 
 
 <b>File Manager (Java (Swing))</b>  
 Wrote application as a pad project, similar in functionality to Total Commander (http://www.ghisler.com).  
