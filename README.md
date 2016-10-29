@@ -1,5 +1,12 @@
 Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I worked on in my spare time. 
 
+<b>Memory Puzzle (C++, Qt)</b>  
+A 4x4 board is full of overturned cards. There is a pair for each card. The player flips over two cards. If they match, then they stay overturned. Otherwise they flip back. The player needs to overturn all the cards in the fewest moves to win.
+![Alt text](/Images/MemoryPuzzle/GameStart.jpg?raw=true "")
+![Alt text](/Images/MemoryPuzzle/OpenedCards.jpg?raw=true "")
+![Alt text](/Images/MemoryPuzzle/LevelComleted.jpg?raw=true "")
+![Alt text](/Images/MemoryPuzzle/Help.jpg?raw=true "")
+
 <b>Tic Tac Toe (C++)</b>  
 Console version of a popular Tic Tac Toe game. Tic-tac-toe is a game for two players who take turns to mark free cells in a 3x3 board with X and O. The player who manages to place three of their marks in a horizontal, vertical, or diagonal row wins the game. In case none of the player manages to accomplish that, the game ends in a draw.  
 
