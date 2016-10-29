@@ -188,9 +188,9 @@ void GameLogic::selectionCompleted(bool success)
         emit scoreChanged(mTotalScore);
         if (mNumOpenedCards == CardBoard::kNumRows * CardBoard::kNumCols)
         {
+            mGameTimer->pause();
             emit levelCompleted();
             mNumOpenedCards = 0;
-            mGameTimer->pause();
         }
         mNumAttempts = 0;
     }
