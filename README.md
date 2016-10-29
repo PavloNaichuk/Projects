@@ -3,7 +3,8 @@ Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I w
 <b>Tic Tac Toe (C++)</b>  
 Console version of a popular Tic Tac Toe game. Tic-tac-toe is a game for two players who take turns to mark free cells in a 3x3 board with X and O. The player who manages to place three of their marks in a horizontal, vertical, or diagonal row wins the game. In case none of the player manages to accomplish that, the game ends in a draw.  
 
-In current implementation, the player is able to select to play versus another player or PC.   
+In current implementation, the player is able to select to play versus another player or PC.
+![Alt text](/Images/TicTacToe/PlayerVsPlayer.jpg?raw=true "Optional Title")
 When the game is finished, the player is offered to play the game again.  
 In case user provides invalid keyboard input, he or she is required to repeat the operation. 
 
