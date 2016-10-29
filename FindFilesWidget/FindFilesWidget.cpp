@@ -1,5 +1,4 @@
 #include "FindFilesWidget.h"
-#include "FindWordInFileThread.h"
 
 struct Range
 {
@@ -36,56 +35,93 @@ std::vector<Range> GenerateRanges(size_t numRanges, size_t numFiles)
 
 FindFilesWidget::FindFilesWidget(QWidget *parent)
     : QWidget(parent)
+    , mActionState(ActionState::STOPPED)
+    , mDirectorySizeInBytes(0)
+    , mBytesProcessed(0)
 {
-    setWindowTitle("Search Files");
+    setWindowTitle("Find Files");
 
     QVBoxLayout* vLayout = new QVBoxLayout(this);
     vLayout->setSpacing(6);
     vLayout->setContentsMargins(11, 11, 11, 11);
     vLayout->addWidget(createSelectDirectoryGroup());
     vLayout->addWidget(createSearchWordGroup());
+    vLayout->addWidget(createProgressBarGroup());
     vLayout->addWidget(createFoundFilesGroup());
     setLayout(vLayout);
-
     resize(600, 600);
 }
 
 void FindFilesWidget::startClicked()
 {
-    const int idealThreadCount = QThread::idealThreadCount();
-
-    std::vector<QThread*> threads;
-    threads.reserve(idealThreadCount);
-
-    QDirIterator dirIt(mSearchDirectoryLine->text(), QDirIterator::Subdirectories);
-    std::vector<QString> paths;
-    while (dirIt.hasNext())
+    if (mActionState == ActionState::STOPPED)
     {
-        dirIt.next();
-        if (QFileInfo(dirIt.filePath()).isFile())
+        mFoundFilesList->clear();
+        mProgressBar->setValue(0);
+        mBytesProcessed = 0;
+        mActionState = ActionState::RUNNING;
+        mStartButton->setText("&Cancel");
+
+        const int idealThreadCount = QThread::idealThreadCount();
+        for (size_t index = 0; index < mThreads.size(); ++index)
+            delete mThreads[index];
+        mThreads.clear();
+        mThreads.reserve(idealThreadCount);
+
+        mDirectorySizeInBytes = 0;
+        mPaths.clear();
+        QDirIterator dirIt(mSearchDirectoryLine->text(), QDirIterator::Subdirectories);
+        while (dirIt.hasNext())
         {
-            if (QFileInfo(dirIt.filePath()).suffix() == "txt")
-                paths.push_back(dirIt.filePath());
+            dirIt.next();
+            QFileInfo fileInfo(dirIt.filePath());
+            if (fileInfo.isFile())
+            {
+                if (fileInfo.suffix() == "txt")
+                {
+                    mPaths.push_back(dirIt.filePath());
+                    mDirectorySizeInBytes += fileInfo.size();
+                }
+            }
         }
+
+        const std::vector<Range> ranges = GenerateRanges(idealThreadCount, mPaths.size());
+        for (size_t index = 0; index < idealThreadCount; ++index)
+            mThreads.push_back(new FindWordInFileThread(mPaths, mSearchWordLine->text(), ranges[index].mStart, ranges[index].mLength));
+
+        for (size_t index = 0; index < idealThreadCount; ++index)
+        {
+            QObject::connect(mThreads[index], SIGNAL(progressChanged(qint64)), this, SLOT(progressChanged(qint64)));
+            QObject::connect(mThreads[index], SIGNAL(fileFound(const QString&)), this, SLOT(fileFound(const QString&)));
+        }
+
+        for (size_t index = 0; index < idealThreadCount; ++index)
+            mThreads[index]->start();
     }
-    const std::vector<Range> ranges = GenerateRanges(idealThreadCount, paths.size());
-    std::vector<QString> foundFiles;
+    else
+    {
+        mActionState = ActionState::STOPPED;
+        mStartButton->setText("&Start");
+        for (size_t index = 0; index < mThreads.size(); ++index)
+            mThreads[index]->cancel();
+    }
+}
 
-    for (size_t index = 0; index < idealThreadCount; ++index)
-        threads.push_back(new FindWordInFileThread(paths, mSearchWordLine->text(), ranges[index].mStart, ranges[index].mLength, foundFiles));
-    for (size_t index = 0; index < idealThreadCount; ++index)
-        threads[index]->start();
-    for (size_t index = 0; index < idealThreadCount; ++index)
-        threads[index]->wait();
+void FindFilesWidget::progressChanged(qint64 bytesProcessed)
+{
+    mBytesProcessed += bytesProcessed;
+    int progressValue = 100 * ((float)mBytesProcessed / (float)mDirectorySizeInBytes);
+    mProgressBar->setValue(progressValue);
+    if (mBytesProcessed == mDirectorySizeInBytes)
+    {
+        mActionState = ActionState::STOPPED;
+        mStartButton->setText("&Start");
+    }
+}
 
-    std::sort(foundFiles.begin(), foundFiles.end());
-
-    for (size_t index = 0; index < idealThreadCount; ++index)
-        delete threads[index];
-
-    mFoundFilesList->clear();
-    for (size_t index = 0; index < foundFiles.size(); ++index)
-        mFoundFilesList->addItem(foundFiles[index]);
+void FindFilesWidget::fileFound(const QString& fileName)
+{
+    mFoundFilesList->addItem(fileName);
 }
 
 void FindFilesWidget::selectDirectoryClicked()
@@ -115,18 +151,35 @@ QGroupBox* FindFilesWidget::createSearchWordGroup()
 {
     QGroupBox* searchWordGroup = new QGroupBox("&Search word:");
     mSearchWordLine = new QLineEdit(searchWordGroup);
-    QPushButton* startButton = new QPushButton("&Start");
+    mStartButton = new QPushButton("&Start");
 
     QHBoxLayout* hLayout = new QHBoxLayout();
     hLayout->setSpacing(6);
     hLayout->setContentsMargins(11, 11, 11, 11);
     hLayout->addWidget(mSearchWordLine);
-    hLayout->addWidget(startButton);
+    hLayout->addWidget(mStartButton);
 
-    connect(startButton, SIGNAL(clicked()), SLOT(startClicked()));
+    connect(mStartButton, SIGNAL(clicked()), SLOT(startClicked()));
 
     searchWordGroup->setLayout(hLayout);
     return searchWordGroup;
+}
+
+QGroupBox* FindFilesWidget::createProgressBarGroup()
+{
+    QGroupBox* progressBarGroup = new QGroupBox("&Progress:");
+    mProgressBar = new QProgressBar(progressBarGroup);
+
+    QHBoxLayout* hLayout = new QHBoxLayout();
+    hLayout->setSpacing(6);
+    hLayout->setContentsMargins(11, 11, 11, 11);
+    hLayout->addWidget(mProgressBar);
+    mProgressBar->setMaximum(100);
+    mProgressBar->setMinimumWidth(500);
+    mProgressBar->setAlignment(Qt::AlignCenter);
+
+    progressBarGroup->setLayout(hLayout);
+    return progressBarGroup;
 }
 
 QGroupBox* FindFilesWidget::createFoundFilesGroup()
@@ -141,4 +194,32 @@ QGroupBox* FindFilesWidget::createFoundFilesGroup()
 
     foundFilesGroup->setLayout(hLayout);
     return foundFilesGroup;
+}
+
+void FindFilesWidget::closeEvent(QCloseEvent* event)
+{
+    for (size_t index = 0; index < mThreads.size(); ++index)
+        mThreads[index]->pause();
+
+    QMessageBox::StandardButton message = QMessageBox::question(this, "Find Files", tr("Are you sure?\n"), QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+    if (message == QMessageBox::Yes)
+    {
+        for (size_t index = 0; index < mThreads.size(); ++index)
+            mThreads[index]->cancel();
+
+        event->accept();
+    }
+    else
+    {
+        for (size_t index = 0; index < mThreads.size(); ++index)
+            mThreads[index]->resume();
+
+        event->ignore();
+    }
+}
+
+FindFilesWidget::~FindFilesWidget()
+{
+    for (size_t index = 0; index < mThreads.size(); ++index)
+        delete mThreads[index];
 }

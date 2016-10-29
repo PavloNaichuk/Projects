@@ -2,34 +2,61 @@
 
 #include <QFile>
 #include <QTextStream>
-#include <QFileInfo>
+#include <QDebug>
 
-FindWordInFileThread::FindWordInFileThread(const std::vector<QString>& filePath, const QString& word, size_t startIndex, size_t numElements, std::vector<QString>& foundFiles)
+FindWordInFileThread::FindWordInFileThread(const std::vector<QString>& filePath, const QString& word, size_t startIndex, size_t numElements)
     : mFilePath(filePath)
     , mWord(word)
     , mStartIndex(startIndex)
     , mNumElements(numElements)
-    , mFoundFiles(foundFiles)
+    , mIsCancelled(false)
+    , mIsPaused(false)
 {}
 
 void FindWordInFileThread::run()
 {
-    for (size_t index = mStartIndex; index < mStartIndex + mNumElements; ++index)
+    mIsCancelled = false;
+    mIsPaused = false;
+    for (size_t index = mStartIndex; (index < mStartIndex + mNumElements) && !mIsCancelled; ++index)
     {
+        while (mIsPaused)
+        {
+            sleep(1);
+        }
         QFile file(mFilePath[index]);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-            return;
+           return;
 
         QTextStream textStream(&file);
-        while (!textStream.atEnd())
+        while (!textStream.atEnd() && !mIsCancelled)
         {
+            while (mIsPaused)
+            {
+                sleep(1);
+            }
             QString line = textStream.readLine();
             if (line.contains(mWord, Qt::CaseInsensitive))
             {
-                mFoundFiles.push_back(QFileInfo(mFilePath[index]).filePath());
+                emit fileFound(file.fileName());
                 break;
             }
         }
+        emit progressChanged(file.size());
         file.close();
     }
+}
+
+void FindWordInFileThread::cancel()
+{
+    mIsCancelled = true;
+}
+
+void FindWordInFileThread::pause()
+{
+    mIsPaused = true;
+}
+
+void FindWordInFileThread::resume()
+{
+    mIsPaused = false;
 }
