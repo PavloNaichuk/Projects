@@ -1,16 +1,16 @@
-#ifndef FIND_WORD_IN_FILE_THREAD_H
-#define FIND_WORD_IN_FILE_THREAD_H
+#ifndef FIND_WORD_IN_FILES_THREAD_H
+#define FIND_WORD_IN_FILES_THREAD_H
 
 #include <QThread>
 #include <QString>
 
 
-class FindWordInFileThread : public QThread
+class FindWordInFilesThread : public QThread
 {
     Q_OBJECT
 
 public:
-    FindWordInFileThread(const std::vector<QString>& filePath, const QString& word, size_t startIndex, size_t numElements);
+    FindWordInFilesThread(const std::vector<QString>& filePath, const QString& word, size_t startIndex, size_t numElements);
     virtual void run();
     void cancel();
     void pause();
@@ -29,4 +29,4 @@ private:
     bool mIsPaused;
 };
 
-#endif // FIND_WORD_IN_FILE_THREAD_H
+#endif // FIND_WORD_IN_FILES_THREAD_H

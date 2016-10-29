@@ -1,7 +1,7 @@
 #ifndef FINDFILESWIDGET_H
 #define FINDFILESWIDGET_H
 
-#include "FindWordInFileThread.h"
+#include "FindWordInFilesThread.h"
 #include <QtWidgets>
 
 class FindFilesWidget : public QWidget
@@ -37,7 +37,7 @@ private:
     QPushButton* mStartButton;
     QProgressBar* mProgressBar;
     ActionState mActionState;
-    std::vector<FindWordInFileThread*> mThreads;
+    std::vector<FindWordInFilesThread*> mThreads;
     qint64 mDirectorySizeInBytes;
     qint64 mBytesProcessed;
     std::vector<QString> mPaths;

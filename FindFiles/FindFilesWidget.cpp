@@ -87,7 +87,7 @@ void FindFilesWidget::startClicked()
 
         const std::vector<Range> ranges = GenerateRanges(idealThreadCount, mPaths.size());
         for (size_t index = 0; index < idealThreadCount; ++index)
-            mThreads.push_back(new FindWordInFileThread(mPaths, mSearchWordLine->text(), ranges[index].mStart, ranges[index].mLength));
+            mThreads.push_back(new FindWordInFilesThread(mPaths, mSearchWordLine->text(), ranges[index].mStart, ranges[index].mLength));
 
         for (size_t index = 0; index < idealThreadCount; ++index)
         {

@@ -1,10 +1,10 @@
-#include "FindWordInFileThread.h"
+#include "FindWordInFilesThread.h"
 
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
 
-FindWordInFileThread::FindWordInFileThread(const std::vector<QString>& filePath, const QString& word, size_t startIndex, size_t numElements)
+FindWordInFilesThread::FindWordInFilesThread(const std::vector<QString>& filePath, const QString& word, size_t startIndex, size_t numElements)
     : mFilePath(filePath)
     , mWord(word)
     , mStartIndex(startIndex)
@@ -13,7 +13,7 @@ FindWordInFileThread::FindWordInFileThread(const std::vector<QString>& filePath,
     , mIsPaused(false)
 {}
 
-void FindWordInFileThread::run()
+void FindWordInFilesThread::run()
 {
     mIsCancelled = false;
     mIsPaused = false;
@@ -46,17 +46,17 @@ void FindWordInFileThread::run()
     }
 }
 
-void FindWordInFileThread::cancel()
+void FindWordInFilesThread::cancel()
 {
     mIsCancelled = true;
 }
 
-void FindWordInFileThread::pause()
+void FindWordInFilesThread::pause()
 {
     mIsPaused = true;
 }
 
-void FindWordInFileThread::resume()
+void FindWordInFilesThread::resume()
 {
     mIsPaused = false;
 }
