@@ -1,12 +1,16 @@
 Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I worked on in my spare time. 
 
 <b>Find Files (C++, Qt, multi-threading)</b>   
-FindFiles app demonstrates file search containing a word of interest in a particular directory using multi-threaded approach.   
-The algorithm starts with accumulating list of files in the directory. This step is accomplished by the main thread. As soon as the list of files in the directory has been populated, we split it into subranges. After, we start a dedicated thread for each subrange of files from the list. The number of the subranges and, consequently, number of threads is defined by the actual count of hardware threads that could be launched on the PC. In Qt this information could be retrieved using QThread::idealThreadCount() function.   
+FindFiles app demonstrates file search containing a word of interest in a particular directory using multi-threaded approach.
+
+The algorithm starts with accumulating list of files in the directory. This step is accomplished by the main thread. As soon as the list of files in the directory has been populated, we split it into subranges. After, we start a dedicated thread for each subrange of files from the list. The number of the subranges and, consequently, number of threads is defined by the actual count of hardware threads that could be launched on the PC. In Qt this information could be retrieved using QThread::idealThreadCount() function.  
+
 Apart from this, the app demonstrates search progress, exploiting Qt progress bar component. The progress is calculated based on the current number of processed bytes by all the threads relative to the total byte size of all the files.   
 The user is allowed to pause the search operation. Qt threading library does not provide support for suspending the thread compared to Win API. To mimic such behaviour, "while (mIsPaused)" polling is used in conjunction with Qt::sleep() to avoid unnecessary CPU work. 
 Naturally, the user is allowed to cancel the search in a graceful way as well.   
-The comparison of single-threaded and multi-threaded versions illustrate a considerable performance gain in the multi-threaded alternative. We have ... ms and ... ms respectively on ... with 8 hardware threads.   
+
+The comparison of single-threaded and multi-threaded versions illustrate a considerable performance gain in the multi-threaded alternative. We have ... ms and ... ms respectively on ... with 8 hardware threads. 
+
 It is worth mentioning that we still encounter performance drop while iterating the file direcory
 the collect the files required for the inspection as the first step of the algorithm. As a future improvement this step could
 also benefit from multi-threaded approach.
