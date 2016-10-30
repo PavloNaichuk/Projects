@@ -201,7 +201,7 @@ void FindFilesWidget::closeEvent(QCloseEvent* event)
     for (size_t index = 0; index < mThreads.size(); ++index)
         mThreads[index]->pause();
 
-    QMessageBox::StandardButton message = QMessageBox::question(this, "Find Files", tr("Are you sure?\n"), QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+    QMessageBox::StandardButton message = QMessageBox::question(this, "Find Files", tr("Are you sure you want to exit?"), QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
     if (message == QMessageBox::Yes)
     {
         for (size_t index = 0; index < mThreads.size(); ++index)
