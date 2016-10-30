@@ -11,9 +11,11 @@ Naturally, the user is allowed to cancel the search in a graceful way as well.
 
 For the directory with 268 files, the single-threaded search took 21324 milliseconds. In its turn, the multi-threaded search took 5910 milliseconds with launched 8 hardware threads on Intel Core i7 CPU. We observe considerable performance gain in the second scenario. 
 
-It is worth mentioning that we still encounter performance drop while iterating the file direcory
+It is worth noting that we still encounter performance drop while iterating the file direcory
 the collect the files required for the inspection as the first step of the algorithm. As a future improvement this step could
 also benefit from multi-threaded approach.
+
+![Alt text](/Images/FindFiles/Pause.jpg?raw=true "")
 
 <b>Memory Puzzle (C++, Qt)</b>  
 A 4x4 board is full of overturned cards. There is a pair for each card. The player flips over two cards. If they match, then they stay overturned. Otherwise they flip back. The player needs to overturn all the cards in the fewest moves to win.
