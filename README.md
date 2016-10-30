@@ -9,7 +9,7 @@ Apart from this, the app demonstrates search progress, exploiting Qt progress ba
 The user is allowed to pause the search operation. Qt threading library does not provide support for suspending the thread compared to Win API. To mimic such behaviour, "while (mIsPaused)" polling is used in conjunction with Qt::sleep() to avoid unnecessary CPU work. 
 Naturally, the user is allowed to cancel the search in a graceful way as well.   
 
-The comparison of single-threaded and multi-threaded versions illustrate a considerable performance gain in the multi-threaded alternative. We have ... ms and ... ms respectively on ... with 8 hardware threads. 
+For the directory with 268 files, the single-threaded search took 21324 milliseconds. In its turn, the multi-threaded search took 5910 milliseconds with launched 8 hardware threads on Intel Core i7 CPU. We observe considerable performance gain in the second scenario. 
 
 It is worth mentioning that we still encounter performance drop while iterating the file direcory
 the collect the files required for the inspection as the first step of the algorithm. As a future improvement this step could
