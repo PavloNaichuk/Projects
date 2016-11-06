@@ -15,7 +15,8 @@ It is worth noting that we still encounter performance drop while iterating the 
 the collect the files required for the inspection as the first step of the algorithm. As a future improvement this step could
 also benefit from multi-threaded approach.
 
-![Alt text](/Images/FindFiles/Pause.jpg?raw=true "")
+![Alt text](/Images/FindFiles/FoundFiles.jpg?raw=true "")
+![Alt text](/Images/FindFiles/Cancel.jpg?raw=true "")
 
 <b>Memory Puzzle (C++, Qt)</b>  
 A 4x4 board is full of overturned cards. There is a pair for each card. The player flips over two cards. If they match, then they stay overturned. Otherwise they flip back. The player needs to overturn all the cards in the fewest moves to win.
