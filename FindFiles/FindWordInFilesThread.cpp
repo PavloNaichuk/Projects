@@ -4,6 +4,31 @@
 #include <QTextStream>
 #include <QDebug>
 
+Range::Range(size_t start, size_t length)
+    : mStart(start)
+    , mLength(length)
+{}
+
+std::vector<Range> GenerateRanges(size_t numRanges, size_t numFiles)
+{
+    std::vector<Range> ranges;
+    ranges.reserve(numRanges);
+
+    const size_t minLength = numFiles / numRanges;
+    const size_t modulo = numFiles % numRanges;
+
+    for (size_t index = 0; index < modulo; ++index)
+        ranges.push_back(Range(0, minLength + 1));
+
+    for (size_t index = modulo; index < numRanges; ++index)
+        ranges.push_back(Range(0, minLength));
+
+    for (size_t index = 1; index < numRanges; ++index)
+        ranges[index].mStart = ranges[index - 1].mStart + ranges[index - 1].mLength;
+
+    return ranges;
+}
+
 FindWordInFilesThread::FindWordInFilesThread(const std::vector<QString>& filePath, const QString& word, size_t startIndex, size_t numElements)
     : mFilePath(filePath)
     , mWord(word)

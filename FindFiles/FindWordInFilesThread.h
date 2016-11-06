@@ -4,6 +4,15 @@
 #include <QThread>
 #include <QString>
 
+struct Range
+{
+    Range(size_t start, size_t length);
+
+    size_t mStart;
+    size_t mLength;
+};
+
+std::vector<Range> GenerateRanges(size_t numRanges, size_t numFiles);
 
 class FindWordInFilesThread : public QThread
 {
@@ -11,7 +20,8 @@ class FindWordInFilesThread : public QThread
 
 public:
     FindWordInFilesThread(const std::vector<QString>& filePath, const QString& word, size_t startIndex, size_t numElements);
-    virtual void run();
+
+    void run();
     void cancel();
     void pause();
     void resume();

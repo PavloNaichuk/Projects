@@ -14,11 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     FindFilesWidget.cpp \
-    FindWordInFilesThread.cpp
+    FindWordInFilesThread.cpp \
+    ProgressWidget.cpp
 
     FindFilesWidget.cpp
     FindWordInFilesThread.cpp
 
 HEADERS  += \
     FindFilesWidget.h \
-    FindWordInFilesThread.h
+    FindWordInFilesThread.h \
+    ProgressWidget.h

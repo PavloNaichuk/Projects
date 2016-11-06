@@ -2,6 +2,7 @@
 #define FINDFILESWIDGET_H
 
 #include "FindWordInFilesThread.h"
+#include "ProgressWidget.h"
 #include <QtWidgets>
 
 class FindFilesWidget : public QWidget
@@ -15,31 +16,25 @@ public:
 public slots:
     void startClicked();
     void selectDirectoryClicked();
-    void progressChanged(qint64 bytesProcessed);
     void fileFound(const QString& fileName);
     void closeEvent(QCloseEvent* event);
 
-private:
-    enum ActionState
-    {
-        RUNNING,
-        STOPPED,
-    };
+    void searchFinished();
+    void searchContinued();
+    void searchPaused();
+    void searchCancelled();
 
+private:
     QGroupBox* createSelectDirectoryGroup();
     QGroupBox* createSearchWordGroup();
-    QGroupBox* createProgressBarGroup();
     QGroupBox* createFoundFilesGroup();
 
     QLineEdit* mSearchDirectoryLine;
     QListWidget* mFoundFilesList;
     QLineEdit* mSearchWordLine;
     QPushButton* mStartButton;
-    QProgressBar* mProgressBar;
-    ActionState mActionState;
+    ProgressWidget* mProgressWidget;
     std::vector<FindWordInFilesThread*> mThreads;
-    qint64 mDirectorySizeInBytes;
-    qint64 mBytesProcessed;
     std::vector<QString> mPaths;
 };
 
