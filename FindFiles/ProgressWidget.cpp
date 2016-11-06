@@ -7,7 +7,7 @@ ProgressWidget::ProgressWidget(qint64 directorySizeInBytes, QDialog *parent)
     , mDirectorySizeInBytes(directorySizeInBytes)
     , mBytesProcessed(0)
 {
-    setWindowTitle("Search Progress");
+    setWindowTitle("Search");
     setModal(true);
 
     mProgressBar = new QProgressBar();
@@ -95,7 +95,7 @@ void ProgressWidget::closeEvent(QCloseEvent* event)
     {
         emit paused();
 
-        QMessageBox::StandardButton message = QMessageBox::question(this, "Search Progress", tr("Are you sure you want to exit?"), QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+        QMessageBox::StandardButton message = QMessageBox::question(this, "Search", tr("Are you sure you want to cancel?"), QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
         if (message == QMessageBox::Yes)
         {
             event->accept();
