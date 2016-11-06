@@ -95,7 +95,7 @@ void ProgressWidget::closeEvent(QCloseEvent* event)
     {
         emit paused();
 
-        QMessageBox::StandardButton message = QMessageBox::question(this, "Search", tr("Are you sure you want to cancel?"), QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+        QMessageBox::StandardButton message = QMessageBox::question(this, "Search", tr("Are you sure you want to stop search?"), QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
         if (message == QMessageBox::Yes)
         {
             event->accept();
