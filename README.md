@@ -14,6 +14,8 @@ Collsion detection prevents game units from penetrating into other game units wh
 Tank object is controlled by Tank AI object. In terms of design patterns, Tank AI could be regarded as a "strategy" or "policy". This allows us to configure the behavior of the enemy tank during its instantiation. For an easy difficulty level of the game, we could use one strategy whereas for the hard level it could be a very aggressive one. For the player tank, tank AI object has dummy (empty) implementation as the player is in charge of making decisions on the next action. Tank AI object for enemy tank consists of goal objects. On each game frame update, the goal is re-evaluated and based on its cost AI object will choose the next action. Enemy tank is supplied with two goals: destroy player base and destroy player. We define goal priority based on how close enemy tank is located to its target. 
 <b><li>Navigation</li></b>
 In order to find a path to the player base and player tank, tank AI exploits breadth-first search algorithm. Since tank unit has size greater than one map tile, the original breadth-first search algorithm has been modified to take game unit size into account during path-finding stage. Specifically, each map tile is assigned so-called clearance metric which represents the number of tiles in bottom/right direction to the first obstacle. If clearance value of the tile is less than the size of the game unit, that tile should be discarded during path-finding.  
+![Alt text](/Images/BattleCity/StartMenu.jpg?raw=true "")
+![Alt text](/Images/BattleCity/Gameplay.jpg?raw=true "")
 
 <b>Find Files (C++, Qt, multi-threading)</b>   
 FindFiles app demonstrates file search containing a word of interest in a particular directory using multi-threaded approach.
