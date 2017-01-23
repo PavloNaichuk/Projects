@@ -5,7 +5,7 @@ Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I w
 The game entities are derived from the base object GameUnit. There are two types of game units - stationary (attached to one place on the map) and mobile (that is movable). Walls on the map are examples of stationary units while tank and missile are instances of mobile units.  
 <b><li>Level Map</li></b>
 Level map is represented as 2D matrix of equally-sized tiles (cells). Each tile contains information about its location and stationary units standing on it. Keeping information about stationary unit associated with the tile allows to speed up collision detection process.  
-<b>Collision Detection</b>  
+<b><li>Collision Detection</li></b>  
 Collsion detection prevents game units from penetrating into other game units while navigating. Since game units are allowed to move only in left, right, up and down directions, collision detection functionality has been optimized specifically for this use-case. Two collision feeler points are attached to the front face of the game unit which are propagated along its heading on the test distance to reveal any obstacles.  
 <b>Tank AI</b>  
 Tank object is controlled by Tank AI object. For player tank, tank AI object has dummy (empty) implementation as the player is in charge for making decisions on the next action. Tank AI object for enemy tank consists of goal objects. On each game frame update, the goal is re-evaluated and based on its cost AI object will choose the next action. Enemy tank is supplied with two goals: destroy player base and destroy player. We define goal priority based on how close enemy tank is located to its target.  
