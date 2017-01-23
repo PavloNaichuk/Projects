@@ -1,6 +1,9 @@
 Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I worked on in my spare time. 
 
 <b>Battle City (C++11, Qt, QML, collision detection, path-finding, artificial intelligence)</b>  
+An attemp to implement own version of popular game Battle City, developed by Namco in 1985 https://en.wikipedia.org/wiki/Battle_City_(video_game). The game has of a playfield where player tank has to protect the base from enemy tanks which are trying to destroy it.  
+<b><li>Qt/QML</li></b>
+The game has been implemented in Qt and QML with new features of C++11, such as lambda functions, auto, override, smart pointers, constexpr and enum classes. Qt and QML are utilized to present user interface and visuals in the game. Specifically, "model-view" approach is used to accomplish that to allow us to keep game data seperate from its visual representation. Qt and C++ are used to handle game data and logic while QML is responsible for visual representation of that data.
 <b><li>Game Units</li></b>
 The game entities are derived from the base object GameUnit. There are two types of game units - stationary (attached to one place on the map) and mobile (that is movable). Walls on the map are examples of stationary units while tank and missile are instances of mobile units.  
 <b><li>Level Map</li></b>
