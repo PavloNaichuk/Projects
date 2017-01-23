@@ -1,7 +1,7 @@
 Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I worked on in my spare time. 
 
 <b>Battle City (C++, Qt, QML, collision detection, path-finding, artificial intelligence)</b>  
-<b>Game Units</b>  
+<b><center>Game Units</center></b>  
 The game entities are derived from the base object GameUnit. There are two types of game units - stationary (attached to one place on the map) and mobile (that is movable). Walls on the map are examples of stationary units while tank and missile are instances of mobile units.  
 <b>Level Map</b>  
 Level map is represented as 2D matrix of equally-sized tiles (cells). Each tile contains information about its location and stationary units standing on it. Keeping information about stationary unit associated with the tile allows to speed up collision detection process.  
