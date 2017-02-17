@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     Matrix3f.cpp \
     Point2f.cpp \
     Point3f.cpp \
-    Utilities.cpp
+    Utilities.cpp \
+    Transform.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -36,4 +37,5 @@ HEADERS += \
     Matrix3f.h \
     Point2f.h \
     Point3f.h \
-    Utilities.h
+    Utilities.h \
+    Transform.h
