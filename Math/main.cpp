@@ -2,6 +2,7 @@
 #include "Vector3f.h"
 #include "Matrix2f.h"
 #include "Matrix3f.h"
+#include "Matrix4f.h"
 
 int main()
 {
@@ -51,7 +52,7 @@ int main()
     std::cout << "Distance-: " << dist << std::endl;*/
 
 
-    Vector3f vec1(3.0f, 5.0f, 4.7f);
+   /* Vector3f vec1(3.0f, 5.0f, 4.7f);
     Vector3f vec2(2.3f, 3.6f, 5.2f);
 
     std::cout << "vec1: "<< vec1 << std::endl;
@@ -132,7 +133,7 @@ int main()
     std::cout << tran << std::endl;
     std::cout << "Identity:" << "\n";
     std::cout << Matrix2f::identity << std::endl;
-*/
+
     Matrix2f matrix(2.0f, 3.0f, 4.0f, 5.0f);
     Matrix2f invMatrix;
     bool inverted = inverse(matrix, &invMatrix);
@@ -186,7 +187,7 @@ int main()
     std::cout << (matrix1 * Matrix3f::identity) << std::endl;
 
     std::cout << "Identity * Matrix1:" << "\n";
-    std::cout << (Matrix3f::identity * matrix1) << std::endl;*/
+    std::cout << (Matrix3f::identity * matrix1) << std::endl;
 
     Matrix3f matrix3f = Matrix3f::identity;
     Matrix3f invMatrix3f;
@@ -198,5 +199,70 @@ int main()
     }
     else
        std::cout << "No inverted\n";
+    return 0;*/
+
+
+    Matrix4f matrix1(2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 33.0f, 8.0f, 9.0f, 10.0f,  11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f, 1.0f);
+    Matrix4f matrix2(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
+    std::cout << "Matrix1:"<< "\n";
+    std::cout<< matrix1 << std::endl;
+    std::cout << "Matrix2:" <<"\n";
+    std::cout<< matrix2 << std::endl;
+
+    Matrix4f op1 = matrix1 + matrix2;
+    Matrix4f op2 = matrix1 - matrix2;
+    Matrix4f op3 = matrix1 * matrix2;
+    Matrix4f op4 = matrix2 * 2;
+    Matrix4f op5 = 2 * matrix1;
+
+    float det = determinant(matrix1);
+    Matrix4f tran = transpose(matrix1);
+
+
+    std::cout << "Operator+:" << "\n";
+    std::cout << op1 << std::endl;
+    std::cout << "Operator-:" << "\n";
+    std::cout << op2 << std::endl;
+    std::cout << "Operator*:" << "\n";
+    std::cout << op3 << std::endl;
+    std::cout << "Operator*:" << "\n";
+    std::cout << op4 << std::endl;
+    std::cout << "Operator*:" << "\n";
+    std::cout << op5 << std::endl;
+    std::cout << "Determinant:" << "\n";
+    std::cout << det << std::endl;
+    std::cout << "Transpose:" << "\n";
+    std::cout << tran << std::endl;
+    std::cout << "Identity:" << "\n";
+    std::cout << Matrix4f::identity << std::endl;
+
+    std::cout << "Matrix1:"<< "\n";
+    std::cout << matrix1 << std::endl;
+
+    std::cout << "Matrix1 * Identity:" << "\n";
+    std::cout << (matrix1 * Matrix4f::identity) << std::endl;
+
+    std::cout << "Identity * Matrix1:" << "\n";
+    std::cout << (Matrix4f::identity * matrix1) << std::endl;
+
+    Matrix4f invMatrix4f;
+    bool inverted4f = inverse(transpose(matrix1), &invMatrix4f);
+    if (inverted4f)
+    {
+       std::cout << "Inverted:\n";
+       std::cout << invMatrix4f << std::endl;
+    }
+    else
+       std::cout << "No inverted\n";
+
+    Matrix4f invertedNew = Inverse(matrix1);
+    std::cout << "InvertedNew:" << "\n";
+    std::cout << invertedNew << std::endl;
+
+    Matrix4f op6 = invMatrix4f * matrix1;
+    std::cout << "Matrix1 * inverse :"<< "\n";
+    std::cout << op6 << std::endl;
     return 0;
+
+
 }
