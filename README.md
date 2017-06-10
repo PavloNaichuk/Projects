@@ -18,7 +18,7 @@ In order to find a path to the player base and player tank, tank AI exploits bre
 ![Alt text](/Images/BattleCity/Gameplay.jpg?raw=true "")
 
 
-<b>Pac Man (C++11, WinAPI, Direct3D 11)</b>
+<b>Pac Man (C++11, WinAPI, Direct3D 11)</b>  
 Own version of Pac Man game. The game borrows a lot of ideas to manage game entities, game run loop and AI from Battle City implementation. Written in C++, with WinAPI for user interface and handling keyboard input. Direct3D API is used for rendering game entities, level map and text.
 ![Alt text](/Images/PacMan/startMenu.jpg?raw=true "")
 ![Alt text](/Images/PacMan/chasing.jpg?raw=true "")
