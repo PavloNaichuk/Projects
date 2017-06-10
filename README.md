@@ -1,6 +1,6 @@
 Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I worked on in my spare time. 
 
-<b>Battle City (C++11, Qt, QML, collision detection, path-finding, artificial intelligence)</b>  
+<b>Battle City (C++, Qt, QML, collision detection, path-finding, artificial intelligence)</b>  
 An attemp to implement own version of popular game Battle City, developed by Namco in 1985 https://en.wikipedia.org/wiki/Battle_City_(video_game). The game has of a playfield where player tank has to protect the base from enemy tanks which are trying to destroy it.  
 <b><li>Qt/QML</li></b>
 The game has been implemented in Qt and QML with new features of C++11, such as lambda functions, auto, override, smart pointers, constexpr and enum classes. Qt and QML are utilized to present user interface and visuals in the game. Specifically, "model-view" approach is used to accomplish that to allow us to keep game data seperate from its visual representation. Qt and C++ are used to handle game data and logic while QML is responsible for visual representation of that data.
@@ -18,8 +18,8 @@ In order to find a path to the player base and player tank, tank AI exploits bre
 ![Alt text](/Images/BattleCity/Gameplay.jpg?raw=true "")
 
 
-<b>Pac Man (C++11, WinAPI, Direct3D 11)</b>  
-Own version of Pac Man game. The game borrows a lot of ideas to manage game entities, game run loop and AI from Battle City implementation. Written in C++, with WinAPI for user interface and handling keyboard input. Direct3D API is used for rendering game entities, level map and text.
+<b>Pac Man (C++, WinAPI, Direct3D 11)</b>  
+Own version of Pac Man game. The game borrows a lot of ideas to manage game entities, game run loop and AI from Battle City implementation. Written in C++ with WinAPI for user interface and handling keyboard input. Direct3D API is used for rendering game entities, level map and text.
 ![Alt text](/Images/PacMan/startMenu.jpg?raw=true "")
 ![Alt text](/Images/PacMan/chasing.jpg?raw=true "")
 ![Alt text](/Images/PacMan/runAway.jpg?raw=true "")
