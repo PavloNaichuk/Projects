@@ -6,3 +6,6 @@ Qt/build-MemoryPuzzle-Desktop_Qt_5_5_1_MSVC2013_64bit-Debug/
 *.0dca578
 *.ad65dec
 build-Math-Desktop_Qt_5_7_1_MSVC2015_64bit-Debug/
+*.opendb
+*.db
+PacMan/Debug/
