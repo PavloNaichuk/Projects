@@ -1,17 +1,20 @@
-#include "Transform.h"
+#include "Transform2f.h"
 #include <cmath>
+
 const Matrix3f CreateScalingMatrixAboutOrigin(const float xScale, const float yScale)
 {
     return Matrix3f(xScale, 0.0f, 0.0f,
                     0.0f, yScale, 0.0f,
                     0.0f, 0.0f,  1.0f);
 }
-const Matrix3f CreateTranslationMatrix(const float xOffset, const float yOffset)
+
+const Matrix3f CreateTranslationMatrixAboutOrigin(const float xOffset, const float yOffset)
 {
     return Matrix3f(1.0f, 0.0f, xOffset,
                     0.0f, 1.0f, yOffset,
                     0.0f, 0.0f, 1.0f);
 }
+
 const Matrix3f CreateRotationMatrixAboutOrigin(const float angleInRadians)
 {
     float sin = std::sinf(angleInRadians);
@@ -45,6 +48,7 @@ const Matrix3f CreateScalingMatrixAboutPoint(const Point3f& point, float xScale,
                     0.0f, yScale, pY,
                     0.0f, 0.0f,  1.0f);
 }
+
 const Matrix3f CreateRotationMatrixAboutPoint(const Point3f& point, const float angleInRadians)
 {
     float sin = std::sinf(angleInRadians);
@@ -73,8 +77,8 @@ const Matrix3f CreateShearingYMatrixAboutPoint(const Point3f& point, const float
 
 const Point3f operator* (const Matrix3f& matrix, const Point3f& point)
 {
-    return Point3f( matrix.m00 * point.mX + matrix.m01 * point.mY + matrix.m02 *  point.mZ,
-                    matrix.m10 * point.mX + matrix.m11 * point.mY + matrix.m12 *  point.mZ,
-                    matrix.m20 * point.mX + matrix.m21 * point.mY + matrix.m22 *  point.mZ);
+    return Point3f(matrix.m00 * point.mX + matrix.m01 * point.mY + matrix.m02 *  point.mZ,
+                   matrix.m10 * point.mX + matrix.m11 * point.mY + matrix.m12 *  point.mZ,
+                   matrix.m20 * point.mX + matrix.m21 * point.mY + matrix.m22 *  point.mZ);
 }
 
