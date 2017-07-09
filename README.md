@@ -1,6 +1,6 @@
 Welcome to Pavlo Naichuk GitHub page. Here you can find some of the projects I worked on in my spare time. 
 
-<b>Battle City (C++11, Qt, QML, collision detection, path-finding, artificial intelligence)</b>  
+<b>Battle City (C++, Qt, QML, collision detection, path-finding, artificial intelligence)</b>  
 An attemp to implement own version of popular game Battle City, developed by Namco in 1985 https://en.wikipedia.org/wiki/Battle_City_(video_game). The game has of a playfield where player tank has to protect the base from enemy tanks which are trying to destroy it.  
 <b><li>Qt/QML</li></b>
 The game has been implemented in Qt and QML with new features of C++11, such as lambda functions, auto, override, smart pointers, constexpr and enum classes. Qt and QML are utilized to present user interface and visuals in the game. Specifically, "model-view" approach is used to accomplish that to allow us to keep game data seperate from its visual representation. Qt and C++ are used to handle game data and logic while QML is responsible for visual representation of that data.
@@ -16,6 +16,15 @@ Tank object is controlled by Tank AI object. In terms of design patterns, Tank A
 In order to find a path to the player base and player tank, tank AI exploits breadth-first search algorithm. Since tank unit has size greater than one map tile, the original breadth-first search algorithm has been modified to take game unit size into account during path-finding stage. Specifically, each map tile is assigned so-called clearance metric which represents the number of tiles in bottom/right direction to the first obstacle. If clearance value of the tile is less than the size of the game unit, that tile should be discarded during path-finding.  
 ![Alt text](/Images/BattleCity/StartMenu.jpg?raw=true "")
 ![Alt text](/Images/BattleCity/Gameplay.jpg?raw=true "")
+
+
+<b>Pac Man (C++, WinAPI, Direct3D 11)</b>  
+Own version of Pac Man game. The game borrows a lot of ideas to manage game entities, game run loop and AI from Battle City implementation. Written in C++ with WinAPI for user interface and handling keyboard input. Direct3D API is used for rendering game entities, level map and text.
+![Alt text](/Images/PacMan/startMenu.jpg?raw=true "")
+![Alt text](/Images/PacMan/chasing.jpg?raw=true "")
+![Alt text](/Images/PacMan/runAway.jpg?raw=true "")
+![Alt text](/Images/PacMan/gameOver.jpg?raw=true "")
+
 
 <b>Find Files (C++, Qt, multi-threading)</b>   
 FindFiles app demonstrates file search containing a word of interest in a particular directory using multi-threaded approach.
