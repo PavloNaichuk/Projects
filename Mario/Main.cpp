@@ -1,12 +1,48 @@
-#include "SDL.h"
+#include <SDL.h>
 
 int main(int argc, char** argv)
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-		return -1;
+		return 1;
 	}
+
+	SDL_Window* window = SDL_CreateWindow(
+		"Mario by Pavlo Naichuk",                  
+		SDL_WINDOWPOS_UNDEFINED,           
+		SDL_WINDOWPOS_UNDEFINED,          
+		640,                               
+		480,                               
+		SDL_WINDOW_OPENGL                  
+	);
+	if (window == nullptr) 
+	{
+		SDL_Log("Unable to created window: %s", SDL_GetError());
+		return 1;
+	}
+	
+	SDL_Event event;
+	for (bool runGame = true; runGame; )
+	{
+		if (SDL_PollEvent(&event))
+		{
+			switch (event.type)
+			{
+				case SDL_QUIT:
+				{
+					runGame = false;
+					break;
+				}
+				case SDL_KEYDOWN: 
+				{
+					break;
+				}
+			}
+		}
+	}
+
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 	return 0;
 }

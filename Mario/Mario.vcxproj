@@ -92,7 +92,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\External\SDL2-2.0.5\lib\x86\</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
