@@ -88,18 +88,20 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\SDL2-2.0.5\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\SDL2_ttf-2.0.14\include\;$(SolutionDir)\External\SDL2-2.0.5\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\External\SDL2-2.0.5\lib\x86\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\SDL2_ttf-2.0.14\lib\x86;$(SolutionDir)\External\SDL2-2.0.5\lib\x86\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>IF NOT EXIST "$(SolutionDir)Debug\SDL2.dll" COPY /Y "$(SolutionDir)External\SDL2-2.0.5\lib\x86\SDL2.dll" "$(SolutionDir)Debug\SDL2.dll"
-</Command>
+IF NOT EXIST "$(SolutionDir)Debug\libfreetype-6.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\libfreetype-6.dll" "$(SolutionDir)Debug\libfreetype-6.dll"
+IF NOT EXIST "$(SolutionDir)Debug\SDL2_ttf.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\SDL2_ttf.dll" "$(SolutionDir)Debug\SDL2_ttf.dll"
+IF NOT EXIST "$(SolutionDir)Debug\zlib1.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\zlib1.dll" "$(SolutionDir)Debug\zlib1.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

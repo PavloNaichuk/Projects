@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 int main(int argc, char** argv)
 {
@@ -16,6 +17,7 @@ int main(int argc, char** argv)
 		480,                               
 		SDL_WINDOW_OPENGL                  
 	);
+
 	if (window == nullptr) 
 	{
 		SDL_Log("Unable to created window: %s", SDL_GetError());
@@ -23,6 +25,7 @@ int main(int argc, char** argv)
 	}
 	
 	SDL_Event event;
+	SDL_Renderer* renderer;
 	for (bool runGame = true; runGame; )
 	{
 		if (SDL_PollEvent(&event))
@@ -40,6 +43,7 @@ int main(int argc, char** argv)
 				}
 			}
 		}
+		// Render
 	}
 
 	SDL_DestroyWindow(window);
