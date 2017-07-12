@@ -24,8 +24,16 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 
+		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE);
+
+	if (renderer == nullptr)
+	{
+		SDL_Log("Failed to create renderer: %s", SDL_GetError());
+		return 1;
+	}
+
 	SDL_Event event;
-	SDL_Renderer* renderer;
 	for (bool runGame = true; runGame; )
 	{
 		if (SDL_PollEvent(&event))
@@ -37,15 +45,19 @@ int main(int argc, char** argv)
 					runGame = false;
 					break;
 				}
-				case SDL_KEYDOWN: 
+				case SDL_KEYDOWN:
 				{
 					break;
 				}
 			}
 		}
-		// Render
+
+		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 0);
+		SDL_RenderClear(renderer);
+		SDL_RenderPresent(renderer);
 	}
 
+	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 	return 0;
