@@ -98,10 +98,15 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)Debug\SDL2.dll" COPY /Y "$(SolutionDir)External\SDL2-2.0.5\lib\x86\SDL2.dll" "$(SolutionDir)Debug\SDL2.dll"
+      <Command>IF NOT EXIST "$(SolutionDir)Debug\Resources" MKDIR "$(SolutionDir)Debug\Resources"
+IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts" MKDIR "$(SolutionDir)Debug\Resources\Fonts"
+
+IF NOT EXIST "$(SolutionDir)Debug\SDL2.dll" COPY /Y "$(SolutionDir)External\SDL2-2.0.5\lib\x86\SDL2.dll" "$(SolutionDir)Debug\SDL2.dll"
 IF NOT EXIST "$(SolutionDir)Debug\libfreetype-6.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\libfreetype-6.dll" "$(SolutionDir)Debug\libfreetype-6.dll"
 IF NOT EXIST "$(SolutionDir)Debug\SDL2_ttf.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\SDL2_ttf.dll" "$(SolutionDir)Debug\SDL2_ttf.dll"
-IF NOT EXIST "$(SolutionDir)Debug\zlib1.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\zlib1.dll" "$(SolutionDir)Debug\zlib1.dll"</Command>
+IF NOT EXIST "$(SolutionDir)Debug\zlib1.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\zlib1.dll" "$(SolutionDir)Debug\zlib1.dll"
+IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(SolutionDir)Resources\Fonts\Arial.TTF" "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF"
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

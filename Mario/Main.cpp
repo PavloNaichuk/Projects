@@ -9,6 +9,12 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	if (TTF_Init() != 0) 
+	{
+		SDL_Log("Unable to initialize TTF: %s", TTF_GetError());
+		return 1;
+	}
+
 	SDL_Window* window = SDL_CreateWindow(
 		"Mario by Pavlo Naichuk",                  
 		SDL_WINDOWPOS_UNDEFINED,           
@@ -30,6 +36,13 @@ int main(int argc, char** argv)
 	if (renderer == nullptr)
 	{
 		SDL_Log("Failed to create renderer: %s", SDL_GetError());
+		return 1;
+	}
+
+	TTF_Font* font = TTF_OpenFont("Resources/Fonts/Arial.TTF", 16);
+	if (font == nullptr) 
+	{
+		SDL_Log("Unable to create font: %s", TTF_GetError());
 		return 1;
 	}
 
@@ -56,9 +69,13 @@ int main(int argc, char** argv)
 		SDL_RenderClear(renderer);
 		SDL_RenderPresent(renderer);
 	}
+	
+	TTF_CloseFont(font);
+	TTF_Quit();
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+
 	return 0;
 }
