@@ -39,12 +39,31 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	TTF_Font* font = TTF_OpenFont("Resources/Fonts/Arial.TTF", 16);
+	TTF_Font* font = TTF_OpenFont("Resources/Fonts/Arial.TTF", 78);
 	if (font == nullptr) 
 	{
 		SDL_Log("Unable to create font: %s", TTF_GetError());
 		return 1;
 	}
+
+	SDL_Color textColor = { 255, 255, 255, 255 };
+	SDL_Surface* marioSurface = TTF_RenderText_Solid(font, "Mario", textColor);
+	if (marioSurface == nullptr)
+	{
+		SDL_Log("Unable to create surface: %s", TTF_GetError());
+		return 1;
+	}
+
+	SDL_Texture* marioTexture = SDL_CreateTextureFromSurface(renderer, marioSurface);
+	if (marioTexture == nullptr)
+	{
+		SDL_Log("Unable to create texture: %s", TTF_GetError());
+		return 1;
+	}
+	SDL_Rect marioRect;
+	marioRect.x = 0;
+	marioRect.y = 0;
+	SDL_QueryTexture(marioTexture, nullptr, nullptr, &marioRect.w, &marioRect.h);
 
 	SDL_Event event;
 	for (bool runGame = true; runGame; )
@@ -64,18 +83,21 @@ int main(int argc, char** argv)
 				}
 			}
 		}
-
 		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 0);
 		SDL_RenderClear(renderer);
+		SDL_RenderCopy(renderer, marioTexture, nullptr, &marioRect);
 		SDL_RenderPresent(renderer);
 	}
 	
 	TTF_CloseFont(font);
 	TTF_Quit();
 
+	SDL_FreeSurface(marioSurface);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 
 	return 0;
 }
+
+
