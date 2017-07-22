@@ -1,8 +1,15 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <conio.h>
+#include <iostream>
+
+
 
 int main(int argc, char** argv)
 {
+	const int windowWidth = 800;
+	const int windowHeight = 600;
+
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
@@ -19,10 +26,11 @@ int main(int argc, char** argv)
 		"Mario by Pavlo Naichuk",                  
 		SDL_WINDOWPOS_UNDEFINED,           
 		SDL_WINDOWPOS_UNDEFINED,          
-		640,                               
-		480,                               
+		windowWidth,                               
+		windowHeight,                               
 		SDL_WINDOW_OPENGL                  
 	);
+
 
 	if (window == nullptr) 
 	{
@@ -39,31 +47,51 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	TTF_Font* font = TTF_OpenFont("Resources/Fonts/Arial.TTF", 78);
-	if (font == nullptr) 
+	TTF_Font* marioTextFont = TTF_OpenFont("Resources/Fonts/Arial.TTF", 130);
+	if (marioTextFont == nullptr) 
 	{
 		SDL_Log("Unable to create font: %s", TTF_GetError());
 		return 1;
 	}
 
 	SDL_Color textColor = { 255, 255, 255, 255 };
-	SDL_Surface* marioSurface = TTF_RenderText_Solid(font, "Mario", textColor);
-	if (marioSurface == nullptr)
+	SDL_Surface* marioTextSurface = TTF_RenderText_Solid(marioTextFont, "Mario", textColor);
+	if (marioTextSurface == nullptr)
 	{
 		SDL_Log("Unable to create surface: %s", TTF_GetError());
 		return 1;
 	}
 
-	SDL_Texture* marioTexture = SDL_CreateTextureFromSurface(renderer, marioSurface);
-	if (marioTexture == nullptr)
+	SDL_Texture* marioTextTexture = SDL_CreateTextureFromSurface(renderer, marioTextSurface);
+	if (marioTextTexture == nullptr)
 	{
 		SDL_Log("Unable to create texture: %s", TTF_GetError());
 		return 1;
 	}
-	SDL_Rect marioRect;
-	marioRect.x = 0;
-	marioRect.y = 0;
-	SDL_QueryTexture(marioTexture, nullptr, nullptr, &marioRect.w, &marioRect.h);
+	SDL_Rect marioTextRect;
+	SDL_QueryTexture(marioTextTexture, nullptr, nullptr, &marioTextRect.w, &marioTextRect.h);
+	marioTextRect.x = windowWidth / 2 - marioTextRect.w / 2;
+	marioTextRect.y = windowHeight / 2 - marioTextRect.h / 2 - 50;
+
+
+	TTF_Font* enterTextFont = TTF_OpenFont("Resources/Fonts/Arial.TTF", 40);
+	SDL_Surface* enterTextSurface = TTF_RenderText_Solid(enterTextFont, "Press Space to enter", textColor);
+	if (enterTextSurface == nullptr)
+	{
+		SDL_Log("Unable to create surface: %s", TTF_GetError());
+		return 1;
+	}
+
+	SDL_Texture* enterTextTexture = SDL_CreateTextureFromSurface(renderer, enterTextSurface);
+	if (marioTextTexture == nullptr)
+	{
+		SDL_Log("Unable to create texture: %s", TTF_GetError());
+		return 1;
+	}
+	SDL_Rect enterTextRect;
+	SDL_QueryTexture(enterTextTexture, nullptr, nullptr, &enterTextRect.w, &enterTextRect.h);
+	enterTextRect.x = windowWidth / 2 - enterTextRect.w / 2;
+	enterTextRect.y = windowHeight / 2 - enterTextRect.h / 2 + marioTextRect.h;
 
 	SDL_Event event;
 	for (bool runGame = true; runGame; )
@@ -79,20 +107,31 @@ int main(int argc, char** argv)
 				}
 				case SDL_KEYDOWN:
 				{
+					switch (event.key.keysym.sym) 
+					{ 
+						case SDLK_SPACE:
+						{
+							std::cout << "Space";
+							break;
+						}		
+					}
 					break;
-				}
+				}		
 			}
 		}
+
 		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 0);
 		SDL_RenderClear(renderer);
-		SDL_RenderCopy(renderer, marioTexture, nullptr, &marioRect);
+		SDL_RenderCopy(renderer, marioTextTexture, nullptr, &marioTextRect);
+		SDL_RenderCopy(renderer, enterTextTexture, nullptr, &enterTextRect);
 		SDL_RenderPresent(renderer);
 	}
-	
-	TTF_CloseFont(font);
+	TTF_CloseFont(marioTextFont);
+	TTF_CloseFont(enterTextFont);
 	TTF_Quit();
 
-	SDL_FreeSurface(marioSurface);
+	SDL_FreeSurface(marioTextSurface);
+	SDL_FreeSurface(enterTextSurface);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
