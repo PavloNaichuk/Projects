@@ -158,6 +158,15 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="RenderEndMenu.cpp" />
+    <ClCompile Include="RenderStartMenu.cpp" />
+    <ClCompile Include="RenderGamePlay.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="RenderEndMenu.h" />
+    <ClInclude Include="RenderGamePlay.h" />
+    <ClInclude Include="RenderStartMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
