@@ -1,12 +1,17 @@
 #pragma once
 
 #include "Common.h"
+#include "IGameState.h"
 
-class RenderGamePlay
+class RenderGamePlay : public IGameState
 {
 public:
 	RenderGamePlay(SDLRendererPointer& renderer);
-	void render();
+	virtual void enter();
+	virtual void exit();
+	virtual void processKeyboard(SDL_Keycode key);
+	virtual void update();
+	virtual void render();
 
 private:
 	SDLRendererPointer& mRenderer;

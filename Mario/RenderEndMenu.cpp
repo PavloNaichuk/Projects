@@ -2,12 +2,6 @@
 
 RenderEndMenu::RenderEndMenu(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight)
 	: mRenderer(renderer)
-	, mTextColor({ 255, 255, 255, 255 })
-	, mGameOverTextFont(TTF_OpenFont("Resources/Fonts/Arial.TTF", 130), TTF_CloseFont)
-	, mGameOverTextSurface(TTF_RenderText_Solid(mGameOverTextFont.get(), "Game Over", mTextColor), SDL_FreeSurface)
-	, mGameOverTextTexture(SDL_CreateTextureFromSurface(renderer.get(), mGameOverTextSurface.get()), SDL_DestroyTexture)
-	, mGameOverTextRect()
-
 {
 	if (mGameOverTextFont == nullptr)
 	{
@@ -24,6 +18,22 @@ RenderEndMenu::RenderEndMenu(SDLRendererPointer& renderer, const int windowWidth
 	SDL_QueryTexture(mGameOverTextTexture.get(), nullptr, nullptr, &mGameOverTextRect.w, &mGameOverTextRect.h);
 	mGameOverTextRect.x = windowWidth / 2 - mGameOverTextRect.w / 2;
 	mGameOverTextRect.y = windowHeight / 2 - mGameOverTextRect.h / 2 - 50;
+}
+
+void RenderEndMenu::enter()
+{
+}
+
+void RenderEndMenu::exit()
+{
+}
+
+void RenderEndMenu::processKeyboard(SDL_Keycode key)
+{
+}
+
+void RenderEndMenu::update()
+{
 }
 
 void RenderEndMenu::render()

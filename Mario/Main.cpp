@@ -12,13 +12,6 @@
 #include <string>
 #include <sstream>
 
-enum class State
-{
-	StartMenuState,
-	PlayGameState,
-	EndMenuState
-};
-
 int main(int argc, char** argv)
 {
 	const int windowWidth = 1280;
@@ -68,7 +61,8 @@ int main(int argc, char** argv)
 	RenderEndMenu renderEndMenu(renderer, windowWidth, windowHeight);
 
 	SDL_Event event;
-	State state = State::StartMenuState;
+
+	IGameState* currState;
 	for (bool runGame = true; runGame; )
 	{
 		if (SDL_PollEvent(&event))
@@ -84,28 +78,12 @@ int main(int argc, char** argv)
 				{
 					switch (event.key.keysym.sym)
 					{
-						case SDLK_SPACE:
-						{	
-							if (state == State::StartMenuState)
-								state = State::PlayGameState;
-							else if (state == State::PlayGameState)
-								state = State::EndMenuState;
-						}
+						currState->processKeyboard(SDLK_SPACE);
+						currState->update();
+						currState->render();
 					}
 				}
 			}
-		}
-		if (state == State::StartMenuState)
-		{
-			renderStartMenu.render();
-		}
-		else if (state == State::PlayGameState)
-		{
-			renderGamePlay.render();
-		}
-		else if (state == State::EndMenuState)
-		{
-			renderEndMenu.render();
 		}
 	}
 	return 0;

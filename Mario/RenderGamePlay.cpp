@@ -51,6 +51,22 @@ RenderGamePlay::RenderGamePlay(SDLRendererPointer& renderer)
 	mTimeTextRect.y = 10;
 }
 
+void RenderGamePlay::enter()
+{
+}
+
+void RenderGamePlay::exit()
+{
+}
+
+void RenderGamePlay::processKeyboard(SDL_Keycode key)
+{
+}
+
+void RenderGamePlay::update()
+{
+}
+
 void RenderGamePlay::render()
 {
 	SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 255, 0);
@@ -59,3 +75,4 @@ void RenderGamePlay::render()
 	SDL_RenderCopy(mRenderer.get(), mTimeTextTexture.get(), nullptr, &mTimeTextRect);
 	SDL_RenderPresent(mRenderer.get());
 }
+

@@ -167,6 +167,7 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
     <ClInclude Include="RenderEndMenu.h" />
     <ClInclude Include="RenderGamePlay.h" />
     <ClInclude Include="RenderStartMenu.h" />
+    <ClInclude Include="IGameState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

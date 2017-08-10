@@ -52,6 +52,22 @@ RenderStartMenu::RenderStartMenu(SDLRendererPointer& renderer, const int windowW
 	mEnterTextRect.y = windowHeight / 2 - mEnterTextRect.h / 2 + mEnterTextRect.h;
 }
 
+void RenderStartMenu::enter()
+{
+}
+
+void RenderStartMenu::exit()
+{
+}
+
+void RenderStartMenu::processKeyboard(SDL_Keycode key)
+{
+}
+
+void RenderStartMenu::update()
+{
+}
+
 void RenderStartMenu::render()
 {
 	SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 255, 0);
@@ -60,3 +76,4 @@ void RenderStartMenu::render()
 	SDL_RenderCopy(mRenderer.get(), mEnterTextTexture.get(), nullptr, &mEnterTextRect);
 	SDL_RenderPresent(mRenderer.get());
 }
+
