@@ -1,7 +1,8 @@
 #include "StartMenuState.h"
 
-StartMenuState::StartMenuState(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight)
-	: mRenderer(renderer)
+StartMenuState::StartMenuState(StartMenuStateListener& listener, SDLRendererPointer& renderer, const int windowWidth, const int windowHeight)
+	: mListener(listener)
+	, mRenderer(renderer)
 	, mTextColor({ 255, 255, 255, 255 })
 	, mMarioTextFont(TTF_OpenFont("Resources/Fonts/Arial.TTF", 130), TTF_CloseFont)
 	, mMarioTextSurface(TTF_RenderText_Solid(mMarioTextFont.get(), "Mario", mTextColor), SDL_FreeSurface)
@@ -50,6 +51,7 @@ StartMenuState::StartMenuState(SDLRendererPointer& renderer, const int windowWid
 	SDL_QueryTexture(mEnterTextTexture.get(), nullptr, nullptr, &mEnterTextRect.w, &mEnterTextRect.h);
 	mEnterTextRect.x = windowWidth / 2 - mEnterTextRect.w / 2;
 	mEnterTextRect.y = windowHeight / 2 - mEnterTextRect.h / 2 + mEnterTextRect.h;
+	mListener.OnGameStart();
 }
 
 void StartMenuState::Enter()

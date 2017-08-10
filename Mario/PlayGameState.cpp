@@ -1,7 +1,8 @@
 #include "PlayGameState.h"
 
-PlayGameState::PlayGameState(SDLRendererPointer& renderer)
-	: mRenderer(renderer)
+PlayGameState::PlayGameState(PlayGameStateListener& listener, SDLRendererPointer& renderer)
+	: mListener(listener)
+	, mRenderer(renderer)
 	, mTextColor({ 255, 255, 255, 255 })
 	, mMarTextFont(TTF_OpenFont("Resources/Fonts/Arial.TTF", 50), TTF_CloseFont)
 	, mMarTextSurface(TTF_RenderText_Solid(mMarTextFont.get(), "Mario: 0", mTextColor), SDL_FreeSurface)

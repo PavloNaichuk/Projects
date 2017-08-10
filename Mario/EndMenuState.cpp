@@ -1,7 +1,8 @@
 #include "EndMenuState.h"
 
-EndMenuState::EndMenuState(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight)
-	: mRenderer(renderer)
+EndMenuState::EndMenuState(EndMenuStateListener& listener, SDLRendererPointer& renderer, const int windowWidth, const int windowHeight)
+	: mListener(listener)
+	, mRenderer(renderer)
 {
 	if (mGameOverTextFont == nullptr)
 	{
@@ -18,6 +19,8 @@ EndMenuState::EndMenuState(SDLRendererPointer& renderer, const int windowWidth, 
 	SDL_QueryTexture(mGameOverTextTexture.get(), nullptr, nullptr, &mGameOverTextRect.w, &mGameOverTextRect.h);
 	mGameOverTextRect.x = windowWidth / 2 - mGameOverTextRect.w / 2;
 	mGameOverTextRect.y = windowHeight / 2 - mGameOverTextRect.h / 2 - 50;
+
+	mListener.OnGameOver();
 }
 
 void EndMenuState::Enter()

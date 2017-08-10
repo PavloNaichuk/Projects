@@ -2,11 +2,12 @@
 
 #include "Common.h"
 #include "GameState.h"
+#include "PlayGameStateListener.h"
 
 class PlayGameState : public GameState
 {
 public:
-	PlayGameState(SDLRendererPointer& renderer);
+	PlayGameState(PlayGameStateListener& listener, SDLRendererPointer& renderer);
 
 	void Enter() override;
 	void Exit() override;
@@ -25,5 +26,7 @@ private:
 	SDLSurfacePointer mTimeTextSurface;
 	SDLTexturePointer mTimeTextTexture;
 	SDL_Rect mTimeTextRect;
+
+	PlayGameStateListener& mListener;
 };
 

@@ -2,11 +2,12 @@
 
 #include "Common.h"
 #include "GameState.h"
+#include "StartMenuStateListener.h"
 
 class StartMenuState : public GameState
 {
 public:
-	StartMenuState(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight);
+	StartMenuState(StartMenuStateListener& listener, SDLRendererPointer& renderer, const int windowWidth, const int windowHeight);
 
     void Enter() override;
 	void Exit() override;
@@ -26,4 +27,6 @@ private:
 	SDLSurfacePointer mEnterTextSurface;
 	SDLTexturePointer mEnterTextTexture;
 	SDL_Rect mEnterTextRect;
+
+	StartMenuStateListener& mListener;
 };
