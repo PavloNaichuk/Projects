@@ -1,6 +1,6 @@
-#include "RenderStartMenu.h"
+#include "StartMenuState.h"
 
-RenderStartMenu::RenderStartMenu(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight)
+StartMenuState::StartMenuState(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight)
 	: mRenderer(renderer)
 	, mTextColor({ 255, 255, 255, 255 })
 	, mMarioTextFont(TTF_OpenFont("Resources/Fonts/Arial.TTF", 130), TTF_CloseFont)
@@ -52,23 +52,25 @@ RenderStartMenu::RenderStartMenu(SDLRendererPointer& renderer, const int windowW
 	mEnterTextRect.y = windowHeight / 2 - mEnterTextRect.h / 2 + mEnterTextRect.h;
 }
 
-void RenderStartMenu::enter()
+void StartMenuState::Enter()
 {
 }
 
-void RenderStartMenu::exit()
+void StartMenuState::Exit()
 {
 }
 
-void RenderStartMenu::processKeyboard(SDL_Keycode key)
+void StartMenuState::ProcessKeyboard(SDL_Keycode key)
+{
+	//if (key == SDLK_SPACE)
+
+}
+
+void StartMenuState::Update()
 {
 }
 
-void RenderStartMenu::update()
-{
-}
-
-void RenderStartMenu::render()
+void StartMenuState::Render()
 {
 	SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 255, 0);
 	SDL_RenderClear(mRenderer.get());

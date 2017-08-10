@@ -1,16 +1,6 @@
-#include "RenderStartMenu.h"
-#include "RenderGamePlay.h"
-#include "RenderEndMenu.h"
-#include "Common.h"
-
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <conio.h>
-#include <iostream>
-#include <memory>
-#include <functional>
-#include <string>
-#include <sstream>
+#include "StartMenuState.h"
+#include "PlayGameState.h"
+#include "EndMenuState.h"
 
 int main(int argc, char** argv)
 {
@@ -54,15 +44,13 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	
-	RenderStartMenu renderStartMenu(renderer, windowWidth, windowHeight);
-	
-	RenderGamePlay renderGamePlay(renderer);
+	StartMenuState startMenuState(renderer, windowWidth, windowHeight);
+	PlayGameState playGameState(renderer);
+	EndMenuState endMenuState(renderer, windowWidth, windowHeight);
 
-	RenderEndMenu renderEndMenu(renderer, windowWidth, windowHeight);
+	GameState* currState = &startMenuState;
 
 	SDL_Event event;
-
-	IGameState* currState;
 	for (bool runGame = true; runGame; )
 	{
 		if (SDL_PollEvent(&event))
@@ -76,15 +64,13 @@ int main(int argc, char** argv)
 				}
 				case SDL_KEYDOWN:
 				{
-					switch (event.key.keysym.sym)
-					{
-						currState->processKeyboard(SDLK_SPACE);
-						currState->update();
-						currState->render();
-					}
+					currState->ProcessKeyboard(event.key.keysym.sym);
+					break;
 				}
 			}
 		}
+		currState->Update();
+		currState->Render();
 	}
 	return 0;
 }

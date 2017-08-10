@@ -1,6 +1,6 @@
-#include "RenderGamePlay.h"
+#include "PlayGameState.h"
 
-RenderGamePlay::RenderGamePlay(SDLRendererPointer& renderer)
+PlayGameState::PlayGameState(SDLRendererPointer& renderer)
 	: mRenderer(renderer)
 	, mTextColor({ 255, 255, 255, 255 })
 	, mMarTextFont(TTF_OpenFont("Resources/Fonts/Arial.TTF", 50), TTF_CloseFont)
@@ -51,23 +51,23 @@ RenderGamePlay::RenderGamePlay(SDLRendererPointer& renderer)
 	mTimeTextRect.y = 10;
 }
 
-void RenderGamePlay::enter()
+void PlayGameState::Enter()
 {
 }
 
-void RenderGamePlay::exit()
+void PlayGameState::Exit()
 {
 }
 
-void RenderGamePlay::processKeyboard(SDL_Keycode key)
+void PlayGameState::ProcessKeyboard(SDL_Keycode key)
 {
 }
 
-void RenderGamePlay::update()
+void PlayGameState::Update()
 {
 }
 
-void RenderGamePlay::render()
+void PlayGameState::Render()
 {
 	SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 255, 0);
 	SDL_RenderClear(mRenderer.get());

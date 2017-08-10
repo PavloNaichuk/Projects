@@ -1,6 +1,6 @@
-#include "RenderEndMenu.h"
+#include "EndMenuState.h"
 
-RenderEndMenu::RenderEndMenu(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight)
+EndMenuState::EndMenuState(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight)
 	: mRenderer(renderer)
 {
 	if (mGameOverTextFont == nullptr)
@@ -20,23 +20,23 @@ RenderEndMenu::RenderEndMenu(SDLRendererPointer& renderer, const int windowWidth
 	mGameOverTextRect.y = windowHeight / 2 - mGameOverTextRect.h / 2 - 50;
 }
 
-void RenderEndMenu::enter()
+void EndMenuState::Enter()
 {
 }
 
-void RenderEndMenu::exit()
+void EndMenuState::Exit()
+{	
+}
+
+void EndMenuState::ProcessKeyboard(SDL_Keycode key)
 {
 }
 
-void RenderEndMenu::processKeyboard(SDL_Keycode key)
+void EndMenuState::Update()
 {
 }
 
-void RenderEndMenu::update()
-{
-}
-
-void RenderEndMenu::render()
+void EndMenuState::Render()
 {
 	SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 255, 0);
 	SDL_RenderClear(mRenderer.get());

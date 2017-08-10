@@ -1,17 +1,18 @@
 #pragma once
 
 #include "Common.h"
-#include "IGameState.h"
+#include "GameState.h"
 
-class RenderStartMenu : public IGameState
+class StartMenuState : public GameState
 {
 public:
-	RenderStartMenu(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight);
-	virtual void enter();
-	virtual void exit();
-	virtual void processKeyboard(SDL_Keycode key);
-	virtual void update();
-	virtual void render();
+	StartMenuState(SDLRendererPointer& renderer, const int windowWidth, const int windowHeight);
+
+    void Enter() override;
+	void Exit() override;
+	void ProcessKeyboard(SDL_Keycode key) override;
+	void Update() override;
+	void Render() override;
 
 private:
 	SDLRendererPointer& mRenderer;

@@ -2,10 +2,11 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include <conio.h>
 #include <iostream>
 #include <memory>
 #include <functional>
+#include <string>
+#include <sstream>
 
 using SDLQuiter = std::unique_ptr<void, std::function<void(void*)>>;
 using SDLWindowPointer = std::unique_ptr<SDL_Window, std::function<void(SDL_Window*)>>;
