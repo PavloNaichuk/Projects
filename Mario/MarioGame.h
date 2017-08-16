@@ -10,4 +10,9 @@ class MarioGame : public StartMenuStateListener, public PlayGameStateListener, p
 public:
 	void LaunchGame();
 	void EnterState(GameState* newState);
+
+	void OnGameStart() override;
+	void OnLevelLose() override;
+	void OnLevelComplete() override;
+	void OnGameOver() override;
 };

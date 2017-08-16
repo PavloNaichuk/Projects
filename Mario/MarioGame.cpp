@@ -44,9 +44,14 @@ void MarioGame::LaunchGame()
 			return 1;
 		}
 
+
+		/*StartMenuStateListener startMenuStateListener;
+		PlayGameStateListener playGameStateListener);
+		EndMenuStateListener endMenuStateListener;
+
 		StartMenuState startMenuState(renderer, windowWidth, windowHeight);
 		PlayGameState playGameState(renderer);
-		EndMenuState endMenuState(renderer, windowWidth, windowHeight);
+		EndMenuState endMenuState(renderer, windowWidth, windowHeight);*/
 
 		GameState* currState = &startMenuState;
 
@@ -76,5 +81,21 @@ void MarioGame::LaunchGame()
 }
 
 void MarioGame::EnterState(GameState * newState)
+{
+}
+
+void MarioGame::OnGameStart()
+{
+}
+
+void MarioGame::OnLevelLose()
+{
+}
+
+void MarioGame::OnLevelComplete()
+{
+}
+
+void MarioGame::OnGameOver()
 {
 }
