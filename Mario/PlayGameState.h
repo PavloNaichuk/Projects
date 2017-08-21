@@ -2,12 +2,21 @@
 
 #include "Common.h"
 #include "GameState.h"
-#include "PlayGameStateListener.h"
+
+class PlayGameStateListener
+{
+public:
+	virtual ~PlayGameStateListener() {}
+
+	virtual void OnLevelLose() = 0;
+	virtual void OnLevelComplete() = 0;
+};
 
 class PlayGameState : public GameState
 {
 public:
-	PlayGameState(PlayGameStateListener& listener, SDLRendererPointer& renderer);
+	PlayGameState(PlayGameStateListener& listener, SDLRendererPointer renderer);
+	~PlayGameState() override;
 
 	void Enter() override;
 	void Exit() override;
@@ -16,17 +25,19 @@ public:
 	void Render() override;
 
 private:
-	SDLRendererPointer& mRenderer;
+	PlayGameStateListener& mListener;
+	SDLRendererPointer mRenderer;
+
 	SDL_Color mTextColor;
-	TTFFontPointer mMarTextFont;
-	SDLSurfacePointer mMarTextSurface;
-	SDLTexturePointer mMarTextTexture;
-	SDL_Rect mMarTextRect;
+
+	TTFFontPointer mMarioTextFont;
+	SDLSurfacePointer mMarioTextSurface;
+	SDLTexturePointer mMarioTextTexture;
+	SDL_Rect mMarioTextRect;
+
 	TTFFontPointer mTimeTextFont;
 	SDLSurfacePointer mTimeTextSurface;
 	SDLTexturePointer mTimeTextTexture;
 	SDL_Rect mTimeTextRect;
-
-	PlayGameStateListener& mListener;
 };
 

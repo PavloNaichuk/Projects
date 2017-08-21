@@ -1,67 +1,64 @@
 #include "MarioGame.h"
 
+MarioGame::MarioGame()
+	: mWindow(nullptr, SDL_DestroyWindow)
+{
+}
+
+MarioGame::~MarioGame() 
+{
+}
+
 void MarioGame::LaunchGame()
 {
-	while (true) 
+	const int windowWidth = 1280;
+	const int windowHeight = 720;
+
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
-		const int windowWidth = 1280;
-		const int windowHeight = 720;
+		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+		return;
+	}
+	SDLQuiter sdlQuiter(nullptr, [](void*) { SDL_Quit(); });
 
-		if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	if (TTF_Init() != 0)
+	{
+		SDL_Log("Unable to initialize TTF: %s", TTF_GetError());
+		return;
+	}
+	TTFQuiter ttfQuiter(nullptr, [](void*) { TTF_Quit(); });
+
+	mWindow.reset(SDL_CreateWindow(
+		"Mario by Pavlo Naichuk",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		windowWidth,
+		windowHeight,
+		SDL_WINDOW_OPENGL
+	));
+
+	if (mWindow == nullptr)
+	{
+		SDL_Log("Unable to created window: %s", SDL_GetError());
+		return;
+	}
+
+	mRenderer.reset(SDL_CreateRenderer(mWindow.get(), -1,
+		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE), SDL_DestroyRenderer);
+
+	if (mRenderer == nullptr)
+	{
+		SDL_Log("Failed to create renderer: %s", SDL_GetError());
+		return;
+	}
+	
+	EnterState(std::make_unique<StartMenuState>(*this, mRenderer, windowWidth, windowHeight));
+	for (bool runGame = true; runGame; )
+	{
+		if (SDL_PollEvent(&mEvent))
 		{
-			SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-			return 1;
-		}
-		SDLQuiter sdlQuiter(nullptr, [](void*) { SDL_Quit(); });
-
-		if (TTF_Init() != 0)
-		{
-			SDL_Log("Unable to initialize TTF: %s", TTF_GetError());
-			return 1;
-		}
-		TTFQuiter ttfQuiter(nullptr, [](void*) { TTF_Quit(); });
-
-		SDLWindowPointer window(SDL_CreateWindow(
-			"Mario by Pavlo Naichuk",
-			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED,
-			windowWidth,
-			windowHeight,
-			SDL_WINDOW_OPENGL
-		), SDL_DestroyWindow);
-
-		if (window == nullptr)
-		{
-			SDL_Log("Unable to created window: %s", SDL_GetError());
-			return 1;
-		}
-		SDLRendererPointer renderer(SDL_CreateRenderer(window.get(), -1,
-			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE), SDL_DestroyRenderer);
-
-		if (renderer == nullptr)
-		{
-			SDL_Log("Failed to create renderer: %s", SDL_GetError());
-			return 1;
-		}
-
-
-		/*StartMenuStateListener startMenuStateListener;
-		PlayGameStateListener playGameStateListener);
-		EndMenuStateListener endMenuStateListener;
-
-		StartMenuState startMenuState(renderer, windowWidth, windowHeight);
-		PlayGameState playGameState(renderer);
-		EndMenuState endMenuState(renderer, windowWidth, windowHeight);*/
-
-		GameState* currState = &startMenuState;
-
-		SDL_Event event;
-		for (bool runGame = true; runGame; )
-		{
-			if (SDL_PollEvent(&event))
+			switch (mEvent.type)
 			{
-				switch (event.type)
-				{
 				case SDL_QUIT:
 				{
 					runGame = false;
@@ -69,23 +66,28 @@ void MarioGame::LaunchGame()
 				}
 				case SDL_KEYDOWN:
 				{
-					currState->ProcessKeyboard(event.key.keysym.sym);
+					mCurrentState->ProcessKeyboard(mEvent.key.keysym.sym);
 					break;
 				}
-				}
 			}
-			currState->Update();
-			currState->Render();
 		}
-	}
+		mCurrentState->Update();
+		mCurrentState->Render();
+	}	
 }
 
-void MarioGame::EnterState(GameState * newState)
+void MarioGame::EnterState(std::unique_ptr<GameState> newState)
 {
+	if (mCurrentState != nullptr)
+		mCurrentState->Exit();
+
+	mCurrentState = std::move(newState);
+	mCurrentState->Enter();
 }
 
 void MarioGame::OnGameStart()
 {
+	EnterState(std::make_unique<PlayGameState>(*this, mRenderer));
 }
 
 void MarioGame::OnLevelLose()
@@ -98,4 +100,5 @@ void MarioGame::OnLevelComplete()
 
 void MarioGame::OnGameOver()
 {
+	mCurrentState->Exit();
 }

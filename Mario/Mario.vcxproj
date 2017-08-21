@@ -166,13 +166,10 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="EndMenuState.h" />
-    <ClInclude Include="EndMenuStateListener.h" />
     <ClInclude Include="MarioGame.h" />
     <ClInclude Include="PlayGameState.h" />
-    <ClInclude Include="PlayGameStateListener.h" />
     <ClInclude Include="StartMenuState.h" />
     <ClInclude Include="GameState.h" />
-    <ClInclude Include="StartMenuStateListener.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

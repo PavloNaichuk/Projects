@@ -2,12 +2,18 @@
 
 #include "Common.h"
 #include "GameState.h"
-#include "StartMenuStateListener.h"
+
+class StartMenuStateListener
+{
+public:
+	virtual ~StartMenuStateListener() {}
+	virtual void OnGameStart() = 0;
+};
 
 class StartMenuState : public GameState
 {
 public:
-	StartMenuState(StartMenuStateListener& listener, SDLRendererPointer& renderer, const int windowWidth, const int windowHeight);
+	StartMenuState(StartMenuStateListener& listener, SDLRendererPointer renderer, const int windowWidth, const int windowHeight);
 
     void Enter() override;
 	void Exit() override;
@@ -16,8 +22,11 @@ public:
 	void Render() override;
 
 private:
-	SDLRendererPointer& mRenderer;
+	StartMenuStateListener& mListener;
+	SDLRendererPointer mRenderer;
+
 	SDL_Color mTextColor;
+
 	TTFFontPointer mMarioTextFont;
 	SDLSurfacePointer mMarioTextSurface;
 	SDLTexturePointer mMarioTextTexture;
@@ -27,6 +36,4 @@ private:
 	SDLSurfacePointer mEnterTextSurface;
 	SDLTexturePointer mEnterTextTexture;
 	SDL_Rect mEnterTextRect;
-
-	StartMenuStateListener& mListener;
 };
