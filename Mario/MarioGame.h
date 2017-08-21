@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Common.h"
-#include "GameState.h"
 #include "StartMenuState.h" 
 #include "PlayGameState.h"
 #include "EndMenuState.h"
@@ -23,8 +22,7 @@ private:
 	void OnGameOver() override;
 
 private:
-	SDLRendererPointer mRenderer;
 	SDLWindowPointer mWindow;
-	SDL_Event mEvent;
+	SDLRendererPointer mRenderer;
 	std::unique_ptr<GameState> mCurrentState;
 };

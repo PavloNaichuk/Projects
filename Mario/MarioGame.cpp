@@ -3,30 +3,28 @@
 MarioGame::MarioGame()
 	: mWindow(nullptr, SDL_DestroyWindow)
 {
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	{
+		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+		return;
+	}
+	if (TTF_Init() != 0)
+	{
+		SDL_Log("Unable to initialize TTF: %s", TTF_GetError());
+		return;
+	}
 }
 
 MarioGame::~MarioGame() 
 {
+	TTF_Quit();
+	SDL_Quit();
 }
 
 void MarioGame::LaunchGame()
 {
 	const int windowWidth = 1280;
 	const int windowHeight = 720;
-
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-	{
-		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-		return;
-	}
-	SDLQuiter sdlQuiter(nullptr, [](void*) { SDL_Quit(); });
-
-	if (TTF_Init() != 0)
-	{
-		SDL_Log("Unable to initialize TTF: %s", TTF_GetError());
-		return;
-	}
-	TTFQuiter ttfQuiter(nullptr, [](void*) { TTF_Quit(); });
 
 	mWindow.reset(SDL_CreateWindow(
 		"Mario by Pavlo Naichuk",
@@ -36,7 +34,6 @@ void MarioGame::LaunchGame()
 		windowHeight,
 		SDL_WINDOW_OPENGL
 	));
-
 	if (mWindow == nullptr)
 	{
 		SDL_Log("Unable to created window: %s", SDL_GetError());
@@ -45,7 +42,6 @@ void MarioGame::LaunchGame()
 
 	mRenderer.reset(SDL_CreateRenderer(mWindow.get(), -1,
 		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE), SDL_DestroyRenderer);
-
 	if (mRenderer == nullptr)
 	{
 		SDL_Log("Failed to create renderer: %s", SDL_GetError());
@@ -53,11 +49,13 @@ void MarioGame::LaunchGame()
 	}
 	
 	EnterState(std::make_unique<StartMenuState>(*this, mRenderer, windowWidth, windowHeight));
+
+	SDL_Event event;
 	for (bool runGame = true; runGame; )
 	{
-		if (SDL_PollEvent(&mEvent))
+		if (SDL_PollEvent(&event))
 		{
-			switch (mEvent.type)
+			switch (event.type)
 			{
 				case SDL_QUIT:
 				{
@@ -66,7 +64,7 @@ void MarioGame::LaunchGame()
 				}
 				case SDL_KEYDOWN:
 				{
-					mCurrentState->ProcessKeyboard(mEvent.key.keysym.sym);
+					mCurrentState->ProcessKeyboard(event.key.keysym.sym);
 					break;
 				}
 			}
