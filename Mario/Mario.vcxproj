@@ -88,13 +88,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\SDL2_ttf-2.0.14\include\;$(SolutionDir)\External\SDL2-2.0.5\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\SDL2_image-2.0.1\include\;$(SolutionDir)\External\SDL2_ttf-2.0.14\include\;$(SolutionDir)\External\SDL2-2.0.5\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\External\SDL2_ttf-2.0.14\lib\x86;$(SolutionDir)\External\SDL2-2.0.5\lib\x86\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\SDL2_ttf-2.0.14\lib\x86;$(SolutionDir)\External\SDL2-2.0.5\lib\x86\;$(SolutionDir)\External\SDL2_image-2.0.1\lib\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -102,10 +102,21 @@
 IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts" MKDIR "$(SolutionDir)Debug\Resources\Fonts"
 
 IF NOT EXIST "$(SolutionDir)Debug\SDL2.dll" COPY /Y "$(SolutionDir)External\SDL2-2.0.5\lib\x86\SDL2.dll" "$(SolutionDir)Debug\SDL2.dll"
+
 IF NOT EXIST "$(SolutionDir)Debug\libfreetype-6.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\libfreetype-6.dll" "$(SolutionDir)Debug\libfreetype-6.dll"
 IF NOT EXIST "$(SolutionDir)Debug\SDL2_ttf.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\SDL2_ttf.dll" "$(SolutionDir)Debug\SDL2_ttf.dll"
 IF NOT EXIST "$(SolutionDir)Debug\zlib1.dll" COPY /Y "$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x86\zlib1.dll" "$(SolutionDir)Debug\zlib1.dll"
+
+IF NOT EXIST "$(SolutionDir)Debug\libjpeg-9.dll" COPY /Y "$(SolutionDir)External\SDL2_image-2.0.1\lib\x86\libjpeg-9.dll" "$(SolutionDir)Debug\libjpeg-9.dll"
+IF NOT EXIST "$(SolutionDir)Debug\libpng16-16.dll" COPY /Y "$(SolutionDir)External\SDL2_image-2.0.1\lib\x86\libpng16-16.dll" "$(SolutionDir)Debug\libpng16-16.dll"
+IF NOT EXIST "$(SolutionDir)Debug\libtiff-5.dll" COPY /Y "$(SolutionDir)External\SDL2_image-2.0.1\lib\x86\libtiff-5.dll" "$(SolutionDir)Debug\libtiff-5.dll"
+IF NOT EXIST "$(SolutionDir)Debug\libwebp-4.dll" COPY /Y "$(SolutionDir)External\SDL2_image-2.0.1\lib\x86\libwebp-4.dll" "$(SolutionDir)Debug\libwebp-4.dll"
+IF NOT EXIST "$(SolutionDir)Debug\SDL2_image.dll" COPY /Y "$(SolutionDir)External\SDL2_image-2.0.1\lib\x86\SDL2_image.dll" "$(SolutionDir)Debug\SDL2_image.dll"
+
 IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(SolutionDir)Resources\Fonts\Arial.TTF" "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF"
+
+
+
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
