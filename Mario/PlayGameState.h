@@ -39,5 +39,8 @@ private:
 	SDLSurfacePointer mTimeTextSurface;
 	SDLTexturePointer mTimeTextTexture;
 	SDL_Rect mTimeTextRect;
-};
 
+	SDLSurfacePointer mImageSurface;
+	SDLTexturePointer mImageTexture;
+	SDL_Rect mImageRect;
+};

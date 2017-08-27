@@ -14,7 +14,7 @@ EndMenuState::EndMenuState(EndMenuStateListener& listener, SDLRendererPointer re
 	}
 	if (mGameOverTextTexture == nullptr)
 	{
-		SDL_Log("Unable to create texture: %s", TTF_GetError());
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
 	}
 
 	SDL_QueryTexture(mGameOverTextTexture.get(), nullptr, nullptr, &mGameOverTextRect.w, &mGameOverTextRect.h);

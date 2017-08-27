@@ -21,7 +21,7 @@ StartMenuState::StartMenuState(StartMenuStateListener& listener, SDLRendererPoin
 	}
 	if (mMarioTextTexture == nullptr)
 	{
-		SDL_Log("Unable to create texture: %s", TTF_GetError());
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
 	}
 
 	SDL_QueryTexture(mMarioTextTexture.get(), nullptr, nullptr, &mMarioTextRect.w, &mMarioTextRect.h);
@@ -38,7 +38,7 @@ StartMenuState::StartMenuState(StartMenuStateListener& listener, SDLRendererPoin
 	}
 	if (mEnterTextTexture == nullptr)
 	{
-		SDL_Log("Unable to create texture: %s", TTF_GetError());
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
 	}
 
 	SDL_QueryTexture(mEnterTextTexture.get(), nullptr, nullptr, &mEnterTextRect.w, &mEnterTextRect.h);

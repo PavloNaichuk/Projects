@@ -13,10 +13,19 @@ MarioGame::MarioGame()
 		SDL_Log("Unable to initialize TTF: %s", TTF_GetError());
 		return;
 	}
+
+	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+	int initted = IMG_Init(flags);
+	if ((initted & flags) != flags)
+	{
+		SDL_Log("Failed to init required jpg and png support! %s", IMG_GetError());
+		return;
+	}
 }
 
 MarioGame::~MarioGame() 
 {
+	IMG_Quit();
 	TTF_Quit();
 	SDL_Quit();
 }
