@@ -73,12 +73,17 @@ void MarioGame::LaunchGame()
 				}
 				case SDL_KEYDOWN:
 				{
-					mCurrentState->ProcessKeyboard(event.key.keysym.sym);
+					mCurrentState->ProcessKeyPressed(event.key.keysym.sym);
+					break;
+				}
+				case SDL_KEYUP: 
+				{
+					mCurrentState->ProcessKeyReleased(event.key.keysym.sym);
 					break;
 				}
 			}
 		}
-		mCurrentState->Update();
+		mCurrentState->Update(0.1f);
 		mCurrentState->Render();
 	}	
 }

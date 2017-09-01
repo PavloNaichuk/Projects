@@ -10,8 +10,9 @@ PlayGameState::PlayGameState(PlayGameStateListener& listener, SDLRendererPointer
 	, mTimeTextFont(TTF_OpenFont("Resources/Fonts/Arial.TTF", 50), TTF_CloseFont)
 	, mTimeTextSurface(TTF_RenderText_Solid(mTimeTextFont.get(), "Timer: 0", mTextColor), SDL_FreeSurface)
 	, mTimeTextTexture(SDL_CreateTextureFromSurface(renderer.get(), mTimeTextSurface.get()), SDL_DestroyTexture)
-	, mImageSurface(IMG_Load("Resources/Images/foto.JPG"), SDL_FreeSurface)
+	, mImageSurface(IMG_Load("Resources/Images/mario.JPG"), SDL_FreeSurface)
 	, mImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mImageSurface.get()), SDL_DestroyTexture)
+	, mGameUnit(State::Standing, Point(0.0f, 0.0f), Vector(0.0f, 0.0f), Size(MARIO_WIDTH, MARIO_HEIGHT))
 {
 	if (mMarioTextFont == nullptr)
 	{
@@ -56,14 +57,17 @@ PlayGameState::PlayGameState(PlayGameStateListener& listener, SDLRendererPointer
 		SDL_Log("Unable to create texture: %s", SDL_GetError());
 	}
 
-	SDL_QueryTexture(mImageTexture.get(), nullptr, nullptr, &mImageRect.w, &mImageRect.h);
-	mImageRect.x = 0;
-	mImageRect.y = 0;
+	SDL_Rect destRect;
+	SDL_QueryTexture(mImageTexture.get(), nullptr, nullptr, &destRect.w, &destRect.h);
+	destRect.x = 10;
+	destRect.y = 10;
+
+	mGameUnit.mCenter.mX = WINDOW_WIDTH / 2;
+	mGameUnit.mCenter.mY= WINDOW_HEIGHT / 2;
 }
 
 PlayGameState::~PlayGameState() 
 {
-	SDL_FreeSurface;
 }
 
 void PlayGameState::Enter()
@@ -74,12 +78,71 @@ void PlayGameState::Exit()
 {
 }
 
-void PlayGameState::ProcessKeyboard(SDL_Keycode key)
+void PlayGameState::ProcessKeyPressed(SDL_Keycode key)
 {
+	float elapsedTime = 1.0f;
+	if (key == SDLK_LEFT)
+	{
+		mGameUnit.mState = State::Running;
+		mGameUnit.mVelocity = Vector(-MOVE_SPEED, 0);
+	}
+	else if (key == SDLK_RIGHT)
+	{
+		mGameUnit.mState = State::Running;
+		mGameUnit.mVelocity = Vector(MOVE_SPEED, 0);
+	}
+	else if (key == SDLK_DOWN)
+	{
+		mGameUnit.mState = State::Running;
+		mGameUnit.mVelocity = Vector(0, MOVE_SPEED);
+	}
+	else if (key == SDLK_UP)
+	{
+		mGameUnit.mState = State::Running;
+		mGameUnit.mVelocity = Vector(0, -MOVE_SPEED);
+	}
+	else if (key == SDLK_SPACE)
+	{
+		mGameUnit.mState = State::Jumping;
+		mGameUnit.mVelocity.mY = -JUMP_SPEED;
+	}
 }
 
-void PlayGameState::Update()
+void PlayGameState::ProcessKeyReleased(SDL_Keycode key)
 {
+	if ((key == SDLK_LEFT) || (key == SDLK_RIGHT) || (key == SDLK_DOWN) || (key == SDLK_UP))
+	{
+		if (mGameUnit.mState == State::Running) 
+		{
+			mGameUnit.mState = State::Standing;
+			mGameUnit.mVelocity = Vector(0, 0);
+		}
+	}
+}
+
+void PlayGameState::Update(float elapsedTime)
+{
+	if (mGameUnit.mState == State::Jumping) 
+	{
+		mGameUnit.mCenter += mGameUnit.mVelocity * elapsedTime;
+		mGameUnit.mVelocity.mY += GRAVITY * elapsedTime;
+	}
+	else if (mGameUnit.mState == State::Running)
+	{
+		mGameUnit.mCenter += mGameUnit.mVelocity * elapsedTime;
+
+		/*if (mGameUnit.mCenter.mX - mGameUnit.mHalfSize.mX < 0)
+			mGameUnit.mCenter.mX = mGameUnit.mHalfSize.mX;
+
+		if (mGameUnit.mCenter.mX + mGameUnit.mHalfSize.mX > WINDOW_WIDTH)
+			mGameUnit.mCenter.mX = WINDOW_WIDTH - mGameUnit.mHalfSize.mX;
+			
+		if (mGameUnit.mCenter.mY + mGameUnit.mHalfSize.mY > WINDOW_HEIGHT)
+			mGameUnit.mCenter.mY = WINDOW_HEIGHT - mGameUnit.mHalfSize.mY;
+
+		if (mGameUnit.mCenter.mY - mGameUnit.mHalfSize.mY < 0)
+			mGameUnit.mCenter.mY = mGameUnit.mHalfSize.mY;*/
+	}
 }
 
 void PlayGameState::Render()
@@ -88,7 +151,12 @@ void PlayGameState::Render()
 	SDL_RenderClear(mRenderer.get());
 	SDL_RenderCopy(mRenderer.get(), mMarioTextTexture.get(), nullptr, &mMarioTextRect);
 	SDL_RenderCopy(mRenderer.get(), mTimeTextTexture.get(), nullptr, &mTimeTextRect);
-	SDL_RenderCopy(mRenderer.get(), mImageTexture.get(), nullptr, &mImageRect);
+
+	Size size = 2.0f * mGameUnit.mHalfSize;
+	Point topLeft = mGameUnit.mCenter - mGameUnit.mHalfSize;
+	SDL_Rect destRect = {(int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY};
+
+	SDL_RenderCopy(mRenderer.get(), mImageTexture.get(), nullptr, &destRect);
 	SDL_RenderPresent(mRenderer.get());
 }
 

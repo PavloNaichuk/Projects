@@ -54,7 +54,7 @@ void StartMenuState::Exit()
 {
 }
 
-void StartMenuState::ProcessKeyboard(SDL_Keycode key)
+void StartMenuState::ProcessKeyPressed(SDL_Keycode key)
 {
 	if (key == SDLK_SPACE) 
 	{
@@ -62,7 +62,11 @@ void StartMenuState::ProcessKeyboard(SDL_Keycode key)
 	}
 }
 
-void StartMenuState::Update()
+void StartMenuState::ProcessKeyReleased(SDL_Keycode key)
+{
+}
+
+void StartMenuState::Update(float elapsedTime)
 {
 }
 

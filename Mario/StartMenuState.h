@@ -17,8 +17,9 @@ public:
 
     void Enter() override;
 	void Exit() override;
-	void ProcessKeyboard(SDL_Keycode key) override;
-	void Update() override;
+	void ProcessKeyPressed(SDL_Keycode key) override;
+	void ProcessKeyReleased(SDL_Keycode key) override;
+	void Update(float elapsedTime) override;
 	void Render() override;
 
 private:

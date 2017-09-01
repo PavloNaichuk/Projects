@@ -30,11 +30,15 @@ void EndMenuState::Exit()
 {	
 }
 
-void EndMenuState::ProcessKeyboard(SDL_Keycode key)
+void EndMenuState::ProcessKeyPressed(SDL_Keycode key)
 {
 }
 
-void EndMenuState::Update()
+void EndMenuState::ProcessKeyReleased(SDL_Keycode key)
+{
+}
+
+void EndMenuState::Update(float elapsedTime)
 {
 }
 
