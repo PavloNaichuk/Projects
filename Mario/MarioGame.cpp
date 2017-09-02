@@ -60,6 +60,7 @@ void MarioGame::LaunchGame()
 	EnterState(std::make_unique<StartMenuState>(*this, mRenderer, windowWidth, windowHeight));
 
 	SDL_Event event;
+	std::uint32_t prevTime = SDL_GetTicks();
 	for (bool runGame = true; runGame; )
 	{
 		if (SDL_PollEvent(&event))
@@ -83,7 +84,12 @@ void MarioGame::LaunchGame()
 				}
 			}
 		}
-		mCurrentState->Update(0.1f);
+
+		std::uint32_t currTime = SDL_GetTicks();
+		float elapsedTime = float(currTime - prevTime) / 1000.0f;
+		prevTime = currTime;
+
+		mCurrentState->Update(elapsedTime);
 		mCurrentState->Render();
 	}	
 }

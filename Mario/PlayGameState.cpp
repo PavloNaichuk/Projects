@@ -103,8 +103,11 @@ void PlayGameState::ProcessKeyPressed(SDL_Keycode key)
 	}
 	else if (key == SDLK_SPACE)
 	{
-		mGameUnit.mState = State::Jumping;
-		mGameUnit.mVelocity.mY = -JUMP_SPEED;
+		if (mGameUnit.mState != State::Jumping) 
+		{
+			mGameUnit.mState = State::Jumping;
+			mGameUnit.mVelocity.mY = -JUMP_SPEED;
+		}
 	}
 }
 
@@ -126,6 +129,12 @@ void PlayGameState::Update(float elapsedTime)
 	{
 		mGameUnit.mCenter += mGameUnit.mVelocity * elapsedTime;
 		mGameUnit.mVelocity.mY += GRAVITY * elapsedTime;
+
+		if (mGameUnit.mCenter.mY + mGameUnit.mHalfSize.mY > WINDOW_HEIGHT) 
+		{
+			mGameUnit.mCenter.mY = WINDOW_HEIGHT - mGameUnit.mHalfSize.mY;
+			mGameUnit.mState = State::Standing;
+		}
 	}
 	else if (mGameUnit.mState == State::Running)
 	{
