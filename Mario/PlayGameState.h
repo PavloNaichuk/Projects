@@ -43,9 +43,12 @@ private:
 	SDLTexturePointer mTimeTextTexture;
 	SDL_Rect mTimeTextRect;
 
-	SDLSurfacePointer mImageSurface;
-	SDLTexturePointer mImageTexture;
+	SDLSurfacePointer mMarioImageSurface;
+	SDLTexturePointer mMarioImageTexture;
 	SDL_Rect mDestRect;
 
-	GameUnit mGameUnit;
+	GameUnit mMario;
+	GameUnit mEnemy;
+	SDLSurfacePointer mEnemyImageSurface;
+	SDLTexturePointer mEnemyImageTexture;
 };
