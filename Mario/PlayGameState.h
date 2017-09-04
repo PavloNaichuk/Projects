@@ -4,6 +4,9 @@
 #include "Config.h"
 #include "GameState.h"
 #include "GameUnit.h"
+#include "Mario.h"
+#include "Enemy.h"
+#include "GameRenderer.h"
 
 class PlayGameStateListener
 {
@@ -29,7 +32,6 @@ public:
 
 private:
 	PlayGameStateListener& mListener;
-	SDLRendererPointer mRenderer;
 
 	SDL_Color mTextColor;
 
@@ -43,12 +45,10 @@ private:
 	SDLTexturePointer mTimeTextTexture;
 	SDL_Rect mTimeTextRect;
 
-	SDLSurfacePointer mMarioImageSurface;
-	SDLTexturePointer mMarioImageTexture;
-	SDL_Rect mDestRect;
-
-	GameUnit mMario;
-	GameUnit mEnemy;
 	SDLSurfacePointer mEnemyImageSurface;
 	SDLTexturePointer mEnemyImageTexture;
+
+	Mario mMario;
+	Enemy mEnemy;
+	GameRenderer mGameRenderer;
 };

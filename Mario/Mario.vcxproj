@@ -168,10 +168,13 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameRenderer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="EndMenuState.cpp" />
+    <ClCompile Include="Mario.cpp" />
     <ClCompile Include="MarioGame.cpp" />
     <ClCompile Include="GameUnit.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="StartMenuState.cpp" />
     <ClCompile Include="PlayGameState.cpp" />
     <ClCompile Include="Vector.cpp" />
@@ -180,7 +183,10 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
     <ClInclude Include="Common.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="EndMenuState.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameUnit.h" />
+    <ClInclude Include="GameRenderer.h" />
+    <ClInclude Include="Mario.h" />
     <ClInclude Include="MarioGame.h" />
     <ClInclude Include="PlayGameState.h" />
     <ClInclude Include="StartMenuState.h" />
