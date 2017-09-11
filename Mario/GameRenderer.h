@@ -4,6 +4,7 @@
 
 class Mario;
 class Enemy;
+class FireBall;
 
 class GameRenderer
 {
@@ -15,6 +16,7 @@ public:
 
 	void Render(const Mario& mario);
 	void Render(const Enemy& enemy);
+	void Render(const FireBall& fireBall);
 
 private:
 	SDLRendererPointer mRenderer;
@@ -24,4 +26,7 @@ private:
 
 	SDLSurfacePointer mEnemyImageSurface;
 	SDLTexturePointer mEnemyImageTexture;
+
+	SDLSurfacePointer mFireBallImageSurface;
+	SDLTexturePointer mFireBallImageTexture;
 };

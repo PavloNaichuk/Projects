@@ -5,7 +5,7 @@
 enum class State
 {
 	Standing,
-	Running,
+	Moving,
 	Jumping
 };
 

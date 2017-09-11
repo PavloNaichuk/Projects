@@ -74,3 +74,8 @@ std::ostream& operator<< (std::ostream& os, const Vector& vec)
 	os << vec.mX << ", " << vec.mY;
 	return os;
 }
+
+Vector Reflect(const Vector& incidentRay, const Vector& normal)
+{
+	return (incidentRay - (2.0f * (incidentRay * normal)) * normal);
+}

@@ -9,6 +9,9 @@ const float MARIO_HEIGHT = 50.0f;
 const float ENEMY_WIDTH = 50.0f;
 const float ENEMY_HEIGHT = 50.0f;
 
+const float FAREBALL_WIDTH = 15.0f;
+const float FAREBALL_HEIGHT = 15.0f;
+
 const float MOVE_SPEED = 80.0f;
 const float JUMP_SPEED = 40.0f;
 

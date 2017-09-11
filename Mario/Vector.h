@@ -26,3 +26,5 @@ const Vector& operator*= (Vector& vec1, const Vector& vec2);
 const Vector& operator*= (Vector& vec, float scalar);
 
 std::ostream& operator <<(std::ostream& os, const Vector& vec);
+
+Vector Reflect(const Vector& incidentRay, const Vector& normal);

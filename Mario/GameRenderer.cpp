@@ -1,6 +1,7 @@
 #include "GameRenderer.h"
 #include "Mario.h"
 #include "Enemy.h"
+#include "FireBall.h"
 
 GameRenderer::GameRenderer(SDLRendererPointer renderer) 
 	: mRenderer(renderer)
@@ -8,6 +9,8 @@ GameRenderer::GameRenderer(SDLRendererPointer renderer)
 	, mMarioImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mMarioImageSurface.get()), SDL_DestroyTexture)
 	, mEnemyImageSurface(IMG_Load("Resources/Images/owl.JPG"), SDL_FreeSurface)
 	, mEnemyImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mEnemyImageSurface.get()), SDL_DestroyTexture)
+	, mFireBallImageSurface(IMG_Load("Resources/Images/fireBall.JPG"), SDL_FreeSurface)
+	, mFireBallImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mFireBallImageSurface.get()), SDL_DestroyTexture)
 {
 	if (mMarioImageSurface == nullptr)
 	{
@@ -23,6 +26,15 @@ GameRenderer::GameRenderer(SDLRendererPointer renderer)
 		SDL_Log("IMG_Load error: %s", IMG_GetError());
 	}
 	if (mEnemyImageTexture == nullptr)
+	{
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
+	}
+
+	if(mFireBallImageSurface == nullptr)
+	{
+		SDL_Log("IMG_Load error: %s", IMG_GetError());
+	}
+	if (mFireBallImageTexture == nullptr)
 	{
 		SDL_Log("Unable to create texture: %s", SDL_GetError());
 	}
@@ -55,4 +67,13 @@ void GameRenderer::Render(const Enemy& enemy)
 	SDL_Rect destRect = {(int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY};
 
 	SDL_RenderCopy(mRenderer.get(), mEnemyImageTexture.get(), nullptr, &destRect);
+}
+
+void GameRenderer::Render(const FireBall& fireBall)
+{
+	Size size = 2.0f * fireBall.mHalfSize;
+	Point topLeft = fireBall.mCenter - fireBall.mHalfSize;
+	SDL_Rect destRect = { (int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY };
+
+	SDL_RenderCopy(mRenderer.get(), mFireBallImageTexture.get(), nullptr, &destRect);
 }

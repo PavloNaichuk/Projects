@@ -9,17 +9,19 @@ PlayGameState::PlayGameState(PlayGameStateListener& listener, SDLRendererPointer
 	, mTimeTextFont(TTF_OpenFont("Resources/Fonts/Arial.TTF", 50), TTF_CloseFont)
 	, mTimeTextSurface(TTF_RenderText_Solid(mTimeTextFont.get(), "Timer: 0", mTextColor), SDL_FreeSurface)
 	, mTimeTextTexture(SDL_CreateTextureFromSurface(renderer.get(), mTimeTextSurface.get()), SDL_DestroyTexture)
-	, mMario(State::Standing, Point(0.0f, 0.0f), Vector(0.0f, 0.0f), Size(MARIO_WIDTH, MARIO_HEIGHT))
-	, mEnemy(State::Running, Point(0.0f, 0.0f), Vector(0.0f, 0.0f), Size(ENEMY_WIDTH, ENEMY_HEIGHT))
 	, mGameRenderer(renderer)
 {
-	mMario.mCenter.mX = WINDOW_WIDTH / 2;
-	mMario.mCenter.mY = WINDOW_HEIGHT / 2;
+	mGameWorld.mMario.mCenter.mX = WINDOW_WIDTH / 2;
+	mGameWorld.mMario.mCenter.mY = WINDOW_HEIGHT / 2;
 
-	mEnemy.mVelocity.mX = -MOVE_SPEED;
-	mEnemy.mCenter.mX = WINDOW_WIDTH / 2;
-	mEnemy.mCenter.mY = WINDOW_HEIGHT - mEnemy.mHalfSize.mY;
-
+	mGameWorld.mEnemies.emplace_back(State::Moving, Point(0.0f, 0.0f), Vector(0.0f, 0.0f), Size(ENEMY_WIDTH, ENEMY_HEIGHT));
+	for (Enemy& enemy : mGameWorld.mEnemies) 
+	{
+		enemy.mVelocity.mX = -MOVE_SPEED;
+		enemy.mCenter.mX = WINDOW_WIDTH / 2;
+		enemy.mCenter.mY = WINDOW_HEIGHT - enemy.mHalfSize.mY;
+	}
+	
 	if (mMarioTextFont == nullptr)
 	{
 		SDL_Log("Unable to create font: %s", TTF_GetError());
@@ -69,18 +71,17 @@ void PlayGameState::Exit()
 
 void PlayGameState::ProcessKeyPressed(SDL_Keycode key)
 {
-	mMario.ProcessKeyPressed(key);
+	mGameWorld.mMario.ProcessKeyPressed(key, mGameWorld); 
 }
 
 void PlayGameState::ProcessKeyReleased(SDL_Keycode key)
 {
-	mMario.ProcessKeyReleased(key);
+	mGameWorld.mMario.ProcessKeyReleased(key);
 }
 
 void PlayGameState::Update(float elapsedTime)
 {
-	mMario.Update(elapsedTime);
-	mEnemy.Update(elapsedTime);
+	mGameWorld.Update(elapsedTime);
 }
 
 void PlayGameState::Render()
@@ -90,8 +91,12 @@ void PlayGameState::Render()
 	/*SDL_RenderCopy(mRenderer.get(), mMarioTextTexture.get(), nullptr, &mMarioTextRect);
 	SDL_RenderCopy(mRenderer.get(), mTimeTextTexture.get(), nullptr, &mTimeTextRect);*/
 	
-	mGameRenderer.Render(mMario);
-	mGameRenderer.Render(mEnemy);
+	mGameRenderer.Render(mGameWorld.mMario);
+	for (const Enemy& enemy : mGameWorld.mEnemies)
+		mGameRenderer.Render(enemy);
+
+	for (const FireBall& fireBall : mGameWorld.mFireBalls)
+		mGameRenderer.Render(fireBall);
 	
 	mGameRenderer.EndRenderFrame();
 }

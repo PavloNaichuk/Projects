@@ -4,8 +4,7 @@
 #include "Config.h"
 #include "GameState.h"
 #include "GameUnit.h"
-#include "Mario.h"
-#include "Enemy.h"
+#include "GameWorld.h"
 #include "GameRenderer.h"
 
 class PlayGameStateListener
@@ -48,7 +47,6 @@ private:
 	SDLSurfacePointer mEnemyImageSurface;
 	SDLTexturePointer mEnemyImageTexture;
 
-	Mario mMario;
-	Enemy mEnemy;
 	GameRenderer mGameRenderer;
+	GameWorld mGameWorld;
 };

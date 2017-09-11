@@ -8,7 +8,7 @@ Enemy::Enemy(State state, const Point& center, const Vector& velocity, const Siz
 
 void Enemy::Update(float elapsedTime)
 {
-	if (mState == State::Running)
+	if (mState == State::Moving)
 	{
 		mCenter += mVelocity * elapsedTime;
 		if ((mCenter.mX - mHalfSize.mX < 0) || (mCenter.mX + mHalfSize.mX > WINDOW_WIDTH))

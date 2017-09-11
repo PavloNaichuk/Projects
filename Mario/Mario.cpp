@@ -1,46 +1,53 @@
 #include "Mario.h"
 #include "Config.h"
+#include "GameWorld.h"
 
 Mario::Mario(State state, const Point& center, const Vector& velocity, const Size& size)
 	: GameUnit(state, center, velocity, size)
 {
 }
 
-void Mario::ProcessKeyPressed(SDL_Keycode key)
+void Mario::ProcessKeyPressed(SDL_Keycode key, GameWorld& gameWorld)
 {
-	if (mState == State::Standing)
+	if (gameWorld.mMario.mState == State::Standing)
 	{
 		if (key == SDLK_LEFT)
 		{
-			mState = State::Running;
-			mVelocity = Vector(-MOVE_SPEED, 0);
+			gameWorld.mMario.mState = State::Moving;
+			gameWorld.mMario.mVelocity = Vector(-MOVE_SPEED, 0);
 		}
 		else if (key == SDLK_RIGHT)
 		{
-			mState = State::Running;
-			mVelocity = Vector(MOVE_SPEED, 0);
+			gameWorld.mMario.mState = State::Moving;
+			gameWorld.mMario.mVelocity = Vector(MOVE_SPEED, 0);
 		}
 		else if (key == SDLK_DOWN)
 		{
-			mState = State::Running;
-			mVelocity = Vector(0, MOVE_SPEED);
+			gameWorld.mMario.mState = State::Moving;
+			gameWorld.mMario.mVelocity = Vector(0, MOVE_SPEED);
 		}
 		else if (key == SDLK_UP)
 		{
-			mState = State::Running;
-			mVelocity = Vector(0, -MOVE_SPEED);
+			gameWorld.mMario.mState = State::Moving;
+			gameWorld.mMario.mVelocity = Vector(0, -MOVE_SPEED);
 		}
 		else if (key == SDLK_SPACE)
 		{
-			mState = State::Jumping;
-			mVelocity.mY = -JUMP_SPEED;
+			gameWorld.mMario.mState = State::Jumping;
+			gameWorld.mMario.mVelocity.mY = -JUMP_SPEED;
+		}
+		else if (key == SDLK_LCTRL)
+		{
+			gameWorld.mFireBalls.emplace_back(State::Moving, mCenter,
+				Vector(-MOVE_SPEED, 0.0f),
+				Size(FAREBALL_WIDTH, FAREBALL_HEIGHT));
 		}
 	}
 }
 
 void Mario::ProcessKeyReleased(SDL_Keycode key)
 {
-	if (mState == State::Running)
+	if (mState == State::Moving)
 	{
 		if ((key == SDLK_LEFT) || (key == SDLK_RIGHT) || (key == SDLK_DOWN) || (key == SDLK_UP))
 		{
@@ -63,7 +70,7 @@ void Mario::Update(float elapsedTime)
 			mState = State::Standing;
 		}
 	}
-	else if (mState == State::Running)
+	else if (mState == State::Moving)
 	{
 		mCenter += mVelocity * elapsedTime;
 
@@ -79,5 +86,4 @@ void Mario::Update(float elapsedTime)
 		if (mGameUnit.mCenter.mY - mGameUnit.mHalfSize.mY < 0)
 		mGameUnit.mCenter.mY = mGameUnit.mHalfSize.mY;*/
 	}
-
 }
