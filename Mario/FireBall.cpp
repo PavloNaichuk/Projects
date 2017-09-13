@@ -15,7 +15,7 @@ void FireBall::Update(float elapsedTime)
 		const Vector groundNormal(0.0f, -1.0f);
 
 		mCenter += mVelocity * elapsedTime;
-		mVelocity.mY += GRAVITY * elapsedTime;
+		mVelocity.mY += FIREBALL_GRAVITY * elapsedTime;
 
 		if (mCollidedWithGround) 
 		{

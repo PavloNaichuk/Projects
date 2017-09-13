@@ -8,6 +8,7 @@
 #include <functional>
 #include <string>
 #include <sstream>
+#include <algorithm>
 
 using SDLWindowPointer = std::unique_ptr<SDL_Window, std::function<void(SDL_Window*)>>;
 using SDLRendererPointer = std::shared_ptr<SDL_Renderer>;

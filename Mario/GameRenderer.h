@@ -21,12 +21,17 @@ public:
 private:
 	SDLRendererPointer mRenderer;
 
-	SDLSurfacePointer mMarioImageSurface;
-	SDLTexturePointer mMarioImageTexture;
+	SDLSurfacePointer mMarioLeftImageSurface;
+	SDLTexturePointer mMarioLeftImageTexture;
+	SDLSurfacePointer mMarioRightImageSurface;
+	SDLTexturePointer mMarioRightImageTexture;
 
 	SDLSurfacePointer mEnemyImageSurface;
 	SDLTexturePointer mEnemyImageTexture;
 
 	SDLSurfacePointer mFireBallImageSurface;
 	SDLTexturePointer mFireBallImageTexture;
+
+	SDLSurfacePointer mGoldCoinImageSurface;
+	SDLTexturePointer mGoldCoinImageTexture;
 };

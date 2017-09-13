@@ -13,4 +13,6 @@ public:
 	void ProcessKeyPressed(SDL_Keycode key, GameWorld& gameWorld);
 	void ProcessKeyReleased(SDL_Keycode key);
 	void Update(float elapsedTime);
+
+	float mDirection;
 };

@@ -17,7 +17,7 @@ PlayGameState::PlayGameState(PlayGameStateListener& listener, SDLRendererPointer
 	mGameWorld.mEnemies.emplace_back(State::Moving, Point(0.0f, 0.0f), Vector(0.0f, 0.0f), Size(ENEMY_WIDTH, ENEMY_HEIGHT));
 	for (Enemy& enemy : mGameWorld.mEnemies) 
 	{
-		enemy.mVelocity.mX = -MOVE_SPEED;
+		enemy.mVelocity.mX = -ENEMY_SPEED;
 		enemy.mCenter.mX = WINDOW_WIDTH / 2;
 		enemy.mCenter.mY = WINDOW_HEIGHT - enemy.mHalfSize.mY;
 	}

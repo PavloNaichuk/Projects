@@ -2,21 +2,36 @@
 #include "Mario.h"
 #include "Enemy.h"
 #include "FireBall.h"
+#include "GoldCoin.h"
+#include "Config.h"
 
 GameRenderer::GameRenderer(SDLRendererPointer renderer) 
 	: mRenderer(renderer)
-	, mMarioImageSurface(IMG_Load("Resources/Images/mario.JPG"), SDL_FreeSurface)
-	, mMarioImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mMarioImageSurface.get()), SDL_DestroyTexture)
+	, mMarioLeftImageSurface(IMG_Load("Resources/Images/marioLeft.JPG"), SDL_FreeSurface)
+	, mMarioLeftImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mMarioLeftImageSurface.get()), SDL_DestroyTexture)
+	, mMarioRightImageSurface(IMG_Load("Resources/Images/marioRight.JPG"), SDL_FreeSurface)
+	, mMarioRightImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mMarioRightImageSurface.get()), SDL_DestroyTexture)
 	, mEnemyImageSurface(IMG_Load("Resources/Images/owl.JPG"), SDL_FreeSurface)
 	, mEnemyImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mEnemyImageSurface.get()), SDL_DestroyTexture)
 	, mFireBallImageSurface(IMG_Load("Resources/Images/fireBall.JPG"), SDL_FreeSurface)
 	, mFireBallImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mFireBallImageSurface.get()), SDL_DestroyTexture)
+	, mGoldCoinImageSurface(IMG_Load("Resources/Images/fireBall.JPG"), SDL_FreeSurface)
+	, mGoldCoinImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mGoldCoinImageSurface.get()), SDL_DestroyTexture)
 {
-	if (mMarioImageSurface == nullptr)
+	if (mMarioLeftImageSurface == nullptr)
 	{
 		SDL_Log("IMG_Load error: %s", IMG_GetError());
 	}
-	if (mMarioImageTexture == nullptr)
+	if (mMarioLeftImageTexture == nullptr)
+	{
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
+	}
+
+	if (mMarioRightImageSurface == nullptr)
+	{
+		SDL_Log("IMG_Load error: %s", IMG_GetError());
+	}
+	if (mMarioRightImageTexture == nullptr)
 	{
 		SDL_Log("Unable to create texture: %s", SDL_GetError());
 	}
@@ -38,6 +53,15 @@ GameRenderer::GameRenderer(SDLRendererPointer renderer)
 	{
 		SDL_Log("Unable to create texture: %s", SDL_GetError());
 	}
+
+	if (mGoldCoinImageSurface == nullptr)
+	{
+		SDL_Log("IMG_Load error: %s", IMG_GetError());
+	}
+	if (mGoldCoinImageTexture == nullptr)
+	{
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
+	}
 }
 
 void GameRenderer::BeginRenderFrame()
@@ -56,8 +80,10 @@ void GameRenderer::Render(const Mario& mario)
 	Size size = 2.0f * mario.mHalfSize;
 	Point topLeft = mario.mCenter - mario.mHalfSize;
 	SDL_Rect destRect = {(int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY};
-
-	SDL_RenderCopy(mRenderer.get(), mMarioImageTexture.get(), nullptr, &destRect);
+	if (mario.mDirection > 0.0f)
+		SDL_RenderCopy(mRenderer.get(), mMarioRightImageTexture.get(), nullptr, &destRect);
+	else
+		SDL_RenderCopy(mRenderer.get(), mMarioLeftImageTexture.get(), nullptr, &destRect);	
 }
 
 void GameRenderer::Render(const Enemy& enemy)

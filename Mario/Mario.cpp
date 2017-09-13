@@ -4,43 +4,49 @@
 
 Mario::Mario(State state, const Point& center, const Vector& velocity, const Size& size)
 	: GameUnit(state, center, velocity, size)
+	, mDirection(1.0f)
 {
 }
 
 void Mario::ProcessKeyPressed(SDL_Keycode key, GameWorld& gameWorld)
 {
-	if (gameWorld.mMario.mState == State::Standing)
+	if (mState == State::Standing)
 	{
 		if (key == SDLK_LEFT)
 		{
-			gameWorld.mMario.mState = State::Moving;
-			gameWorld.mMario.mVelocity = Vector(-MOVE_SPEED, 0);
+			mState = State::Moving;
+			mVelocity = Vector(-MARIO_SPEED, 0);
+			mDirection = -1.0f;
 		}
 		else if (key == SDLK_RIGHT)
 		{
-			gameWorld.mMario.mState = State::Moving;
-			gameWorld.mMario.mVelocity = Vector(MOVE_SPEED, 0);
+			mState = State::Moving;
+			mVelocity = Vector(MARIO_SPEED, 0);
+			mDirection = 1.0f;
 		}
 		else if (key == SDLK_DOWN)
 		{
-			gameWorld.mMario.mState = State::Moving;
-			gameWorld.mMario.mVelocity = Vector(0, MOVE_SPEED);
+			mState = State::Moving;
+			mVelocity = Vector(0, MARIO_SPEED);
 		}
 		else if (key == SDLK_UP)
 		{
-			gameWorld.mMario.mState = State::Moving;
-			gameWorld.mMario.mVelocity = Vector(0, -MOVE_SPEED);
+			mState = State::Moving;
+			mVelocity = Vector(0, -MARIO_SPEED);
 		}
 		else if (key == SDLK_SPACE)
 		{
-			gameWorld.mMario.mState = State::Jumping;
-			gameWorld.mMario.mVelocity.mY = -JUMP_SPEED;
+			mState = State::Jumping;
+			mVelocity.mY = -MARIO_JUMP_SPEED;
 		}
-		else if (key == SDLK_LCTRL)
+	}
+	if ((mState == State::Standing) || (mState == State::Moving) || (mState == State::Jumping)) 
+	{
+		if (key == SDLK_LCTRL)
 		{
 			gameWorld.mFireBalls.emplace_back(State::Moving, mCenter,
-				Vector(-MOVE_SPEED, 0.0f),
-				Size(FAREBALL_WIDTH, FAREBALL_HEIGHT));
+				mDirection * Vector(FIREBALL_SPEED, 0),
+				Size(FIREBALL_WIDTH, FIREBALL_HEIGHT));
 		}
 	}
 }
@@ -62,7 +68,7 @@ void Mario::Update(float elapsedTime)
 	if (mState == State::Jumping)
 	{
 		mCenter += mVelocity * elapsedTime;
-		mVelocity.mY += GRAVITY * elapsedTime;
+		mVelocity.mY += MARIO_GRAVITY * elapsedTime;
 
 		if (mCenter.mY + mHalfSize.mY > WINDOW_HEIGHT)
 		{
@@ -74,16 +80,16 @@ void Mario::Update(float elapsedTime)
 	{
 		mCenter += mVelocity * elapsedTime;
 
-		/*if (mGameUnit.mCenter.mX - mGameUnit.mHalfSize.mX < 0)
-		mGameUnit.mCenter.mX = mGameUnit.mHalfSize.mX;
+		if (mCenter.mX - mHalfSize.mX < 0)
+			mCenter.mX = mHalfSize.mX;
 
-		if (mGameUnit.mCenter.mX + mGameUnit.mHalfSize.mX > WINDOW_WIDTH)
-		mGameUnit.mCenter.mX = WINDOW_WIDTH - mGameUnit.mHalfSize.mX;
+		if (mCenter.mX + mHalfSize.mX > WINDOW_WIDTH)
+			mCenter.mX = WINDOW_WIDTH - mHalfSize.mX;
 
-		if (mGameUnit.mCenter.mY + mGameUnit.mHalfSize.mY > WINDOW_HEIGHT)
-		mGameUnit.mCenter.mY = WINDOW_HEIGHT - mGameUnit.mHalfSize.mY;
+		if (mCenter.mY + mHalfSize.mY > WINDOW_HEIGHT)
+			mCenter.mY = WINDOW_HEIGHT - mHalfSize.mY;
 
-		if (mGameUnit.mCenter.mY - mGameUnit.mHalfSize.mY < 0)
-		mGameUnit.mCenter.mY = mGameUnit.mHalfSize.mY;*/
+		if (mCenter.mY - mHalfSize.mY < 0)
+			mCenter.mY = mHalfSize.mY;
 	}
 }
