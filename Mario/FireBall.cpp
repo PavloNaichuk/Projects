@@ -1,13 +1,16 @@
 #include "FireBall.h"
 #include "Config.h"
+#include "GameWorld.h"
+#include "Collision.h"
 
 FireBall::FireBall(State state, const Point& center, const Vector& velocity, const Size& size)
 	: GameUnit(state, center, velocity, size)
+	, mIsActive(true)
 	, mCollidedWithGround(false)
 {
 }
 
-void FireBall::Update(float elapsedTime)
+void FireBall::Update(float elapsedTime, GameWorld& gameWorld)
 {
 	if (mState == State::Moving)
 	{
@@ -26,6 +29,23 @@ void FireBall::Update(float elapsedTime)
 		{
 			mCollidedWithGround = true;
 			mCenter.mY = groundY - mHalfSize.mY;
+		}
+		
+		TestCollisionVersusEnemy(gameWorld);
+	}
+}
+
+void FireBall::TestCollisionVersusEnemy(GameWorld& gameWorld)
+{
+	for (Enemy& enemy : gameWorld.mEnemies)
+	{
+		if (Collide(*this, enemy))
+		{
+			gameWorld.mMario.mScores += enemy.mScores;
+			enemy.mIsActive = false;
+			mIsActive = false;
+
+			break;
 		}
 	}
 }

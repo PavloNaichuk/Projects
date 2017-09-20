@@ -5,6 +5,8 @@
 Mario::Mario(State state, const Point& center, const Vector& velocity, const Size& size)
 	: GameUnit(state, center, velocity, size)
 	, mDirection(1.0f)
+	, mScores(0)
+	, mLives(MARIO_LIVES)
 {
 }
 
@@ -92,4 +94,9 @@ void Mario::Update(float elapsedTime)
 		if (mCenter.mY - mHalfSize.mY < 0)
 			mCenter.mY = mHalfSize.mY;
 	}
+}
+
+void Mario::RemoveLife()
+{
+	--mLives;
 }

@@ -5,6 +5,7 @@
 class Mario;
 class Enemy;
 class FireBall;
+class GoldCoin;
 
 class GameRenderer
 {
@@ -17,6 +18,7 @@ public:
 	void Render(const Mario& mario);
 	void Render(const Enemy& enemy);
 	void Render(const FireBall& fireBall);
+	void Render(const GoldCoin& goldCoin);
 
 private:
 	SDLRendererPointer mRenderer;

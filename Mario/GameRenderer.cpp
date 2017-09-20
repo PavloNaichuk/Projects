@@ -15,7 +15,7 @@ GameRenderer::GameRenderer(SDLRendererPointer renderer)
 	, mEnemyImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mEnemyImageSurface.get()), SDL_DestroyTexture)
 	, mFireBallImageSurface(IMG_Load("Resources/Images/fireBall.JPG"), SDL_FreeSurface)
 	, mFireBallImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mFireBallImageSurface.get()), SDL_DestroyTexture)
-	, mGoldCoinImageSurface(IMG_Load("Resources/Images/fireBall.JPG"), SDL_FreeSurface)
+	, mGoldCoinImageSurface(IMG_Load("Resources/Images/goldCoin.JPG"), SDL_FreeSurface)
 	, mGoldCoinImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mGoldCoinImageSurface.get()), SDL_DestroyTexture)
 {
 	if (mMarioLeftImageSurface == nullptr)
@@ -99,7 +99,16 @@ void GameRenderer::Render(const FireBall& fireBall)
 {
 	Size size = 2.0f * fireBall.mHalfSize;
 	Point topLeft = fireBall.mCenter - fireBall.mHalfSize;
-	SDL_Rect destRect = { (int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY };
+	SDL_Rect destRect = {(int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY};
 
 	SDL_RenderCopy(mRenderer.get(), mFireBallImageTexture.get(), nullptr, &destRect);
+}
+
+void GameRenderer::Render(const GoldCoin& goldCoin)
+{
+	Size size = 2.0f * goldCoin.mHalfSize;
+	Point topLeft = goldCoin.mCenter - goldCoin.mHalfSize;
+	SDL_Rect destRect = {(int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY};
+
+	SDL_RenderCopy(mRenderer.get(), mGoldCoinImageTexture.get(), nullptr, &destRect);
 }

@@ -14,14 +14,38 @@ PlayGameState::PlayGameState(PlayGameStateListener& listener, SDLRendererPointer
 	mGameWorld.mMario.mCenter.mX = WINDOW_WIDTH / 2;
 	mGameWorld.mMario.mCenter.mY = WINDOW_HEIGHT / 2;
 
-	mGameWorld.mEnemies.emplace_back(State::Moving, Point(0.0f, 0.0f), Vector(0.0f, 0.0f), Size(ENEMY_WIDTH, ENEMY_HEIGHT));
-	for (Enemy& enemy : mGameWorld.mEnemies) 
-	{
-		enemy.mVelocity.mX = -ENEMY_SPEED;
-		enemy.mCenter.mX = WINDOW_WIDTH / 2;
-		enemy.mCenter.mY = WINDOW_HEIGHT - enemy.mHalfSize.mY;
-	}
+	mGameWorld.mEnemies.emplace_back(State::Moving, Point(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
+		Vector(-ENEMY_SPEED, 0.0f), Size(ENEMY_WIDTH, ENEMY_HEIGHT), ENEMY_SCORE);
+
+	mGameWorld.mEnemies.emplace_back(State::Moving, Point(WINDOW_WIDTH / 3, WINDOW_HEIGHT / 3),
+		Vector(-ENEMY_SPEED, 0.0f), Size(ENEMY_WIDTH, ENEMY_HEIGHT), ENEMY_SCORE);
+
+	mGameWorld.mEnemies.emplace_back(State::Moving, Point(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4),
+		Vector(-ENEMY_SPEED, 0.0f), Size(ENEMY_WIDTH, ENEMY_HEIGHT), ENEMY_SCORE);
+
+	mGameWorld.mEnemies.emplace_back(State::Moving, Point(WINDOW_WIDTH / 5, WINDOW_HEIGHT / 5),
+		Vector(-ENEMY_SPEED, 0.0f), Size(ENEMY_WIDTH, ENEMY_HEIGHT), ENEMY_SCORE);
+
 	
+	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(300.0f, 200.0f), Vector(0.0f, 0.0f),
+		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
+
+	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(400.0f, 200.0f), Vector(0.0f, 0.0f),
+		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
+
+	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(500.0f, 200.0f), Vector(0.0f, 0.0f),
+		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
+
+	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(300.0f, 400.0f), Vector(0.0f, 0.0f),
+		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
+
+	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(400.0f, 400.0f), Vector(0.0f, 0.0f),
+		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
+
+	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(500.0f, 400.0f), Vector(0.0f, 0.0f), 
+		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
+	
+
 	if (mMarioTextFont == nullptr)
 	{
 		SDL_Log("Unable to create font: %s", TTF_GetError());
@@ -82,6 +106,9 @@ void PlayGameState::ProcessKeyReleased(SDL_Keycode key)
 void PlayGameState::Update(float elapsedTime)
 {
 	mGameWorld.Update(elapsedTime);
+	
+	if (mGameWorld.mMario.mLives == 0)
+		mListener.OnLevelLose();
 }
 
 void PlayGameState::Render()
@@ -98,6 +125,9 @@ void PlayGameState::Render()
 	for (const FireBall& fireBall : mGameWorld.mFireBalls)
 		mGameRenderer.Render(fireBall);
 	
+	for (const GoldCoin& goldCoin : mGameWorld.mGoldCoins)
+		mGameRenderer.Render(goldCoin);
+
 	mGameRenderer.EndRenderFrame();
 }
 

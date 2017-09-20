@@ -2,7 +2,17 @@
 
 bool IsFireBallDestroyed(const FireBall& fireBall)
 {
-	return ((fireBall.mCenter.mX < fireBall.mHalfSize.mX) || (fireBall.mCenter.mX + fireBall.mHalfSize.mX > WINDOW_WIDTH));
+	return ((fireBall.mCenter.mX < fireBall.mHalfSize.mX) || (fireBall.mCenter.mX + fireBall.mHalfSize.mX > WINDOW_WIDTH) || (!fireBall.mIsActive));
+}
+
+bool IsEnemyDestroyed(const Enemy& enemy)
+{
+	return !enemy.mIsActive;
+}
+
+bool IsGoldCoinDestroyed(const GoldCoin& goldCoin)
+{
+	return !goldCoin.mIsActive;
 }
 
 GameWorld::GameWorld()
@@ -14,12 +24,18 @@ void GameWorld::Update(float elapsedTime)
 {
 	mMario.Update(elapsedTime);
 
-	for (Enemy& enemy : mEnemies)
-		enemy.Update(elapsedTime);
-
 	for (FireBall& fireBall : mFireBalls)
-		fireBall.Update(elapsedTime);
+		fireBall.Update(elapsedTime, *this);
+	auto itFireBall = std::remove_if(mFireBalls.begin(), mFireBalls.end(), IsFireBallDestroyed);
+	mFireBalls.erase(itFireBall, mFireBalls.end());
 
-	auto it = std::remove_if(mFireBalls.begin(), mFireBalls.end(), IsFireBallDestroyed);
-	mFireBalls.erase(it, mFireBalls.end());
+	for (Enemy& enemy : mEnemies)
+		enemy.Update(elapsedTime, *this);
+	auto itEnemy = std::remove_if(mEnemies.begin(), mEnemies.end(), IsEnemyDestroyed);
+	mEnemies.erase(itEnemy, mEnemies.end());
+
+	for (GoldCoin& goldCoin : mGoldCoins)
+		goldCoin.Update(elapsedTime, *this);
+	auto itGoldCoin = std::remove_if(mGoldCoins.begin(), mGoldCoins.end(), IsGoldCoinDestroyed);
+	mGoldCoins.erase(itGoldCoin, mGoldCoins.end());
 }

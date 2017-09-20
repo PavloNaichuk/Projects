@@ -3,6 +3,7 @@
 #include "Mario.h"
 #include "Enemy.h"
 #include "FireBall.h"
+#include "GoldCoin.h"
 #include "Config.h"
 #include <vector>
 
@@ -15,4 +16,5 @@ public:
 	Mario mMario;
 	std::vector<Enemy> mEnemies;
 	std::vector<FireBall> mFireBalls;
+	std::vector<GoldCoin> mGoldCoins;
 };
