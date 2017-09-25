@@ -7,6 +7,7 @@ Mario::Mario(State state, const Point& center, const Vector& velocity, const Siz
 	, mDirection(1.0f)
 	, mScores(0)
 	, mLives(MARIO_LIVES)
+	, mSkillLevel(SkillLevels::LEVEL1)
 {
 }
 
@@ -42,13 +43,16 @@ void Mario::ProcessKeyPressed(SDL_Keycode key, GameWorld& gameWorld)
 			mVelocity.mY = -MARIO_JUMP_SPEED;
 		}
 	}
-	if ((mState == State::Standing) || (mState == State::Moving) || (mState == State::Jumping)) 
+	if (mSkillLevel == SkillLevels::LEVEL3) 
 	{
-		if (key == SDLK_LCTRL)
+		if ((mState == State::Standing) || (mState == State::Moving) || (mState == State::Jumping))
 		{
-			gameWorld.mFireBalls.emplace_back(State::Moving, mCenter,
-				mDirection * Vector(FIREBALL_SPEED, 0),
-				Size(FIREBALL_WIDTH, FIREBALL_HEIGHT));
+			if (key == SDLK_LCTRL)
+			{
+				gameWorld.mFireBalls.emplace_back(State::Moving, mCenter,
+					mDirection * Vector(FIREBALL_SPEED, 0),
+					Size(FIREBALL_WIDTH, FIREBALL_HEIGHT));
+			}
 		}
 	}
 }
@@ -94,9 +98,44 @@ void Mario::Update(float elapsedTime)
 		if (mCenter.mY - mHalfSize.mY < 0)
 			mCenter.mY = mHalfSize.mY;
 	}
+	if (mSkillLevel == SkillLevels::LEVEL2) 
+	{
+		Size size = Size(80.0f, 80.0f);
+		mHalfSize = size / 2;
+	}
+	else if (mSkillLevel == SkillLevels::LEVEL3)
+	{
+		Size size = Size(120.0f, 120.0f);
+		mHalfSize = size / 2;
+	}
 }
 
 void Mario::RemoveLife()
 {
-	--mLives;
+	mLives--;
+}
+
+SkillLevels Mario::GetSkillLevel() const
+{
+	return mSkillLevel;
+}
+
+void Mario::SetSkillLevel(SkillLevels skillLevel)
+{
+	mSkillLevel = skillLevel;
+	if (mSkillLevel == SkillLevels::LEVEL1)
+	{
+		mHalfSize = 0.5f * Size(MARIO_WIDTH, MARIO_HEIGHT);
+		return;
+	}
+	if (mSkillLevel == SkillLevels::LEVEL2)
+	{
+		mHalfSize = Size(MARIO_WIDTH, MARIO_HEIGHT);
+		return;
+	}
+	if (mSkillLevel == SkillLevels::LEVEL3)
+	{
+		mHalfSize = Size(MARIO_WIDTH, MARIO_HEIGHT);
+		return;
+	}
 }

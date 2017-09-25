@@ -23,3 +23,11 @@ const float FIREBALL_GRAVITY = 40.0f;
 const float GOLDCOIN_WIDTH = 30.0f;
 const float GOLDCOIN_HEIGHT = 30.0f;
 const int GOLDCOIN_SCORE = 5;
+
+const float POWER_UP_TO_LEVEL2_WIDTH = 30.0f;
+const float POWER_UP_TO_LEVEL2_HEIGHT = 30.0f;
+const int POWER_UP_TO_LEVEL2_SCORE = 15;
+
+const float POWER_UP_TO_LEVEL3_WIDTH = 30.0f;
+const float POWER_UP_TO_LEVEL3_HEIGHT = 30.0f;
+const int POWER_UP_TO_LEVEL3_SCORE = 20;

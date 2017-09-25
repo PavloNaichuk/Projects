@@ -170,6 +170,8 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
   <ItemGroup>
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="FireBall.cpp" />
+    <ClCompile Include="PowerUpToLevel2.cpp" />
+    <ClCompile Include="PowerUpToLevel3.cpp" />
     <ClCompile Include="GameRenderer.cpp" />
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="GoldCoin.cpp" />
@@ -190,6 +192,8 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
     <ClInclude Include="EndMenuState.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FireBall.h" />
+    <ClInclude Include="PowerUpToLevel2.h" />
+    <ClInclude Include="PowerUpToLevel3.h" />
     <ClInclude Include="GameUnit.h" />
     <ClInclude Include="GameRenderer.h" />
     <ClInclude Include="GameWorld.h" />

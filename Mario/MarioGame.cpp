@@ -110,6 +110,7 @@ void MarioGame::OnGameStart()
 
 void MarioGame::OnLevelLose()
 {
+	EnterState(std::make_unique<EndMenuState>(*this, mRenderer, WINDOW_WIDTH, WINDOW_HEIGHT));
 }
 
 void MarioGame::OnLevelComplete()

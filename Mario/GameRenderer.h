@@ -6,6 +6,8 @@ class Mario;
 class Enemy;
 class FireBall;
 class GoldCoin;
+class PowerUpToLevel2;
+class PowerUpToLevel3;
 
 class GameRenderer
 {
@@ -19,6 +21,8 @@ public:
 	void Render(const Enemy& enemy);
 	void Render(const FireBall& fireBall);
 	void Render(const GoldCoin& goldCoin);
+	void Render(const PowerUpToLevel2& powerUpToLevel2);
+	void Render(const PowerUpToLevel3& powerUpToLevel3);
 
 private:
 	SDLRendererPointer mRenderer;
@@ -36,4 +40,10 @@ private:
 
 	SDLSurfacePointer mGoldCoinImageSurface;
 	SDLTexturePointer mGoldCoinImageTexture;
+
+	SDLSurfacePointer mPowerUpToLevel2ImageSurface;
+	SDLTexturePointer mPowerUpToLevel2ImageTexture;
+
+	SDLSurfacePointer mPowerUpToLevel3ImageSurface;
+	SDLTexturePointer mPowerUpToLevel3ImageTexture;
 };

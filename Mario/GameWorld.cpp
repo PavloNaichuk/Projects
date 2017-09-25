@@ -15,6 +15,16 @@ bool IsGoldCoinDestroyed(const GoldCoin& goldCoin)
 	return !goldCoin.mIsActive;
 }
 
+bool IsPowerUpToLevel2Destroyed(const PowerUpToLevel2& powerUpToLevel2)
+{
+	return !powerUpToLevel2.mIsActive;
+}
+
+bool IsPowerUpToLevel3Destroyed(const PowerUpToLevel3& powerUpToLevel3)
+{
+	return !powerUpToLevel3.mIsActive;
+}
+
 GameWorld::GameWorld()
 	: mMario(State::Standing, Point(0.0f, 0.0f), Vector(0.0f, 0.0f), Size(MARIO_WIDTH, MARIO_HEIGHT))
 {
@@ -38,4 +48,14 @@ void GameWorld::Update(float elapsedTime)
 		goldCoin.Update(elapsedTime, *this);
 	auto itGoldCoin = std::remove_if(mGoldCoins.begin(), mGoldCoins.end(), IsGoldCoinDestroyed);
 	mGoldCoins.erase(itGoldCoin, mGoldCoins.end());
+
+	for (PowerUpToLevel2& powerUpToLevel2 : mPowerUpToLevel2)
+		powerUpToLevel2.Update(elapsedTime, *this);
+	auto itPowerUpToLevel2 = std::remove_if(mPowerUpToLevel2.begin(), mPowerUpToLevel2.end(), IsPowerUpToLevel2Destroyed);
+	mPowerUpToLevel2.erase(itPowerUpToLevel2, mPowerUpToLevel2.end());
+
+	for (PowerUpToLevel3& powerUpToLevel3 : mPowerUpToLevel3)
+		powerUpToLevel3.Update(elapsedTime, *this);
+	auto itPowerUpToLevel3 = std::remove_if(mPowerUpToLevel3.begin(), mPowerUpToLevel3.end(), IsPowerUpToLevel3Destroyed);
+	mPowerUpToLevel3.erase(itPowerUpToLevel3, mPowerUpToLevel3.end());
 }

@@ -3,6 +3,10 @@
 EndMenuState::EndMenuState(EndMenuStateListener& listener, SDLRendererPointer renderer, const int windowWidth, const int windowHeight)
 	: mListener(listener)
 	, mRenderer(renderer)
+	, mTextColor({ 255, 255, 255, 255 })
+	, mGameOverTextFont(TTF_OpenFont("Resources/Fonts/Arial.TTF", 130), TTF_CloseFont)
+	, mGameOverTextSurface(TTF_RenderText_Solid(mGameOverTextFont.get(), "Game Over", mTextColor), SDL_FreeSurface)
+	, mGameOverTextTexture(SDL_CreateTextureFromSurface(renderer.get(), mGameOverTextSurface.get()), SDL_DestroyTexture)
 {
 	if (mGameOverTextFont == nullptr)
 	{

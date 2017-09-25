@@ -5,6 +5,13 @@
 
 struct GameWorld;
 
+enum class SkillLevels
+{
+	LEVEL1,
+	LEVEL2,
+	LEVEL3
+};
+
 class Mario : public GameUnit
 {
 public:
@@ -15,7 +22,13 @@ public:
 	void Update(float elapsedTime);
 	void RemoveLife();
 
+	SkillLevels GetSkillLevel() const;
+	void SetSkillLevel(SkillLevels skillLevel);
+
 	float mDirection;
 	int mScores;
 	int mLives;
+
+private:
+	SkillLevels mSkillLevel;
 };

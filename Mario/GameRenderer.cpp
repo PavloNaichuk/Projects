@@ -3,6 +3,8 @@
 #include "Enemy.h"
 #include "FireBall.h"
 #include "GoldCoin.h"
+#include "PowerUpToLevel2.h"
+#include "PowerUpToLevel3.h"
 #include "Config.h"
 
 GameRenderer::GameRenderer(SDLRendererPointer renderer) 
@@ -17,6 +19,10 @@ GameRenderer::GameRenderer(SDLRendererPointer renderer)
 	, mFireBallImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mFireBallImageSurface.get()), SDL_DestroyTexture)
 	, mGoldCoinImageSurface(IMG_Load("Resources/Images/goldCoin.JPG"), SDL_FreeSurface)
 	, mGoldCoinImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mGoldCoinImageSurface.get()), SDL_DestroyTexture)
+	, mPowerUpToLevel2ImageSurface(IMG_Load("Resources/Images/mushroom.JPG"), SDL_FreeSurface)
+	, mPowerUpToLevel2ImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mPowerUpToLevel2ImageSurface.get()), SDL_DestroyTexture)
+	, mPowerUpToLevel3ImageSurface(IMG_Load("Resources/Images/flower.JPG"), SDL_FreeSurface)
+	, mPowerUpToLevel3ImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mPowerUpToLevel3ImageSurface.get()), SDL_DestroyTexture)
 {
 	if (mMarioLeftImageSurface == nullptr)
 	{
@@ -59,6 +65,24 @@ GameRenderer::GameRenderer(SDLRendererPointer renderer)
 		SDL_Log("IMG_Load error: %s", IMG_GetError());
 	}
 	if (mGoldCoinImageTexture == nullptr)
+	{
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
+	}
+
+	if (mPowerUpToLevel2ImageSurface == nullptr)
+	{
+		SDL_Log("IMG_Load error: %s", IMG_GetError());
+	}
+	if (mPowerUpToLevel2ImageTexture == nullptr)
+	{
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
+	}
+
+	if (mPowerUpToLevel3ImageSurface == nullptr)
+	{
+		SDL_Log("IMG_Load error: %s", IMG_GetError());
+	}
+	if (mPowerUpToLevel3ImageTexture == nullptr)
 	{
 		SDL_Log("Unable to create texture: %s", SDL_GetError());
 	}
@@ -111,4 +135,22 @@ void GameRenderer::Render(const GoldCoin& goldCoin)
 	SDL_Rect destRect = {(int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY};
 
 	SDL_RenderCopy(mRenderer.get(), mGoldCoinImageTexture.get(), nullptr, &destRect);
+}
+
+void GameRenderer::Render(const PowerUpToLevel2& powerUpToLevel2)
+{
+	Size size = 2.0f * powerUpToLevel2.mHalfSize;
+	Point topLeft = powerUpToLevel2.mCenter - powerUpToLevel2.mHalfSize;
+	SDL_Rect destRect = { (int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY };
+
+	SDL_RenderCopy(mRenderer.get(), mPowerUpToLevel2ImageTexture.get(), nullptr, &destRect);
+}
+
+void GameRenderer::Render(const PowerUpToLevel3 & powerUpToLevel3)
+{
+	Size size = 2.0f * powerUpToLevel3.mHalfSize;
+	Point topLeft = powerUpToLevel3.mCenter - powerUpToLevel3.mHalfSize;
+	SDL_Rect destRect = { (int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY };
+
+	SDL_RenderCopy(mRenderer.get(), mPowerUpToLevel3ImageTexture.get(), nullptr, &destRect);
 }

@@ -44,6 +44,12 @@ PlayGameState::PlayGameState(PlayGameStateListener& listener, SDLRendererPointer
 
 	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(500.0f, 400.0f), Vector(0.0f, 0.0f), 
 		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
+
+	mGameWorld.mPowerUpToLevel2.emplace_back(State::Standing, Point(800.0f, 300.0f), Vector(0.0f, 0.0f),
+		Size(POWER_UP_TO_LEVEL2_WIDTH, POWER_UP_TO_LEVEL2_HEIGHT), POWER_UP_TO_LEVEL2_SCORE);
+
+	mGameWorld.mPowerUpToLevel3.emplace_back(State::Standing, Point(100.0f, 400.0f), Vector(0.0f, 0.0f),
+		Size(POWER_UP_TO_LEVEL3_WIDTH, POWER_UP_TO_LEVEL3_HEIGHT), POWER_UP_TO_LEVEL3_SCORE);
 	
 
 	if (mMarioTextFont == nullptr)
@@ -127,6 +133,12 @@ void PlayGameState::Render()
 	
 	for (const GoldCoin& goldCoin : mGameWorld.mGoldCoins)
 		mGameRenderer.Render(goldCoin);
+
+	for (const PowerUpToLevel2& powerUpToLevel2 : mGameWorld.mPowerUpToLevel2)
+		mGameRenderer.Render(powerUpToLevel2);
+
+	for (const PowerUpToLevel3& powerUpToLevel3 : mGameWorld.mPowerUpToLevel3)
+		mGameRenderer.Render(powerUpToLevel3);
 
 	mGameRenderer.EndRenderFrame();
 }
