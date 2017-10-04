@@ -1,17 +1,16 @@
 #pragma once
 
 #include "Common.h"
-#include "GameUnit.h"
+#include "Trigger.h"
 
 struct GameWorld;
 
-class GoldCoin : public GameUnit
+class GoldCoin : public Trigger
 {
 public:
-	GoldCoin(State state, const Point& center, const Vector& velocity, const Size& size, int scores);
+	GoldCoin(bool isActive, const Point& center, const Size& size, int scores);
 	void Update(float elapsedTime, GameWorld& gameWorld);
 
-	bool mIsActive;
 	int mScores;
 };
 

@@ -32,6 +32,11 @@ private:
 	SDLSurfacePointer mMarioRightImageSurface;
 	SDLTexturePointer mMarioRightImageTexture;
 
+	SDLSurfacePointer mMarioLeftImageLevel3Surface;
+	SDLTexturePointer mMarioLeftImageLevel3Texture;
+	SDLSurfacePointer mMarioRightImageLevel3Surface;
+	SDLTexturePointer mMarioRightImageLevel3Texture;
+
 	SDLSurfacePointer mEnemyImageSurface;
 	SDLTexturePointer mEnemyImageTexture;
 

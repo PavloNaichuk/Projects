@@ -13,15 +13,21 @@ GameRenderer::GameRenderer(SDLRendererPointer renderer)
 	, mMarioLeftImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mMarioLeftImageSurface.get()), SDL_DestroyTexture)
 	, mMarioRightImageSurface(IMG_Load("Resources/Images/marioRight.JPG"), SDL_FreeSurface)
 	, mMarioRightImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mMarioRightImageSurface.get()), SDL_DestroyTexture)
+
+	, mMarioLeftImageLevel3Surface(IMG_Load("Resources/Images/marioLevelLeft.JPG"), SDL_FreeSurface)
+	, mMarioLeftImageLevel3Texture(SDL_CreateTextureFromSurface(renderer.get(), mMarioLeftImageLevel3Surface.get()), SDL_DestroyTexture)
+	, mMarioRightImageLevel3Surface(IMG_Load("Resources/Images/marioLevelRight.JPG"), SDL_FreeSurface)
+	, mMarioRightImageLevel3Texture(SDL_CreateTextureFromSurface(renderer.get(), mMarioRightImageLevel3Surface.get()), SDL_DestroyTexture)
+
 	, mEnemyImageSurface(IMG_Load("Resources/Images/owl.JPG"), SDL_FreeSurface)
 	, mEnemyImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mEnemyImageSurface.get()), SDL_DestroyTexture)
 	, mFireBallImageSurface(IMG_Load("Resources/Images/fireBall.JPG"), SDL_FreeSurface)
 	, mFireBallImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mFireBallImageSurface.get()), SDL_DestroyTexture)
 	, mGoldCoinImageSurface(IMG_Load("Resources/Images/goldCoin.JPG"), SDL_FreeSurface)
 	, mGoldCoinImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mGoldCoinImageSurface.get()), SDL_DestroyTexture)
-	, mPowerUpToLevel2ImageSurface(IMG_Load("Resources/Images/mushroom.JPG"), SDL_FreeSurface)
+	, mPowerUpToLevel2ImageSurface(IMG_Load("Resources/Images/powerUpToLevel2.JPG"), SDL_FreeSurface)
 	, mPowerUpToLevel2ImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mPowerUpToLevel2ImageSurface.get()), SDL_DestroyTexture)
-	, mPowerUpToLevel3ImageSurface(IMG_Load("Resources/Images/flower.JPG"), SDL_FreeSurface)
+	, mPowerUpToLevel3ImageSurface(IMG_Load("Resources/Images/powerUpToLevel3.JPG"), SDL_FreeSurface)
 	, mPowerUpToLevel3ImageTexture(SDL_CreateTextureFromSurface(renderer.get(), mPowerUpToLevel3ImageSurface.get()), SDL_DestroyTexture)
 {
 	if (mMarioLeftImageSurface == nullptr)
@@ -38,6 +44,24 @@ GameRenderer::GameRenderer(SDLRendererPointer renderer)
 		SDL_Log("IMG_Load error: %s", IMG_GetError());
 	}
 	if (mMarioRightImageTexture == nullptr)
+	{
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
+	}
+
+	if (mMarioLeftImageLevel3Surface == nullptr)
+	{
+		SDL_Log("IMG_Load error: %s", IMG_GetError());
+	}
+	if (mMarioLeftImageLevel3Texture == nullptr)
+	{
+		SDL_Log("Unable to create texture: %s", SDL_GetError());
+	}
+
+	if (mMarioRightImageLevel3Surface == nullptr)
+	{
+		SDL_Log("IMG_Load error: %s", IMG_GetError());
+	}
+	if (mMarioRightImageLevel3Texture == nullptr)
 	{
 		SDL_Log("Unable to create texture: %s", SDL_GetError());
 	}
@@ -104,10 +128,21 @@ void GameRenderer::Render(const Mario& mario)
 	Size size = 2.0f * mario.mHalfSize;
 	Point topLeft = mario.mCenter - mario.mHalfSize;
 	SDL_Rect destRect = {(int)topLeft.mX, (int)topLeft.mY, (int)size.mX, (int)size.mY};
-	if (mario.mDirection > 0.0f)
-		SDL_RenderCopy(mRenderer.get(), mMarioRightImageTexture.get(), nullptr, &destRect);
+
+	if (mario.GetSkillLevel() == SkillLevels::LEVEL3)
+	{
+		if (mario.mDirection > 0.0f)
+			SDL_RenderCopy(mRenderer.get(), mMarioRightImageLevel3Texture.get(), nullptr, &destRect);
+		else
+			SDL_RenderCopy(mRenderer.get(), mMarioLeftImageLevel3Texture.get(), nullptr, &destRect);
+	}
 	else
-		SDL_RenderCopy(mRenderer.get(), mMarioLeftImageTexture.get(), nullptr, &destRect);	
+	{ 
+		if (mario.mDirection > 0.0f)
+			SDL_RenderCopy(mRenderer.get(), mMarioRightImageTexture.get(), nullptr, &destRect);
+		else
+			SDL_RenderCopy(mRenderer.get(), mMarioLeftImageTexture.get(), nullptr, &destRect);
+	}	
 }
 
 void GameRenderer::Render(const Enemy& enemy)

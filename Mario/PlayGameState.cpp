@@ -27,28 +27,28 @@ PlayGameState::PlayGameState(PlayGameStateListener& listener, SDLRendererPointer
 		Vector(-ENEMY_SPEED, 0.0f), Size(ENEMY_WIDTH, ENEMY_HEIGHT), ENEMY_SCORE);
 
 	
-	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(300.0f, 200.0f), Vector(0.0f, 0.0f),
+	mGameWorld.mGoldCoins.emplace_back(true, Point(300.0f, 200.0f),
 		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
 
-	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(400.0f, 200.0f), Vector(0.0f, 0.0f),
+	mGameWorld.mGoldCoins.emplace_back(true, Point(400.0f, 200.0f),
 		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
 
-	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(500.0f, 200.0f), Vector(0.0f, 0.0f),
+	mGameWorld.mGoldCoins.emplace_back(true, Point(500.0f, 200.0f),
 		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
 
-	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(300.0f, 400.0f), Vector(0.0f, 0.0f),
+	mGameWorld.mGoldCoins.emplace_back(true, Point(300.0f, 400.0f),
 		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
 
-	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(400.0f, 400.0f), Vector(0.0f, 0.0f),
+	mGameWorld.mGoldCoins.emplace_back(true, Point(400.0f, 400.0f),
 		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
 
-	mGameWorld.mGoldCoins.emplace_back(State::Standing, Point(500.0f, 400.0f), Vector(0.0f, 0.0f), 
+	mGameWorld.mGoldCoins.emplace_back(true, Point(500.0f, 400.0f),
 		Size(GOLDCOIN_WIDTH, GOLDCOIN_HEIGHT), GOLDCOIN_SCORE);
 
-	mGameWorld.mPowerUpToLevel2.emplace_back(State::Standing, Point(800.0f, 300.0f), Vector(0.0f, 0.0f),
+	mGameWorld.mPowerUpToLevel2.emplace_back(true, Point(800.0f, 300.0f),
 		Size(POWER_UP_TO_LEVEL2_WIDTH, POWER_UP_TO_LEVEL2_HEIGHT), POWER_UP_TO_LEVEL2_SCORE);
 
-	mGameWorld.mPowerUpToLevel3.emplace_back(State::Standing, Point(100.0f, 400.0f), Vector(0.0f, 0.0f),
+	mGameWorld.mPowerUpToLevel3.emplace_back(true, Point(100.0f, 400.0f),
 		Size(POWER_UP_TO_LEVEL3_WIDTH, POWER_UP_TO_LEVEL3_HEIGHT), POWER_UP_TO_LEVEL3_SCORE);
 	
 

@@ -2,9 +2,8 @@
 #include "GameWorld.h"
 #include "Collision.h"
 
-GoldCoin::GoldCoin(State state, const Point& center, const Vector& velocity, const Size& size, int scores)
-	: GameUnit(state, center, velocity, size)
-	, mIsActive(true)
+GoldCoin::GoldCoin(bool isActive, const Point& center, const Size& size, int scores)
+	: Trigger(isActive, center, size)
 	, mScores(scores)
 {
 }

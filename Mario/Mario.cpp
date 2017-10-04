@@ -98,21 +98,11 @@ void Mario::Update(float elapsedTime)
 		if (mCenter.mY - mHalfSize.mY < 0)
 			mCenter.mY = mHalfSize.mY;
 	}
-	if (mSkillLevel == SkillLevels::LEVEL2) 
-	{
-		Size size = Size(80.0f, 80.0f);
-		mHalfSize = size / 2;
-	}
-	else if (mSkillLevel == SkillLevels::LEVEL3)
-	{
-		Size size = Size(120.0f, 120.0f);
-		mHalfSize = size / 2;
-	}
 }
 
 void Mario::RemoveLife()
 {
-	mLives--;
+	--mLives;
 }
 
 SkillLevels Mario::GetSkillLevel() const

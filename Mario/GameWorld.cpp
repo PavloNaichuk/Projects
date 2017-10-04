@@ -1,28 +1,17 @@
 #include "GameWorld.h"
 
+
 bool IsFireBallDestroyed(const FireBall& fireBall)
 {
-	return ((fireBall.mCenter.mX < fireBall.mHalfSize.mX) || (fireBall.mCenter.mX + fireBall.mHalfSize.mX > WINDOW_WIDTH) || (!fireBall.mIsActive));
+	return ((fireBall.mCenter.mX < fireBall.mHalfSize.mX) 
+		|| (fireBall.mCenter.mX + fireBall.mHalfSize.mX > WINDOW_WIDTH) 
+		|| !fireBall.mIsActive);
 }
 
-bool IsEnemyDestroyed(const Enemy& enemy)
+template <typename T>
+bool IsNotActive(const T& gameObject)
 {
-	return !enemy.mIsActive;
-}
-
-bool IsGoldCoinDestroyed(const GoldCoin& goldCoin)
-{
-	return !goldCoin.mIsActive;
-}
-
-bool IsPowerUpToLevel2Destroyed(const PowerUpToLevel2& powerUpToLevel2)
-{
-	return !powerUpToLevel2.mIsActive;
-}
-
-bool IsPowerUpToLevel3Destroyed(const PowerUpToLevel3& powerUpToLevel3)
-{
-	return !powerUpToLevel3.mIsActive;
+	return !gameObject.mIsActive;
 }
 
 GameWorld::GameWorld()
@@ -41,21 +30,21 @@ void GameWorld::Update(float elapsedTime)
 
 	for (Enemy& enemy : mEnemies)
 		enemy.Update(elapsedTime, *this);
-	auto itEnemy = std::remove_if(mEnemies.begin(), mEnemies.end(), IsEnemyDestroyed);
+	auto itEnemy = std::remove_if(mEnemies.begin(), mEnemies.end(), IsNotActive<Enemy>);
 	mEnemies.erase(itEnemy, mEnemies.end());
 
 	for (GoldCoin& goldCoin : mGoldCoins)
 		goldCoin.Update(elapsedTime, *this);
-	auto itGoldCoin = std::remove_if(mGoldCoins.begin(), mGoldCoins.end(), IsGoldCoinDestroyed);
+	auto itGoldCoin = std::remove_if(mGoldCoins.begin(), mGoldCoins.end(), IsNotActive<GoldCoin>);
 	mGoldCoins.erase(itGoldCoin, mGoldCoins.end());
 
 	for (PowerUpToLevel2& powerUpToLevel2 : mPowerUpToLevel2)
 		powerUpToLevel2.Update(elapsedTime, *this);
-	auto itPowerUpToLevel2 = std::remove_if(mPowerUpToLevel2.begin(), mPowerUpToLevel2.end(), IsPowerUpToLevel2Destroyed);
+	auto itPowerUpToLevel2 = std::remove_if(mPowerUpToLevel2.begin(), mPowerUpToLevel2.end(), IsNotActive<PowerUpToLevel2>);
 	mPowerUpToLevel2.erase(itPowerUpToLevel2, mPowerUpToLevel2.end());
 
 	for (PowerUpToLevel3& powerUpToLevel3 : mPowerUpToLevel3)
 		powerUpToLevel3.Update(elapsedTime, *this);
-	auto itPowerUpToLevel3 = std::remove_if(mPowerUpToLevel3.begin(), mPowerUpToLevel3.end(), IsPowerUpToLevel3Destroyed);
+	auto itPowerUpToLevel3 = std::remove_if(mPowerUpToLevel3.begin(), mPowerUpToLevel3.end(), IsNotActive<PowerUpToLevel3>);
 	mPowerUpToLevel3.erase(itPowerUpToLevel3, mPowerUpToLevel3.end());
 }

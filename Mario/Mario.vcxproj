@@ -168,7 +168,6 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="PowerUpToLevel2.cpp" />
     <ClCompile Include="PowerUpToLevel3.cpp" />
@@ -183,6 +182,7 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="StartMenuState.cpp" />
     <ClCompile Include="PlayGameState.cpp" />
+    <ClCompile Include="Trigger.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +203,7 @@ IF NOT EXIST "$(SolutionDir)Debug\Resources\Fonts\Arial.TTF" COPY /Y "$(Solution
     <ClInclude Include="PlayGameState.h" />
     <ClInclude Include="StartMenuState.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="Trigger.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
