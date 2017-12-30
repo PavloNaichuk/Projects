@@ -10,3 +10,5 @@ build-Math-Desktop_Qt_5_7_1_MSVC2015_64bit-Debug/
 *.db
 PacMan/Debug/
 Mario/Debug/
+Arkanoid/cocos2d/
+Arkanoid/proj.win32/Debug.win32/
