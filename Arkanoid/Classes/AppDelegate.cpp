@@ -87,10 +87,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 		
 		director->setContentScaleFactor(scaleFactor);
     }
-	
-    auto mainScene = MainScene::create();
-    director->runWithScene(mainScene);
 
+	auto spriteFrameCache = SpriteFrameCache::getInstance();
+	spriteFrameCache->addSpriteFramesWithFile("images/ImageAtlas.plist");
+
+	director->runWithScene(MainScene::create());
     return true;
 }
 

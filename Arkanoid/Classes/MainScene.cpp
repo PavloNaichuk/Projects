@@ -1,16 +1,19 @@
 #include "MainScene.h"
+#include "PlayScene.h"
 
 USING_NS_CC;
 
 Scene* MainScene::create()
 {
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto director = Director::getInstance();
+
+	auto visibleSize = director->getVisibleSize();
+	auto origin = director->getVisibleOrigin();
 
 	auto scene = Scene::create();
 	
 	auto colorLayer = LayerColor::create(Color4B::BLUE);
-	scene->addChild(colorLayer);
+	scene->addChild(colorLayer, 0);
 
 	TTFConfig logoFontConfig;
 	logoFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
@@ -32,8 +35,8 @@ Scene* MainScene::create()
 
 	auto startItem = MenuItemLabel::create(startLabel);
 	startItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 1 * 50));
-	startItem->setCallback([&](Ref *sender) {
-		log("Start Game");
+	startItem->setCallback([director](Ref* sender) {
+		director->replaceScene(PlayScene::create());
 	});
 
 	auto optionsLabel = Label::createWithTTF(menuFontConfig, "Options");
@@ -42,7 +45,7 @@ Scene* MainScene::create()
 
 	auto optionsItem = MenuItemLabel::create(optionsLabel);
 	optionsItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 2 * 50));
-	optionsItem->setCallback([&](Ref *sender) {
+	optionsItem->setCallback([&](Ref* sender) {
 		log("Options");
 	});
 
@@ -52,8 +55,8 @@ Scene* MainScene::create()
 
 	auto exitItem = MenuItemLabel::create(exitLabel);
 	exitItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 3 * 50));
-	exitItem->setCallback([&](Ref *sender) {
-		Director::getInstance()->end();
+	exitItem->setCallback([director](Ref* sender) {
+		director->end();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		exit(0);
 #endif
