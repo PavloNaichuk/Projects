@@ -38,8 +38,14 @@ AppDelegate::~AppDelegate()
 
 void AppDelegate::initGLContextAttrs()
 {
-    // set OpenGL context attributes: red,green,blue,alpha,depth,stencil
-    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
+    GLContextAttrs glContextAttrs;
+	glContextAttrs.redBits = 8;
+	glContextAttrs.greenBits = 8;
+	glContextAttrs.blueBits = 8;
+	glContextAttrs.alphaBits = 8;
+	glContextAttrs.depthBits = 24;
+	glContextAttrs.stencilBits = 8;
+	
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
@@ -57,28 +63,29 @@ bool AppDelegate::applicationDidFinishLaunching()
         director->setOpenGLView(glview);
     }
 
-    // Turn on display FPS
-    director->setDisplayStats(true);
-    // Set FPS. the default value is 1.0/60 if you don't call this
-    director->setAnimationInterval(1.0f / 60);
-
-    // Set the design resolution
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
-    auto frameSize = glview->getFrameSize();    
+    
+	auto frameSize = glview->getFrameSize();    
     if (frameSize.height > mediumResolutionSize.height)
     {
-		// if the frame's height is larger than the height of medium size.
-        director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height, largeResolutionSize.width/designResolutionSize.width));
+		float scaleFactor = MIN(largeResolutionSize.height / designResolutionSize.height,
+			largeResolutionSize.width / designResolutionSize.width);
+		
+		director->setContentScaleFactor(scaleFactor);
     }
     else if (frameSize.height > smallResolutionSize.height)
     {
-		// if the frame's height is larger than the height of small size.
-        director->setContentScaleFactor(MIN(mediumResolutionSize.height/designResolutionSize.height, mediumResolutionSize.width/designResolutionSize.width));
+		float scaleFactor = MIN(mediumResolutionSize.height / designResolutionSize.height,
+			mediumResolutionSize.width / designResolutionSize.width);
+		
+		director->setContentScaleFactor(scaleFactor);
     }
     else
     {
-		// if the frame's height is smaller than the height of medium size.
-        director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
+		float scaleFactor = MIN(smallResolutionSize.height / designResolutionSize.height,
+			smallResolutionSize.width / designResolutionSize.width);
+		
+		director->setContentScaleFactor(scaleFactor);
     }
 	
     auto mainScene = MainScene::create();
