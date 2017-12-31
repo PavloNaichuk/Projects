@@ -26,7 +26,7 @@ Scene* PlayScene::create()
 	{
 		for (int col = 0; col < numBricksInRow; ++col)
 		{
-			auto brickOffset = brickSize * Size(col, row);
+			auto brickOffset = brickSize * Size(col, -row);
 			auto brickType = BrickType(random(0, NUM_BRICK_TYPES - 1));
 			auto brickPos = firstBrickPos + brickOffset;
 
@@ -34,6 +34,11 @@ Scene* PlayScene::create()
 			scene->addChild(brickSprite, 1);
 		}
 	}
+
+	const Vec2& topBorderPos = configManager->getTopBorderPos();
+	const Size& topBorderSize = configManager->getTopBorderSize();
+	auto topBorder = createTopBorder(topBorderPos, topBorderSize);
+	scene->addChild(topBorder, 1);
 
 	const Vec2& leftBorderPos = configManager->getLeftBorderPos();
 	const Size& leftBorderSize = configManager->getLeftBorderSize();
@@ -45,11 +50,6 @@ Scene* PlayScene::create()
 	auto rightBorder = createRightBorder(rightBorderPos, rightBorderSize);
 	scene->addChild(rightBorder, 1);
 
-	const Vec2& topBorderPos = configManager->getTopBorderPos();
-	const Size& topBorderSize = configManager->getTopBorderSize();
-	auto topBorder = createTopBorder(topBorderPos, topBorderSize);
-	scene->addChild(topBorder, 1);
-
 	const Vec2& paddlePos = configManager->getPaddlePos();
 	const Size& paddleSize = configManager->getPaddleSize();
 	auto paddle = createPaddle(paddlePos, paddleSize);
@@ -59,7 +59,7 @@ Scene* PlayScene::create()
 	const Size& ballSize = configManager->getBallSize();
 	auto ball = createBall(ballPos, ballSize);
 	scene->addChild(ball, 1);
-	
+
 	return scene;
 }
 

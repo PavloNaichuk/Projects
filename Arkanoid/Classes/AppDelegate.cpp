@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "MainScene.h"
+#include "ConfigManager.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -17,11 +18,6 @@ using namespace CocosDenshion;
 #endif
 
 USING_NS_CC;
-
-static cocos2d::Size designResolutionSize = cocos2d::Size(480, 600);
-static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
-static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 AppDelegate::AppDelegate()
 {
@@ -52,41 +48,21 @@ void AppDelegate::initGLContextAttrs()
 bool AppDelegate::applicationDidFinishLaunching()
 {
     auto director = Director::getInstance();
+	
+	auto configManager = ConfigManager::getInstance();
+	const Size& designResolution = configManager->getDesignResolution();
+
     auto glview = director->getOpenGLView();
     if (glview == nullptr)
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("Arkanoid", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glview = GLViewImpl::createWithRect("Arkanoid", cocos2d::Rect(0, 0, designResolution.width, designResolution.height));
 #else
         glview = GLViewImpl::create("Arkanoid");
 #endif
         director->setOpenGLView(glview);
     }
-
-    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
-    
-	auto frameSize = glview->getFrameSize();    
-    if (frameSize.height > mediumResolutionSize.height)
-    {
-		float scaleFactor = MIN(largeResolutionSize.height / designResolutionSize.height,
-			largeResolutionSize.width / designResolutionSize.width);
-		
-		director->setContentScaleFactor(scaleFactor);
-    }
-    else if (frameSize.height > smallResolutionSize.height)
-    {
-		float scaleFactor = MIN(mediumResolutionSize.height / designResolutionSize.height,
-			mediumResolutionSize.width / designResolutionSize.width);
-		
-		director->setContentScaleFactor(scaleFactor);
-    }
-    else
-    {
-		float scaleFactor = MIN(smallResolutionSize.height / designResolutionSize.height,
-			smallResolutionSize.width / designResolutionSize.width);
-		
-		director->setContentScaleFactor(scaleFactor);
-    }
+    glview->setDesignResolutionSize(designResolution.width, designResolution.height, ResolutionPolicy::NO_BORDER);
 
 	auto spriteFrameCache = SpriteFrameCache::getInstance();
 	spriteFrameCache->addSpriteFramesWithFile("images/ImageAtlas.plist");

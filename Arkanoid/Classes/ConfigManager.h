@@ -9,6 +9,8 @@ class ConfigManager
 public:
 	static ConfigManager* getInstance();
 
+	const Size& getDesignResolution() const { return _designResolution; }
+
 	int getNumBrickRows() const { return _numBrickRows; }
 	int getNumBricksInRow() const { return _numBricksInRow; }
 	const Vec2& getFirstBrickPos() const { return _firstBrickPos; }
@@ -36,6 +38,8 @@ private:
 	~ConfigManager() = default;
 
 private:
+	Size _designResolution;
+
 	int _numBrickRows;
 	int _numBricksInRow;
 	Vec2 _firstBrickPos;
