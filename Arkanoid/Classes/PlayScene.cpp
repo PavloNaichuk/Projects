@@ -48,6 +48,12 @@ bool PlayScene::init()
 	auto rightBorder = createRightBorder(configManager->getRightBorderPos(), configManager->getRightBorderSize());
 	addChild(rightBorder, 1);
 
+	auto bottomBorder = createBottomBorder(configManager->getBottomBorderStart(), configManager->getBottomBorderEnd());
+	addChild(bottomBorder, 1);
+
+	auto ballExitBorder = createBallExitBorder(configManager->getBallExitBorderStart(), configManager->getBallExitBorderEnd());
+	addChild(ballExitBorder, 1);
+
 	auto paddle = createPaddle(configManager->getPaddlePos(), configManager->getPaddleSize());
 	addChild(paddle, 1);
 
@@ -120,7 +126,7 @@ Sprite* PlayScene::createTopBorder(const Vec2& position, const Size& size)
 	physicsBody->setDynamic(false);
 	physicsBody->setTag(BORDER);
 	physicsBody->setCategoryBitmask(BORDER);
-	physicsBody->setCollisionBitmask(PADDLE | BALL);
+	physicsBody->setCollisionBitmask(BALL);
 
 	sprite->addComponent(physicsBody);
 	return sprite;
@@ -154,4 +160,32 @@ Sprite* PlayScene::createBall(const Vec2& position, float radius)
 
 	sprite->addComponent(physicsBody);
 	return sprite;
+}
+
+Node* PlayScene::createBottomBorder(const Vec2& start, const Vec2& end)
+{
+	auto node = Node::create();
+
+	auto physicsBody = PhysicsBody::createEdgeSegment(start, end, PHYSICSBODY_MATERIAL_DEFAULT);
+	physicsBody->setDynamic(false);
+	physicsBody->setTag(BORDER);
+	physicsBody->setCategoryBitmask(BORDER);
+	physicsBody->setCollisionBitmask(PADDLE);
+
+	node->addComponent(physicsBody);
+	return node;
+}
+
+Node* PlayScene::createBallExitBorder(const Vec2& start, const Vec2& end)
+{
+	auto node = Node::create();
+
+	auto physicsBody = PhysicsBody::createEdgeSegment(start, end, PHYSICSBODY_MATERIAL_DEFAULT);
+	physicsBody->setDynamic(false);
+	physicsBody->setTag(BORDER);
+	physicsBody->setCategoryBitmask(BORDER);
+	physicsBody->setCollisionBitmask(BALL);
+
+	node->addComponent(physicsBody);
+	return node;
 }

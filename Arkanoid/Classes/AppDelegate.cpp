@@ -56,7 +56,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     if (glview == nullptr)
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("Arkanoid", cocos2d::Rect(0, 0, designResolution.width, designResolution.height));
+        glview = GLViewImpl::createWithRect("Arkanoid", Rect(0, 0, designResolution.width, designResolution.height));
 #else
         glview = GLViewImpl::create("Arkanoid");
 #endif

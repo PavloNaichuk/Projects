@@ -18,4 +18,7 @@ private:
 	static Sprite* createTopBorder(const Vec2& position, const Size& size);
 	static Sprite* createPaddle(const Vec2& position, const Size& size);
 	static Sprite* createBall(const Vec2& position, float radius);
+
+	static Node* createBottomBorder(const Vec2& start, const Vec2& end);
+	static Node* createBallExitBorder(const Vec2& start, const Vec2& end);
 };
