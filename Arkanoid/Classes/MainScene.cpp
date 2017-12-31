@@ -3,17 +3,18 @@
 
 USING_NS_CC;
 
-Scene* MainScene::create()
+bool MainScene::init()
 {
+	if (!Scene::init())
+		return false;
+
 	auto director = Director::getInstance();
 
 	auto visibleSize = director->getVisibleSize();
 	auto origin = director->getVisibleOrigin();
-
-	auto scene = Scene::create();
 	
 	auto colorLayer = LayerColor::create(Color4B::BLUE);
-	scene->addChild(colorLayer, 0);
+	addChild(colorLayer, 0);
 
 	TTFConfig logoFontConfig;
 	logoFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
@@ -23,7 +24,7 @@ Scene* MainScene::create()
 	logoLabel->setTextColor(Color4B::WHITE);
 	logoLabel->enableShadow(Color4B::BLACK);
 	logoLabel->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + visibleSize.height / 4));
-	scene->addChild(logoLabel, 1);
+	addChild(logoLabel, 1);
 
 	TTFConfig menuFontConfig;
 	menuFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
@@ -65,7 +66,7 @@ Scene* MainScene::create()
 	Vector<MenuItem*> menuItems = {startItem, optionsItem, exitItem};
 	auto menu = Menu::createWithArray(menuItems);
 	menu->setPosition(Vec2::ZERO);
-	scene->addChild(menu, 1);
+	addChild(menu, 1);
 
-	return scene;
+	return true;
 }

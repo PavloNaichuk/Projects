@@ -5,16 +5,17 @@
 
 USING_NS_CC;
 
-class PlayScene : public Ref
+class PlayScene : public Scene
 {
 public:
-	static Scene* create();
+	CREATE_FUNC(PlayScene);
+	bool init() override;
 
 private:
-	static Sprite* createBrick(BrickType brickType, const Vec2& position, const Size& size);
+	static Sprite* createBrick(EntityType brickType, const Vec2& position, const Size& size);
 	static Sprite* createLeftBorder(const Vec2& position, const Size& size);
 	static Sprite* createRightBorder(const Vec2& position, const Size& size);
 	static Sprite* createTopBorder(const Vec2& position, const Size& size);
 	static Sprite* createPaddle(const Vec2& position, const Size& size);
-	static Sprite* createBall(const Vec2& position, const Size& size);
+	static Sprite* createBall(const Vec2& position, float radius);
 };

@@ -15,7 +15,7 @@ ConfigManager::ConfigManager()
 	, _paddlePos(256.0f, 100.0f)
 	, _paddleSize(78.0f, 16.0f)
 	, _ballPos(256.0f, 116.0f)
-	, _ballSize(16.0f, 16.0f)
+	, _ballRadius(16.0f)
 {}
 
 ConfigManager* ConfigManager::getInstance()

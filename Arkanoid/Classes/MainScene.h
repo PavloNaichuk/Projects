@@ -4,9 +4,10 @@
 
 USING_NS_CC;
 
-class MainScene : public Ref
+class MainScene : public Scene
 {
 public:
-	static Scene* create();
+	CREATE_FUNC(MainScene);
+	bool init() override;
 };
 

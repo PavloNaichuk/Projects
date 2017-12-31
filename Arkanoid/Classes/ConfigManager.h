@@ -29,7 +29,7 @@ public:
 	const Size& getPaddleSize() const { return _paddleSize; }
 
 	const Vec2& getBallPos() const { return _ballPos; }
-	const Size& getBallSize() const { return _ballSize; }
+	float getBallRadius() const { return _ballRadius; }
 
 private:
 	ConfigManager();
@@ -58,5 +58,5 @@ private:
 	Size _paddleSize;
 
 	Vec2 _ballPos;
-	Size _ballSize;
+	float _ballRadius;
 };
