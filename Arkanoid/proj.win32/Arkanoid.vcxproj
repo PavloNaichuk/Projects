@@ -150,7 +150,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\ConfigManager.cpp" />
+    <ClCompile Include="..\Classes\GameLostScene.cpp" />
+    <ClCompile Include="..\Classes\GameWinScene.cpp" />
     <ClCompile Include="..\Classes\MainScene.cpp" />
+    <ClCompile Include="..\Classes\OptionsScene.cpp" />
     <ClCompile Include="..\Classes\PlayScene.cpp" />
     <ClCompile Include="..\Classes\Utilities.cpp" />
     <ClCompile Include="main.cpp" />
@@ -158,6 +161,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\ConfigManager.h" />
+    <ClInclude Include="..\Classes\GameLostScene.h" />
+    <ClInclude Include="..\Classes\GameWinScene.h" />
+    <ClInclude Include="..\Classes\OptionsScene.h" />
     <ClInclude Include="..\Classes\Utilities.h" />
     <ClInclude Include="..\Classes\MainScene.h" />
     <ClInclude Include="..\Classes\PlayScene.h" />

@@ -1,5 +1,6 @@
 #include "MainScene.h"
 #include "PlayScene.h"
+#include "OptionsScene.h"
 
 USING_NS_CC;
 
@@ -46,8 +47,8 @@ bool MainScene::init()
 
 	auto optionsItem = MenuItemLabel::create(optionsLabel);
 	optionsItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 2 * 50));
-	optionsItem->setCallback([&](Ref* sender) {
-		log("Options");
+	optionsItem->setCallback([director](Ref* sender) {
+		director->replaceScene(OptionsScene::create());
 	});
 
 	auto exitLabel = Label::createWithTTF(menuFontConfig, "Exit Game");
