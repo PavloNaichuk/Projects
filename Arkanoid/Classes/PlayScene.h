@@ -18,7 +18,13 @@ private:
 	static Sprite* createTopBorder(const Vec2& position, const Size& size);
 	static Sprite* createPaddle(const Vec2& position, const Size& size);
 	static Sprite* createBall(const Vec2& position, float radius);
-
 	static Node* createBottomBorder(const Vec2& start, const Vec2& end);
 	static Node* createBallExitBorder(const Vec2& start, const Vec2& end);
+
+	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
+	void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
+	bool onContactBegin(PhysicsContact& contact);
+
+private:
+	Sprite* _paddle = nullptr;
 };

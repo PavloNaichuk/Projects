@@ -11,10 +11,7 @@ bool PlayScene::init()
 
 	auto director = Director::getInstance();
 	auto configManager = ConfigManager::getInstance();
-
-	auto visibleSize = director->getVisibleSize();
-	auto origin = director->getVisibleOrigin();
-
+	
 	auto colorLayer = LayerColor::create(Color4B::BLUE);
 	addChild(colorLayer, 0);
 	
@@ -54,11 +51,20 @@ bool PlayScene::init()
 	auto ballExitBorder = createBallExitBorder(configManager->getBallExitBorderStart(), configManager->getBallExitBorderEnd());
 	addChild(ballExitBorder, 1);
 
-	auto paddle = createPaddle(configManager->getPaddlePos(), configManager->getPaddleSize());
-	addChild(paddle, 1);
+	_paddle = createPaddle(configManager->getPaddlePos(), configManager->getPaddleSize());
+	addChild(_paddle, 1);
 
 	auto ball = createBall(configManager->getBallPos(), configManager->getBallRadius());
 	addChild(ball, 1);
+
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyPressed = CC_CALLBACK_2(PlayScene::onKeyPressed, this);
+	keyboardListener->onKeyReleased = CC_CALLBACK_2(PlayScene::onKeyReleased, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(PlayScene::onContactBegin, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	return true;
 }
@@ -83,7 +89,7 @@ Sprite* PlayScene::createBrick(EntityType brickType, const Vec2& position, const
 	physicsBody->setCategoryBitmask(brickType);
 	physicsBody->setCollisionBitmask(BALL);
 
-	sprite->addComponent(physicsBody);
+	sprite->setPhysicsBody(physicsBody);
 	return sprite;
 }
 
@@ -98,7 +104,7 @@ Sprite* PlayScene::createLeftBorder(const Vec2& position, const Size& size)
 	physicsBody->setCategoryBitmask(BORDER);
 	physicsBody->setCollisionBitmask(PADDLE | BALL);
 
-	sprite->addComponent(physicsBody);
+	sprite->setPhysicsBody(physicsBody);
 	return sprite;
 }
 
@@ -113,7 +119,7 @@ Sprite* PlayScene::createRightBorder(const Vec2& position, const Size& size)
 	physicsBody->setCategoryBitmask(BORDER);
 	physicsBody->setCollisionBitmask(PADDLE | BALL);
 
-	sprite->addComponent(physicsBody);
+	sprite->setPhysicsBody(physicsBody);
 	return sprite;
 }
 
@@ -128,7 +134,7 @@ Sprite* PlayScene::createTopBorder(const Vec2& position, const Size& size)
 	physicsBody->setCategoryBitmask(BORDER);
 	physicsBody->setCollisionBitmask(BALL);
 
-	sprite->addComponent(physicsBody);
+	sprite->setPhysicsBody(physicsBody);
 	return sprite;
 }
 
@@ -136,14 +142,14 @@ Sprite* PlayScene::createPaddle(const Vec2& position, const Size& size)
 {
 	auto sprite = Sprite::createWithSpriteFrameName("./Paddle");
 	sprite->setPosition(position);
-
+	
 	auto physicsBody = PhysicsBody::createBox(size, PHYSICSBODY_MATERIAL_DEFAULT);
 	physicsBody->setDynamic(true);
 	physicsBody->setTag(PADDLE);
 	physicsBody->setCategoryBitmask(PADDLE);
 	physicsBody->setCollisionBitmask(BORDER | BALL);
 
-	sprite->addComponent(physicsBody);
+	sprite->setPhysicsBody(physicsBody);
 	return sprite;
 }
 
@@ -158,7 +164,7 @@ Sprite* PlayScene::createBall(const Vec2& position, float radius)
 	physicsBody->setCategoryBitmask(BALL);
 	physicsBody->setCollisionBitmask(BORDER | PADDLE);
 
-	sprite->addComponent(physicsBody);
+	sprite->setPhysicsBody(physicsBody);
 	return sprite;
 }
 
@@ -172,7 +178,7 @@ Node* PlayScene::createBottomBorder(const Vec2& start, const Vec2& end)
 	physicsBody->setCategoryBitmask(BORDER);
 	physicsBody->setCollisionBitmask(PADDLE);
 
-	node->addComponent(physicsBody);
+	node->setPhysicsBody(physicsBody);
 	return node;
 }
 
@@ -186,6 +192,38 @@ Node* PlayScene::createBallExitBorder(const Vec2& start, const Vec2& end)
 	physicsBody->setCategoryBitmask(BORDER);
 	physicsBody->setCollisionBitmask(BALL);
 
-	node->addComponent(physicsBody);
+	node->setPhysicsBody(physicsBody);
 	return node;
+}
+
+void PlayScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+{
+	switch (keyCode)
+	{
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		{
+			break;
+		}
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		{
+			break;
+		}
+	}
+}
+
+void PlayScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
+{
+	switch (keyCode)
+	{
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		{
+			break;
+		}
+	}
+}
+
+bool PlayScene::onContactBegin(PhysicsContact& contact)
+{
+	return false;
 }
