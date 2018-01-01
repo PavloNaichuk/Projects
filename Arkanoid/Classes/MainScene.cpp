@@ -36,7 +36,7 @@ bool MainScene::init()
 	startLabel->enableShadow(Color4B::BLACK);
 
 	auto startItem = MenuItemLabel::create(startLabel);
-	startItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 1 * 50));
+	startItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
 	startItem->setCallback([director](Ref* sender) {
 		director->replaceScene(PlayScene::create());
 	});
@@ -46,9 +46,9 @@ bool MainScene::init()
 	optionsLabel->enableShadow(Color4B::BLACK);
 
 	auto optionsItem = MenuItemLabel::create(optionsLabel);
-	optionsItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 2 * 50));
+	optionsItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 50));
 	optionsItem->setCallback([director](Ref* sender) {
-		director->replaceScene(OptionsScene::create());
+		director->pushScene(OptionsScene::create());
 	});
 
 	auto exitLabel = Label::createWithTTF(menuFontConfig, "Exit Game");
@@ -56,12 +56,9 @@ bool MainScene::init()
 	exitLabel->enableShadow(Color4B::BLACK);
 
 	auto exitItem = MenuItemLabel::create(exitLabel);
-	exitItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 3 * 50));
+	exitItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 100));
 	exitItem->setCallback([director](Ref* sender) {
 		director->end();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-		exit(0);
-#endif
 	});
 
 	Vector<MenuItem*> menuItems = {startItem, optionsItem, exitItem};
