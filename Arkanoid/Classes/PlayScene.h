@@ -27,5 +27,7 @@ private:
 
 private:
 	Sprite* _paddle = nullptr;
+	float _paddleSpeed = 250.0f;
 	Sprite* _ball = nullptr;
+	float _ballSpeed = 200.0f;
 };

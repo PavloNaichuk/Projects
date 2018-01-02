@@ -70,7 +70,7 @@ bool PlayScene::init()
 	auto setBallInitialVelocity = [this](float delay)
 	{
 		auto physicsBody = _ball->getPhysicsBody();
-		physicsBody->setVelocity(Vec2(0.0, 200.0f));
+		physicsBody->setVelocity(Vec2(0.0, _ballSpeed));
 
 		unschedule("setBallInitialVelocity");
 	};
@@ -162,7 +162,7 @@ Sprite* PlayScene::createPaddle(const Vec2& position, const Size& size)
 	sprite->setPosition(position);
 	sprite->setTag(PADDLE);
 
-	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
+	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 0.0f, 0.0f));
 	physicsBody->setMass(10.0f);
 	physicsBody->setDynamic(true);
 	physicsBody->setCategoryBitmask(PADDLE);
@@ -211,14 +211,12 @@ void PlayScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 	{
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		{
-			auto physicsBody = _paddle->getPhysicsBody();
-			physicsBody->setVelocity(Vec2(-250.0f, 0.0f));
+			_paddle->getPhysicsBody()->setVelocity(Vec2(-_paddleSpeed, 0.0f));
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		{
-			auto physicsBody = _paddle->getPhysicsBody();
-			physicsBody->setVelocity(Vec2(+250.0f, 0.0f));
+			_paddle->getPhysicsBody()->setVelocity(Vec2(_paddleSpeed, 0.0f));
 			break;
 		}
 	}
@@ -231,8 +229,7 @@ void PlayScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		{
-			auto physicsBody = _paddle->getPhysicsBody();
-			physicsBody->setVelocity(Vec2::ZERO);
+			_paddle->getPhysicsBody()->setVelocity(Vec2::ZERO);
 			break;
 		}
 	}
@@ -245,14 +242,9 @@ bool PlayScene::onContactBegin(PhysicsContact& contact)
 
 	if ((node1->getTag() | node2->getTag()) == (PADDLE | BALL))
 	{
-		auto ballPhysicsBody = _ball->getPhysicsBody();
-		auto ballVelocity = ballPhysicsBody->getVelocity();
-		float ballSpeed = ballVelocity.length();
-
-		Vec2 dirBetweenCenters = _ball->getPosition() - _paddle->getPosition();
-		dirBetweenCenters.normalize();
-
-		ballPhysicsBody->setVelocity(ballSpeed * dirBetweenCenters);
+		Vec2 ballDir = _ball->getPosition() - _paddle->getPosition();
+		_ball->getPhysicsBody()->setVelocity(_ballSpeed * ballDir.getNormalized());
+		return true;
 	}
 
 	return true;
