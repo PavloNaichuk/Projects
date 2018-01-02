@@ -48,14 +48,11 @@ bool PlayScene::init()
 	auto bottomBorder = createBottomBorder(configManager->getBottomBorderStart(), configManager->getBottomBorderEnd());
 	addChild(bottomBorder, 1);
 
-	auto ballExitBorder = createBallExitBorder(configManager->getBallExitBorderStart(), configManager->getBallExitBorderEnd());
-	addChild(ballExitBorder, 1);
-
 	_paddle = createPaddle(configManager->getPaddlePos(), configManager->getPaddleSize());
 	addChild(_paddle, 1);
 
-	auto ball = createBall(configManager->getBallPos(), configManager->getBallRadius());
-	addChild(ball, 1);
+	_ball = createBall(configManager->getBallPos(), configManager->getBallRadius());
+	addChild(_ball, 1);
 
 	auto keyboardListener = EventListenerKeyboard::create();
 	keyboardListener->onKeyPressed = CC_CALLBACK_2(PlayScene::onKeyPressed, this);
@@ -66,7 +63,27 @@ bool PlayScene::init()
 	contactListener->onContactBegin = CC_CALLBACK_1(PlayScene::onContactBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
+	auto physicsWorld = getPhysicsWorld();
+	physicsWorld->setGravity(Vec2::ZERO);
+	physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+
+	auto setBallInitialVelocity = [this](float delay)
+	{
+		auto physicsBody = _ball->getPhysicsBody();
+		physicsBody->setVelocity(Vec2(0.0, 200.0f));
+
+		unschedule("setBallInitialVelocity");
+	};
+	scheduleOnce(setBallInitialVelocity, 1.0f, "setBallInitialVelocity");
+
+	scheduleUpdate();
 	return true;
+}
+
+void PlayScene::update(float deltaTime)
+{
+	//auto physicsBody = _paddle->getPhysicsBody();
+	//physicsBody->setVelocity(deltaTime * _paddleVelocity);
 }
 
 Sprite* PlayScene::createBrick(EntityType brickType, const Vec2& position, const Size& size)
@@ -82,12 +99,13 @@ Sprite* PlayScene::createBrick(EntityType brickType, const Vec2& position, const
 
 	auto sprite = Sprite::createWithSpriteFrameName(spriteFrameName);
 	sprite->setPosition(position);
+	sprite->setTag(brickType);
 
-	auto physicsBody = PhysicsBody::createBox(size, PHYSICSBODY_MATERIAL_DEFAULT);
+	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
 	physicsBody->setDynamic(false);
-	physicsBody->setTag(brickType);
 	physicsBody->setCategoryBitmask(brickType);
 	physicsBody->setCollisionBitmask(BALL);
+	physicsBody->setContactTestBitmask(BALL);
 
 	sprite->setPhysicsBody(physicsBody);
 	return sprite;
@@ -97,10 +115,10 @@ Sprite* PlayScene::createLeftBorder(const Vec2& position, const Size& size)
 {
 	auto sprite = Sprite::createWithSpriteFrameName("./LeftBorder");
 	sprite->setPosition(position);
+	sprite->setTag(BORDER);
 
-	auto physicsBody = PhysicsBody::createBox(size, PHYSICSBODY_MATERIAL_DEFAULT);
+	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
 	physicsBody->setDynamic(false);
-	physicsBody->setTag(BORDER);
 	physicsBody->setCategoryBitmask(BORDER);
 	physicsBody->setCollisionBitmask(PADDLE | BALL);
 
@@ -112,10 +130,10 @@ Sprite* PlayScene::createRightBorder(const Vec2& position, const Size& size)
 {
 	auto sprite = Sprite::createWithSpriteFrameName("./RightBorder");
 	sprite->setPosition(position);
+	sprite->setTag(BORDER);
 
-	auto physicsBody = PhysicsBody::createBox(size, PHYSICSBODY_MATERIAL_DEFAULT);
+	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
 	physicsBody->setDynamic(false);
-	physicsBody->setTag(BORDER);
 	physicsBody->setCategoryBitmask(BORDER);
 	physicsBody->setCollisionBitmask(PADDLE | BALL);
 
@@ -127,10 +145,10 @@ Sprite* PlayScene::createTopBorder(const Vec2& position, const Size& size)
 {
 	auto sprite = Sprite::createWithSpriteFrameName("./TopBorder");
 	sprite->setPosition(position);
+	sprite->setTag(BORDER);
 
-	auto physicsBody = PhysicsBody::createBox(size, PHYSICSBODY_MATERIAL_DEFAULT);
+	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
 	physicsBody->setDynamic(false);
-	physicsBody->setTag(BORDER);
 	physicsBody->setCategoryBitmask(BORDER);
 	physicsBody->setCollisionBitmask(BALL);
 
@@ -142,12 +160,15 @@ Sprite* PlayScene::createPaddle(const Vec2& position, const Size& size)
 {
 	auto sprite = Sprite::createWithSpriteFrameName("./Paddle");
 	sprite->setPosition(position);
-	
-	auto physicsBody = PhysicsBody::createBox(size, PHYSICSBODY_MATERIAL_DEFAULT);
+	sprite->setTag(PADDLE);
+
+	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
+	physicsBody->setMass(10.0f);
 	physicsBody->setDynamic(true);
-	physicsBody->setTag(PADDLE);
 	physicsBody->setCategoryBitmask(PADDLE);
 	physicsBody->setCollisionBitmask(BORDER | BALL);
+	physicsBody->setContactTestBitmask(BALL);
+	physicsBody->setRotationEnable(false);
 
 	sprite->setPhysicsBody(physicsBody);
 	return sprite;
@@ -157,32 +178,20 @@ Sprite* PlayScene::createBall(const Vec2& position, float radius)
 {
 	auto sprite = Sprite::createWithSpriteFrameName("./Ball");
 	sprite->setPosition(position);
+	sprite->setTag(BALL);
 
-	auto physicsBody = PhysicsBody::createCircle(radius, PHYSICSBODY_MATERIAL_DEFAULT);
+	auto physicsBody = PhysicsBody::createCircle(radius, PhysicsMaterial(0.1f, 1.0f, 0.0f));
+	physicsBody->setMass(0.00001f);
 	physicsBody->setDynamic(true);
-	physicsBody->setTag(BALL);
 	physicsBody->setCategoryBitmask(BALL);
-	physicsBody->setCollisionBitmask(BORDER | PADDLE);
+	physicsBody->setCollisionBitmask(BORDER | PADDLE | RED_BRICK | GREEN_BRICK | BLUE_BRICK);
+	physicsBody->setContactTestBitmask(PADDLE | RED_BRICK | GREEN_BRICK | BLUE_BRICK);
 
 	sprite->setPhysicsBody(physicsBody);
 	return sprite;
 }
 
 Node* PlayScene::createBottomBorder(const Vec2& start, const Vec2& end)
-{
-	auto node = Node::create();
-
-	auto physicsBody = PhysicsBody::createEdgeSegment(start, end, PHYSICSBODY_MATERIAL_DEFAULT);
-	physicsBody->setDynamic(false);
-	physicsBody->setTag(BORDER);
-	physicsBody->setCategoryBitmask(BORDER);
-	physicsBody->setCollisionBitmask(PADDLE);
-
-	node->setPhysicsBody(physicsBody);
-	return node;
-}
-
-Node* PlayScene::createBallExitBorder(const Vec2& start, const Vec2& end)
 {
 	auto node = Node::create();
 
@@ -197,15 +206,19 @@ Node* PlayScene::createBallExitBorder(const Vec2& start, const Vec2& end)
 }
 
 void PlayScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
-{
+{	
 	switch (keyCode)
 	{
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		{
+			auto physicsBody = _paddle->getPhysicsBody();
+			physicsBody->setVelocity(Vec2(-250.0f, 0.0f));
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		{
+			auto physicsBody = _paddle->getPhysicsBody();
+			physicsBody->setVelocity(Vec2(+250.0f, 0.0f));
 			break;
 		}
 	}
@@ -218,6 +231,8 @@ void PlayScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		{
+			auto physicsBody = _paddle->getPhysicsBody();
+			physicsBody->setVelocity(Vec2::ZERO);
 			break;
 		}
 	}
@@ -225,5 +240,20 @@ void PlayScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 
 bool PlayScene::onContactBegin(PhysicsContact& contact)
 {
-	return false;
+	auto node1 = contact.getShapeA()->getBody()->getNode();
+	auto node2 = contact.getShapeB()->getBody()->getNode();
+
+	if ((node1->getTag() | node2->getTag()) == (PADDLE | BALL))
+	{
+		auto ballPhysicsBody = _ball->getPhysicsBody();
+		auto ballVelocity = ballPhysicsBody->getVelocity();
+		float ballSpeed = ballVelocity.length();
+
+		Vec2 dirBetweenCenters = _ball->getPosition() - _paddle->getPosition();
+		dirBetweenCenters.normalize();
+
+		ballPhysicsBody->setVelocity(ballSpeed * dirBetweenCenters);
+	}
+
+	return true;
 }

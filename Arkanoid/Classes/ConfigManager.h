@@ -28,9 +28,6 @@ public:
 	const Vec2& getBottomBorderStart() const { return _bottomBorderStart; }
 	const Vec2& getBottomBorderEnd() const { return _bottomBorderEnd; }
 
-	const Vec2& getBallExitBorderStart() const { return _ballExitBorderStart; }
-	const Vec2& getBallExitBorderEnd() const { return _ballExitBorderEnd; }
-
 	const Vec2& getPaddlePos() const { return _paddlePos; }
 	const Size& getPaddleSize() const { return _paddleSize; }
 
@@ -62,9 +59,6 @@ private:
 
 	Vec2 _bottomBorderStart;
 	Vec2 _bottomBorderEnd;
-
-	Vec2 _ballExitBorderStart;
-	Vec2 _ballExitBorderEnd;
 
 	Vec2 _paddlePos;
 	Size _paddleSize;

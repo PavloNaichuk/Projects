@@ -10,16 +10,16 @@ class PlayScene : public Scene
 public:
 	CREATE_FUNC(PlayScene);
 	bool init() override;
+	void update(float deltaTime) override;
 
 private:
 	static Sprite* createBrick(EntityType brickType, const Vec2& position, const Size& size);
 	static Sprite* createLeftBorder(const Vec2& position, const Size& size);
 	static Sprite* createRightBorder(const Vec2& position, const Size& size);
 	static Sprite* createTopBorder(const Vec2& position, const Size& size);
+	static Node* createBottomBorder(const Vec2& start, const Vec2& end);
 	static Sprite* createPaddle(const Vec2& position, const Size& size);
 	static Sprite* createBall(const Vec2& position, float radius);
-	static Node* createBottomBorder(const Vec2& start, const Vec2& end);
-	static Node* createBallExitBorder(const Vec2& start, const Vec2& end);
 
 	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
@@ -27,4 +27,5 @@ private:
 
 private:
 	Sprite* _paddle = nullptr;
+	Sprite* _ball = nullptr;
 };
