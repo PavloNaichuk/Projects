@@ -9,24 +9,24 @@ class ConfigManager
 public:
 	static ConfigManager* getInstance();
 
-	const Size& getDesignResolution() const { return _designResolution; }
+	const Size& getWorldSize() const { return _worldSize; }
 
 	int getNumBrickRows() const { return _numBrickRows; }
 	int getNumBricksInRow() const { return _numBricksInRow; }
 	const Vec2& getFirstBrickPos() const { return _firstBrickPos; }
 	const Size& getBrickSize() const { return _brickSize; }
 
-	const Vec2& getLeftBorderPos() const { return _leftBorderPos; }
-	const Size& getLeftBorderSize() const { return _leftBorderSize; }
+	const Vec2& getLeftWallPos() const { return _leftWallPos; }
+	const Size& getLeftWallSize() const { return _leftWallSize; }
 
-	const Vec2& getRightBorderPos() const { return _rightBorderPos; }
-	const Size& getRightBorderSize() const { return _rightBorderSize; }
+	const Vec2& getRightWallPos() const { return _rightWallPos; }
+	const Size& getRightWallSize() const { return _rightWallSize; }
 
-	const Vec2& getTopBorderPos() const { return _topBorderPos; }
-	const Size& getTopBorderSize() const { return _topBorderSize; }
+	const Vec2& getTopWallPos() const { return _topWallPos; }
+	const Size& getTopWallSize() const { return _topWallSize; }
 
-	const Vec2& getBottomBorderStart() const { return _bottomBorderStart; }
-	const Vec2& getBottomBorderEnd() const { return _bottomBorderEnd; }
+	const Vec2& getExitZoneStart() const { return _exitZoneStart; }
+	const Vec2& getExitZoneEnd() const { return _exitZoneEnd; }
 
 	const Vec2& getPaddlePos() const { return _paddlePos; }
 	const Size& getPaddleSize() const { return _paddleSize; }
@@ -41,24 +41,24 @@ private:
 	~ConfigManager() = default;
 
 private:
-	Size _designResolution;
+	Size _worldSize;
 
 	int _numBrickRows;
 	int _numBricksInRow;
 	Vec2 _firstBrickPos;
 	Size _brickSize;
 
-	Vec2 _leftBorderPos;
-	Size _leftBorderSize;
+	Vec2 _leftWallPos;
+	Size _leftWallSize;
 
-	Vec2 _rightBorderPos;
-	Size _rightBorderSize;
+	Vec2 _rightWallPos;
+	Size _rightWallSize;
 
-	Vec2 _topBorderPos;
-	Size _topBorderSize;
+	Vec2 _topWallPos;
+	Size _topWallSize;
 
-	Vec2 _bottomBorderStart;
-	Vec2 _bottomBorderEnd;
+	Vec2 _exitZoneStart;
+	Vec2 _exitZoneEnd;
 
 	Vec2 _paddlePos;
 	Size _paddleSize;

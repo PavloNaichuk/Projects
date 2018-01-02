@@ -1,8 +1,8 @@
-#include "GameLostScene.h"
+#include "GameLoseScene.h"
 
 USING_NS_CC;
 
-bool GameLostScene::init()
+bool GameLoseScene::init()
 {
 	if (!Scene::init())
 		return false;

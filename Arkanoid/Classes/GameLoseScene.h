@@ -4,10 +4,10 @@
 
 USING_NS_CC;
 
-class GameLostScene : public Scene
+class GameLoseScene : public Scene
 {
 public:
-	CREATE_FUNC(GameLostScene);
+	CREATE_FUNC(GameLoseScene);
 	bool init() override;
 };
 

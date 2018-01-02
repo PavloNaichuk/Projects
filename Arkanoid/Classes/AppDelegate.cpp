@@ -50,19 +50,15 @@ bool AppDelegate::applicationDidFinishLaunching()
     auto director = Director::getInstance();
 	
 	auto configManager = ConfigManager::getInstance();
-	const Size& designResolution = configManager->getDesignResolution();
+	const Size& worldSize = configManager->getWorldSize();
 
     auto glview = director->getOpenGLView();
     if (glview == nullptr)
 	{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("Arkanoid", Rect(0, 0, designResolution.width, designResolution.height));
-#else
-        glview = GLViewImpl::create("Arkanoid");
-#endif
+        glview = GLViewImpl::createWithRect("Arkanoid", Rect(0, 0, worldSize.width, worldSize.height));
         director->setOpenGLView(glview);
     }
-    glview->setDesignResolutionSize(designResolution.width, designResolution.height, ResolutionPolicy::NO_BORDER);
+    glview->setDesignResolutionSize(worldSize.width, worldSize.height, ResolutionPolicy::NO_BORDER);
 
 	auto spriteFrameCache = SpriteFrameCache::getInstance();
 	spriteFrameCache->addSpriteFramesWithFile("images/ImageAtlas.plist");
@@ -71,7 +67,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     return true;
 }
 
-// This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
 void AppDelegate::applicationDidEnterBackground()
 {
     Director::getInstance()->stopAnimation();
@@ -84,7 +79,6 @@ void AppDelegate::applicationDidEnterBackground()
 #endif
 }
 
-// This function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground()
 {
     Director::getInstance()->startAnimation();

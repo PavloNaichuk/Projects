@@ -15,7 +15,7 @@
     <key>spriteSourceSize</key>
     <string>{16,16}</string>
     <key>textureRect</key>
-    <string>{{48,48},{16,16}}</string>
+    <string>{{16,64},{16,16}}</string>
     <key>textureRotated</key>
     <false/>
    </dict>
@@ -34,21 +34,6 @@
     <key>textureRotated</key>
     <false/>
    </dict>
-   <key>./Border</key>
-   <dict>
-    <key>aliases</key>
-    <array/>
-    <key>spriteOffset</key>
-    <string>{0,0}</string>
-    <key>spriteSize</key>
-    <string>{38,7}</string>
-    <key>spriteSourceSize</key>
-    <string>{38,7}</string>
-    <key>textureRect</key>
-    <string>{{16,64},{38,7}}</string>
-    <key>textureRotated</key>
-    <false/>
-   </dict>
    <key>./GreenBrick</key>
    <dict>
     <key>aliases</key>
@@ -64,7 +49,7 @@
     <key>textureRotated</key>
     <false/>
    </dict>
-   <key>./LeftBorder</key>
+   <key>./LeftWall</key>
    <dict>
     <key>aliases</key>
     <array/>
@@ -109,7 +94,7 @@
     <key>textureRotated</key>
     <false/>
    </dict>
-   <key>./RightBorder</key>
+   <key>./RightWall</key>
    <dict>
     <key>aliases</key>
     <array/>
@@ -124,7 +109,7 @@
     <key>textureRotated</key>
     <false/>
    </dict>
-   <key>./TopBorder</key>
+   <key>./TopWall</key>
    <dict>
     <key>aliases</key>
     <array/>
@@ -145,7 +130,7 @@
    <key>format</key>
    <integer>3</integer>
    <key>size</key>
-   <string>{512,512}</string>
+   <string>{512,500}</string>
    <key>textureFileName</key>
    <string>ImageAtlas.png</string>
   </dict>
