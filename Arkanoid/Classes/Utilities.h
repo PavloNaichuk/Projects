@@ -14,3 +14,15 @@ enum EntityType
 };
 
 const Size operator* (const Size& lhs, const Size& rhs);
+
+class BrickData : public Ref
+{
+public:
+	static BrickData* create(int lives);
+
+	int getLives() const;
+	void setLives(int lives);
+
+private:
+	int _lives = 0;
+};

@@ -11,7 +11,7 @@ public:
 	bool init() override;
 
 private:
-	static Sprite* createBrick(int brickState, const Vec2& position, const Size& size);
+	static Sprite* createBrick(int lives, const Vec2& position, const Size& size);
 	static Sprite* createLeftWall(const Vec2& position, const Size& size);
 	static Sprite* createRightWall(const Vec2& position, const Size& size);
 	static Sprite* createTopWall(const Vec2& position, const Size& size);
@@ -28,5 +28,5 @@ private:
 	float _paddleSpeed = 250.0f;
 	Sprite* _ball = nullptr;
 	float _ballSpeed = 200.0f;
-	bool _userInputAllowed = false;
+	bool _allowUserInput = false;
 };

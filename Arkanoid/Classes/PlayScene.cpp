@@ -4,6 +4,27 @@
 #include "Utilities.h"
 #include "ConfigManager.h"
 
+namespace
+{
+	void setBrickTexture(Sprite* brick, int brickLives)
+	{
+		const char* frameName = nullptr;
+		if (brickLives == 1)
+			frameName = "./GreenBrick";
+		else if (brickLives == 2)
+			frameName = "./RedBrick";
+		else if (brickLives == 3)
+			frameName = "./BlueBrick";
+		assert(frameName != nullptr);
+
+		auto spriteFrameCache = SpriteFrameCache::getInstance();
+		auto spriteFrame = spriteFrameCache->getSpriteFrameByName(frameName);
+		
+		brick->setTexture(spriteFrame->getTexture());
+		brick->setTextureRect(spriteFrame->getRect());
+	}
+}
+
 USING_NS_CC;
 
 bool PlayScene::init()
@@ -22,16 +43,16 @@ bool PlayScene::init()
 	const Vec2& firstBrickPos = configManager->getFirstBrickPos();
 	const Size& brickSize = configManager->getBrickSize();
 
-	const int numBrickStates = 3;
+	const int maxBrickLives = 3;
 	for (int row = 0; row < numBrickRows; ++row)
 	{
 		for (int col = 0; col < numBricksInRow; ++col)
 		{
 			auto brickOffset = brickSize * Size(col, -row);
-			auto brickState = random(1, numBrickStates);
+			auto brickLives = random(1, maxBrickLives);
 			auto brickPos = firstBrickPos + brickOffset;
 
-			auto brick = createBrick(brickState, brickPos, brickSize);
+			auto brick = createBrick(brickLives, brickPos, brickSize);
 			addChild(brick, 1);
 		}
 	}
@@ -70,27 +91,20 @@ bool PlayScene::init()
 	auto setBallInitialVelocity = [this](float delay)
 	{
 		_ball->getPhysicsBody()->setVelocity(Vec2(0.0, _ballSpeed));
-		_userInputAllowed = true;
+		_allowUserInput = true;
 		unschedule("setBallInitialVelocity");
 	};
 	scheduleOnce(setBallInitialVelocity, 0.5f, "setBallInitialVelocity");
 	return true;
 }
 
-Sprite* PlayScene::createBrick(int brickState, const Vec2& position, const Size& size)
+Sprite* PlayScene::createBrick(int lives, const Vec2& position, const Size& size)
 {
-	const char* spriteFrameName = nullptr;
-	if (brickState == 1)
-		spriteFrameName = "./GreenBrick";
-	else if (brickState == 2)
-		spriteFrameName = "./RedBrick";
-	else if (brickState == 3)
-		spriteFrameName = "./BlueBrick";
-	assert(spriteFrameName != nullptr);
-
-	auto sprite = Sprite::createWithSpriteFrameName(spriteFrameName);
+	auto sprite = Sprite::create();
 	sprite->setPosition(position);
 	sprite->setTag(BRICK);
+	sprite->setUserObject(BrickData::create(lives));
+	setBrickTexture(sprite, lives);
 
 	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
 	physicsBody->setDynamic(false);
@@ -199,7 +213,7 @@ Node* PlayScene::createExitZone(const Vec2& start, const Vec2& end)
 
 void PlayScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {	
-	if (!_userInputAllowed)
+	if (!_allowUserInput)
 		return;
 
 	switch (keyCode)
@@ -219,7 +233,7 @@ void PlayScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 
 void PlayScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	if (!_userInputAllowed)
+	if (!_allowUserInput)
 		return;
 
 	switch (keyCode)
@@ -251,6 +265,24 @@ bool PlayScene::onContactBegin(PhysicsContact& contact)
 		director->replaceScene(GameLoseScene::create());
 
 		return false;
+	}
+	if ((node1->getTag() | node2->getTag()) == (BALL | BRICK))
+	{
+		auto node = (node1->getTag() == BRICK) ? node1 : node2;
+		
+		auto brick = static_cast<Sprite*>(node);
+		auto brickData = static_cast<BrickData*>(brick->getUserObject());
+
+		brickData->setLives(brickData->getLives() - 1);
+		if (brickData->getLives() > 0)
+		{
+			setBrickTexture(brick, brickData->getLives());
+		}
+		else
+		{
+			node->removeFromParent();
+		}
+		return true;
 	}
 
 	return true;
