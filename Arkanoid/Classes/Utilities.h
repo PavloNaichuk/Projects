@@ -4,6 +4,8 @@
 
 USING_NS_CC;
 
+const char* const kPlayerScoreKey = "PlayerScore";
+
 enum EntityType
 {
 	BRICK = 1 << 0,

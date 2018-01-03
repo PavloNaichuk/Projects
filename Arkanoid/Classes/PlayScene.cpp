@@ -37,13 +37,25 @@ bool PlayScene::init()
 	
 	auto colorLayer = LayerColor::create(Color4B::BLUE);
 	addChild(colorLayer, 0);
-	
+
+	TTFConfig scoreFontConfig;
+	scoreFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
+	scoreFontConfig.fontSize = 24;
+
+	_scoreLabel = Label::createWithTTF(scoreFontConfig, "");
+	_scoreLabel->setTextColor(Color4B::WHITE);
+	_scoreLabel->enableShadow(Color4B::BLACK);
+	_scoreLabel->setAnchorPoint(Vec2(0.0f, 1.0f));
+	_scoreLabel->setPosition(configManager->getScoreLabelPos());
+	addChild(_scoreLabel);
+	updateScore(0);
+
+	const int maxBrickLives = configManager->getMaxBrickLives();
 	const int numBrickRows = configManager->getNumBrickRows();
 	const int numBricksInRow = configManager->getNumBricksInRow();
 	const Vec2& firstBrickPos = configManager->getFirstBrickPos();
 	const Size& brickSize = configManager->getBrickSize();
 
-	const int maxBrickLives = 3;
 	for (int row = 0; row < numBrickRows; ++row)
 	{
 		for (int col = 0; col < numBricksInRow; ++col)
@@ -54,6 +66,8 @@ bool PlayScene::init()
 
 			auto brick = createBrick(brickLives, brickPos, brickSize);
 			addChild(brick, 1);
+
+			++_numBricks;
 		}
 	}
 
@@ -211,6 +225,15 @@ Node* PlayScene::createExitZone(const Vec2& start, const Vec2& end)
 	return node;
 }
 
+void PlayScene::updateScore(int score)
+{
+	_score = score;
+
+	static char stringBuffer[60];
+	std::snprintf(stringBuffer, sizeof(stringBuffer), "Score: %d", _score);
+	_scoreLabel->setString(stringBuffer);
+}
+
 void PlayScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {	
 	if (!_allowUserInput)
@@ -261,6 +284,9 @@ bool PlayScene::onContactBegin(PhysicsContact& contact)
 	}
 	if ((node1->getTag() | node2->getTag()) == (BALL | EXIT_ZONE))
 	{
+		auto userDefault = UserDefault::getInstance();
+		userDefault->setIntegerForKey(kPlayerScoreKey, _score);
+
 		auto director = Director::getInstance();
 		director->replaceScene(GameLoseScene::create());
 
@@ -281,6 +307,19 @@ bool PlayScene::onContactBegin(PhysicsContact& contact)
 		else
 		{
 			node->removeFromParent();
+			--_numBricks;
+
+			auto configManager = ConfigManager::getInstance();
+			updateScore(_score + configManager->getScore());
+
+			if (_numBricks == 0)
+			{
+				auto userDefault = UserDefault::getInstance();
+				userDefault->setIntegerForKey(kPlayerScoreKey, _score);
+
+				auto director = Director::getInstance();
+				director->replaceScene(GameWinScene::create());
+			}
 		}
 		return true;
 	}

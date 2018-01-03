@@ -2,6 +2,7 @@
 
 ConfigManager::ConfigManager()
 	: _worldSize(512.0f, 540.0f)
+	, _maxBrickLives(3)
 	, _numBrickRows(5)
 	, _numBricksInRow(15)
 	, _firstBrickPos(32.0f, 440.0f)
@@ -18,6 +19,8 @@ ConfigManager::ConfigManager()
 	, _paddleSize(78.0f, 16.0f)
 	, _ballPos(256.0f, 116.0f)
 	, _ballRadius(8.0f)
+	, _scoreLabelPos(20.0f, 532.0f)
+	, _score(10)
 {}
 
 ConfigManager* ConfigManager::getInstance()

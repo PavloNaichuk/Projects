@@ -19,6 +19,8 @@ private:
 	static Sprite* createBall(const Vec2& position, float radius);
 	static Node* createExitZone(const Vec2& start, const Vec2& end);
 
+	void updateScore(int score);
+
 	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
 	bool onContactBegin(PhysicsContact& contact);
@@ -28,5 +30,8 @@ private:
 	float _paddleSpeed = 250.0f;
 	Sprite* _ball = nullptr;
 	float _ballSpeed = 200.0f;
+	Label* _scoreLabel = nullptr;
+	int _score = 0;
 	bool _allowUserInput = false;
+	int _numBricks = 0;
 };

@@ -1,4 +1,6 @@
 #include "GameWinScene.h"
+#include "PlayScene.h"
+#include "Utilities.h"
 
 USING_NS_CC;
 
@@ -27,8 +29,11 @@ bool GameWinScene::init()
 	scoreFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
 	scoreFontConfig.fontSize = 32;
 	
+	auto userDefault = UserDefault::getInstance();
+	auto playerScore = userDefault->getIntegerForKey(kPlayerScoreKey);
+
 	char stringBuffer[80];
-	std::snprintf(stringBuffer, sizeof(stringBuffer), "Your score: %d", 10);
+	std::snprintf(stringBuffer, sizeof(stringBuffer), "Your score: %d", playerScore);
 	auto scoreLabel = Label::createWithTTF(scoreFontConfig, stringBuffer);
 	scoreLabel->setTextColor(Color4B::WHITE);
 	scoreLabel->enableShadow(Color4B::BLACK);
@@ -46,6 +51,8 @@ bool GameWinScene::init()
 	auto replayItem = MenuItemLabel::create(replayLabel);
 	replayItem->setPosition(Vec2(visibleSize.width / 2, 50));
 	replayItem->setCallback([director](Ref* sender) {
+		auto director = Director::getInstance();
+		director->replaceScene(PlayScene::create());
 	});
 
 	auto replayMenu = Menu::create(replayItem, nullptr);

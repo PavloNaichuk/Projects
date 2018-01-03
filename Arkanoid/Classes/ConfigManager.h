@@ -11,6 +11,7 @@ public:
 
 	const Size& getWorldSize() const { return _worldSize; }
 
+	int getMaxBrickLives() const { return _maxBrickLives; }
 	int getNumBrickRows() const { return _numBrickRows; }
 	int getNumBricksInRow() const { return _numBricksInRow; }
 	const Vec2& getFirstBrickPos() const { return _firstBrickPos; }
@@ -34,6 +35,9 @@ public:
 	const Vec2& getBallPos() const { return _ballPos; }
 	float getBallRadius() const { return _ballRadius; }
 
+	const Vec2& getScoreLabelPos() const { return _scoreLabelPos; }
+	int getScore() const { return _score; }
+
 private:
 	ConfigManager();
 	ConfigManager(const ConfigManager&) = delete;
@@ -43,6 +47,7 @@ private:
 private:
 	Size _worldSize;
 
+	int _maxBrickLives;
 	int _numBrickRows;
 	int _numBricksInRow;
 	Vec2 _firstBrickPos;
@@ -65,4 +70,7 @@ private:
 
 	Vec2 _ballPos;
 	float _ballRadius;
+
+	Vec2 _scoreLabelPos;
+	int _score;
 };
