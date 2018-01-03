@@ -51,8 +51,8 @@ bool GameWinScene::init()
 	auto replayItem = MenuItemLabel::create(replayLabel);
 	replayItem->setPosition(Vec2(visibleSize.width / 2, 50));
 	replayItem->setCallback([director](Ref* sender) {
-		auto director = Director::getInstance();
-		director->replaceScene(PlayScene::create());
+		auto nextScene = PlayScene::create();
+		director->replaceScene(TransitionFade::create(2.0f, nextScene));
 	});
 
 	auto replayMenu = Menu::create(replayItem, nullptr);

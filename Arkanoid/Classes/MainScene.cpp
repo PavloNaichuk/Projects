@@ -38,7 +38,8 @@ bool MainScene::init()
 	auto startItem = MenuItemLabel::create(startLabel);
 	startItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
 	startItem->setCallback([director](Ref* sender) {
-		director->replaceScene(PlayScene::create());
+		auto nextScene = PlayScene::create();
+		director->replaceScene(TransitionFade::create(2.0f, nextScene));
 	});
 
 	auto optionsLabel = Label::createWithTTF(menuFontConfig, "Options");
@@ -48,7 +49,8 @@ bool MainScene::init()
 	auto optionsItem = MenuItemLabel::create(optionsLabel);
 	optionsItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 50));
 	optionsItem->setCallback([director](Ref* sender) {
-		director->pushScene(OptionsScene::create());
+		auto nextScene = OptionsScene::create();
+		director->pushScene(TransitionFade::create(2.0f, nextScene));
 	});
 
 	auto exitLabel = Label::createWithTTF(menuFontConfig, "Exit Game");
