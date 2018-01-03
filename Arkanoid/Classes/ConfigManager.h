@@ -29,9 +29,11 @@ public:
 	const Vec2& getExitZoneStart() const { return _exitZoneStart; }
 	const Vec2& getExitZoneEnd() const { return _exitZoneEnd; }
 
+	float getPaddleSpeed() const { return _paddleSpeed; }
 	const Vec2& getPaddlePos() const { return _paddlePos; }
 	const Size& getPaddleSize() const { return _paddleSize; }
 
+	float getBallSpeed() const { return _ballSpeed; }
 	const Vec2& getBallPos() const { return _ballPos; }
 	float getBallRadius() const { return _ballRadius; }
 
@@ -65,9 +67,11 @@ private:
 	Vec2 _exitZoneStart;
 	Vec2 _exitZoneEnd;
 
+	float _paddleSpeed;
 	Vec2 _paddlePos;
 	Size _paddleSize;
 
+	float _ballSpeed;
 	Vec2 _ballPos;
 	float _ballRadius;
 

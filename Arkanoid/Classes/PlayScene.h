@@ -28,13 +28,11 @@ private:
 	bool onContactPostSolve(PhysicsContact& contact);
 	bool onContactSeparate(PhysicsContact& contact);
 	
-	void update(float dt);
-
 private:
 	Sprite* _paddle = nullptr;
-	float _paddleSpeed = 250.0f;
+	float _paddleSpeed = 0.0f;
 	Sprite* _ball = nullptr;
-	float _ballSpeed = 120.0f;
+	float _ballSpeed = 0.0f;
 	Label* _scoreLabel = nullptr;
 	int _score = 0;
 	bool _allowUserInput = false;

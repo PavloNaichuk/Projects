@@ -34,6 +34,9 @@ bool PlayScene::init()
 
 	auto director = Director::getInstance();
 	auto configManager = ConfigManager::getInstance();
+
+	_paddleSpeed = configManager->getPaddleSpeed();
+	_ballSpeed = configManager->getBallSpeed();
 	
 	auto colorLayer = LayerColor::create(Color4B::BLUE);
 	addChild(colorLayer, 0);
@@ -111,7 +114,6 @@ bool PlayScene::init()
 	};
 	scheduleOnce(startGame, 1.0f, "startGame");
 
-	scheduleUpdate();
 	return true;
 }
 
@@ -235,14 +237,6 @@ void PlayScene::updateScore(int score)
 	static char stringBuffer[60];
 	std::snprintf(stringBuffer, sizeof(stringBuffer), "Score: %d", _score);
 	_scoreLabel->setString(stringBuffer);
-}
-
-void PlayScene::update(float dt)
-{
-	Vec2 velocity = _ball->getPhysicsBody()->getVelocity();
-	float speed = velocity.length();
-
-	log("velocity initial: %f, actual: %f", _ballSpeed, speed);
 }
 
 void PlayScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
