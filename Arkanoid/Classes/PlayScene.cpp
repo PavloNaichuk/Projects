@@ -66,8 +66,6 @@ bool PlayScene::init()
 
 			auto brick = createBrick(brickLives, brickPos, brickSize);
 			addChild(brick, 1);
-
-			++_numBricks;
 		}
 	}
 
@@ -96,19 +94,24 @@ bool PlayScene::init()
 
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(PlayScene::onContactBegin, this);
+	contactListener->onContactPostSolve = CC_CALLBACK_1(PlayScene::onContactPostSolve, this);
+	contactListener->onContactSeparate = CC_CALLBACK_1(PlayScene::onContactSeparate, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	auto physicsWorld = getPhysicsWorld();
 	physicsWorld->setGravity(Vec2::ZERO);
-	physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
 
-	auto setBallInitialVelocity = [this](float delay)
+	auto startGame = [this](float delay)
 	{
 		_ball->getPhysicsBody()->setVelocity(Vec2(0.0, _ballSpeed));
 		_allowUserInput = true;
-		unschedule("setBallInitialVelocity");
+
+		unschedule("startGame");
 	};
-	scheduleOnce(setBallInitialVelocity, 0.5f, "setBallInitialVelocity");
+	scheduleOnce(startGame, 0.5f, "startGame");
+
+	scheduleUpdate();
 	return true;
 }
 
@@ -234,6 +237,14 @@ void PlayScene::updateScore(int score)
 	_scoreLabel->setString(stringBuffer);
 }
 
+void PlayScene::update(float dt)
+{
+	Vec2 velocity = _ball->getPhysicsBody()->getVelocity();
+	float speed = velocity.length();
+
+	log("velocity initial: %f, actual: %f", _ballSpeed, speed);
+}
+
 void PlayScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {	
 	if (!_allowUserInput)
@@ -275,27 +286,23 @@ bool PlayScene::onContactBegin(PhysicsContact& contact)
 	auto node1 = contact.getShapeA()->getBody()->getNode();
 	auto node2 = contact.getShapeB()->getBody()->getNode();
 
+	return ((node1->getTag() | node2->getTag()) != (BALL | EXIT_ZONE));
+}
+
+bool PlayScene::onContactPostSolve(PhysicsContact& contact)
+{
+	auto node1 = contact.getShapeA()->getBody()->getNode();
+	auto node2 = contact.getShapeB()->getBody()->getNode();
+
 	if ((node1->getTag() | node2->getTag()) == (PADDLE | BALL))
 	{
 		Vec2 ballDir = _ball->getPosition() - _paddle->getPosition();
 		_ball->getPhysicsBody()->setVelocity(_ballSpeed * ballDir.getNormalized());
-		
-		return true;
 	}
-	if ((node1->getTag() | node2->getTag()) == (BALL | EXIT_ZONE))
-	{
-		auto userDefault = UserDefault::getInstance();
-		userDefault->setIntegerForKey(kPlayerScoreKey, _score);
-
-		auto director = Director::getInstance();
-		director->replaceScene(GameLoseScene::create());
-
-		return false;
-	}
-	if ((node1->getTag() | node2->getTag()) == (BALL | BRICK))
+	else if ((node1->getTag() | node2->getTag()) == (BALL | BRICK))
 	{
 		auto node = (node1->getTag() == BRICK) ? node1 : node2;
-		
+
 		auto brick = static_cast<Sprite*>(node);
 		auto brickData = static_cast<BrickData*>(brick->getUserObject());
 
@@ -306,23 +313,68 @@ bool PlayScene::onContactBegin(PhysicsContact& contact)
 		}
 		else
 		{
-			node->removeFromParent();
-			--_numBricks;
+			brick->removeFromParent();
+			++_numDestroyedBricks;
 
 			auto configManager = ConfigManager::getInstance();
 			updateScore(_score + configManager->getScore());
 
-			if (_numBricks == 0)
+			const int numBricks = configManager->getNumBrickRows() * configManager->getNumBricksInRow();
+			if (_numDestroyedBricks == numBricks)
 			{
 				auto userDefault = UserDefault::getInstance();
 				userDefault->setIntegerForKey(kPlayerScoreKey, _score);
 
-				auto director = Director::getInstance();
-				director->replaceScene(GameWinScene::create());
+				auto goToGameWinScene = [this](float delay)
+				{
+					_paddle->getPhysicsBody()->setVelocity(Vec2::ZERO);
+					_allowUserInput = false;
+
+					auto director = Director::getInstance();
+					director->replaceScene(GameWinScene::create());
+
+					unschedule("goToGameWinScene");
+				};
+				scheduleOnce(goToGameWinScene, 0.5f, "goToGameWinScene");
+			}
+			else
+			{
+				if ((_numDestroyedBricks % 5) == 0)
+				{
+					_ballSpeed += 0.1f * _ballSpeed;
+
+					auto ballPhysicsBody = _ball->getPhysicsBody();
+					Vec2 ballVelocity = ballPhysicsBody->getVelocity();
+
+					ballPhysicsBody->setVelocity(_ballSpeed * ballVelocity.getNormalized());
+				}
 			}
 		}
-		return true;
 	}
+	return true;
+}
 
+bool PlayScene::onContactSeparate(PhysicsContact& contact)
+{
+	auto node1 = contact.getShapeA()->getBody()->getNode();
+	auto node2 = contact.getShapeB()->getBody()->getNode();
+
+	if ((node1->getTag() | node2->getTag()) == (BALL | EXIT_ZONE))
+	{
+		auto userDefault = UserDefault::getInstance();
+		userDefault->setIntegerForKey(kPlayerScoreKey, _score);
+
+		auto goToGameLoseScene = [this](float delay)
+		{
+			_paddle->getPhysicsBody()->setVelocity(Vec2::ZERO);
+			_allowUserInput = false;
+
+			auto director = Director::getInstance();
+			director->replaceScene(GameLoseScene::create());
+
+			unschedule("goToGameLoseScene");
+		};
+		scheduleOnce(goToGameLoseScene, 0.5f, "goToGameLoseScene");
+	}
 	return true;
 }
