@@ -29,3 +29,13 @@ void BrickData::setLives(int lives)
 {
 	_lives = lives;
 }
+
+Action* createMenuItemAnimation()
+{
+	auto scaleUp = ScaleBy::create(2.0f, 1.1f);
+	auto scaleDown = scaleUp->reverse();
+	auto delay = DelayTime::create(0.25f);
+	auto sequence = Sequence::create(scaleUp, delay, scaleDown, delay->clone(), nullptr);
+	
+	return RepeatForever::create(sequence);
+}

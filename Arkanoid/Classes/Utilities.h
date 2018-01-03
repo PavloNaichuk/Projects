@@ -28,3 +28,5 @@ public:
 private:
 	int _lives = 0;
 };
+
+Action* createMenuItemAnimation();

@@ -54,6 +54,7 @@ bool GameWinScene::init()
 		auto nextScene = PlayScene::create();
 		director->replaceScene(TransitionFade::create(2.0f, nextScene));
 	});
+	replayItem->runAction(createMenuItemAnimation());
 
 	auto replayMenu = Menu::create(replayItem, nullptr);
 	replayMenu->setPosition(Vec2::ZERO);

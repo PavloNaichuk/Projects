@@ -1,4 +1,6 @@
 #include "OptionsScene.h"
+#include "MainScene.h"
+#include "Utilities.h"
 
 USING_NS_CC;
 
@@ -60,8 +62,10 @@ bool OptionsScene::init()
 	auto backItem = MenuItemLabel::create(backLabel);
 	backItem->setPosition(Vec2(visibleSize.width / 2, 50));
 	backItem->setCallback([director](Ref* sender) {
-		director->popScene();
+		auto nextScene = MainScene::create();
+		director->replaceScene(TransitionFade::create(2.0f, nextScene));
 	});
+	backItem->runAction(createMenuItemAnimation());
 
 	auto backMenu = Menu::create(backItem, nullptr);
 	backMenu->setPosition(Vec2::ZERO);

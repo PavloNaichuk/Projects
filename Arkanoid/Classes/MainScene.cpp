@@ -1,6 +1,7 @@
 #include "MainScene.h"
 #include "PlayScene.h"
 #include "OptionsScene.h"
+#include "Utilities.h"
 
 USING_NS_CC;
 
@@ -41,6 +42,7 @@ bool MainScene::init()
 		auto nextScene = PlayScene::create();
 		director->replaceScene(TransitionFade::create(2.0f, nextScene));
 	});
+	startItem->runAction(createMenuItemAnimation());
 
 	auto optionsLabel = Label::createWithTTF(menuFontConfig, "Options");
 	optionsLabel->setTextColor(Color4B::WHITE);
@@ -50,8 +52,9 @@ bool MainScene::init()
 	optionsItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 50));
 	optionsItem->setCallback([director](Ref* sender) {
 		auto nextScene = OptionsScene::create();
-		director->pushScene(TransitionFade::create(2.0f, nextScene));
+		director->replaceScene(TransitionFade::create(2.0f, nextScene));
 	});
+	optionsItem->runAction(createMenuItemAnimation());
 
 	auto exitLabel = Label::createWithTTF(menuFontConfig, "Exit Game");
 	exitLabel->setTextColor(Color4B::WHITE);
@@ -62,6 +65,7 @@ bool MainScene::init()
 	exitItem->setCallback([director](Ref* sender) {
 		director->end();
 	});
+	exitItem->runAction(createMenuItemAnimation());
 
 	Vector<MenuItem*> menuItems = {startItem, optionsItem, exitItem};
 	auto menu = Menu::createWithArray(menuItems);
