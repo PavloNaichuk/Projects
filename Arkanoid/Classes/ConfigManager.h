@@ -34,6 +34,7 @@ public:
 	const Size& getPaddleSize() const { return _paddleSize; }
 
 	float getBallSpeed() const { return _ballSpeed; }
+	float getBallSpeedPercentChange() const { return _ballSpeedPercentChange; }
 	const Vec2& getBallPos() const { return _ballPos; }
 	float getBallRadius() const { return _ballRadius; }
 
@@ -72,6 +73,7 @@ private:
 	Size _paddleSize;
 
 	float _ballSpeed;
+	float _ballSpeedPercentChange;
 	Vec2 _ballPos;
 	float _ballRadius;
 

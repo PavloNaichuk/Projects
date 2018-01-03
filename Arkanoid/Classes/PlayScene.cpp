@@ -340,7 +340,7 @@ bool PlayScene::onContactPostSolve(PhysicsContact& contact)
 				{
 					if ((_numDestroyedBricks % 5) == 0)
 					{
-						_ballSpeed += 0.1f * _ballSpeed;
+						_ballSpeed += configManager->getBallSpeedPercentChange() * _ballSpeed;
 
 						auto ballPhysicsBody = _ball->getPhysicsBody();
 						Vec2 ballVelocity = ballPhysicsBody->getVelocity();
