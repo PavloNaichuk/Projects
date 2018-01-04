@@ -68,6 +68,9 @@
     <ClInclude Include="..\Classes\GameLoseScene.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\GameController.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

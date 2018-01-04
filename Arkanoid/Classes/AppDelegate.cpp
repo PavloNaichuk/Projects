@@ -1,5 +1,9 @@
 #include "AppDelegate.h"
 #include "MainScene.h"
+#include "OptionsScene.h"
+#include "PlayScene.h"
+#include "GameWinScene.h"
+#include "GameLoseScene.h"
 #include "ConfigManager.h"
 
 // #define USE_AUDIO_ENGINE 1
@@ -63,7 +67,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	auto spriteFrameCache = SpriteFrameCache::getInstance();
 	spriteFrameCache->addSpriteFramesWithFile("images/ImageAtlas.plist");
 
-	director->runWithScene(MainScene::create());
+	startGame();
     return true;
 }
 
@@ -89,4 +93,52 @@ void AppDelegate::applicationWillEnterForeground()
     SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
     SimpleAudioEngine::getInstance()->resumeAllEffects();
 #endif
+}
+
+void AppDelegate::startGame()
+{
+	auto director = Director::getInstance();
+	director->runWithScene(MainScene::create(this));
+}
+
+void AppDelegate::playGame()
+{
+	auto director = Director::getInstance();
+	director->replaceScene(TransitionFade::create(2.0f, PlayScene::create(this)));
+}
+
+void AppDelegate::replayGame()
+{
+	auto director = Director::getInstance();
+	director->replaceScene(TransitionFade::create(2.0f, PlayScene::create(this)));
+}
+
+void AppDelegate::exitGame()
+{
+	auto director = Director::getInstance();
+	director->end();
+}
+
+void AppDelegate::loadMainMenu()
+{
+	auto director = Director::getInstance();
+	director->replaceScene(TransitionFade::create(2.0f, MainScene::create(this)));
+}
+
+void AppDelegate::loadOptionsMenu()
+{
+	auto director = Director::getInstance();
+	director->replaceScene(TransitionFade::create(2.0f, OptionsScene::create(this)));
+}
+
+void AppDelegate::notifyGameWin()
+{
+	auto director = Director::getInstance();
+	director->replaceScene(TransitionFade::create(2.0f, GameWinScene::create(this)));
+}
+
+void AppDelegate::notifyGameLose()
+{
+	auto director = Director::getInstance();
+	director->replaceScene(TransitionFade::create(2.0f, GameLoseScene::create(this)));
 }

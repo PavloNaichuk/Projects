@@ -1,8 +1,7 @@
 #include "PlayScene.h"
-#include "GameWinScene.h"
-#include "GameLoseScene.h"
-#include "Utilities.h"
 #include "ConfigManager.h"
+#include "GameController.h"
+#include "Utilities.h"
 
 namespace
 {
@@ -26,6 +25,26 @@ namespace
 }
 
 USING_NS_CC;
+
+PlayScene::PlayScene(GameController* gameController)
+	: _gameController(gameController)
+{
+}
+
+PlayScene* PlayScene::create(GameController* gameController)
+{
+	auto scene = new (std::nothrow) PlayScene(gameController);
+	if ((scene != nullptr) && scene->init())
+	{
+		scene->autorelease();
+	}
+	else
+	{
+		delete scene;
+		scene = nullptr;
+	}
+	return scene;
+}
 
 bool PlayScene::init()
 {
@@ -322,19 +341,15 @@ bool PlayScene::onContactPostSolve(PhysicsContact& contact)
 					auto userDefault = UserDefault::getInstance();
 					userDefault->setIntegerForKey(kPlayerScoreKey, _score);
 
-					auto goToGameWinScene = [this](float delay)
+					auto notifyGameWin = [this](float delay)
 					{
-						auto director = Director::getInstance();
-
 						_paddle->getPhysicsBody()->setVelocity(Vec2::ZERO);
 						_allowUserInput = false;
 
-						auto nextScene = GameWinScene::create();
-						director->replaceScene(TransitionFade::create(2.0f, nextScene));
-
-						unschedule("goToGameWinScene");
+						_gameController->notifyGameWin();
+						unschedule("notifyGameWin");
 					};
-					scheduleOnce(goToGameWinScene, 0.5f, "goToGameWinScene");
+					scheduleOnce(notifyGameWin, 0.5f, "notifyGameWin");
 				}
 				else
 				{
@@ -366,19 +381,15 @@ bool PlayScene::onContactSeparate(PhysicsContact& contact)
 			auto userDefault = UserDefault::getInstance();
 			userDefault->setIntegerForKey(kPlayerScoreKey, _score);
 
-			auto goToGameLoseScene = [this](float delay)
+			auto notifyGameLose = [this](float delay)
 			{
-				auto director = Director::getInstance();
-
 				_paddle->getPhysicsBody()->setVelocity(Vec2::ZERO);
 				_allowUserInput = false;
 
-				auto nextScene = GameLoseScene::create();
-				director->replaceScene(TransitionFade::create(2.0f, nextScene));
-
-				unschedule("goToGameLoseScene");
+				_gameController->notifyGameLose();
+				unschedule("notifyGameLose");
 			};
-			scheduleOnce(goToGameLoseScene, 0.5f, "goToGameLoseScene");
+			scheduleOnce(notifyGameLose, 0.5f, "notifyGameLose");
 		}
 	}
 	return true;

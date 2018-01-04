@@ -1,8 +1,28 @@
 #include "GameWinScene.h"
-#include "PlayScene.h"
+#include "GameController.h"
 #include "Utilities.h"
 
 USING_NS_CC;
+
+GameWinScene::GameWinScene(GameController* gameController)
+	: _gameController(gameController)
+{
+}
+
+GameWinScene* GameWinScene::create(GameController* gameController)
+{
+	auto scene = new (std::nothrow) GameWinScene(gameController);
+	if ((scene != nullptr) && scene->init())
+	{
+		scene->autorelease();
+	}
+	else
+	{
+		delete scene;
+		scene = nullptr;
+	}
+	return scene;
+}
 
 bool GameWinScene::init()
 {
@@ -50,9 +70,8 @@ bool GameWinScene::init()
 
 	auto replayItem = MenuItemLabel::create(replayLabel);
 	replayItem->setPosition(Vec2(visibleSize.width / 2, 50));
-	replayItem->setCallback([director](Ref* sender) {
-		auto nextScene = PlayScene::create();
-		director->replaceScene(TransitionFade::create(2.0f, nextScene));
+	replayItem->setCallback([this](Ref* sender) {
+		_gameController->replayGame();
 	});
 	replayItem->runAction(createMenuItemAnimation());
 

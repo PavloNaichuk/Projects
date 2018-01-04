@@ -4,10 +4,17 @@
 
 USING_NS_CC;
 
+class GameController;
+
 class GameLoseScene : public Scene
 {
 public:
-	CREATE_FUNC(GameLoseScene);
+	GameLoseScene(GameController* gameController);
+	static GameLoseScene* create(GameController* gameController);
+
 	bool init() override;
+
+private:
+	GameController* _gameController;
 };
 

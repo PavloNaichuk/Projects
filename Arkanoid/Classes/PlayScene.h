@@ -4,10 +4,14 @@
 
 USING_NS_CC;
 
+class GameController;
+
 class PlayScene : public Scene
 {
 public:
-	CREATE_FUNC(PlayScene);
+	PlayScene(GameController* gameController);
+	static PlayScene* create(GameController* gameController);
+	
 	bool init() override;
 
 private:
@@ -29,6 +33,7 @@ private:
 	bool onContactSeparate(PhysicsContact& contact);
 	
 private:
+	GameController* _gameController = nullptr;
 	Sprite* _paddle = nullptr;
 	float _paddleSpeed = 0.0f;
 	Sprite* _ball = nullptr;

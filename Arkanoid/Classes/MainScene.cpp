@@ -1,9 +1,28 @@
 #include "MainScene.h"
-#include "PlayScene.h"
-#include "OptionsScene.h"
+#include "GameController.h"
 #include "Utilities.h"
 
 USING_NS_CC;
+
+MainScene::MainScene(GameController* gameController)
+	: _gameController(gameController)
+{
+}
+
+MainScene* MainScene::create(GameController* gameController)
+{
+	auto scene = new (std::nothrow) MainScene(gameController);
+	if ((scene != nullptr) && (scene->init()))
+	{
+		scene->autorelease();
+	}
+	else
+	{
+		delete scene;
+		scene = nullptr;
+	}
+	return scene;
+}
 
 bool MainScene::init()
 {
@@ -38,9 +57,8 @@ bool MainScene::init()
 
 	auto startItem = MenuItemLabel::create(startLabel);
 	startItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
-	startItem->setCallback([director](Ref* sender) {
-		auto nextScene = PlayScene::create();
-		director->replaceScene(TransitionFade::create(2.0f, nextScene));
+	startItem->setCallback([this](Ref* sender) {
+		_gameController->playGame();
 	});
 	startItem->runAction(createMenuItemAnimation());
 
@@ -50,9 +68,8 @@ bool MainScene::init()
 
 	auto optionsItem = MenuItemLabel::create(optionsLabel);
 	optionsItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 50));
-	optionsItem->setCallback([director](Ref* sender) {
-		auto nextScene = OptionsScene::create();
-		director->replaceScene(TransitionFade::create(2.0f, nextScene));
+	optionsItem->setCallback([this](Ref* sender) {
+		_gameController->loadOptionsMenu();
 	});
 	optionsItem->runAction(createMenuItemAnimation());
 
@@ -62,8 +79,8 @@ bool MainScene::init()
 
 	auto exitItem = MenuItemLabel::create(exitLabel);
 	exitItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 100));
-	exitItem->setCallback([director](Ref* sender) {
-		director->end();
+	exitItem->setCallback([this](Ref* sender) {
+		_gameController->exitGame();
 	});
 	exitItem->runAction(createMenuItemAnimation());
 

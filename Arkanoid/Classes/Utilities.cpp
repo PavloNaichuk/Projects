@@ -16,6 +16,7 @@ BrickData* BrickData::create(int lives)
 	else
 	{
 		delete brickData;
+		brickData = nullptr;
 	}
 	return brickData;
 }

@@ -1,8 +1,28 @@
 #include "OptionsScene.h"
-#include "MainScene.h"
+#include "GameController.h"
 #include "Utilities.h"
 
 USING_NS_CC;
+
+OptionsScene::OptionsScene(GameController* gameController)
+	: _gameController(gameController)
+{
+}
+
+OptionsScene* OptionsScene::create(GameController* gameController)
+{
+	auto scene = new (std::nothrow) OptionsScene(gameController);
+	if ((scene != nullptr) && (scene->init()))
+	{
+		scene->autorelease();
+	}
+	else
+	{
+		delete scene;
+		scene = nullptr;
+	}
+	return scene;
+}
 
 bool OptionsScene::init()
 {
@@ -61,9 +81,8 @@ bool OptionsScene::init()
 
 	auto backItem = MenuItemLabel::create(backLabel);
 	backItem->setPosition(Vec2(visibleSize.width / 2, 50));
-	backItem->setCallback([director](Ref* sender) {
-		auto nextScene = MainScene::create();
-		director->replaceScene(TransitionFade::create(2.0f, nextScene));
+	backItem->setCallback([this](Ref* sender) {
+		_gameController->loadMainMenu();
 	});
 	backItem->runAction(createMenuItemAnimation());
 
