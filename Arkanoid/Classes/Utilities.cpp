@@ -5,12 +5,16 @@ const Size operator* (const Size& lhs, const Size& rhs)
 	return Size(lhs.width * rhs.width, lhs.height * rhs.height);
 }
 
+BrickData::BrickData(int lives)
+	: _lives(lives)
+{
+}
+
 BrickData* BrickData::create(int lives)
 {
-	auto brickData = new (std::nothrow) BrickData();
+	auto brickData = new (std::nothrow) BrickData(lives);
 	if (brickData != nullptr)
 	{
-		brickData->setLives(lives);
 		brickData->autorelease();
 	}
 	else
@@ -21,6 +25,24 @@ BrickData* BrickData::create(int lives)
 	return brickData;
 }
 
+void setBrickTexture(Sprite* brick, int brickLives)
+{
+	const char* frameName = nullptr;
+	if (brickLives == 1)
+		frameName = "./GreenBrick";
+	else if (brickLives == 2)
+		frameName = "./RedBrick";
+	else if (brickLives == 3)
+		frameName = "./BlueBrick";
+	assert(frameName != nullptr);
+
+	auto spriteFrameCache = SpriteFrameCache::getInstance();
+	auto spriteFrame = spriteFrameCache->getSpriteFrameByName(frameName);
+
+	brick->setTexture(spriteFrame->getTexture());
+	brick->setTextureRect(spriteFrame->getRect());
+}
+
 int BrickData::getLives() const
 {
 	return _lives;
@@ -29,14 +51,4 @@ int BrickData::getLives() const
 void BrickData::setLives(int lives)
 {
 	_lives = lives;
-}
-
-Action* createMenuItemAnimation()
-{
-	auto scaleUp = ScaleBy::create(2.0f, 1.1f);
-	auto scaleDown = scaleUp->reverse();
-	auto delay = DelayTime::create(0.25f);
-	auto sequence = Sequence::create(scaleUp, delay, scaleDown, delay->clone(), nullptr);
-	
-	return RepeatForever::create(sequence);
 }

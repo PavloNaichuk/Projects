@@ -1,5 +1,6 @@
 #include "OptionsScene.h"
 #include "GameController.h"
+#include "GameFactory.h"
 #include "Utilities.h"
 
 USING_NS_CC;
@@ -35,19 +36,9 @@ bool OptionsScene::init()
 	auto colorLayer = LayerColor::create(Color4B::BLUE);
 	addChild(colorLayer, 0);
 
-	TTFConfig titleFontConfig;
-	titleFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
-	titleFontConfig.fontSize = 44;
-
-	auto titleLabel = Label::createWithTTF(titleFontConfig, "Options");
-	titleLabel->setTextColor(Color4B::WHITE);
-	titleLabel->enableShadow(Color4B::BLACK);
-	titleLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
+	auto titleLabelPos = Vec2(visibleSize.width / 2, visibleSize.height - 100);
+	auto titleLabel = GameFactory::createLabel(titleLabelPos, 44, "Options");
 	addChild(titleLabel, 1);
-
-	TTFConfig optionFontConfig;
-	optionFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
-	optionFontConfig.fontSize = 32;
 
 	const char* options[] =
 	{
@@ -60,31 +51,19 @@ bool OptionsScene::init()
 	Vec2 optionPos(visibleSize.width / 2, visibleSize.height - 200);
 	for (int optionIndex = 0; optionIndex < numOptions; ++optionIndex)
 	{
-		auto optionLabel = Label::createWithTTF(optionFontConfig, options[optionIndex]);
-		optionLabel->setTextColor(Color4B::WHITE);
-		optionLabel->enableShadow(Color4B::BLACK);
-		optionLabel->setPosition(optionPos);
-		
+		auto optionLabel = GameFactory::createLabel(optionPos, 32, options[optionIndex]);
 		addChild(optionLabel, 1);
 
 		optionPos.y -= optionLabel->getContentSize().height;
 		optionPos.y -= spaceBetweenOptions;
 	}
 
-	TTFConfig backFontConfig;
-	backFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
-	backFontConfig.fontSize = 32;
-
-	auto backLabel = Label::createWithTTF(backFontConfig, "Back");
-	backLabel->setTextColor(Color4B::WHITE);
-	backLabel->enableShadow(Color4B::BLACK);
-
-	auto backItem = MenuItemLabel::create(backLabel);
-	backItem->setPosition(Vec2(visibleSize.width / 2, 50));
+	auto backItemPos = Vec2(visibleSize.width / 2, 50);
+	auto backItem = GameFactory::createMenuItem(backItemPos, 32, "Back");
 	backItem->setCallback([this](Ref* sender) {
 		_gameController->loadMainMenu();
 	});
-	backItem->runAction(createMenuItemAnimation());
+	backItem->runAction(GameFactory::createMenuItemAnimation());
 
 	auto backMenu = Menu::create(backItem, nullptr);
 	backMenu->setPosition(Vec2::ZERO);

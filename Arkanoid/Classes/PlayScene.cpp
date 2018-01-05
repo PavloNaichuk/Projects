@@ -1,28 +1,8 @@
 #include "PlayScene.h"
 #include "ConfigManager.h"
 #include "GameController.h"
+#include "GameFactory.h"
 #include "Utilities.h"
-
-namespace
-{
-	void setBrickTexture(Sprite* brick, int brickLives)
-	{
-		const char* frameName = nullptr;
-		if (brickLives == 1)
-			frameName = "./GreenBrick";
-		else if (brickLives == 2)
-			frameName = "./RedBrick";
-		else if (brickLives == 3)
-			frameName = "./BlueBrick";
-		assert(frameName != nullptr);
-
-		auto spriteFrameCache = SpriteFrameCache::getInstance();
-		auto spriteFrame = spriteFrameCache->getSpriteFrameByName(frameName);
-		
-		brick->setTexture(spriteFrame->getTexture());
-		brick->setTextureRect(spriteFrame->getRect());
-	}
-}
 
 USING_NS_CC;
 
@@ -86,27 +66,27 @@ bool PlayScene::init()
 			auto brickLives = random(1, maxBrickLives);
 			auto brickPos = firstBrickPos + brickOffset;
 
-			auto brick = createBrick(brickLives, brickPos, brickSize);
+			auto brick = GameFactory::createBrick(brickLives, brickPos, brickSize);
 			addChild(brick, 1);
 		}
 	}
 
-	auto topWall = createTopWall(configManager->getTopWallPos(), configManager->getTopWallSize());
+	auto topWall = GameFactory::createTopWall(configManager->getTopWallPos(), configManager->getTopWallSize());
 	addChild(topWall, 1);
 
-	auto leftWall = createLeftWall(configManager->getLeftWallPos(), configManager->getLeftWallSize());
+	auto leftWall = GameFactory::createLeftWall(configManager->getLeftWallPos(), configManager->getLeftWallSize());
 	addChild(leftWall, 1);
 
-	auto rightWall = createRightWall(configManager->getRightWallPos(), configManager->getRightWallSize());
+	auto rightWall = GameFactory::createRightWall(configManager->getRightWallPos(), configManager->getRightWallSize());
 	addChild(rightWall, 1);
 
-	auto exitZone = createExitZone(configManager->getExitZoneStart(), configManager->getExitZoneEnd());
+	auto exitZone = GameFactory::createExitZone(configManager->getExitZoneStart(), configManager->getExitZoneEnd());
 	addChild(exitZone, 1);
 
-	_paddle = createPaddle(configManager->getPaddlePos(), configManager->getPaddleSize());
+	_paddle = GameFactory::createPaddle(configManager->getPaddlePos(), configManager->getPaddleSize());
 	addChild(_paddle, 1);
 
-	_ball = createBall(configManager->getBallPos(), configManager->getBallRadius());
+	_ball = GameFactory::createBall(configManager->getBallPos(), configManager->getBallRadius());
 	addChild(_ball, 1);
 
 	auto keyboardListener = EventListenerKeyboard::create();
@@ -124,129 +104,16 @@ bool PlayScene::init()
 	physicsWorld->setGravity(Vec2::ZERO);
 	physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
 
-	auto startGame = [this](float delay)
+	auto allowStart = [this](float delay)
 	{
 		_ball->getPhysicsBody()->setVelocity(Vec2(0.0, _ballSpeed));
 		_allowUserInput = true;
 
-		unschedule("startGame");
+		unschedule("allowStart");
 	};
-	scheduleOnce(startGame, 1.0f, "startGame");
+	scheduleOnce(allowStart, 1.0f, "allowStart");
 
 	return true;
-}
-
-Sprite* PlayScene::createBrick(int lives, const Vec2& position, const Size& size)
-{
-	auto sprite = Sprite::create();
-	sprite->setPosition(position);
-	sprite->setTag(BRICK);
-	sprite->setUserObject(BrickData::create(lives));
-	setBrickTexture(sprite, lives);
-
-	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
-	physicsBody->setDynamic(false);
-	physicsBody->setCategoryBitmask(BRICK);
-	physicsBody->setCollisionBitmask(BALL);
-	physicsBody->setContactTestBitmask(BALL);
-
-	sprite->setPhysicsBody(physicsBody);
-	return sprite;
-}
-
-Sprite* PlayScene::createLeftWall(const Vec2& position, const Size& size)
-{
-	auto sprite = Sprite::createWithSpriteFrameName("./LeftWall");
-	sprite->setPosition(position);
-	sprite->setTag(WALL);
-
-	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
-	physicsBody->setDynamic(false);
-	physicsBody->setCategoryBitmask(WALL);
-	physicsBody->setCollisionBitmask(PADDLE | BALL);
-
-	sprite->setPhysicsBody(physicsBody);
-	return sprite;
-}
-
-Sprite* PlayScene::createRightWall(const Vec2& position, const Size& size)
-{
-	auto sprite = Sprite::createWithSpriteFrameName("./RightWall");
-	sprite->setPosition(position);
-	sprite->setTag(WALL);
-
-	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
-	physicsBody->setDynamic(false);
-	physicsBody->setCategoryBitmask(WALL);
-	physicsBody->setCollisionBitmask(PADDLE | BALL);
-
-	sprite->setPhysicsBody(physicsBody);
-	return sprite;
-}
-
-Sprite* PlayScene::createTopWall(const Vec2& position, const Size& size)
-{
-	auto sprite = Sprite::createWithSpriteFrameName("./TopWall");
-	sprite->setPosition(position);
-	sprite->setTag(WALL);
-
-	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 1.0f, 0.0f));
-	physicsBody->setDynamic(false);
-	physicsBody->setCategoryBitmask(WALL);
-	physicsBody->setCollisionBitmask(BALL);
-
-	sprite->setPhysicsBody(physicsBody);
-	return sprite;
-}
-
-Sprite* PlayScene::createPaddle(const Vec2& position, const Size& size)
-{
-	auto sprite = Sprite::createWithSpriteFrameName("./Paddle");
-	sprite->setPosition(position);
-	sprite->setTag(PADDLE);
-
-	auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(1.0f, 0.0f, 0.0f));
-	physicsBody->setMass(10.0f);
-	physicsBody->setDynamic(true);
-	physicsBody->setCategoryBitmask(PADDLE);
-	physicsBody->setCollisionBitmask(WALL | BALL);
-	physicsBody->setContactTestBitmask(BALL);
-	physicsBody->setRotationEnable(false);
-
-	sprite->setPhysicsBody(physicsBody);
-	return sprite;
-}
-
-Sprite* PlayScene::createBall(const Vec2& position, float radius)
-{
-	auto sprite = Sprite::createWithSpriteFrameName("./Ball");
-	sprite->setPosition(position);
-	sprite->setTag(BALL);
-
-	auto physicsBody = PhysicsBody::createCircle(radius, PhysicsMaterial(0.1f, 1.0f, 0.0f));
-	physicsBody->setMass(0.00001f);
-	physicsBody->setDynamic(true);
-	physicsBody->setCategoryBitmask(BALL);
-	physicsBody->setCollisionBitmask(WALL | PADDLE | BRICK | EXIT_ZONE);
-	physicsBody->setContactTestBitmask(PADDLE | BRICK | EXIT_ZONE);
-
-	sprite->setPhysicsBody(physicsBody);
-	return sprite;
-}
-
-Node* PlayScene::createExitZone(const Vec2& start, const Vec2& end)
-{
-	auto node = Node::create();
-	node->setTag(EXIT_ZONE);
-
-	auto physicsBody = PhysicsBody::createEdgeSegment(start, end, PhysicsMaterial(1.0f, 0.0f, 0.0f));
-	physicsBody->setDynamic(false);
-	physicsBody->setCategoryBitmask(EXIT_ZONE);
-	physicsBody->setCollisionBitmask(BALL);
-	physicsBody->setContactTestBitmask(BALL);
-
-	node->setPhysicsBody(physicsBody);
-	return node;
 }
 
 void PlayScene::updateScore(int score)

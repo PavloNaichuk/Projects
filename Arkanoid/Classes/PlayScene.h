@@ -15,14 +15,6 @@ public:
 	bool init() override;
 
 private:
-	static Sprite* createBrick(int lives, const Vec2& position, const Size& size);
-	static Sprite* createLeftWall(const Vec2& position, const Size& size);
-	static Sprite* createRightWall(const Vec2& position, const Size& size);
-	static Sprite* createTopWall(const Vec2& position, const Size& size);
-	static Sprite* createPaddle(const Vec2& position, const Size& size);
-	static Sprite* createBall(const Vec2& position, float radius);
-	static Node* createExitZone(const Vec2& start, const Vec2& end);
-
 	void updateScore(int score);
 
 	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);

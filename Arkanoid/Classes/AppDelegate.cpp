@@ -5,6 +5,7 @@
 #include "GameWinScene.h"
 #include "GameLoseScene.h"
 #include "ConfigManager.h"
+#include "GameFactory.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -104,13 +105,13 @@ void AppDelegate::startGame()
 void AppDelegate::playGame()
 {
 	auto director = Director::getInstance();
-	director->replaceScene(TransitionFade::create(2.0f, PlayScene::create(this)));
+	director->replaceScene(GameFactory::createTransitionScene(PlayScene::create(this)));
 }
 
 void AppDelegate::replayGame()
 {
 	auto director = Director::getInstance();
-	director->replaceScene(TransitionFade::create(2.0f, PlayScene::create(this)));
+	director->replaceScene(GameFactory::createTransitionScene(PlayScene::create(this)));
 }
 
 void AppDelegate::exitGame()
@@ -122,23 +123,23 @@ void AppDelegate::exitGame()
 void AppDelegate::loadMainMenu()
 {
 	auto director = Director::getInstance();
-	director->replaceScene(TransitionFade::create(2.0f, MainScene::create(this)));
+	director->replaceScene(GameFactory::createTransitionScene(MainScene::create(this)));
 }
 
 void AppDelegate::loadOptionsMenu()
 {
 	auto director = Director::getInstance();
-	director->replaceScene(TransitionFade::create(2.0f, OptionsScene::create(this)));
+	director->replaceScene(GameFactory::createTransitionScene(OptionsScene::create(this)));
 }
 
 void AppDelegate::notifyGameWin()
 {
 	auto director = Director::getInstance();
-	director->replaceScene(TransitionFade::create(2.0f, GameWinScene::create(this)));
+	director->replaceScene(GameFactory::createTransitionScene(GameWinScene::create(this)));
 }
 
 void AppDelegate::notifyGameLose()
 {
 	auto director = Director::getInstance();
-	director->replaceScene(TransitionFade::create(2.0f, GameLoseScene::create(this)));
+	director->replaceScene(GameFactory::createTransitionScene(GameLoseScene::create(this)));
 }

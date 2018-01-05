@@ -1,5 +1,6 @@
 #include "GameWinScene.h"
 #include "GameController.h"
+#include "GameFactory.h"
 #include "Utilities.h"
 
 USING_NS_CC;
@@ -31,49 +32,30 @@ bool GameWinScene::init()
 
 	auto director = Director::getInstance();
 	auto visibleSize = director->getVisibleSize();
-	
+
 	auto colorLayer = LayerColor::create(Color4B::BLUE);
 	addChild(colorLayer, 0);
 
-	TTFConfig statusFontConfig;
-	statusFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
-	statusFontConfig.fontSize = 44;
-
-	auto statusLabel = Label::createWithTTF(statusFontConfig, "Congratulations!");
-	statusLabel->setTextColor(Color4B::WHITE);
-	statusLabel->enableShadow(Color4B::BLACK);
-	statusLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
+	auto statusLabelPos = Vec2(visibleSize.width / 2, visibleSize.height - 100);
+	auto statusLabel = GameFactory::createLabel(statusLabelPos, 44, "Congratulations!");
 	addChild(statusLabel, 1);
 
-	TTFConfig scoreFontConfig;
-	scoreFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
-	scoreFontConfig.fontSize = 32;
-	
 	auto userDefault = UserDefault::getInstance();
 	auto playerScore = userDefault->getIntegerForKey(kPlayerScoreKey);
 
 	char stringBuffer[80];
 	std::snprintf(stringBuffer, sizeof(stringBuffer), "Your score: %d", playerScore);
-	auto scoreLabel = Label::createWithTTF(scoreFontConfig, stringBuffer);
-	scoreLabel->setTextColor(Color4B::WHITE);
-	scoreLabel->enableShadow(Color4B::BLACK);
-	scoreLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 200));
+
+	auto scoreLabelPos = Vec2(visibleSize.width / 2, visibleSize.height - 200);
+	auto scoreLabel = GameFactory::createLabel(scoreLabelPos, 32, stringBuffer);
 	addChild(scoreLabel, 1);
 
-	TTFConfig replayFontConfig;
-	replayFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
-	replayFontConfig.fontSize = 32;
-
-	auto replayLabel = Label::createWithTTF(replayFontConfig, "Replay");
-	replayLabel->setTextColor(Color4B::WHITE);
-	replayLabel->enableShadow(Color4B::BLACK);
-
-	auto replayItem = MenuItemLabel::create(replayLabel);
-	replayItem->setPosition(Vec2(visibleSize.width / 2, 50));
+	auto replayItemPos = Vec2(visibleSize.width / 2, 50);
+	auto replayItem = GameFactory::createMenuItem(replayItemPos, 32, "Replay");
 	replayItem->setCallback([this](Ref* sender) {
 		_gameController->replayGame();
 	});
-	replayItem->runAction(createMenuItemAnimation());
+	replayItem->runAction(GameFactory::createMenuItemAnimation());
 
 	auto replayMenu = Menu::create(replayItem, nullptr);
 	replayMenu->setPosition(Vec2::ZERO);

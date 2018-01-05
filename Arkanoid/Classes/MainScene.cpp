@@ -1,5 +1,6 @@
 #include "MainScene.h"
 #include "GameController.h"
+#include "GameFactory.h"
 #include "Utilities.h"
 
 USING_NS_CC;
@@ -30,59 +31,36 @@ bool MainScene::init()
 		return false;
 
 	auto director = Director::getInstance();
-
 	auto visibleSize = director->getVisibleSize();
-	auto origin = director->getVisibleOrigin();
 	
 	auto colorLayer = LayerColor::create(Color4B::BLUE);
 	addChild(colorLayer, 0);
-
-	TTFConfig logoFontConfig;
-	logoFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
-	logoFontConfig.fontSize = 60;
-
-	auto logoLabel = Label::createWithTTF(logoFontConfig, "Arkanoid");
-	logoLabel->setTextColor(Color4B::WHITE);
-	logoLabel->enableShadow(Color4B::BLACK);
-	logoLabel->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + visibleSize.height / 4));
+	
+	auto logoLabelPos = Vec2(visibleSize.width / 2, visibleSize.height / 2 + visibleSize.height / 4);
+	auto logoLabel = GameFactory::createLabel(logoLabelPos, 60, "Arkanoid");
 	addChild(logoLabel, 1);
-
-	TTFConfig menuFontConfig;
-	menuFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
-	menuFontConfig.fontSize = 32;
-
-	auto startLabel = Label::createWithTTF(menuFontConfig, "Start Game");
-	startLabel->setTextColor(Color4B::WHITE);
-	startLabel->enableShadow(Color4B::BLACK);
-
-	auto startItem = MenuItemLabel::create(startLabel);
-	startItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+	
+	auto offsetBetweenMenuItems = Vec2(0.0f, 50.0f);
+	auto startItemPos = Vec2(visibleSize.width / 2, visibleSize.height / 2);
+	auto startItem = GameFactory::createMenuItem(startItemPos, 32, "Start Game");
 	startItem->setCallback([this](Ref* sender) {
 		_gameController->playGame();
 	});
-	startItem->runAction(createMenuItemAnimation());
-
-	auto optionsLabel = Label::createWithTTF(menuFontConfig, "Options");
-	optionsLabel->setTextColor(Color4B::WHITE);
-	optionsLabel->enableShadow(Color4B::BLACK);
-
-	auto optionsItem = MenuItemLabel::create(optionsLabel);
-	optionsItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 50));
+	startItem->runAction(GameFactory::createMenuItemAnimation());
+	
+	auto optionsItemPos = startItemPos - offsetBetweenMenuItems;
+	auto optionsItem = GameFactory::createMenuItem(optionsItemPos, 32, "Options");
 	optionsItem->setCallback([this](Ref* sender) {
 		_gameController->loadOptionsMenu();
 	});
-	optionsItem->runAction(createMenuItemAnimation());
-
-	auto exitLabel = Label::createWithTTF(menuFontConfig, "Exit Game");
-	exitLabel->setTextColor(Color4B::WHITE);
-	exitLabel->enableShadow(Color4B::BLACK);
-
-	auto exitItem = MenuItemLabel::create(exitLabel);
-	exitItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 100));
+	optionsItem->runAction(GameFactory::createMenuItemAnimation());
+	
+	auto exitItemPos = optionsItemPos - offsetBetweenMenuItems;
+	auto exitItem = GameFactory::createMenuItem(exitItemPos, 32, "Exit Game");
 	exitItem->setCallback([this](Ref* sender) {
 		_gameController->exitGame();
 	});
-	exitItem->runAction(createMenuItemAnimation());
+	exitItem->runAction(GameFactory::createMenuItemAnimation());
 
 	Vector<MenuItem*> menuItems = {startItem, optionsItem, exitItem};
 	auto menu = Menu::createWithArray(menuItems);

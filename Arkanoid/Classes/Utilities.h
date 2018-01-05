@@ -20,13 +20,14 @@ const Size operator* (const Size& lhs, const Size& rhs);
 class BrickData : public Ref
 {
 public:
+	BrickData(int lives);
 	static BrickData* create(int lives);
 
 	int getLives() const;
 	void setLives(int lives);
 
 private:
-	int _lives = 0;
+	int _lives;
 };
 
-Action* createMenuItemAnimation();
+void setBrickTexture(Sprite* brick, int brickLives);
