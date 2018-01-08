@@ -39,16 +39,9 @@ bool PlayScene::init()
 	
 	auto colorLayer = LayerColor::create(Color4B::BLUE);
 	addChild(colorLayer, 0);
-
-	TTFConfig scoreFontConfig;
-	scoreFontConfig.fontFilePath = "fonts/Marker Felt.ttf";
-	scoreFontConfig.fontSize = 24;
-
-	_scoreLabel = Label::createWithTTF(scoreFontConfig, "");
-	_scoreLabel->setTextColor(Color4B::WHITE);
-	_scoreLabel->enableShadow(Color4B::BLACK);
+		
+	_scoreLabel = GameFactory::createLabel(configManager->getScoreLabelPos(), 24, "");
 	_scoreLabel->setAnchorPoint(Vec2(0.0f, 1.0f));
-	_scoreLabel->setPosition(configManager->getScoreLabelPos());
 	addChild(_scoreLabel);
 	updateScore(0);
 
