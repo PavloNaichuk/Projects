@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{4AE3F3D6-0A5E-4BC9-8679-2BE0B0033CA0}</ProjectGuid>
+    <ProjectGuid>{2D6AE133-FECB-452B-A249-EDB8DBCCD11B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Materialise</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
@@ -161,7 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">
-      <Project>{a3ab2efe-9944-4ae4-83e9-faa915042248}</Project>
+      <Project>{368ae59a-1b2c-45de-b486-1501b9f0bfb9}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
