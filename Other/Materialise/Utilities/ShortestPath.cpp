@@ -4,28 +4,23 @@
 
 std::pair<Path, bool> findShortestPath(const Graph& graph, VertexIndex startIndex, VertexIndex endIndex)
 {
-	std::vector<float> distance(graph.numVertices());
-	std::vector<VertexIndex> parents(graph.numVertices());
-	std::vector<std::uint8_t> visited(graph.numVertices());
-	for (VertexIndex i = 0; i < graph.numVertices(); ++i)
-	{
-		distance[i] = std::numeric_limits<float>::max();
-		parents[i] = graph.numVertices();
-		visited[i] = 0;
-	}
+	std::vector<float> distances(graph.numVertices(), std::numeric_limits<float>::max());
+	std::vector<VertexIndex> parents(graph.numVertices(), graph.numVertices());
+	std::vector<std::uint8_t> visited(graph.numVertices(), 0);
 
-	distance[startIndex] = 0.0f;
 	bool pathFound = false;
+	distances[startIndex] = 0.0f;
+	
 	while (true)
 	{
 		VertexIndex currentIndex = graph.numVertices();
 		float minDist = std::numeric_limits<float>::max();
 		for (VertexIndex index = 0; index < graph.numVertices(); ++index)
 		{
-			if ((visited[index] == 0) && (distance[index] < minDist))
+			if ((visited[index] == 0) && (distances[index] < minDist))
 			{
 				currentIndex = index;
-				minDist = distance[index];
+				minDist = distances[index];
 			}
 		}
 
@@ -42,20 +37,19 @@ std::pair<Path, bool> findShortestPath(const Graph& graph, VertexIndex startInde
 
 		for (const AdjacentVertex& adjacent : graph.adjacencyList(currentIndex))
 		{
-			float newDist = distance[currentIndex] + adjacent.mWeight;
-			if (newDist < distance[adjacent.mIndex])
+			float newDist = distances[currentIndex] + adjacent.mWeight;
+			if (newDist < distances[adjacent.mIndex])
 			{
-				distance[adjacent.mIndex] = newDist;
+				distances[adjacent.mIndex] = newDist;
 				parents[adjacent.mIndex] = currentIndex;
 			}
 		}
-
 		visited[currentIndex] = 1;
 	}
 
+	Path path;
 	if (pathFound)
 	{
-		Path path;
 		for (VertexIndex index = endIndex; true; index = parents[index])
 		{
 			path.push_back(index);
@@ -63,7 +57,6 @@ std::pair<Path, bool> findShortestPath(const Graph& graph, VertexIndex startInde
 				break;
 		}
 		std::reverse(path.begin(), path.end());
-		return std::make_pair(std::move(path), true);
 	}
-	return std::make_pair(Path(), false);
+	return std::make_pair(path, pathFound);
 }
