@@ -2,7 +2,7 @@
 #include "ShortestPath.h"
 #include "Graph.h"
 
-std::pair<std::vector<VertexIndex>, bool> findShortestPath(const Graph& graph, VertexIndex startIndex, VertexIndex endIndex)
+std::pair<Path, bool> findShortestPath(const Graph& graph, VertexIndex startIndex, VertexIndex endIndex)
 {
 	std::vector<float> distance(graph.numVertices());
 	std::vector<VertexIndex> parents(graph.numVertices());
@@ -15,21 +15,28 @@ std::pair<std::vector<VertexIndex>, bool> findShortestPath(const Graph& graph, V
 	}
 
 	distance[startIndex] = 0.0f;
-	VertexIndex numToVisit = graph.numVertices();
-	while (numToVisit > 0)
+	bool pathFound = false;
+	while (true)
 	{
 		VertexIndex currentIndex = graph.numVertices();
 		float minDist = std::numeric_limits<float>::max();
-		for (VertexIndex i = 0; i < graph.numVertices(); ++i)
+		for (VertexIndex index = 0; index < graph.numVertices(); ++index)
 		{
-			if ((visited[i] == 0) && (distance[i] < minDist))
+			if ((visited[index] == 0) && (distance[index] < minDist))
 			{
-				currentIndex = i;
-				minDist = distance[i];
+				currentIndex = index;
+				minDist = distance[index];
 			}
 		}
+
 		if (currentIndex == endIndex)
 		{
+			pathFound = true;
+			break;
+		}
+		if (currentIndex == graph.numVertices()) 
+		{
+			pathFound = false;
 			break;
 		}
 
@@ -44,20 +51,19 @@ std::pair<std::vector<VertexIndex>, bool> findShortestPath(const Graph& graph, V
 		}
 
 		visited[currentIndex] = 1;
-		--numToVisit;
 	}
 
-	if (numToVisit > 0)
+	if (pathFound)
 	{
-		std::vector<VertexIndex> path;
-		for (VertexIndex i = endIndex; true; i = parents[i])
+		Path path;
+		for (VertexIndex index = endIndex; true; index = parents[index])
 		{
-			path.push_back(i);
-			if (i == startIndex)
+			path.push_back(index);
+			if (index == startIndex)
 				break;
 		}
 		std::reverse(path.begin(), path.end());
 		return std::make_pair(std::move(path), true);
 	}
-	return std::make_pair(std::vector<VertexIndex>(), false);
+	return std::make_pair(Path(), false);
 }

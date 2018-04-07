@@ -33,6 +33,32 @@ const Graph::AdjacencyList& Graph::adjacencyList(VertexIndex index) const
 	return mVertexList[index];
 }
 
+bool Graph::hasEdge(const Edge& edge) const
+{
+	if (edge.mStartIndex == edge.mEndIndex)
+		return false;
+
+	if (!((edge.mStartIndex < numVertices()) && (edge.mEndIndex < numVertices())))
+		return false;
+
+	{
+		const AdjacencyList& adjacencyList = mVertexList[edge.mStartIndex];
+		auto it = std::find_if(adjacencyList.begin(), adjacencyList.end(),
+			[&edge](const AdjacentVertex& vertex) { return vertex.mIndex == edge.mEndIndex; });
+
+		if (it == adjacencyList.end())
+			return false;
+	}
+
+	{
+		const AdjacencyList& adjacencyList = mVertexList[edge.mEndIndex];
+		auto it = std::find_if(adjacencyList.begin(), adjacencyList.end(),
+			[&edge](const AdjacentVertex& vertex) { return vertex.mIndex == edge.mStartIndex; });
+		
+		return (it != adjacencyList.end());
+	}
+}
+
 bool Graph::addEdge(const Edge& edge)
 {
 	if (edge.mStartIndex == edge.mEndIndex)
@@ -61,7 +87,7 @@ void Graph::removeEdge(const Edge& edge)
 		AdjacencyList& adjacencyList = mVertexList[edge.mStartIndex];
 
 		auto it = std::find_if(adjacencyList.cbegin(), adjacencyList.cend(),
-			[&](const AdjacentVertex& vertex) { return vertex.mIndex == edge.mEndIndex; });
+			[&edge](const AdjacentVertex& vertex) { return vertex.mIndex == edge.mEndIndex; });
 
 		adjacencyList.erase(it);
 	}
@@ -69,7 +95,7 @@ void Graph::removeEdge(const Edge& edge)
 		AdjacencyList& adjacencyList = mVertexList[edge.mEndIndex];
 
 		auto it = std::find_if(adjacencyList.cbegin(), adjacencyList.cend(),
-			[&](const AdjacentVertex& vertex) { return vertex.mIndex == edge.mStartIndex; });
+			[&edge](const AdjacentVertex& vertex) { return vertex.mIndex == edge.mStartIndex; });
 
 		adjacencyList.erase(it);
 	}

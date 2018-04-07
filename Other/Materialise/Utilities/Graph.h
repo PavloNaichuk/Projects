@@ -28,6 +28,7 @@ public:
 	VertexIndex numVertices() const;
 	const AdjacencyList& adjacencyList(VertexIndex index) const;
 
+	bool hasEdge(const Edge& edge) const;
 	bool addEdge(const Edge& edge);
 	void removeEdge(const Edge& edge);
 

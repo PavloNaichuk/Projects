@@ -4,5 +4,6 @@
 
 class Graph;
 
-std::pair<std::vector<VertexIndex>, bool> findShortestPath(const Graph& graph, VertexIndex startIndex, VertexIndex endIndex);
+using Path = std::vector<VertexIndex>;
+std::pair<Path, bool> findShortestPath(const Graph& graph, VertexIndex startIndex, VertexIndex endIndex);
 
