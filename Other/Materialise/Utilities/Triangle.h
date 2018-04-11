@@ -13,5 +13,6 @@ struct Triangle
 	Vector mVertex2;
 	Vector mVertex3;
 };
+bool AreEqual(const Triangle& triangle1, const Triangle& triangle2);
 std::ostream& operator<< (std::ostream& os, const Triangle& triangle);
 
