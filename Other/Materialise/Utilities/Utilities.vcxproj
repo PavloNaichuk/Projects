@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="Core.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="OptimizeTriangleData.h" />
     <ClInclude Include="ShortestPath.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="STLFile.h" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="OptimizeTriangleData.cpp" />
     <ClCompile Include="ShortestPath.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

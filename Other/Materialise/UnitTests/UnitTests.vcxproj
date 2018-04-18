@@ -156,6 +156,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="OptimizeTriangleData.cpp" />
     <ClCompile Include="ShortestPathTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -170,6 +171,22 @@
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">
       <Project>{368ae59a-1b2c-45de-b486-1501b9f0bfb9}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestFiles\TestLoad.stl" />
+    <None Include="TestFiles\TestLoad_EmptyFile.stl" />
+    <None Include="TestFiles\TestLoad_InvalidEndfacetAttribute.stl" />
+    <None Include="TestFiles\TestLoad_InvalidEndloopAttribute.stl" />
+    <None Include="TestFiles\TestLoad_InvalidFacetAttribute.stl" />
+    <None Include="TestFiles\TestLoad_InvalidNormalFormat.stl" />
+    <None Include="TestFiles\TestLoad_InvalidOuterAttribute.stl" />
+    <None Include="TestFiles\TestLoad_InvalidSolidAttribute.stl" />
+    <None Include="TestFiles\TestLoad_InvalidVertexFormat.stl" />
+    <None Include="TestFiles\TestLoad_InvaludEndsolidAttribute.stl" />
+    <None Include="TestFiles\TestLoad_MissingNormal.stl" />
+    <None Include="TestFiles\TestLoad_MissingNormalCoord.stl" />
+    <None Include="TestFiles\TestLoad_MissingVertex.stl" />
+    <None Include="TestFiles\TestLoad_MissingVertexCoord.stl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="TestFiles">
+      <UniqueIdentifier>{9613191f-fba7-4b4e-bab7-f7b202f38c1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -35,5 +38,52 @@
     <ClCompile Include="LoadSTLFileTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OptimizeTriangleData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestFiles\TestLoad.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_EmptyFile.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvalidEndfacetAttribute.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvalidEndloopAttribute.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvalidFacetAttribute.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvalidNormalFormat.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvalidOuterAttribute.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvalidSolidAttribute.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvalidVertexFormat.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvaludEndsolidAttribute.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_MissingNormal.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_MissingNormalCoord.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_MissingVertex.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_MissingVertexCoord.stl">
+      <Filter>TestFiles</Filter>
+    </None>
   </ItemGroup>
 </Project>

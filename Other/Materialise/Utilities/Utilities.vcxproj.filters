@@ -39,6 +39,9 @@
     <ClInclude Include="STLFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OptimizeTriangleData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -57,6 +60,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="STLFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptimizeTriangleData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
