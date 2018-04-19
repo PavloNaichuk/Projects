@@ -178,9 +178,11 @@
     <None Include="TestFiles\TestLoad_InvalidEndfacetAttribute.stl" />
     <None Include="TestFiles\TestLoad_InvalidEndloopAttribute.stl" />
     <None Include="TestFiles\TestLoad_InvalidFacetAttribute.stl" />
+    <None Include="TestFiles\TestLoad_InvalidNormalAttribute.stl" />
     <None Include="TestFiles\TestLoad_InvalidNormalFormat.stl" />
     <None Include="TestFiles\TestLoad_InvalidOuterAttribute.stl" />
     <None Include="TestFiles\TestLoad_InvalidSolidAttribute.stl" />
+    <None Include="TestFiles\TestLoad_InvalidVertexAttribute.stl" />
     <None Include="TestFiles\TestLoad_InvalidVertexFormat.stl" />
     <None Include="TestFiles\TestLoad_InvaludEndsolidAttribute.stl" />
     <None Include="TestFiles\TestLoad_MissingNormal.stl" />

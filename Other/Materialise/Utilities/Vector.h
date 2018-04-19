@@ -12,4 +12,5 @@ struct Vector
 };
 
 bool AreEqual(const Vector& vector1, const Vector& vector2);
+const float distance (const Vector& point1, const Vector& point2);
 std::ostream& operator<< (std::ostream& os, const Vector& vec);

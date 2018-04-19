@@ -102,9 +102,23 @@ namespace UnitTests
 			Assert::IsTrue(result.first.empty());
 		}
 
+		TEST_METHOD(TestLoad_InvalidNormalAttribute)
+		{
+			auto result = loadSTLFile("../UnitTests/TestFiles/TestLoad_InvalidNormalAttribute.stl");
+			Assert::IsFalse(result.second);
+			Assert::IsTrue(result.first.empty());
+		}
+
 		TEST_METHOD(TestLoad_InvalidOuterAttribute)
 		{
 			auto result = loadSTLFile("../UnitTests/TestFiles/TestLoad_InvalidOuterAttribute.stl");
+			Assert::IsFalse(result.second);
+			Assert::IsTrue(result.first.empty());
+		}
+
+		TEST_METHOD(TestLoad_InvalidVertexAttribute)
+		{
+			auto result = loadSTLFile("../UnitTests/TestFiles/TestLoad_InvalidVertexAttribute.stl");
 			Assert::IsFalse(result.second);
 			Assert::IsTrue(result.first.empty());
 		}

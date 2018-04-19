@@ -58,6 +58,9 @@
     <None Include="TestFiles\TestLoad_InvalidFacetAttribute.stl">
       <Filter>TestFiles</Filter>
     </None>
+    <None Include="TestFiles\TestLoad_InvalidNormalAttribute.stl">
+      <Filter>TestFiles</Filter>
+    </None>
     <None Include="TestFiles\TestLoad_InvalidNormalFormat.stl">
       <Filter>TestFiles</Filter>
     </None>
@@ -65,6 +68,9 @@
       <Filter>TestFiles</Filter>
     </None>
     <None Include="TestFiles\TestLoad_InvalidSolidAttribute.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvalidVertexAttribute.stl">
       <Filter>TestFiles</Filter>
     </None>
     <None Include="TestFiles\TestLoad_InvalidVertexFormat.stl">
