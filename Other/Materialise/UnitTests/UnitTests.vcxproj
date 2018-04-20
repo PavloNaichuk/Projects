@@ -156,6 +156,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GraphUtilities.cpp" />
     <ClCompile Include="OptimizeTriangleData.cpp" />
     <ClCompile Include="ShortestPathTest.cpp" />
     <ClCompile Include="stdafx.cpp">

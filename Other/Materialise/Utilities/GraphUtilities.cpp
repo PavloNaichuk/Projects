@@ -2,7 +2,7 @@
 #include "Graph.h"
 #include "GraphUtilities.h"
 
-Graph& createGraph(const VertexBuffer& vertexBuffer, const IndexBuffer& indexBuffer)
+Graph createGraph(const VertexBuffer& vertexBuffer, const IndexBuffer& indexBuffer)
 {
 	Graph graph(vertexBuffer.size());
 

@@ -5,4 +5,4 @@
 
 class Graph;
 
-Graph& createGraph(const VertexBuffer& vertexBuffer, const IndexBuffer& indexBuffer);
+Graph createGraph(const VertexBuffer& vertexBuffer, const IndexBuffer& indexBuffer);
