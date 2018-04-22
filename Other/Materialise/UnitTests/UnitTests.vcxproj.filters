@@ -79,9 +79,6 @@
     <None Include="TestFiles\TestLoad_InvalidVertexFormat.stl">
       <Filter>TestFiles</Filter>
     </None>
-    <None Include="TestFiles\TestLoad_InvaludEndsolidAttribute.stl">
-      <Filter>TestFiles</Filter>
-    </None>
     <None Include="TestFiles\TestLoad_MissingNormal.stl">
       <Filter>TestFiles</Filter>
     </None>
@@ -92,6 +89,9 @@
       <Filter>TestFiles</Filter>
     </None>
     <None Include="TestFiles\TestLoad_MissingVertexCoord.stl">
+      <Filter>TestFiles</Filter>
+    </None>
+    <None Include="TestFiles\TestLoad_InvalidEndsolidAttribute.stl">
       <Filter>TestFiles</Filter>
     </None>
   </ItemGroup>

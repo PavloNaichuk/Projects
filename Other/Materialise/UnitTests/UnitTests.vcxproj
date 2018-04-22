@@ -185,7 +185,7 @@
     <None Include="TestFiles\TestLoad_InvalidSolidAttribute.stl" />
     <None Include="TestFiles\TestLoad_InvalidVertexAttribute.stl" />
     <None Include="TestFiles\TestLoad_InvalidVertexFormat.stl" />
-    <None Include="TestFiles\TestLoad_InvaludEndsolidAttribute.stl" />
+    <None Include="TestFiles\TestLoad_InvalidEndsolidAttribute.stl" />
     <None Include="TestFiles\TestLoad_MissingNormal.stl" />
     <None Include="TestFiles\TestLoad_MissingNormalCoord.stl" />
     <None Include="TestFiles\TestLoad_MissingVertex.stl" />

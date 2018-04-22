@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Vector.h"
+#include <sstream>
 
 Vector::Vector()
 	: Vector(0.0f, 0.0f, 0.0f)
@@ -13,12 +14,12 @@ Vector::Vector(float x, float y, float z)
 {
 }
 
-bool AreEqual(const Vector & vector1, const Vector & vector2)
+bool areEqual(const Vector& vec1, const Vector& vec2)
 {
-	return ((vector1.mX == vector2.mX) && (vector1.mY == vector2.mY) && (vector1.mZ == vector2.mZ));
+	return ((vec1.mX == vec2.mX) && (vec1.mY == vec2.mY) && (vec1.mZ == vec2.mZ));
 }
 
-const float distance(const Vector& point1, const Vector& point2)
+float distance(const Vector& point1, const Vector& point2)
 {
 	float diffX = point2.mX - point1.mX;
 	float diffY = point2.mY - point1.mY;
@@ -27,8 +28,16 @@ const float distance(const Vector& point1, const Vector& point2)
 	return std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
 }
 
-std::ostream& operator<< (std::ostream& os, const Vector& vec)
+std::string toString(const Vector& vec)
 {
-	os << vec.mX << " , " << vec.mY << " , " << vec.mZ << "\n";
-	return os;
+	std::stringstream stream;
+	stream << vec;
+	return stream.str();
+}
+
+std::wstring toWString(const Vector& vec)
+{
+	std::wstringstream stream;
+	stream << vec;
+	return stream.str();
 }

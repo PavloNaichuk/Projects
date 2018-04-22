@@ -4,17 +4,17 @@
 #include <cstring>
 #include <numeric>
 
-std::pair<std::vector<Triangle>, bool> loadSTLFile(const char* pathToFile)
+std::pair<std::vector<Triangle>, bool> loadSTLFile(const wchar_t* pathToFile)
 {
-	std::ifstream stream(pathToFile);
+	std::wifstream stream(pathToFile);
 	if (!stream)
 		return std::make_pair(std::vector<Triangle>(), false);
 	
 	const std::uint8_t maxCommandLen = 32;
-	char command[maxCommandLen];
+	wchar_t command[maxCommandLen];
 
 	stream >> command;
-	if (std::strcmp("solid", command) != 0)
+	if (std::wcscmp(L"solid", command) != 0)
 		return std::make_pair(std::vector<Triangle>(), false);
 	stream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	
@@ -25,11 +25,11 @@ std::pair<std::vector<Triangle>, bool> loadSTLFile(const char* pathToFile)
 	while (true) 
 	{
 		stream >> command;
-		if (std::strcmp("facet", command) != 0)
+		if (std::wcscmp(L"facet", command) != 0)
 			break;
 		
 		stream >> command;
-		oooppsError = std::strcmp("normal", command) != 0;
+		oooppsError = std::wcscmp(L"normal", command) != 0;
 		if (oooppsError)
 			break;
 
@@ -49,12 +49,12 @@ std::pair<std::vector<Triangle>, bool> loadSTLFile(const char* pathToFile)
 			break;
 
 		stream >> command;
-		oooppsError = std::strcmp("outer", command) != 0;
+		oooppsError = std::wcscmp(L"outer", command) != 0;
 		if (oooppsError)
 			break;
 
 		stream >> command;
-		oooppsError = std::strcmp("loop", command) != 0;
+		oooppsError = std::wcscmp(L"loop", command) != 0;
 		if (oooppsError)
 			break;
 
@@ -62,7 +62,7 @@ std::pair<std::vector<Triangle>, bool> loadSTLFile(const char* pathToFile)
 		for (int index = 0; index < 3; ++index)
 		{
 			stream >> command;
-			oooppsError = std::strcmp("vertex", command) != 0;
+			oooppsError = std::wcscmp(L"vertex", command) != 0;
 			if (oooppsError)
 				break;
 
@@ -85,19 +85,19 @@ std::pair<std::vector<Triangle>, bool> loadSTLFile(const char* pathToFile)
 			break;
 
 		stream >> command;
-		oooppsError = std::strcmp("endloop", command) != 0;
+		oooppsError = std::wcscmp(L"endloop", command) != 0;
 		if (oooppsError)
 			break;
 
 		stream >> command;
-		oooppsError = std::strcmp("endfacet", command) != 0;
+		oooppsError = std::wcscmp(L"endfacet", command) != 0;
 		if (oooppsError)
 			break;
 
 		triangles.push_back(triangle);
 	}
 
-	if (std::strcmp("endsolid", command) == 0)
+	if (std::wcscmp(L"endsolid", command) == 0)
 		return std::make_pair(triangles, true);
 	
 	return std::make_pair(std::vector<Triangle>(), false);	

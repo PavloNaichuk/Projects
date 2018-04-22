@@ -12,10 +12,10 @@ Triangle::Triangle(const Vector& normal, const Vector& vertex1, const Vector& ve
 
 bool AreEqual(const Triangle& triangle1, const Triangle& triangle2)
 {
-	return ((AreEqual(triangle1.mNormal, triangle2.mNormal)) 
-		&& (AreEqual(triangle1.mVertex1, triangle2.mVertex1)) 
-		&& (AreEqual(triangle1.mVertex2, triangle2.mVertex2)) 
-		&& (AreEqual(triangle1.mVertex3, triangle2.mVertex3)));
+	return ((areEqual(triangle1.mNormal, triangle2.mNormal)) 
+		&& (areEqual(triangle1.mVertex1, triangle2.mVertex1)) 
+		&& (areEqual(triangle1.mVertex2, triangle2.mVertex2)) 
+		&& (areEqual(triangle1.mVertex3, triangle2.mVertex3)));
 }
 
 std::ostream & operator<<(std::ostream& os, const Triangle& triangle)

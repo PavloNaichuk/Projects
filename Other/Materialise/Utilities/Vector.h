@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iostream>
+#include <string>
 
 struct Vector
 {
@@ -11,6 +11,15 @@ struct Vector
 	float mX, mY, mZ;
 };
 
-bool AreEqual(const Vector& vector1, const Vector& vector2);
-const float distance (const Vector& point1, const Vector& point2);
-std::ostream& operator<< (std::ostream& os, const Vector& vec);
+bool areEqual(const Vector& vec1, const Vector& vec2);
+float distance(const Vector& point1, const Vector& point2);
+
+std::string toString(const Vector& vec);
+std::wstring toWString(const Vector& vec);
+
+template <typename Stream>
+Stream& operator<< (Stream& os, const Vector& vec)
+{
+	os << "(" << vec.mX << " , " << vec.mY << " , " << vec.mZ << ")";
+	return os;
+}

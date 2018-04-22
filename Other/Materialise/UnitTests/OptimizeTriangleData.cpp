@@ -48,7 +48,7 @@ namespace UnitTests
 
 			Assert::AreEqual(vertexBuffer.size(), optimizedData.first.size());
 			for (decltype(vertexBuffer.size()) index = 0; index < vertexBuffer.size(); ++index)
-				Assert::IsTrue(AreEqual(vertexBuffer[index], optimizedData.first[index]));
+				Assert::IsTrue(areEqual(vertexBuffer[index], optimizedData.first[index]));
 		
 			Assert::IsTrue(indexBuffer == optimizedData.second);
 		}

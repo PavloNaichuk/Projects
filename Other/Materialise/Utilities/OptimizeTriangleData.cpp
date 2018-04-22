@@ -14,7 +14,7 @@ std::pair<VertexBuffer, IndexBuffer> OptimizeTriangleData(const std::vector<Tria
 		for (const Vector* pVertex = pFirstVertex; pVertex != pLastVertex; ++pVertex)
 		{
 			auto it = std::find_if(vertexBuffer.begin(), vertexBuffer.end(),
-				[pVertex](const Vector& vertex) { return AreEqual(vertex, *pVertex); });
+				[pVertex](const Vector& vertex) { return areEqual(vertex, *pVertex); });
 
 			if (it == vertexBuffer.end()) 
 			{
