@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "Graph.h"
 #include "GraphUtilities.h"
 
 Graph createGraph(const VertexBuffer& vertexBuffer, const IndexBuffer& indexBuffer)

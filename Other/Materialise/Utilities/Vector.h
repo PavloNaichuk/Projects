@@ -20,6 +20,6 @@ std::wstring toWString(const Vector& vec);
 template <typename Stream>
 Stream& operator<< (Stream& os, const Vector& vec)
 {
-	os << "(" << vec.mX << " , " << vec.mY << " , " << vec.mZ << ")";
+	os << "(" << vec.mX << ", " << vec.mY << ", " << vec.mZ << ")";
 	return os;
 }
