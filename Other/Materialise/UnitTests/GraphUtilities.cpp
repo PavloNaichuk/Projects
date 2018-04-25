@@ -28,18 +28,15 @@ namespace UnitTests
 				0, 4, 3
 			};
 
-			Graph graph = createGraph(vertexBuffer, indexBuffer);
-            Assert::AreEqual(vertexBuffer.size(), graph.numVertices());
-
+			auto graph = createGraph(vertexBuffer, indexBuffer);
+            Assert::AreEqual(vertexBuffer.size(), graph->numVertices());
 			
-			const std::vector<AdjacentVertex>& adjacentList = graph.adjacencyList(2);
+			const std::vector<AdjacentVertex>& adjacentList = graph->adjacencyList(2);
 			Assert::IsTrue(adjacentList.size() == 3u);
 			
 			Assert::AreEqual(adjacentList[0].mIndex, 1u);
 			Assert::AreEqual(adjacentList[1].mIndex, 0u);
 			Assert::AreEqual(adjacentList[2].mIndex, 3u);
-			
-		
 		}
 	};
 }
