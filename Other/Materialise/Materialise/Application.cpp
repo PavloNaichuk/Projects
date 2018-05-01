@@ -241,7 +241,7 @@ void Application::loadFile(HWND hWnd)
 	auto loadResult = loadSTLFile(fileNameBuffer);
 	if (loadResult.second)
 	{
-		auto optimizedData = OptimizeTriangleData(loadResult.first);
+		auto optimizedData = optimizeTriangleData(loadResult.first);
 
 		mVertexBuffer = std::move(optimizedData.first);
 		mGraph = createGraph(mVertexBuffer, optimizedData.second);

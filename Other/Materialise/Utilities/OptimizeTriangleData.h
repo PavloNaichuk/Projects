@@ -8,4 +8,4 @@
 using VertexBuffer = std::vector<Vector>;
 using IndexBuffer = std::vector<VertexIndex>;
 
-std::pair<VertexBuffer, IndexBuffer> OptimizeTriangleData(const std::vector<Triangle>& triangles);
+std::pair<VertexBuffer, IndexBuffer> optimizeTriangleData(const std::vector<Triangle>& triangles);

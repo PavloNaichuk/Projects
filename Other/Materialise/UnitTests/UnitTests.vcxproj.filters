@@ -38,10 +38,10 @@
     <ClCompile Include="LoadSTLFileTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OptimizeTriangleData.cpp">
+    <ClCompile Include="GraphUtilitiesTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GraphUtilities.cpp">
+    <ClCompile Include="OptimizeTriangleDataTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

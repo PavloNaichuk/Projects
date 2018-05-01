@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "OptimizeTriangleData.h"
 
-std::pair<VertexBuffer, IndexBuffer> OptimizeTriangleData(const std::vector<Triangle>& triangles)
+std::pair<VertexBuffer, IndexBuffer> optimizeTriangleData(const std::vector<Triangle>& triangles)
 {
 	VertexBuffer vertexBuffer;
 	IndexBuffer indexBuffer;

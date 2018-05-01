@@ -44,7 +44,7 @@ namespace UnitTests
 				0, 4, 3
 			};
 
-			auto optimizedData = OptimizeTriangleData(triangles);
+			auto optimizedData = optimizeTriangleData(triangles);
 
 			Assert::AreEqual(vertexBuffer.size(), optimizedData.first.size());
 			for (decltype(vertexBuffer.size()) index = 0; index < vertexBuffer.size(); ++index)
