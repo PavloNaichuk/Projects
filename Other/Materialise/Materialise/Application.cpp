@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "Application.h"
-
 #include "../Utilities/ShortestPath.h"
 #include "../Utilities/STLFile.h"
 #include "../Utilities/GraphUtilities.h"
+
+#include <string>
 
 enum
 {
@@ -286,7 +287,10 @@ void Application::findPath(HWND hWnd)
 	Path path = std::move(result.first);
 
 	std::wstring pathString;
-	for (VertexIndex index : path)
+	pathString += L"Distance: " + std::to_wstring(path.mDistance);
+	pathString += L"\r\n";
+
+	for (VertexIndex index : path.mVertexIndices)
 		pathString += toWString(mVertexBuffer[index]) + L"\r\n";
 
 	SetWindowText(mFoundPathEdit, pathString.c_str());

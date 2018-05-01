@@ -52,11 +52,12 @@ std::pair<Path, bool> findShortestPath(const Graph& graph, VertexIndex startInde
 	{
 		for (VertexIndex index = endIndex; true; index = parents[index])
 		{
-			path.push_back(index);
+			path.mVertexIndices.push_back(index);
 			if (index == startIndex)
 				break;
 		}
-		std::reverse(path.begin(), path.end());
+		std::reverse(path.mVertexIndices.begin(), path.mVertexIndices.end());
+		path.mDistance = distances[endIndex];
 	}
 	return std::make_pair(path, pathFound);
 }

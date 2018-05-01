@@ -17,11 +17,12 @@ namespace UnitTests
 			graph.addEdge(Edge(2, 3, 2.0f));
 			graph.addEdge(Edge(4, 5, 1.0f));
 
-			const Path path = {2, 3};
+			const Path path({2, 3}, 2.0f);
 			auto result = findShortestPath(graph, 2, 3);
 
 			Assert::IsTrue(result.second);
-			Assert::IsTrue(path == result.first);
+			Assert::IsTrue(path.mVertexIndices == result.first.mVertexIndices);
+			Assert::IsTrue(path.mDistance == result.first.mDistance);
 		}
 
 		TEST_METHOD(TestFindShortestPath_Found2)
@@ -41,11 +42,12 @@ namespace UnitTests
 			graph.addEdge(Edge(6, 7, 2.0f));
 			graph.addEdge(Edge(7, 8, 3.0f));
 
-			const Path path = {1, 4, 0, 7, 8 };
+			const Path path({1, 4, 0, 7, 8}, 7.0f);
 			auto result = findShortestPath(graph, 1, 8);
 
 			Assert::IsTrue(result.second);
-			Assert::IsTrue(path == result.first);
+			Assert::IsTrue(path.mVertexIndices == result.first.mVertexIndices);
+			Assert::IsTrue(path.mDistance == result.first.mDistance);
 		}
 
 		TEST_METHOD(TestFindShortestPath_NotFound1)
@@ -58,7 +60,8 @@ namespace UnitTests
 			auto result = findShortestPath(graph, 2, 5);
 
 			Assert::IsFalse(result.second);
-			Assert::IsTrue(result.first.empty());
+			Assert::IsTrue(result.first.mVertexIndices.empty());
+			Assert::IsTrue(result.first.mDistance < 0.0f);
 		}
 
 		TEST_METHOD(TestFindShortestPath_NotFound2)
@@ -81,7 +84,8 @@ namespace UnitTests
 			auto result = findShortestPath(graph, 1, 10);
 
 			Assert::IsFalse(result.second);
-			Assert::IsTrue(result.first.empty());
+			Assert::IsTrue(result.first.mVertexIndices.empty());
+			Assert::IsTrue(result.first.mDistance < 0.0f);
 		}
 
 		TEST_METHOD(TestFindShortestPath_InvalidVertex)
@@ -103,6 +107,8 @@ namespace UnitTests
 
 			auto result = findShortestPath(graph, 8, 11);
 			Assert::IsFalse(result.second);
+			Assert::IsTrue(result.first.mVertexIndices.empty());
+			Assert::IsTrue(result.first.mDistance < 0.0f);
 		}
 
 		TEST_METHOD(TestFindShortestPath_SameStartAndEnd)
@@ -122,11 +128,12 @@ namespace UnitTests
 			graph.addEdge(Edge(6, 7, 2.0f));
 			graph.addEdge(Edge(7, 8, 3.0f));
 
-			const Path path = {2};
+			const Path path({2}, 0.0f);
 			auto result = findShortestPath(graph, 2, 2);
 
 			Assert::IsTrue(result.second);
-			Assert::IsTrue(path == result.first);
+			Assert::IsTrue(path.mVertexIndices == result.first.mVertexIndices);
+			Assert::IsTrue(path.mDistance == result.first.mDistance);
 		}
 	};
 }
