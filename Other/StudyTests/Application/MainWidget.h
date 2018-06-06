@@ -1,0 +1,25 @@
+#ifndef MAINWIDGET_H
+#define MAINWIDGET_H
+
+#include <QWidget>
+
+class StudentWidget;
+class TeacherWidget;
+
+class MainWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    MainWidget(QWidget* parent = 0);
+    ~MainWidget();
+
+    void setStudent();
+    void setTeacher();
+
+private:
+    StudentWidget* mStudentWidget;
+    TeacherWidget* mTeacherWidget;
+};
+
+#endif // MAINWIDGET_H
