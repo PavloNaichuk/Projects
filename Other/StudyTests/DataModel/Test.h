@@ -8,6 +8,7 @@
 class Test : public CompositeComponent
 {
 public:
+    Test();
     Test(QString name);
 
     const QString& name() const;

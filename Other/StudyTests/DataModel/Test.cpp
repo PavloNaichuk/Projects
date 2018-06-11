@@ -1,5 +1,9 @@
 #include "Test.h"
 
+Test::Test()
+{
+}
+
 Test::Test(QString name)
     : mName(std::move(name))
 {

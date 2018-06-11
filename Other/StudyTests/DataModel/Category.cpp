@@ -1,5 +1,9 @@
 #include "Category.h"
 
+Category::Category()
+{
+}
+
 Category::Category(QString name)
     : mName(std::move(name))
 {

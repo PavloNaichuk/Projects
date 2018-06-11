@@ -7,6 +7,7 @@
 class Category : public CompositeComponent
 {
 public:
+    Category();
     Category(QString name);
 
     const QString& name() const;
