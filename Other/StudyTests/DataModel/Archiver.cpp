@@ -71,9 +71,9 @@ std::unique_ptr<QJsonObject> Archiver::serialise(const Component* component)
     return nullptr;
 }
 
-std::unique_ptr<Component> Archiver::deserialise(const QJsonObject& jsonData)
+std::unique_ptr<Component> Archiver::deserialise(const QJsonObject &jsonData)
 {
-    const int classType = jsonData["classType"];
+    const QJsonValue classType = jsonData["classType"];
     if (classType == ClassType::TASK)
     {
         std::unique_ptr<Task> task = std::make_unique<Task>();
