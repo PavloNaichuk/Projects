@@ -11,18 +11,18 @@ public:
     TestTests();
 
 private Q_SLOTS:
-    void testTest1();
-    void testTest2();
+    void testTest();
 };
 
 TestTests::TestTests()
 {
 }
 
-void TestTests::testTest1()
+void TestTests::testTest()
 {
     Test test;
     test.setName("Iм'я");
+    QVERIFY(test.name() == "Iм'я");
 
     auto task1 = std::make_unique<Task>();
     task1->setQuestion("Запитання 1");
@@ -35,43 +35,18 @@ void TestTests::testTest1()
     task2->setNumPoints(4);
 
     test.addChild(std::move(task1));
+    QVERIFY(test.numChildren() == 1);
     test.addChild(std::move(task2));
+    QVERIFY(test.numChildren() == 2);
 
-    size_t number = test.numChildren();
+    // test.child(0) == task1;
+    // test.child(1) == task2;
 
-    test.removeChild(1);
-
-    QVERIFY(test.name() == "Iм'я");
-    QVERIFY(number == 2);
-    QVERIFY(number != test.numChildren());
-    QVERIFY(test.numChildren() == 1);
-}
-
-void TestTests::testTest2()
-{
-    Test test;
-    test.setName("Iм'я");
-
-    auto task1 = std::make_unique<Task>();
-    task1->setQuestion("Запитання 1");
-    task1->setAnswer("Відповідь 1");
-    task1->setNumPoints(2);
-
-    test.addChild(std::move(task1));
-    size_t number1 = test.numChildren();
     test.removeChild(0);
-
-    auto task2 = std::make_unique<Task>();
-    task2->setQuestion("Запитання 2");
-    task2->setAnswer("Відповідь 2");
-    task2->setNumPoints(4);
-
-    test.addChild(std::move(task1));
-    size_t number2 = test.numChildren();
-
-    QVERIFY(test.name() == "Iм'я");
-    QVERIFY(number1 == number2);
     QVERIFY(test.numChildren() == 1);
+
+    test.removeChild(0);
+    QVERIFY(test.numChildren() == 0);
 }
 
 #include "TestTests.moc"

@@ -153,22 +153,27 @@ void SerializationTests::testCategory4()
     task1->setQuestion("Запитання 1");
     task1->setAnswer("Відповідь 1");
     task1->setNumPoints(2);
+
     auto task2 = std::make_unique<Task>();
     task2->setQuestion("Запитання 2");
     task2->setAnswer("Відповідь 2");
     task2->setNumPoints(4);
+
     auto task3 = std::make_unique<Task>();
     task3->setQuestion("Запитання 3");
     task3->setAnswer("Відповідь 3");
     task3->setNumPoints(7);
+
     auto task4 = std::make_unique<Task>();
     task4->setQuestion("Запитання 4");
     task4->setAnswer("Відповідь 4");
     task4->setNumPoints(9);
+
     auto task5 = std::make_unique<Task>();
     task5->setQuestion("Запитання 5");
     task5->setAnswer("Відповідь 5");
     task5->setNumPoints(1);
+
     auto task6 = std::make_unique<Task>();
     task6->setQuestion("Запитання 6");
     task6->setAnswer("Відповідь 6");
@@ -183,14 +188,17 @@ void SerializationTests::testCategory4()
 
     auto test2 = std::make_unique<Test>();
     test2->setName("Тест 2");
+
     auto task7 = std::make_unique<Task>();
     task7->setQuestion("Запитання 7");
     task7->setAnswer("Відповідь 7");
     task7->setNumPoints(2);
+
     auto task8 = std::make_unique<Task>();
     task8->setQuestion("Запитання 8");
     task8->setAnswer("Відповідь 8");
     task8->setNumPoints(4);
+
     auto task9 = std::make_unique<Task>();
     task9->setQuestion("Запитання 9");
     task9->setAnswer("Відповідь 9");
@@ -220,14 +228,17 @@ void SerializationTests::testCategory5()
 
     auto test1 = std::make_unique<Test>();
     test1->setName("Тест 1");
+
     auto task1 = std::make_unique<Task>();
     task1->setQuestion("Запитання 1");
     task1->setAnswer("Відповідь 1");
     task1->setNumPoints(2);
+
     auto task2 = std::make_unique<Task>();
     task2->setQuestion("Запитання 2");
     task2->setAnswer("Відповідь 2");
     task2->setNumPoints(4);
+
     auto task3 = std::make_unique<Task>();
     task3->setQuestion("Запитання 3");
     task3->setAnswer("Відповідь 3");
@@ -239,14 +250,17 @@ void SerializationTests::testCategory5()
 
     auto test2 = std::make_unique<Test>();
     test2->setName("Тест 2");
+
     auto task4 = std::make_unique<Task>();
     task4->setQuestion("Запитання 4");
     task4->setAnswer("Відповідь 4");
     task4->setNumPoints(9);
+
     auto task5 = std::make_unique<Task>();
     task5->setQuestion("Запитання 5");
     task5->setAnswer("Відповідь 5");
     task5->setNumPoints(1);
+
     auto task6 = std::make_unique<Task>();
     task6->setQuestion("Запитання 6");
     task6->setAnswer("Відповідь 6");
@@ -256,15 +270,18 @@ void SerializationTests::testCategory5()
     test2->addChild(std::move(task5));
     test2->addChild(std::move(task6));
 
-
     auto category2 = std::make_unique<Category>();
     category2->setName("Ім'я 1");
+
     auto category3 = std::make_unique<Category>();
     category2->setName("Ім'я 2");
+
     auto category4 = std::make_unique<Category>();
     category2->setName("Ім'я 3");
+
     auto category5 = std::make_unique<Category>();
     category2->setName("Ім'я 4");
+
     auto category6 = std::make_unique<Category>();
     category2->setName("Ім'я 5");
 

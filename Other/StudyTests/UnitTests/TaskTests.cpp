@@ -27,7 +27,6 @@ void TaskTests::testTask()
     QVERIFY(task.question() == "Запитання");
     QVERIFY(task.answer() == "Відповідь");
     QVERIFY(task.numPoints() == 3);
-
 }
 
 #include "TaskTests.moc"
