@@ -27,7 +27,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-    SerializationTests.cpp
+    SerializationTests.cpp \
+    TaskTests.cpp \
+    TestTests.cpp \
+    CategoryTests.cpp \
+    main.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../DataModel/release/ -lDataModel

@@ -21,6 +21,7 @@ private Q_SLOTS:
     void testCategory2();
     void testCategory3();
     void testCategory4();
+    void testCategory5();
 };
 
 SerializationTests::SerializationTests()
@@ -113,6 +114,38 @@ void SerializationTests::testCategory3()
     Category category1;
     category1.setName("Ім'я");
 
+    auto category2 = std::make_unique<Category>();
+    category2->setName("Ім'я 1");
+
+    auto category3 = std::make_unique<Category>();
+    category2->setName("Ім'я 2");
+
+    auto category4 = std::make_unique<Category>();
+    category2->setName("Ім'я 3");
+
+    auto category5 = std::make_unique<Category>();
+    category2->setName("Ім'я 4");
+
+    auto category6 = std::make_unique<Category>();
+    category2->setName("Ім'я 5");
+
+    category1.addChild(std::move(category2));
+    category1.addChild(std::move(category3));
+    category1.addChild(std::move(category4));
+    category1.addChild(std::move(category5));
+    category1.addChild(std::move(category6));
+
+    auto jsonObject = Archiver::serialise(&category1);
+    auto category7 = Archiver::deserialise(*jsonObject);
+
+    QVERIFY(areEqual(&category1, category7.get()));
+}
+
+void SerializationTests::testCategory4()
+{
+    Category category1;
+    category1.setName("Ім'я");
+
     auto test1 = std::make_unique<Test>();
     test1->setName("Тест 1");
 
@@ -120,27 +153,22 @@ void SerializationTests::testCategory3()
     task1->setQuestion("Запитання 1");
     task1->setAnswer("Відповідь 1");
     task1->setNumPoints(2);
-
     auto task2 = std::make_unique<Task>();
     task2->setQuestion("Запитання 2");
     task2->setAnswer("Відповідь 2");
     task2->setNumPoints(4);
-
     auto task3 = std::make_unique<Task>();
     task3->setQuestion("Запитання 3");
     task3->setAnswer("Відповідь 3");
     task3->setNumPoints(7);
-
     auto task4 = std::make_unique<Task>();
     task4->setQuestion("Запитання 4");
     task4->setAnswer("Відповідь 4");
     task4->setNumPoints(9);
-
     auto task5 = std::make_unique<Task>();
     task5->setQuestion("Запитання 5");
     task5->setAnswer("Відповідь 5");
     task5->setNumPoints(1);
-
     auto task6 = std::make_unique<Task>();
     task6->setQuestion("Запитання 6");
     task6->setAnswer("Відповідь 6");
@@ -155,17 +183,14 @@ void SerializationTests::testCategory3()
 
     auto test2 = std::make_unique<Test>();
     test2->setName("Тест 2");
-
     auto task7 = std::make_unique<Task>();
     task7->setQuestion("Запитання 7");
     task7->setAnswer("Відповідь 7");
     task7->setNumPoints(2);
-
     auto task8 = std::make_unique<Task>();
     task8->setQuestion("Запитання 8");
     task8->setAnswer("Відповідь 8");
     task8->setNumPoints(4);
-
     auto task9 = std::make_unique<Task>();
     task9->setQuestion("Запитання 9");
     task9->setAnswer("Відповідь 9");
@@ -188,48 +213,40 @@ void SerializationTests::testCategory3()
     QVERIFY(areEqual(&category1, category3.get()));
 }
 
-void SerializationTests::testCategory4()
+void SerializationTests::testCategory5()
 {
     Category category1;
     category1.setName("Ім'я");
 
     auto test1 = std::make_unique<Test>();
     test1->setName("Тест 1");
-
     auto task1 = std::make_unique<Task>();
     task1->setQuestion("Запитання 1");
     task1->setAnswer("Відповідь 1");
     task1->setNumPoints(2);
-
     auto task2 = std::make_unique<Task>();
     task2->setQuestion("Запитання 2");
     task2->setAnswer("Відповідь 2");
     task2->setNumPoints(4);
-
     auto task3 = std::make_unique<Task>();
     task3->setQuestion("Запитання 3");
     task3->setAnswer("Відповідь 3");
     task3->setNumPoints(7);
 
-
     test1->addChild(std::move(task1));
     test1->addChild(std::move(task2));
     test1->addChild(std::move(task3));
 
-
     auto test2 = std::make_unique<Test>();
     test2->setName("Тест 2");
-
     auto task4 = std::make_unique<Task>();
     task4->setQuestion("Запитання 4");
     task4->setAnswer("Відповідь 4");
     task4->setNumPoints(9);
-
     auto task5 = std::make_unique<Task>();
     task5->setQuestion("Запитання 5");
     task5->setAnswer("Відповідь 5");
     task5->setNumPoints(1);
-
     auto task6 = std::make_unique<Task>();
     task6->setQuestion("Запитання 6");
     task6->setAnswer("Відповідь 6");
@@ -242,16 +259,12 @@ void SerializationTests::testCategory4()
 
     auto category2 = std::make_unique<Category>();
     category2->setName("Ім'я 1");
-
     auto category3 = std::make_unique<Category>();
     category2->setName("Ім'я 2");
-
     auto category4 = std::make_unique<Category>();
     category2->setName("Ім'я 3");
-
     auto category5 = std::make_unique<Category>();
     category2->setName("Ім'я 4");
-
     auto category6 = std::make_unique<Category>();
     category2->setName("Ім'я 5");
 
@@ -315,9 +328,6 @@ bool areEqual(const Component* comp1, const Component* comp2)
     }
     return false;
 }
-
-
-QTEST_APPLESS_MAIN(SerializationTests)
 
 #include "SerializationTests.moc"
 
