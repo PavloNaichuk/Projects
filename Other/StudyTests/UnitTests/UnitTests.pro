@@ -27,10 +27,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    CategoryTests.cpp \
     SerializationTests.cpp \
     TaskTests.cpp \
     TestTests.cpp \
-    CategoryTests.cpp \
     main.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 

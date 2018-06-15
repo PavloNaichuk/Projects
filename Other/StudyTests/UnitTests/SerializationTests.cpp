@@ -62,7 +62,8 @@ void SerializationTests::testTest()
      auto jsonObject = Archiver::serialise(&test1);
      auto test2 = Archiver::deserialise(*jsonObject);
 
-     QVERIFY(areEqual(&test1, test2.get()));
+     //QVERIFY(areEqual(&test1, test2.get()));
+     QVERIFY(test1.equals(test2.get()));
 }
 
 void SerializationTests::testCategory1()
@@ -86,7 +87,8 @@ void SerializationTests::testCategory1()
     auto jsonObject = Archiver::serialise(&category1);
     auto category2 = Archiver::deserialise(*jsonObject);
 
-    QVERIFY(areEqual(&category1, category2.get()));
+    //QVERIFY(areEqual(&category1, category2.get()));
+    QVERIFY(category1.equals(category2.get()));
 }
 
 void SerializationTests::testCategory2()
@@ -106,7 +108,8 @@ void SerializationTests::testCategory2()
     auto jsonObject = Archiver::serialise(&category1);
     auto category2 = Archiver::deserialise(*jsonObject);
 
-    QVERIFY(areEqual(&category1, category2.get()));
+    //QVERIFY(areEqual(&category1, category2.get()));
+    QVERIFY(category1.equals(category2.get()));
 }
 
 void SerializationTests::testCategory3()
@@ -138,7 +141,8 @@ void SerializationTests::testCategory3()
     auto jsonObject = Archiver::serialise(&category1);
     auto category7 = Archiver::deserialise(*jsonObject);
 
-    QVERIFY(areEqual(&category1, category7.get()));
+    //QVERIFY(areEqual(&category1, category7.get()));
+    QVERIFY(category1.equals(category7.get()));
 }
 
 void SerializationTests::testCategory4()
@@ -218,7 +222,8 @@ void SerializationTests::testCategory4()
     auto jsonObject = Archiver::serialise(&category1);
     auto category3 = Archiver::deserialise(*jsonObject);
 
-    QVERIFY(areEqual(&category1, category3.get()));
+    //QVERIFY(areEqual(&category1, category3.get()));
+    QVERIFY(category1.equals(category3.get()));
 }
 
 void SerializationTests::testCategory5()
@@ -298,7 +303,8 @@ void SerializationTests::testCategory5()
     auto jsonObject = Archiver::serialise(&category1);
     auto category7 = Archiver::deserialise(*jsonObject);
 
-    QVERIFY(areEqual(&category1, category7.get()));
+    //QVERIFY(areEqual(&category1, category7.get()));
+    QVERIFY(category1.equals(category7.get()));
 }
 
 bool areEqual(const Component* comp1, const Component* comp2)

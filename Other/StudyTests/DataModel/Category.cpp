@@ -43,3 +43,23 @@ const Component* Category::child(size_t index) const
 {
     return mComponents[index].get();
 }
+
+bool Category::equals(const Component* comp) const
+{
+    const Category* category1 = this;
+    const Category* category2 = dynamic_cast<const Category*>(comp);
+    if (category2 != nullptr)
+    {
+        if (category1->name() != category2->name())
+            return false;
+        if (category1->numChildren() != category2->numChildren())
+            return false;
+        for (decltype(category1->numChildren()) childIndex = 0; childIndex < category1->numChildren(); ++childIndex)
+        {
+            if (!category1->child(childIndex)->equals(category2->child(childIndex)))
+                      return false;
+        }
+        return true;
+    }
+    return false;
+}

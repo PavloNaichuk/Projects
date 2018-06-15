@@ -15,6 +15,8 @@ public:
     int numPoints() const;
     void setNumPoints(unsigned numPoints);
 
+    bool equals(const Component* comp) const;
+
 private:
     QString mQuestion;
     QString mAnswer;

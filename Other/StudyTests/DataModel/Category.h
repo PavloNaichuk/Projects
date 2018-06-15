@@ -18,6 +18,7 @@ public:
     size_t numChildren() const;
     Component* child(size_t index);
     const Component* child(size_t index) const;
+    bool equals(const Component* comp) const;
 
 private:
     QString mName;

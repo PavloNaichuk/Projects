@@ -71,3 +71,4 @@ void CategoryTests::testCategory()
 }
 
 #include "CategoryTests.moc"
+
