@@ -5,8 +5,6 @@
 #include "Task.h"
 #include "Archiver.h"
 
-bool areEqual(const Component* comp1, const Component* comp2);
-
 class SerializationTests : public QObject
 {
     Q_OBJECT
@@ -38,7 +36,7 @@ void SerializationTests::testTask()
     auto jsonObject = Archiver::serialise(&task1);
     auto task2 = Archiver::deserialise(*jsonObject);
 
-    QVERIFY(areEqual(&task1, task2.get()));
+    QVERIFY(task1.equals(task2.get()));
 }
 
 void SerializationTests::testTest()
@@ -62,7 +60,6 @@ void SerializationTests::testTest()
      auto jsonObject = Archiver::serialise(&test1);
      auto test2 = Archiver::deserialise(*jsonObject);
 
-     //QVERIFY(areEqual(&test1, test2.get()));
      QVERIFY(test1.equals(test2.get()));
 }
 
@@ -87,7 +84,6 @@ void SerializationTests::testCategory1()
     auto jsonObject = Archiver::serialise(&category1);
     auto category2 = Archiver::deserialise(*jsonObject);
 
-    //QVERIFY(areEqual(&category1, category2.get()));
     QVERIFY(category1.equals(category2.get()));
 }
 
@@ -108,7 +104,6 @@ void SerializationTests::testCategory2()
     auto jsonObject = Archiver::serialise(&category1);
     auto category2 = Archiver::deserialise(*jsonObject);
 
-    //QVERIFY(areEqual(&category1, category2.get()));
     QVERIFY(category1.equals(category2.get()));
 }
 
@@ -141,7 +136,6 @@ void SerializationTests::testCategory3()
     auto jsonObject = Archiver::serialise(&category1);
     auto category7 = Archiver::deserialise(*jsonObject);
 
-    //QVERIFY(areEqual(&category1, category7.get()));
     QVERIFY(category1.equals(category7.get()));
 }
 
@@ -222,7 +216,6 @@ void SerializationTests::testCategory4()
     auto jsonObject = Archiver::serialise(&category1);
     auto category3 = Archiver::deserialise(*jsonObject);
 
-    //QVERIFY(areEqual(&category1, category3.get()));
     QVERIFY(category1.equals(category3.get()));
 }
 
@@ -303,53 +296,7 @@ void SerializationTests::testCategory5()
     auto jsonObject = Archiver::serialise(&category1);
     auto category7 = Archiver::deserialise(*jsonObject);
 
-    //QVERIFY(areEqual(&category1, category7.get()));
     QVERIFY(category1.equals(category7.get()));
-}
-
-bool areEqual(const Component* comp1, const Component* comp2)
-{
-    const Task* task1 = dynamic_cast<const Task*>(comp1);
-    const Task* task2 = dynamic_cast<const Task*>(comp2);
-    if ((task1 != nullptr) && (task2 != nullptr))
-    {
-        return ((task1->question() == task2->question()) &&
-                (task1->answer() == task2->answer()) &&
-                (task1->numPoints() == task2->numPoints()));
-    }
-
-    const Test* test1 = dynamic_cast<const Test*>(comp1);
-    const Test* test2 = dynamic_cast<const Test*>(comp2);
-    if ((test1 != nullptr) && (test2 != nullptr))
-    {
-        if (test1->name() != test2->name())
-            return false;
-        if (test1->numChildren() != test2->numChildren())
-            return false;
-        for (decltype(test1->numChildren()) childIndex = 0; childIndex < test1->numChildren(); ++childIndex)
-        {
-            if (!areEqual(test1->child(childIndex), test2->child(childIndex)))
-                return false;
-        }
-        return true;
-    }
-
-    const Category* category1 = dynamic_cast<const Category*>(comp1);
-    const Category* category2 = dynamic_cast<const Category*>(comp2);
-    if ((category1 != nullptr) && (category2 != nullptr))
-    {
-        if (category1->name() != category2->name())
-            return false;
-        if (category1->numChildren() != category2->numChildren())
-            return false;
-        for (decltype(category1->numChildren()) childIndex = 0; childIndex < category1->numChildren(); ++childIndex)
-        {
-            if (!areEqual(category1->child(childIndex), category2->child(childIndex)))
-                return false;
-        }
-        return true;
-    }
-    return false;
 }
 
 #include "SerializationTests.moc"

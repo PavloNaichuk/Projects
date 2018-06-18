@@ -1,5 +1,9 @@
 #include "Task.h"
 
+Task::Task()
+    : mNumPoints(0)
+{}
+
 const QString& Task::question() const
 {
     return mQuestion;
@@ -25,20 +29,18 @@ int Task::numPoints() const
     return mNumPoints;
 }
 
-void Task::setNumPoints(unsigned numPoints)
+void Task::setNumPoints(int numPoints)
 {
     mNumPoints = numPoints;
 }
 
 bool Task::equals(const Component* comp) const
 {
-    const Task* task1 = this;
-    const Task* task2 = dynamic_cast<const Task*>(comp);
-    if (task2 != nullptr)
-    {
-        return ((task1->question() == task2->question()) &&
-                (task1->answer() == task2->answer()) &&
-                (task1->numPoints() == task2->numPoints()));
-    }
-    return false;
+    const Task* task = dynamic_cast<const Task*>(comp);
+    if (task == nullptr)
+        return false;
+
+    return ((question() == task->question()) &&
+            (answer() == task->answer()) &&
+            (numPoints() == task->numPoints()));
 }

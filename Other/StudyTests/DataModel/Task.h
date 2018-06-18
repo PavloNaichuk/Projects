@@ -6,6 +6,10 @@
 class Task : public Component
 {
 public:
+    Task();
+
+    bool equals(const Component* comp) const override;
+
     const QString& question() const;
     void setQuestion(QString question);
 
@@ -13,12 +17,10 @@ public:
     void setAnswer(QString answer);
 
     int numPoints() const;
-    void setNumPoints(unsigned numPoints);
-
-    bool equals(const Component* comp) const;
+    void setNumPoints(int numPoints);
 
 private:
     QString mQuestion;
     QString mAnswer;
-    unsigned mNumPoints;
+    int mNumPoints;
 };

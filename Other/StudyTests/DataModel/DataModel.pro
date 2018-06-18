@@ -26,7 +26,8 @@ SOURCES += DataModel.cpp \
     Component.cpp \
     Task.cpp \
     Test.cpp \
-    Archiver.cpp
+    Archiver.cpp \
+    JSONVisitor.cpp
 
 HEADERS += DataModel.h \
     Category.h \
@@ -34,8 +35,11 @@ HEADERS += DataModel.h \
     CompositeComponent.h \
     Task.h \
     Test.h \
-    Archiver.h
+    Archiver.h \
+    Visitor.h \
+    JSONVisitor.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+

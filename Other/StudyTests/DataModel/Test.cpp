@@ -46,20 +46,20 @@ const Component* Test::child(size_t index) const
 
 bool Test::equals(const Component* comp) const
 {
-    const Test* test1 = this;
-    const Test* test2 = dynamic_cast<const Test*>(comp);
-    if (test2 != nullptr)
+    const Test* test = dynamic_cast<const Test*>(comp);
+    if (test == nullptr)
+        return false;
+
+    if (name() != test->name())
+        return false;
+
+    if (numChildren() != test->numChildren())
+        return false;
+
+    for (decltype(numChildren()) childIndex = 0; childIndex < numChildren(); ++childIndex)
     {
-        if (test1->name() != test2->name())
+        if (!child(childIndex)->equals(test->child(childIndex)))
             return false;
-        if (test1->numChildren() != test2->numChildren())
-            return false;
-        for (decltype(test1->numChildren()) childIndex = 0; childIndex < test1->numChildren(); ++childIndex)
-        {
-            if (!test1->child(childIndex)->equals(test2->child(childIndex)))
-                      return false;
-        }
-        return true;
     }
-    return false;
+    return true;
 }

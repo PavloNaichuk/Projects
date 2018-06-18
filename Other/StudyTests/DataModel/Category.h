@@ -10,6 +10,8 @@ public:
     Category();
     Category(QString name);
 
+    bool equals(const Component* comp) const override;
+
     const QString& name() const;
     void setName(QString name);
 
@@ -18,7 +20,6 @@ public:
     size_t numChildren() const;
     Component* child(size_t index);
     const Component* child(size_t index) const;
-    bool equals(const Component* comp) const;
 
 private:
     QString mName;
