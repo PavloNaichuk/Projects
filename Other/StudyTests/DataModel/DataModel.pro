@@ -27,7 +27,8 @@ SOURCES += DataModel.cpp \
     Task.cpp \
     Test.cpp \
     Archiver.cpp \
-    JSONVisitor.cpp
+    JSONVisitor.cpp \
+    Visitor.cpp
 
 HEADERS += DataModel.h \
     Category.h \

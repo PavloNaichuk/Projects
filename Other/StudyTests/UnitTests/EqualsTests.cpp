@@ -130,7 +130,7 @@ void EqualsTests::noEqualTestTask()
     task2->setNumPoints(3);
 
 
-    QVERIFY(task1->equals(task2.get()));
+    QVERIFY(!task1->equals(task2.get()));
 }
 
 void EqualsTests::noEqualTestTest()
@@ -169,7 +169,7 @@ void EqualsTests::noEqualTestTest()
      test2->addChild(std::move(task4));
 
 
-     QVERIFY(test1->equals(test2.get()));
+     QVERIFY(!test1->equals(test2.get()));
 }
 
 void EqualsTests::noEqualTestCategory()
@@ -204,7 +204,7 @@ void EqualsTests::noEqualTestCategory()
 
     category2->addChild(std::move(test2));
 
-    QVERIFY(category1->equals(category2.get()));
+    QVERIFY(!category1->equals(category2.get()));
 }
 
 #include "EqualsTests.moc"
