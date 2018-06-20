@@ -63,3 +63,8 @@ bool Test::equals(const Component* comp) const
     }
     return true;
 }
+
+void Test::visit(Visitor* visitor) const
+{
+    visitor->visit(this);
+}

@@ -44,3 +44,8 @@ bool Task::equals(const Component* comp) const
             (answer() == task->answer()) &&
             (numPoints() == task->numPoints()));
 }
+
+void Task::visit(Visitor* visitor) const
+{
+    visitor->visit(this);
+}

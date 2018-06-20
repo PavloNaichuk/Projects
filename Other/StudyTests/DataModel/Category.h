@@ -1,8 +1,11 @@
 #pragma once
 
 #include "CompositeComponent.h"
+#include "Visitor.h"
+
 #include <vector>
 #include <QString>
+
 
 class Category : public CompositeComponent
 {
@@ -11,6 +14,7 @@ public:
     Category(QString name);
 
     bool equals(const Component* comp) const override;
+    void visit(Visitor* visitor) const override;
 
     const QString& name() const;
     void setName(QString name);

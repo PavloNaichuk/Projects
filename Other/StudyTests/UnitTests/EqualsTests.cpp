@@ -157,7 +157,7 @@ void EqualsTests::noEqualTestTest()
 
      auto task3 = std::make_unique<Task>();
      task3->setQuestion("Запитання 1");
-     task3->setAnswer("Відповідь 1");
+     task3->setAnswer("Відповідь 2");
      task3->setNumPoints(7);
 
      auto task4 = std::make_unique<Task>();
@@ -198,7 +198,7 @@ void EqualsTests::noEqualTestCategory()
     auto task2 = std::make_unique<Task>();
     task2->setQuestion("Запитання 1");
     task2->setAnswer("Відповідь 2");
-    task2->setNumPoints(2);
+    task2->setNumPoints(5);
 
     test2->addChild(std::move(task2));
 

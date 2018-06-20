@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CompositeComponent.h"
+#include "Visitor.h"
 #include <memory>
 #include <vector>
 #include <QString>
@@ -12,6 +13,7 @@ public:
     Test(QString name);
 
     bool equals(const Component* comp) const override;
+    void visit(Visitor* visitor) const override;
 
     const QString& name() const;
     void setName(QString name);

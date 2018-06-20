@@ -63,3 +63,8 @@ bool Category::equals(const Component* comp) const
     }
     return true;
 }
+
+void Category::visit(Visitor* visitor) const
+{
+     visitor->visit(this);
+}

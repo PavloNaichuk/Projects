@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Component.h"
+#include "Visitor.h"
+
 #include <QString>
 
 class Task : public Component
@@ -9,6 +11,7 @@ public:
     Task();
 
     bool equals(const Component* comp) const override;
+    void visit(Visitor* visitor) const override;
 
     const QString& question() const;
     void setQuestion(QString question);
