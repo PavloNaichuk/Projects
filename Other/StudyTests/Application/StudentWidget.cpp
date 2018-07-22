@@ -6,6 +6,7 @@ StudentWidget::StudentWidget(QWidget* parent)
 {
     setWindowTitle("Виконання тестів");
     setWindowModality(Qt::WindowModal);
+    resize(800, 600);
 }
 
 StudentWidget::~StudentWidget()

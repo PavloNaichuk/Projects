@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     StudentWidget.cpp \
     StudyTests.cpp \
     TeacherEnterMenuWidget.cpp \
-    TeacherWidget.cpp
+    TeacherWidget.cpp \
+    AddTestWidget.cpp \
+    TableModel.cpp
 
 HEADERS  += MainWidget.h \
     StartProgramMenuWidget.h \
@@ -38,7 +40,9 @@ HEADERS  += MainWidget.h \
     StudentWidget.h \
     StudyTests.h \
     TeacherEnterMenuWidget.h \
-    TeacherWidget.h
+    TeacherWidget.h \
+    AddTestWidget.h \
+    TableModel.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../DataModel/release/ -lDataModel
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../DataModel/debug/ -lDataModel

@@ -1,10 +1,14 @@
-#ifndef MEMORYPUZZLE_H
-#define MEMORYPUZZLE_H
+#ifndef STUDYTESTS_H
+#define STUDYTESTS_H
 
 #include <QObject>
 
 class MainWidget;
 class StudentEnterMenuWidget;
+class TeacherEnterMenuWidget;
+class StudentWidget;
+class TeacherWidget;
+class AddTestWidget;
 
 class StudyTests : public QObject
 {
@@ -20,10 +24,20 @@ private slots:
     void exitProgram();
     void studentEnter();
     void teacherEnter();
+    void addTest();
+    void editTest();
+    void removeTest();
+    void addTestEnter();
+    void editTestEnter();
+    void removeTestEnter();
 
 private:
     MainWidget* mMainWidget;
     StudentEnterMenuWidget* mStudentEnterMenuWidget;
+    TeacherEnterMenuWidget* mTeacherEnterMenuWidget;
+    StudentWidget* mStudentWidget;
+    TeacherWidget* mTeacherWidget;
+    AddTestWidget* mAddTestWidget;
 };
 
-#endif // MEMORYPUZZLE_H
+#endif // STUDYTESTS_H

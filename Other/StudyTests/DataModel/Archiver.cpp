@@ -21,11 +21,10 @@ namespace
 
 std::unique_ptr<QJsonObject> Archiver::serialise(const Component* component)
 {
-    assert(false);
     JSONVisitor visitor;
     component->visit(&visitor);
 
-    return visitor.jsonData();
+    return std::make_unique<QJsonObject>(visitor.jsonData());
 }
 
 std::unique_ptr<Component> Archiver::deserialise(const QJsonObject &jsonData)

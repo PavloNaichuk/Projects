@@ -5,6 +5,7 @@
 #include "StartProgramMenuWidget.h"
 #include "StudentEnterMenuWidget.h"
 #include "TeacherEnterMenuWidget.h"
+#include "AddTestWidget.h"
 
 int StudyTests::runGame()
 {
@@ -42,12 +43,56 @@ void StudyTests::exitProgram()
 }
 void StudyTests::studentEnter()
 {
-   // mStudentEnterMenuWidget->enter();
+   // mMainWidget->setStudent();
+    mStudentWidget = new StudentWidget();
+    mStudentWidget->show();
+     mMainWidget->close();
 }
 void StudyTests::teacherEnter()
 {
-   // mStudentEnterMenuWidget->enter();
+    //mMainWidget->setTeacher();
+    mTeacherWidget = new TeacherWidget();
+    mTeacherWidget->show();
+    mMainWidget->close();
+
 }
+
+void StudyTests::addTest()
+{
+    AddTestWidget addTestWidget;
+    connect(&addTestWidget, SIGNAL(addTestEnter()), this, SLOT(addTestEnter()));
+    addTestWidget.show();
+
+
+
+}
+void StudyTests::editTest()
+{
+
+}
+
+void StudyTests::removeTest()
+{
+
+}
+
+void StudyTests::addTestEnter()
+{
+    mAddTestWidget = new AddTestWidget();
+    mAddTestWidget->show();
+    mMainWidget->close();
+
+}
+void StudyTests::editTestEnter()
+{
+
+}
+
+void StudyTests::removeTestEnter()
+{
+
+}
+
 
 StudyTests::~StudyTests()
 {
