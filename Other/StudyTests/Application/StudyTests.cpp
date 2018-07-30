@@ -5,7 +5,8 @@
 #include "StartProgramMenuWidget.h"
 #include "StudentEnterMenuWidget.h"
 #include "TeacherEnterMenuWidget.h"
-#include "AddTestWidget.h"
+#include "CategoryWidget.h"
+#include "TestWidget.h"
 
 int StudyTests::runGame()
 {
@@ -57,45 +58,23 @@ void StudyTests::teacherEnter()
 
 }
 
+void StudyTests::addCategory()
+{
+    mCategoryWidget = new CategoryWidget();
+    mCategoryWidget->show();
+    mMainWidget->close();
+}
+
+
+
 void StudyTests::addTest()
 {
-    AddTestWidget addTestWidget;
-    connect(&addTestWidget, SIGNAL(addTestEnter()), this, SLOT(addTestEnter()));
-    addTestWidget.show();
-
-
-
-}
-void StudyTests::editTest()
-{
-
-}
-
-void StudyTests::removeTest()
-{
-
-}
-
-void StudyTests::addTestEnter()
-{
-    mAddTestWidget = new AddTestWidget();
-    mAddTestWidget->show();
+    mTestWidget = new TestWidget();
+    mTestWidget->show();
     mMainWidget->close();
-
 }
-void StudyTests::editTestEnter()
-{
-
-}
-
-void StudyTests::removeTestEnter()
-{
-
-}
-
 
 StudyTests::~StudyTests()
 {
     delete mMainWidget;
-
 }

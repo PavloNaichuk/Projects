@@ -9,6 +9,10 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QMessageBox>
+#include "FileUtilities.h"
+#include "Component.h"
+#include "CategoryWidget.h"
+#include "TestWidget.h"
 
 TeacherWidget::TeacherWidget(QWidget *parent)
     : QWidget(parent)
@@ -30,9 +34,9 @@ TeacherWidget::TeacherWidget(QWidget *parent)
     hLayout->addWidget(mBackButton);
     hLayout->addWidget(textEdit);
 
-
+    auto fileData = LoadComponentFromFile("Tests.data");
     mTableView = new QTableView();
-    mTableModel = new TableModel(0);
+    mTableModel = new TableModel(std::move(fileData));
     mTableView->setModel(mTableModel);
     mTableView->verticalHeader()->hide();
 
@@ -49,8 +53,12 @@ TeacherWidget::TeacherWidget(QWidget *parent)
 
     connect(mBackButton, SIGNAL(clicked()), this, SLOT(backClicked()));
 
-    mTableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    //mTableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(mTableView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contexMenuClicked(const QPoint)));
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contexMenuComponent(const QPoint)));
+
+
 }
 
 TeacherWidget::~TeacherWidget()
@@ -66,20 +74,55 @@ void TeacherWidget::backClicked()
 
 void TeacherWidget::contexMenuClicked(const QPoint pos)
 {
-    QMenu* menu = new QMenu(this);
-    QAction* open = new QAction("Відкрити", this);
-    QAction* remove = new QAction("Видалити", this);
-    connect(open, SIGNAL(triggered()), this, SLOT(openClicked()));
-    connect(remove, SIGNAL(triggered()), this, SLOT(removeClicked()));
-    menu->addAction(open);
-    menu->addAction(remove);
-    menu->popup(mTableView->viewport()->mapToGlobal(pos));
+    QMenu menu;
+
+    QAction* openAction = new QAction("Відкрити", &menu);
+    QAction* removeAction = new QAction("Видалити", &menu);
+
+    connect(openAction, SIGNAL(triggered()), this, SLOT(openClicked()));
+    connect(removeAction, SIGNAL(triggered()), this, SLOT(removeClicked()));
+
+    menu.addAction(openAction);
+    menu.addAction(removeAction);
+
+    menu.exec(mTableView->mapToGlobal(pos));
 }
 
+void TeacherWidget::contexMenuComponent(const QPoint pos)
+{
+    QMenu menu;
+    QMenu* createMenu;
+
+    createMenu = menu.addMenu("Додати");
+
+    QAction* categoryAction = new QAction("Категорію", createMenu);
+    QAction* testAction = new QAction("Тест", createMenu);
+    createMenu->addAction(categoryAction);
+    createMenu->addAction(testAction);
+
+    QAction* sortByAction = new QAction("Відсортувати", &menu);
+
+    connect(categoryAction, SIGNAL(triggered()), this, SLOT(categoryClicked()));
+    connect(testAction, SIGNAL(triggered()), this, SLOT(testClicked()));
+    connect(sortByAction, SIGNAL(triggered()), this, SLOT(sortedClicked()));
+
+    menu.addAction(sortByAction);
+    menu.exec(mapToGlobal(pos));
+}
 
 void TeacherWidget::openClicked()
 {
-    //emit back();
+    //if( mComponent->type() == CATEGORY)
+   // {
+        mCategoryWidget = new CategoryWidget();
+        mCategoryWidget->show();
+   // }
+
+   /* if( mComponent->type() == TEST)
+    {
+        mTestWidget = new TestWidget();
+        mTestWidget->show();
+    }*/
     close();
 }
 
@@ -91,6 +134,7 @@ void TeacherWidget::removeClicked()
         if (QMessageBox::warning(this, "Видалити", "Ви точно  хочете видалити?",
                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
         {
+            mTableModel->removeRows(mTableModel->rowCount(), mTableModel->columnCount());
             return;
         }
         else
@@ -102,5 +146,20 @@ void TeacherWidget::removeClicked()
             mTableView->setCurrentIndex(mTableModel->index(-1, -1));
         }
    }
+}
+
+void TeacherWidget::categoryClicked()
+{
+    mTableModel->insertRows(mTableModel->rowCount(), mTableModel->columnCount());
+}
+void TeacherWidget::testClicked()
+{
+    mTableModel->insertRows(mTableModel->rowCount(), mTableModel->columnCount());
+}
+
+
+void TeacherWidget::sortedClicked()
+{
+    close();
 }
 

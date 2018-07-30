@@ -68,3 +68,8 @@ void Test::visit(Visitor* visitor) const
 {
     visitor->visit(this);
 }
+
+Type Test::type() const
+{
+    return TEST;
+}

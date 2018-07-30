@@ -8,7 +8,8 @@ class StudentEnterMenuWidget;
 class TeacherEnterMenuWidget;
 class StudentWidget;
 class TeacherWidget;
-class AddTestWidget;
+class CategoryWidget;
+class TestWidget;
 
 class StudyTests : public QObject
 {
@@ -24,12 +25,9 @@ private slots:
     void exitProgram();
     void studentEnter();
     void teacherEnter();
+    void addCategory();
     void addTest();
-    void editTest();
-    void removeTest();
-    void addTestEnter();
-    void editTestEnter();
-    void removeTestEnter();
+
 
 private:
     MainWidget* mMainWidget;
@@ -37,7 +35,8 @@ private:
     TeacherEnterMenuWidget* mTeacherEnterMenuWidget;
     StudentWidget* mStudentWidget;
     TeacherWidget* mTeacherWidget;
-    AddTestWidget* mAddTestWidget;
+    CategoryWidget* mCategoryWidget;
+    TestWidget* mTestWidget;
 };
 
 #endif // STUDYTESTS_H

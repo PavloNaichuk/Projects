@@ -28,7 +28,8 @@ SOURCES += DataModel.cpp \
     Test.cpp \
     Archiver.cpp \
     JSONVisitor.cpp \
-    Visitor.cpp
+    Visitor.cpp \
+    FileUtilities.cpp
 
 HEADERS += DataModel.h \
     Category.h \
@@ -38,7 +39,8 @@ HEADERS += DataModel.h \
     Test.h \
     Archiver.h \
     Visitor.h \
-    JSONVisitor.h
+    JSONVisitor.h \
+    FileUtilities.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

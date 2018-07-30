@@ -68,6 +68,9 @@ void CategoryTests::testCategory()
     QVERIFY(category.numChildren() == 1);
     category.removeChild(0);
     QVERIFY(category.numChildren() == 0);
+
+    QVERIFY(category.type() == CATEGORY);
+
 }
 
 #include "CategoryTests.moc"

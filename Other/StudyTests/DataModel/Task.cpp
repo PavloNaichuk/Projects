@@ -4,6 +4,17 @@ Task::Task()
     : mNumPoints(0)
 {}
 
+
+const QString& Task::name() const
+{
+    return mName;
+}
+
+void Task::setName(QString name)
+{
+    mName = std::move(name);
+}
+
 const QString& Task::question() const
 {
     return mQuestion;
@@ -48,4 +59,9 @@ bool Task::equals(const Component* comp) const
 void Task::visit(Visitor* visitor) const
 {
     visitor->visit(this);
+}
+
+Type Task::type() const
+{
+    return TASK;
 }

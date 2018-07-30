@@ -4,7 +4,6 @@
 #include "Visitor.h"
 #include <memory>
 #include <vector>
-#include <QString>
 
 class Test : public CompositeComponent
 {
@@ -14,9 +13,9 @@ public:
 
     bool equals(const Component* comp) const override;
     void visit(Visitor* visitor) const override;
-
-    const QString& name() const;
-    void setName(QString name);
+    Type type() const override;
+    const QString& name() const override;
+    void setName(QString name) override;
 
     void addChild(std::unique_ptr<Component> component);
     void removeChild(size_t index);

@@ -47,6 +47,8 @@ void TestTests::testTest()
 
     test.removeChild(0);
     QVERIFY(test.numChildren() == 0);
+
+    QVERIFY(test.type() == TEST);
 }
 
 #include "TestTests.moc"

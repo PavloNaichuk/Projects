@@ -68,3 +68,8 @@ void Category::visit(Visitor* visitor) const
 {
      visitor->visit(this);
 }
+
+Type Category::type() const
+{
+    return CATEGORY;
+}
