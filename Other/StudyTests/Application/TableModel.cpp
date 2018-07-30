@@ -27,46 +27,10 @@ QVariant TableModel::data(const QModelIndex& index, int role) const
 
     if (role == Qt::DisplayRole)
     {
-        const auto& components = mComponents.at(index.row());
-
-        if (index.column() == 0)
-        {
-            //const Component* component = mCompositeComponent->child(row);
-            //return QString(component->name());
-            return components.name;
-        }
-        else if (index.column() == 1)
-            return components.type;
-        else if (index.column() == 2)
-            return components.data;
+       const Component* component = mCompositeComponent->child(row);
+       return QString(component->name());
     }
-
     return QVariant();
-}
-
-
-bool TableModel::setData(const QModelIndex& index, const QVariant& value, int role)
-{
-    if (index.isValid() && role == Qt::EditRole)
-    {
-        int row = index.row();
-        auto component = mComponents.value(row);
-
-        if (index.column() == 0)
-            component.name = value.toString();
-        else if (index.column() == 1)
-            component.type = value.toString();
-        else if (index.column() == 2)
-            component.data = value.toString();
-        else
-            return false;
-
-        mComponents.replace(row, component);
-        emit dataChanged(index, index);
-
-        return true;
-    }
-    return false;
 }
 
 QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -89,31 +53,6 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
     return QVariant();
 }
 
-bool TableModel::insertRows(int row, int count, const QModelIndex& index/*parent*/)
-{
-    Q_UNUSED(index);
-    beginInsertRows(QModelIndex(), count, count + row - 1);
-
-    for (int index = 0; index < row; ++index)
-    {
-            if( mComponent->type() == CATEGORY)
-            {
-                mComponents.insert(count, { QString("Нова категорія"), });
-            }
-
-            if( mComponent->type() == TEST)
-            {
-                mComponents.insert(count, { QString("Новий  тест"), });
-            }
-
-    }
-
-        endInsertRows();
-        return true;
-}
-
-
-
 bool TableModel::removeRows(int row, int count,const QModelIndex& /*parent*/)
 {
     beginRemoveRows(QModelIndex(), row, row + count - 1);
@@ -125,10 +64,19 @@ bool TableModel::removeRows(int row, int count,const QModelIndex& /*parent*/)
     return true;
 }
 
-Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
+void TableModel::insertComponent(Type type)
 {
-    if (!index.isValid())
-        return Qt::ItemIsEnabled;
+    if(type  == CATEGORY)
+    {
+        Category category = new Category("Нова категорія");
+        mCompositeComponent->addChild(category);
+        this->insertRows(this->rowCount(), 1);
+    }
 
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    if(type == TEST)
+    {
+        Test test = new Test("Нова категорія");
+        mCompositeComponent->addChild(test);
+        this->insertRows(this->rowCount(), 1);
+    }
 }

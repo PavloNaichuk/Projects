@@ -35,9 +35,9 @@ public slots:
 
     void openClicked();
     void removeClicked();
-    void categoryClicked();
-    void testClicked();
-    void sortedClicked();
+    void addCategoryClicked();
+    void addTestClicked();
+    void sortByClicked();
 
 
 private:

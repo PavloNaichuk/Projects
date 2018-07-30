@@ -51,14 +51,13 @@ TeacherWidget::TeacherWidget(QWidget *parent)
     layout->addWidget(mTableView);
     setLayout(layout);
 
-    connect(mBackButton, SIGNAL(clicked()), this, SLOT(backClicked()));
+    connect(mBackButton, SIGNAL(clicked()), this, SLOT(backClicked())); 
 
-    setContextMenuPolicy(Qt::CustomContextMenu);
     //mTableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(mTableView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contexMenuClicked(const QPoint)));
+
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contexMenuComponent(const QPoint)));
-
-
 }
 
 TeacherWidget::~TeacherWidget()
@@ -102,9 +101,9 @@ void TeacherWidget::contexMenuComponent(const QPoint pos)
 
     QAction* sortByAction = new QAction("Відсортувати", &menu);
 
-    connect(categoryAction, SIGNAL(triggered()), this, SLOT(categoryClicked()));
-    connect(testAction, SIGNAL(triggered()), this, SLOT(testClicked()));
-    connect(sortByAction, SIGNAL(triggered()), this, SLOT(sortedClicked()));
+    connect(categoryAction, SIGNAL(triggered()), this, SLOT(addCategoryClicked()));
+    connect(testAction, SIGNAL(triggered()), this, SLOT(addTestClicked()));
+    connect(sortByAction, SIGNAL(triggered()), this, SLOT(sortByClicked()));
 
     menu.addAction(sortByAction);
     menu.exec(mapToGlobal(pos));
@@ -148,17 +147,17 @@ void TeacherWidget::removeClicked()
    }
 }
 
-void TeacherWidget::categoryClicked()
+void TeacherWidget::addCategoryClicked()
 {
     mTableModel->insertRows(mTableModel->rowCount(), mTableModel->columnCount());
 }
-void TeacherWidget::testClicked()
+void TeacherWidget::addTestClicked()
 {
     mTableModel->insertRows(mTableModel->rowCount(), mTableModel->columnCount());
 }
 
 
-void TeacherWidget::sortedClicked()
+void TeacherWidget::sortByClicked()
 {
     close();
 }
