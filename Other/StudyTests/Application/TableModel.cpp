@@ -31,6 +31,16 @@ QVariant TableModel::data(const QModelIndex& index, int role) const
     {
         if (col == 0)
             return QString(component->name());
+        if (col == 1)
+        {
+            if (component->type() == CATEGORY)
+                return QString("CATEGORY");
+            else if (component->type() == TEST)
+                return QString("TEST");
+            else
+                assert(false && "Unknown type");
+        }
+
     }
     return QVariant();
 }
@@ -59,8 +69,8 @@ bool TableModel::removeRows(int row, int count,const QModelIndex& /*parent*/)
 {
     beginRemoveRows(QModelIndex(), row, row + count - 1);
 
-    for(int index = 0; index < count; ++index)
-        mCompositeComponent->removeChild(index);
+    for(int index = 0; index < count; ++index )
+        mCompositeComponent->removeChild(row);
 
     endRemoveRows();
     return true;
