@@ -53,7 +53,7 @@ TeacherWidget::TeacherWidget(QWidget *parent)
 
     connect(mBackButton, SIGNAL(clicked()), this, SLOT(backClicked())); 
 
-    //mTableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    mTableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(mTableView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contexMenuClicked(const QPoint)));
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -109,20 +109,36 @@ void TeacherWidget::contexMenuComponent(const QPoint pos)
     menu.exec(mapToGlobal(pos));
 }
 
-void TeacherWidget::openClicked()
+/*void TeacherWidget::openClicked()
 {
-    //if( mComponent->type() == CATEGORY)
-   // {
+    if( mComponent->type() == CATEGORY)
+    {
         mCategoryWidget = new CategoryWidget();
         mCategoryWidget->show();
-   // }
+    }
 
-   /* if( mComponent->type() == TEST)
+    if( mComponent->type() == TEST)
     {
         mTestWidget = new TestWidget();
         mTestWidget->show();
-    }*/
+    }
     close();
+}*/
+
+void TeacherWidget::openClicked()
+{
+    if( mTableModel->addComponent(CATEGORY) == true)
+    {
+        mCategoryWidget = new CategoryWidget();
+        mCategoryWidget->show();
+    }
+
+    else if (mTableModel->addComponent(TEST) == false)
+    {
+        mTestWidget = new TestWidget();
+        mTestWidget->show();
+    }
+
 }
 
 void TeacherWidget::removeClicked()
@@ -149,11 +165,11 @@ void TeacherWidget::removeClicked()
 
 void TeacherWidget::addCategoryClicked()
 {
-    mTableModel->insertRows(mTableModel->rowCount(), mTableModel->columnCount());
+    mTableModel->insertComponent(CATEGORY);
 }
 void TeacherWidget::addTestClicked()
 {
-    mTableModel->insertRows(mTableModel->rowCount(), mTableModel->columnCount());
+    mTableModel->insertComponent(TEST);
 }
 
 

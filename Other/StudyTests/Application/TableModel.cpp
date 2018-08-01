@@ -68,15 +68,36 @@ void TableModel::insertComponent(Type type)
 {
     if(type  == CATEGORY)
     {
-        Category category = new Category("Нова категорія");
-        mCompositeComponent->addChild(category);
-        this->insertRows(this->rowCount(), 1);
+        const int row = rowCount();
+        beginInsertRows(QModelIndex(), row, row);
+
+        std::unique_ptr<Category> category(new Category("Нова категорія"));
+        mCompositeComponent->addChild(std::move(category));
+        //this->insertRows(this->rowCount(), 1);
+
+        endInsertRows();
     }
 
     if(type == TEST)
     {
-        Test test = new Test("Нова категорія");
-        mCompositeComponent->addChild(test);
-        this->insertRows(this->rowCount(), 1);
+        const int row = rowCount();
+        beginInsertRows(QModelIndex(), row, row);
+        std::unique_ptr<Test> test(new Test("Новий  тест"));
+        mCompositeComponent->addChild(std::move(test));
+        //this->insertRows(this->rowCount(), 1);
+        endInsertRows();
+    }
+}
+
+bool TableModel::addComponent(Type type)
+{
+    if(type  == CATEGORY)
+    {
+        return true;
+    }
+
+    if(type == TEST)
+    {
+        return false;
     }
 }

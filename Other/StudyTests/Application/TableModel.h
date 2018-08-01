@@ -18,6 +18,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
     void insertComponent(Type type);
+    bool addComponent(Type type);
 
 private:
     std::unique_ptr<CompositeComponent> mCompositeComponent;  
