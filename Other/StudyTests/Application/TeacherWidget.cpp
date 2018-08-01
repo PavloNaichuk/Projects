@@ -127,18 +127,17 @@ void TeacherWidget::contexMenuComponent(const QPoint pos)
 
 void TeacherWidget::openClicked()
 {
-    if( mTableModel->addComponent(CATEGORY) == true)
+    /*if( mTableModel->openComponent() == true)
     {
         mCategoryWidget = new CategoryWidget();
         mCategoryWidget->show();
     }
 
-    else if (mTableModel->addComponent(TEST) == false)
+    else
     {
         mTestWidget = new TestWidget();
         mTestWidget->show();
-    }
-
+    }*/
 }
 
 void TeacherWidget::removeClicked()

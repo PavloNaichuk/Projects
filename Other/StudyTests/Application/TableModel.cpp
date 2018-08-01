@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "CategoryWidget.h"
 #include "TestWidget.h"
+#include <cassert>
 
 
 TableModel::TableModel(std::unique_ptr<CompositeComponent> compositeComponent)
@@ -25,10 +26,11 @@ QVariant TableModel::data(const QModelIndex& index, int role) const
     const int row = index.row();
     const int col = index.column();
 
+    const Component* component = mCompositeComponent->child(row);
     if (role == Qt::DisplayRole)
     {
-       const Component* component = mCompositeComponent->child(row);
-       return QString(component->name());
+        if (col == 0)
+            return QString(component->name());
     }
     return QVariant();
 }
@@ -66,38 +68,22 @@ bool TableModel::removeRows(int row, int count,const QModelIndex& /*parent*/)
 
 void TableModel::insertComponent(Type type)
 {
-    if(type  == CATEGORY)
-    {
-        const int row = rowCount();
-        beginInsertRows(QModelIndex(), row, row);
+    const int row = rowCount();
+    beginInsertRows(QModelIndex(), row, row);
 
-        std::unique_ptr<Category> category(new Category("Нова категорія"));
-        mCompositeComponent->addChild(std::move(category));
-        //this->insertRows(this->rowCount(), 1);
+    std::unique_ptr<Component> component;
+    if (type == CATEGORY)
+        component.reset(new Category("Нова категорія"));
+    else if (type == TEST)
+        component.reset(new Test("Новий  тест"));
+    else
+        assert(false && "Unknown type");
 
-        endInsertRows();
-    }
-
-    if(type == TEST)
-    {
-        const int row = rowCount();
-        beginInsertRows(QModelIndex(), row, row);
-        std::unique_ptr<Test> test(new Test("Новий  тест"));
-        mCompositeComponent->addChild(std::move(test));
-        //this->insertRows(this->rowCount(), 1);
-        endInsertRows();
-    }
+    mCompositeComponent->addChild(std::move(component));
+    endInsertRows();
 }
 
-bool TableModel::addComponent(Type type)
+bool TableModel::openComponent(Type type)
 {
-    if(type  == CATEGORY)
-    {
-        return true;
-    }
-
-    if(type == TEST)
-    {
-        return false;
-    }
+    return type == CATEGORY;
 }

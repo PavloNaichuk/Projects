@@ -29,6 +29,7 @@ private slots:
     void addTest();
 
 
+
 private:
     MainWidget* mMainWidget;
     StudentEnterMenuWidget* mStudentEnterMenuWidget;
