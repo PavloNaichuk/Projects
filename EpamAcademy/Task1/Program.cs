@@ -28,6 +28,16 @@ namespace Task1
             Console.WriteLine($"matrix1:{matrix1}");
             Console.WriteLine($"matrix3:{matrix3}");
 
+            float[] polmas1 = { 5, 3, -2, 1 };
+            float[] polmas2 = { 6, 0, -1, 0, 1 };
+
+            Polynomial pol1 = new Polynomial(polmas1);
+            Polynomial pol2 = new Polynomial(polmas2);
+
+            Polynomial pol3 = pol1 - pol2;
+            for (int index = 0; index < pol3.CoefficientCount; ++index)
+                Console.WriteLine($"Pol3:{ pol3} *X ^({index})");
+
             Console.ReadKey();
         }
     }
