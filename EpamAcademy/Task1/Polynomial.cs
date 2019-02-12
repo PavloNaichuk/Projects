@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task1
 {
-    class Polynomial
+    public class Polynomial
     {
         float[] mCoeffs;
 
@@ -52,17 +52,13 @@ namespace Task1
                 throw new ArgumentNullException("pol2", "Parameter is null");
 
             int maxCoeffCount = Math.Max(pol1.CoefficientCount, pol2.CoefficientCount);
-            int minCoeffCount = Math.Min(pol1.CoefficientCount, pol2.CoefficientCount);
-
             Polynomial pol = new Polynomial(maxCoeffCount);
 
-            for (int index = 0; index < minCoeffCount; ++index)
-                pol[index] = pol1[index] + pol2[index];
-
-            Polynomial maxCoeffCountPol = (maxCoeffCount == pol2.CoefficientCount) ? pol2 : pol1;
-                
-            for (int index = minCoeffCount; index < maxCoeffCount; ++index)
-                pol[index] = maxCoeffCountPol[index];
+            for (int index = 0; index < pol1.CoefficientCount; ++index)
+                pol[index] = pol1[index];
+            
+            for (int index = 0; index < pol2.CoefficientCount; ++index)
+                pol[index] += pol2[index];
 
             return pol;
         }
@@ -76,27 +72,56 @@ namespace Task1
                 throw new ArgumentNullException("pol2", "Parameter is null");
 
             int maxCoeffCount = Math.Max(pol1.CoefficientCount, pol2.CoefficientCount);
-            int minCoeffCount = Math.Min(pol1.CoefficientCount, pol2.CoefficientCount);
-
             Polynomial pol = new Polynomial(maxCoeffCount);
 
-            for (int index = 0; index < minCoeffCount; ++index)
-                pol[index] = pol1[index] - pol2[index];
+            for (int index = 0; index < pol1.CoefficientCount; ++index)
+                pol[index] = pol1[index];
 
-            for (int index = minCoeffCount; index < pol2.CoefficientCount; ++index)
-                pol[index] = -pol2[index];
+            for (int index = 0; index < pol2.CoefficientCount; ++index)
+                pol[index] -= pol2[index];
 
             return pol;
         }
 
-        /*public static Polynomial operator *(Polynomial pol1, Polynomial pol2)
+        public static Polynomial operator *(Polynomial pol1, Polynomial pol2)
         {
-            return Polynomial(6)
-        }*/
+            if (pol1 == null)
+                throw new ArgumentNullException("pol1", "Parameter is null");
+
+            if (pol2 == null)
+                throw new ArgumentNullException("pol2", "Parameter is null");
+
+            Polynomial pol = new Polynomial(pol1.Degree + pol2.Degree + 1);
+
+            for (int index1 = 0; index1 < pol1.CoefficientCount; ++index1)
+            {
+                for (int index2 = 0; index2 < pol2.CoefficientCount; ++index2)
+                    pol[index1 + index2] += pol1[index1] * pol2[index2];
+            }
+            return pol;
+        }
 
         public override string ToString()
         {
             return string.Format("Coefficients:*" + string.Join(";*", mCoeffs));
+        }
+
+        public static bool AreEqual(float value1, float value2)
+        {
+            return (Math.Abs(value1 - value2) < 0.000001f);
+        }
+
+        public static bool AreEqual(Polynomial pol1, Polynomial pol2)
+        {
+            if (pol1.CoefficientCount != pol2.CoefficientCount)
+                return false;
+
+            for (int index = 0; index < pol1.CoefficientCount; ++index)
+            {
+                if (!AreEqual(pol1[index], pol2[index]))
+                    return false;
+            }
+            return true;
         }
     }
 }

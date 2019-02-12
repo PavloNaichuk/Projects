@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Task1
 {
     [Serializable]
-    class Matrix : ISerializable
+    public class Matrix : ISerializable
     {
         private float[,] mValues;
         private int mRowCount;
