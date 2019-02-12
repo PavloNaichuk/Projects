@@ -17,6 +17,9 @@ namespace Task1
             Matrix matrix2 = new Matrix(mas2);
 
             Matrix matplus = matrix1 + matrix2;
+
+            Console.WriteLine($"MatPlus:{matplus}");
+
             MatrixSerializator.Serialize("matrix.dat", matrix1);
             Console.WriteLine($"RowCount:{matrix1.RowCount}");
             Console.WriteLine($"ColumnCount:{matrix1.ColumnCount}");

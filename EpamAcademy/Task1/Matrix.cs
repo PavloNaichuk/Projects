@@ -186,6 +186,22 @@ namespace Task1
             info.AddValue("mColumnCount", mColumnCount);
             info.AddValue("mValues", mValues, typeof(float[,]));
         }
+
+        public static bool AreEqual(Matrix mat1, Matrix mat2)
+        {
+            if ((mat1.mColumnCount != mat2.mColumnCount) || (mat1.mRowCount != mat2.mRowCount))
+                return false;
+
+            for (int row = 0; row < mat1.mRowCount; ++row)
+            {
+                for (int column = 0; column < mat1.mColumnCount; ++column)
+                {
+                    if (!Helpers.AreEqual(mat1.mValues[row, column], mat2.mValues[row, column]))
+                        return false;
+                }
+            }
+            return true;
+        }
     }
 }
 

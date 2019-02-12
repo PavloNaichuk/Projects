@@ -106,11 +106,6 @@ namespace Task1
             return string.Format("Coefficients:*" + string.Join(";*", mCoeffs));
         }
 
-        public static bool AreEqual(float value1, float value2)
-        {
-            return (Math.Abs(value1 - value2) < 0.000001f);
-        }
-
         public static bool AreEqual(Polynomial pol1, Polynomial pol2)
         {
             if (pol1.CoefficientCount != pol2.CoefficientCount)
@@ -118,7 +113,7 @@ namespace Task1
 
             for (int index = 0; index < pol1.CoefficientCount; ++index)
             {
-                if (!AreEqual(pol1[index], pol2[index]))
+                if (!Helpers.AreEqual(pol1[index], pol2[index]))
                     return false;
             }
             return true;
