@@ -165,6 +165,21 @@ namespace Task1
              return newMat;
         }
 
+        public float[,] ToArray(Matrix mat)
+        {
+            float[,] array = new float[mat.mRowCount, mat.mColumnCount];
+
+            for (int row = 0; row < mat.mRowCount; ++row)
+            {
+                for (int column = 0; column < mat.mColumnCount; ++column)
+                {
+                    array[row, column] = mat.mValues[row, column];
+                }
+            }
+            return array;
+        }
+
+
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();

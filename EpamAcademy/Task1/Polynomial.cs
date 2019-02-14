@@ -15,6 +15,9 @@ namespace Task1
             if (coeffs == null)
                 throw new ArgumentNullException("coeffs", "Parameter is null");
 
+            if (coeffs.Length == 0)
+                throw new ArgumentException("Coefficeint count is expected to be greater than 0", "coeffs");
+
             mCoeffs = new float[coeffs.Length];
             for (int index = 0; index < coeffs.Length; ++index)
                 mCoeffs[index] = coeffs[index];
@@ -22,6 +25,9 @@ namespace Task1
 
         public Polynomial(int coeffCount)
         {
+            if (coeffCount <= 0)
+                throw new ArgumentException("Coefficeint count is expected to be greater than 0", "coeffCount");
+
             mCoeffs = new float[coeffCount];
             for (int index = 0; index < coeffCount; ++index)
                 mCoeffs[index] = 0;
@@ -60,6 +66,7 @@ namespace Task1
             for (int index = 0; index < pol2.CoefficientCount; ++index)
                 pol[index] += pol2[index];
 
+            pol.RemoveTrailingZeroCoefficients();
             return pol;
         }
 
@@ -80,6 +87,7 @@ namespace Task1
             for (int index = 0; index < pol2.CoefficientCount; ++index)
                 pol[index] -= pol2[index];
 
+            pol.RemoveTrailingZeroCoefficients();
             return pol;
         }
 
@@ -98,7 +106,30 @@ namespace Task1
                 for (int index2 = 0; index2 < pol2.CoefficientCount; ++index2)
                     pol[index1 + index2] += pol1[index1] * pol2[index2];
             }
+
+            pol.RemoveTrailingZeroCoefficients();
             return pol;
+        }
+
+        public void RemoveTrailingZeroCoefficients()
+        {
+            int lastNonZeroIndex = mCoeffs.Length;
+            while (lastNonZeroIndex > 0)
+            {
+                --lastNonZeroIndex;
+                if (!Helpers.AreEqual(mCoeffs[lastNonZeroIndex], 0.0f))
+                    break;
+            }
+
+            int newCoeffCount = lastNonZeroIndex + 1;
+            if (newCoeffCount == mCoeffs.Length)
+                return;
+
+            float[] newCoeffs = new float[newCoeffCount];
+            for (int index = 0; index < newCoeffCount; ++index)
+                newCoeffs[index] = mCoeffs[index];
+
+            mCoeffs = newCoeffs;
         }
 
         public override string ToString()

@@ -10,9 +10,30 @@ namespace UnitTests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Expected ArgumentNullException")]
-        public void TestNullArgument()
+        public void TestPolynomCreation1()
         {
             Polynomial pol = new Polynomial(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "Expected ArgumentException")]
+        public void TestPolynomCreation2()
+        {
+            Polynomial pol = new Polynomial(new float[] { });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "Expected ArgumentException")]
+        public void TestPolynomCreation3()
+        {
+            Polynomial pol = new Polynomial(-3);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "Expected ArgumentException")]
+        public void TestPolynomCreation4()
+        {
+            Polynomial pol = new Polynomial(0);
         }
 
         [TestMethod]
@@ -46,7 +67,7 @@ namespace UnitTests
         [ExpectedException(typeof(ArgumentNullException), "Expected ArgumentNullException")]
         public void TestSubtractionNullArgument2()
         {
-            Polynomial pol1 = new Polynomial(new float[] { 4, 3, -1, 0,8 });
+            Polynomial pol1 = new Polynomial(new float[] { 4, 3, -1, 0, 8 });
             Polynomial pol2 = null;
             Polynomial pol3 = pol1 - pol2;
         }
@@ -73,7 +94,7 @@ namespace UnitTests
         public void TestAddition1()
         {
             Polynomial pol1 = new Polynomial(new float[] { 1, -1, 3, 0, 1 });
-            Polynomial pol2 = new Polynomial(new float[] { 6, 2, 2, 1});
+            Polynomial pol2 = new Polynomial(new float[] { 6, 2, 2, 1 });
             Polynomial pol3 = pol1 + pol2;
 
             Polynomial pol4 = new Polynomial(new float[] { 7, 1, 5, 1, 1 });
@@ -83,7 +104,7 @@ namespace UnitTests
         [TestMethod]
         public void TestAddition2()
         {
-            Polynomial pol1 = new Polynomial(new float[] { 6, 2, 0, 2});
+            Polynomial pol1 = new Polynomial(new float[] { 6, 2, 0, 2 });
             Polynomial pol2 = new Polynomial(new float[] { 1, -1, 3, 0, 1 });
             Polynomial pol3 = pol1 + pol2;
 
@@ -94,7 +115,7 @@ namespace UnitTests
         [TestMethod]
         public void TestAddition3()
         {
-            Polynomial pol1 = new Polynomial(new float[] { 1, -1, 3});
+            Polynomial pol1 = new Polynomial(new float[] { 1, -1, 3 });
             Polynomial pol2 = new Polynomial(new float[] { 6, 2, 4 });
             Polynomial pol3 = pol1 + pol2;
 
@@ -106,7 +127,7 @@ namespace UnitTests
         public void TestSubtraction1()
         {
             Polynomial pol1 = new Polynomial(new float[] { 1, -3, 2, 0, 1 });
-            Polynomial pol2 = new Polynomial(new float[] { 6, 2, 4});
+            Polynomial pol2 = new Polynomial(new float[] { 6, 2, 4 });
             Polynomial pol3 = pol1 - pol2;
 
             Polynomial pol4 = new Polynomial(new float[] { -5, -5, -2, 0, 1 });
@@ -117,7 +138,7 @@ namespace UnitTests
         public void TestSubtraction2()
         {
             Polynomial pol1 = new Polynomial(new float[] { 6, 2, 0, 2 });
-            Polynomial pol2 = new Polynomial(new float[] { 3, 5, 6, 3, 3});
+            Polynomial pol2 = new Polynomial(new float[] { 3, 5, 6, 3, 3 });
             Polynomial pol3 = pol1 - pol2;
 
             Polynomial pol4 = new Polynomial(new float[] { 3, -3, -6, -1, -3 });
@@ -131,7 +152,7 @@ namespace UnitTests
             Polynomial pol2 = new Polynomial(new float[] { 6, 2, 4 });
             Polynomial pol3 = pol1 - pol2;
 
-            Polynomial pol4 = new Polynomial(new float[] { -5, -3, -1});
+            Polynomial pol4 = new Polynomial(new float[] { -5, -3, -1 });
             Assert.IsTrue(Polynomial.AreEqual(pol3, pol4));
         }
 
@@ -139,21 +160,21 @@ namespace UnitTests
         public void TestProduct1()
         {
             Polynomial pol1 = new Polynomial(new float[] { 1, 3, 2 });
-            Polynomial pol2 = new Polynomial(new float[] {-6, 2});
+            Polynomial pol2 = new Polynomial(new float[] { -6, 2 });
             Polynomial pol3 = pol1 * pol2;
 
-            Polynomial pol4 = new Polynomial(new float[] {-6, -16, -6, 4});
+            Polynomial pol4 = new Polynomial(new float[] { -6, -16, -6, 4 });
             Assert.IsTrue(Polynomial.AreEqual(pol3, pol4));
         }
 
         [TestMethod]
         public void TestProduct2()
         {
-            Polynomial pol1 = new Polynomial(new float[] { -5, 0});
+            Polynomial pol1 = new Polynomial(new float[] { -5, 0 });
             Polynomial pol2 = new Polynomial(new float[] { 1, 0, 2 });
             Polynomial pol3 = pol1 * pol2;
 
-            Polynomial pol4 = new Polynomial(new float[] { -5, 0, -10, 0});
+            Polynomial pol4 = new Polynomial(new float[] { -5, 0, -10});
             Assert.IsTrue(Polynomial.AreEqual(pol3, pol4));
         }
 
@@ -161,11 +182,51 @@ namespace UnitTests
         public void TestProduct3()
         {
             Polynomial pol1 = new Polynomial(new float[] { 1, 4 });
-            Polynomial pol2 = new Polynomial(new float[] { 2, 3});
+            Polynomial pol2 = new Polynomial(new float[] { 2, 3 });
             Polynomial pol3 = pol1 * pol2;
 
             Polynomial pol4 = new Polynomial(new float[] { 2, 11, 12 });
             Assert.IsTrue(Polynomial.AreEqual(pol3, pol4));
+        }
+
+        [TestMethod]
+        public void TestRemoveTrailingZeroCoefficients1()
+        {
+            Polynomial pol1 = new Polynomial(new float[] { 2, 4, 3, 0 });
+            pol1.RemoveTrailingZeroCoefficients();
+
+            Polynomial pol2 = new Polynomial(new float[] { 2, 4, 3 });
+            Assert.IsTrue(Polynomial.AreEqual(pol1, pol2));
+        }
+
+        [TestMethod]
+        public void TestRemoveTrailingZeroCoefficients2()
+        {
+            Polynomial pol1 = new Polynomial(new float[] { 0, 0, 0, 0 });
+            pol1.RemoveTrailingZeroCoefficients();
+
+            Polynomial pol2 = new Polynomial(new float[] { 0 });
+            Assert.IsTrue(Polynomial.AreEqual(pol1, pol2));
+        }
+
+        [TestMethod]
+        public void TestRemoveTrailingZeroCoefficients3()
+        {
+            Polynomial pol1 = new Polynomial(new float[] { 1, 2, 0, 0 });
+            pol1.RemoveTrailingZeroCoefficients();
+
+            Polynomial pol2 = new Polynomial(new float[] { 1, 2 });
+            Assert.IsTrue(Polynomial.AreEqual(pol1, pol2));
+        }
+
+        [TestMethod]
+        public void TestRemoveTrailingZeroCoefficients4()
+        {
+            Polynomial pol1 = new Polynomial(new float[] { 0 });
+            pol1.RemoveTrailingZeroCoefficients();
+
+            Polynomial pol2 = new Polynomial(new float[] { 0 });
+            Assert.IsTrue(Polynomial.AreEqual(pol1, pol2));
         }
     }
 
@@ -251,13 +312,14 @@ namespace UnitTests
         [TestMethod]
         public void TestAddition()
         {
-            Matrix mat1 = new Matrix(new float[,] { { 2.0f, 1.0f, 2.0f}, { 3.0f, 4.0f, 3.0f }, { 4.0f, 1.0f, 2.0f} });
+            Matrix mat1 = new Matrix(new float[,] { { 2.0f, 1.0f, 2.0f }, { 3.0f, 4.0f, 3.0f }, { 4.0f, 1.0f, 2.0f } });
             Matrix mat2 = new Matrix(new float[,] { { 2.0f, 1.0f, 2.0f }, { 4.0f, 1.0f, 3.0f }, { 1.0f, 2.0f, 2.0f } });
             Matrix mat3 = mat1 + mat2;
 
             Matrix mat4 = new Matrix(new float[,] { { 4.0f, 2.0f, 4.0f }, { 7.0f, 5.0f, 6.0f }, { 5.0f, 3.0f, 4.0f } });
             Assert.IsTrue(Matrix.AreEqual(mat3, mat4));
         }
+
         [TestMethod]
         public void TestSubtraction()
         {
@@ -276,7 +338,7 @@ namespace UnitTests
             Matrix mat2 = new Matrix(new float[,] { { 4.0f, 2.0f }, { 5.0f, 2.0f } });
             Matrix mat3 = mat1 * mat2;
 
-            Matrix mat4 = new Matrix(new float[,] { { 22.0f, 10.0f}, { 39.0f, 16.0f } });
+            Matrix mat4 = new Matrix(new float[,] { { 22.0f, 10.0f }, { 39.0f, 16.0f } });
             Assert.IsTrue(Matrix.AreEqual(mat3, mat4));
         }
 
@@ -305,6 +367,12 @@ namespace UnitTests
             Matrix mat1 = new Matrix(new float[,] { { 4.0f, 3.0f, 1.7f }, { 4.0f, 3.0f, 2.7f } });
             Matrix mat2 = new Matrix(new float[,] { { 4.0f, 3.0f, 1.7f, 2.5f }, { 4.0f, 3.0f, 2.7f, 6.7f } });
             Matrix mat3 = mat1 * mat2;
+        }
+
+        [TestMethod]
+        public void TestMatrixConvertToArray()
+        {
+            Matrix mat1 = new Matrix(new float[,] { { 3.0f, 2.0f }, { 1.0f, 7.0f } });
         }
     }
 }

@@ -30,6 +30,11 @@ namespace Task1
 
             Console.WriteLine($"matrix1:{matrix1}");
             Console.WriteLine($"matrix3:{matrix3}");
+
+            Polynomial pol1 = new Polynomial(new float[] { 2, 1, -2, 0 });
+            pol1.RemoveTrailingZeroCoefficients();
+            Console.WriteLine($"Pol1:{pol1}");
+
             Console.ReadKey();
         }
     }
