@@ -89,7 +89,7 @@ namespace Task1
                 throw new ArgumentNullException("mat2", "Parameter is null");
 
             if ((mat1.mColumnCount != mat2.mColumnCount) || (mat1.mRowCount != mat2.mRowCount))
-                throw new ArgumentException("The matrix is incompartible", "mat2");
+                throw new IncompartibleMatrixException("The matrix is incompartible", "mat2");
 
             Matrix newMat = new Matrix(mat1.mRowCount, mat1.mColumnCount);
             for (int row = 0; row < mat1.mRowCount; ++row)

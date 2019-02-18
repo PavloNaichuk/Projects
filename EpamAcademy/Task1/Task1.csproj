@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers.cs" />
+    <Compile Include="IncompartibleMatrixException.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Polynomial.cs" />
     <Compile Include="Program.cs" />

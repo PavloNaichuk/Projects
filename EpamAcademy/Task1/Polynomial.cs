@@ -134,7 +134,7 @@ namespace Task1
 
         public override string ToString()
         {
-            return string.Format("Coefficients:*" + string.Join(";*", mCoeffs));
+             return string.Format("Coefficients:*" + string.Join(";*", mCoeffs));
         }
 
         public static bool AreEqual(Polynomial pol1, Polynomial pol2)

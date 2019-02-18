@@ -368,11 +368,5 @@ namespace UnitTests
             Matrix mat2 = new Matrix(new float[,] { { 4.0f, 3.0f, 1.7f, 2.5f }, { 4.0f, 3.0f, 2.7f, 6.7f } });
             Matrix mat3 = mat1 * mat2;
         }
-
-        [TestMethod]
-        public void TestMatrixConvertToArray()
-        {
-            Matrix mat1 = new Matrix(new float[,] { { 3.0f, 2.0f }, { 1.0f, 7.0f } });
-        }
     }
 }
