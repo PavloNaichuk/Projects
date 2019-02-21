@@ -56,6 +56,35 @@ namespace Task2
             return false;
         }
 
+        public bool Find(Key key, out Value foundValue)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key", "Parameter is null");
+
+            Node<Key, Value> currentNode = mRootNode;
+            while (currentNode != null)
+            {
+                int compResult = key.CompareTo(currentNode.mKey);
+                if (compResult > 0)
+                    currentNode = currentNode.mRightNode;
+                else if (compResult < 0)
+                    currentNode = currentNode.mLeftNode;
+                else
+                    break;
+            }
+
+            if (currentNode == null)
+            {
+                foundValue = default(Value);
+                return false;
+            }
+            else
+            {
+                foundValue = currentNode.mValue;
+                return true;
+            }
+        }
+
         public void Remove(Key key, Value value)
         {
             if (key == null)

@@ -14,8 +14,15 @@ namespace Task2
             binaryTree.Insert(12, 5);
             binaryTree.Insert(17, 2);
            
-    
             Console.WriteLine($"{ binaryTree.ToString()}");
+
+            int foundValue;
+            bool found = binaryTree.Find(64, out foundValue);
+            Console.WriteLine($"Found:{ found}");
+            Console.WriteLine($"Found value :{ foundValue}");
+
+
+
             Console.ReadKey();
         }
     }
