@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task1
 {
-    class IncompartibleMatrixException : ArgumentException
+    public class IncompartibleMatrixException : ArgumentException
     {
         public IncompartibleMatrixException(string message, string paramName) 
             : base(message)

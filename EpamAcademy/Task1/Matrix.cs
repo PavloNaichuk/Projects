@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Task1
 {
@@ -109,7 +106,7 @@ namespace Task1
                 throw new ArgumentNullException("mat2", "Parameter is null");
 
             if ((mat1.mColumnCount != mat2.mColumnCount) || (mat1.mRowCount != mat2.mRowCount))
-                throw new ArgumentException("The matrix is incompartible", "mat2");
+                throw new IncompartibleMatrixException("The matrix is incompartible", "mat2");
 
             Matrix newMat = new Matrix(mat1.mRowCount, mat1.mColumnCount);
             for (int row = 0; row < mat1.mRowCount; ++row)
@@ -148,7 +145,7 @@ namespace Task1
                 throw new ArgumentNullException("mat2", "Parameter is null");
 
             if (mat1.mColumnCount != mat2.mRowCount)
-                throw new ArgumentException("The matrix is incompartible", "mat2");
+                throw new IncompartibleMatrixException("The matrix is incompartible", "mat2");
 
             Matrix newMat = new Matrix(mat1.mRowCount, mat2.mColumnCount);
             for (int row = 0; row < mat1.mRowCount; ++row)
@@ -165,16 +162,14 @@ namespace Task1
              return newMat;
         }
 
-        public float[,] ToArray(Matrix mat)
+        public float[,] ToArray()
         {
-            float[,] array = new float[mat.mRowCount, mat.mColumnCount];
+            float[,] array = new float[mRowCount, mColumnCount];
 
-            for (int row = 0; row < mat.mRowCount; ++row)
+            for (int row = 0; row < mRowCount; ++row)
             {
-                for (int column = 0; column < mat.mColumnCount; ++column)
-                {
-                    array[row, column] = mat.mValues[row, column];
-                }
+                for (int column = 0; column < mColumnCount; ++column)
+                    array[row, column] = mValues[row, column];
             }
             return array;
         }
