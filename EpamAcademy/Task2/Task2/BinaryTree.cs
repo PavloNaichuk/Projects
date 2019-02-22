@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Task2
 {
@@ -7,18 +8,27 @@ namespace Task2
         where Key : IComparable
     {
         private Node<Key, Value> mRootNode;
+        private int mNodeCount;
 
         public BinaryTree()
         {
             mRootNode = null;
+            mNodeCount = 0;
         }
 
-        public bool Insert(Key key, Value value)
+        public int NodeCount
+        {
+            get { return mNodeCount; }
+        }
+
+        public bool InsertNode(Key key, Value value)
         {
             if (key == null)
                 throw new ArgumentNullException("key", "Parameter is null");
             if (value == null)
                 throw new ArgumentNullException("value", "Parameter is null");
+
+            ++mNodeCount;
 
             if (mRootNode == null)
             {
@@ -56,7 +66,7 @@ namespace Task2
             return false;
         }
 
-        public bool Find(Key key, out Value foundValue)
+        public Node<Key, Value> FindNode(Key key)
         {
             if (key == null)
                 throw new ArgumentNullException("key", "Parameter is null");
@@ -72,53 +82,44 @@ namespace Task2
                 else
                     break;
             }
+            return currentNode;
+        }
 
-            if (currentNode == null)
-            {
-                foundValue = default(Value);
-                return false;
-            }
+        public void RemoveNode(Node<Key, Value> node)
+        {
+            if (node == null)
+                return;
+
+            --mNodeCount;
+
+            if (node.mLeftNode == null)
+                ReplaceNode(node, node.mRightNode);
+            else if (node.mRightNode == null)
+                ReplaceNode(node, node.mLeftNode);
             else
             {
-                foundValue = currentNode.mValue;
-                return true;
+                Node<Key, Value> minNode = FindMinNode(node.mRightNode);
+                if (minNode.mParentNode != node)
+                {
+                    ReplaceNode(minNode, minNode.mRightNode);
+                    minNode.mRightNode = node.mRightNode;
+                    minNode.mRightNode.mParentNode = minNode;
+                }
+                ReplaceNode(node, minNode);
+                minNode.mLeftNode = node.mLeftNode;
+                minNode.mLeftNode.mParentNode = minNode;
             }
         }
 
-        public void Remove(Key key, Value value)
+        public void RemoveNode(Key key)
         {
-            if (key == null)
-                throw new ArgumentNullException("key", "Parameter is null");
-            if (value == null)
-                throw new ArgumentNullException("value", "Parameter is null");
-
-            if (mRootNode == null)
-            {
-                return;
-            }
-
-            Node<Key, Value> currentNode = mRootNode;
-            Node<Key, Value> parentNode = currentNode;
-
-            int compResult = key.CompareTo(currentNode.mKey);
-            while (currentNode != null)
-            {
-                if (compResult > 0)
-                {
-                    
-                }
-                else if (compResult < 0)
-                {
-                    
-                }
-                else
-                {
-                    currentNode = null;
-                }
-            }
-
+            RemoveNode(FindNode(key));
         }
 
+        public override string ToString()
+        {
+            return BuildString(mRootNode);
+        }
 
         private string BuildString(Node<Key, Value> node)
         {
@@ -132,41 +133,26 @@ namespace Task2
             return left + current + right;
         }
 
-        public override string ToString()
+        private Node<Key, Value> FindMinNode(Node<Key, Value> rootNode)
         {
-            return BuildString(mRootNode);
+            Node<Key, Value> currentNode = rootNode;
+            while (currentNode.mLeftNode != null)
+                currentNode = currentNode.mLeftNode;
+
+            return currentNode;
         }
 
-        private class Node<Key, Value>
+        private void ReplaceNode(Node<Key, Value> oldNode, Node<Key, Value> newNode)
         {
-            public Key mKey;
-            public Value mValue;
-            public Node<Key, Value> mParentNode;
-            public Node<Key, Value> mLeftNode;
-            public Node<Key, Value> mRightNode;
+            if (oldNode.mParentNode == null)
+                mRootNode = newNode;
+            else if (oldNode == oldNode.mParentNode.mLeftNode)
+                oldNode.mParentNode.mLeftNode = newNode;
+            else
+                oldNode.mParentNode.mRightNode = newNode;
 
-            public Node(Key key, Value value, Node<Key, Value> parentNode, Node<Key, Value> leftNode, Node<Key, Value> rightNode)
-            {
-                mKey = key;
-                mValue = value;
-                mParentNode = parentNode;
-                mLeftNode = leftNode;
-                mRightNode = rightNode;
-            }
-
-            public Node(Key key, Value value, Node<Key, Value> parentNode)
-                : this(key, value, parentNode, null, null)
-            {
-            }
-
-            public override string ToString()
-            {
-                return string.Format("[pk:{0}, k:{1}, lk:{2}, rk:{3}]",
-                     (mParentNode != null) ? mParentNode.mKey.ToString() : "null",
-                     mKey.ToString(),
-                     (mLeftNode != null) ? mLeftNode.mKey.ToString() : "null",
-                     (mRightNode != null) ? mRightNode.mKey.ToString() : "null");
-            }
+            if (newNode != null)
+                newNode.mParentNode = oldNode.mParentNode;
         }
     }
 
