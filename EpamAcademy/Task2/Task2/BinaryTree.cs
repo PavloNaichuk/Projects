@@ -28,14 +28,6 @@ namespace Task2
             if (value == null)
                 throw new ArgumentNullException("value", "Parameter is null");
 
-            ++mNodeCount;
-
-            if (mRootNode == null)
-            {
-                mRootNode = new Node<Key, Value>(key, value, null);
-                return true;
-            }
-
             Node<Key, Value> parentNode = null;
             int compResult = 0;
             for (Node<Key, Value> currentNode = mRootNode; currentNode != null; )
@@ -51,19 +43,23 @@ namespace Task2
                     currentNode = null;
             }
 
-            if (compResult > 0)
+            if ((parentNode != null) && (compResult == 0))
             {
-                parentNode.mRightNode = new Node<Key, Value>(key, value, parentNode);
-                return true;
-            }
-            if (compResult < 0)
-            {
-                parentNode.mLeftNode = new Node<Key, Value>(key, value, parentNode);
-                return true;
+                /*Key already exists. Simply return. No duplicates allowed.*/
+                return false;
             }
 
-            /*Key already exists. Simply return. No duplicates allowed.*/
-            return false;
+            Node<Key, Value> newNode = new Node<Key, Value>(key, value, parentNode);
+            ++mNodeCount;
+
+            if (parentNode == null)
+                mRootNode = newNode;
+            else if (compResult > 0)
+                parentNode.mRightNode = newNode;
+            else
+                parentNode.mLeftNode = newNode;
+
+            return true;
         }
 
         public Node<Key, Value> FindNode(Key key)
