@@ -30,9 +30,10 @@ namespace Task2
 
         public override string ToString()
         {
-            return string.Format("[pk:{0}, k:{1}, lk:{2}, rk:{3}]",
+            return string.Format("[pk:{0}, k:{1}, v:{2}, lk:{3}, rk:{4}]",
                  (mParentNode != null) ? mParentNode.mKey.ToString() : "null",
                  mKey.ToString(),
+                 mValue.ToString(),
                  (mLeftNode != null) ? mLeftNode.mKey.ToString() : "null",
                  (mRightNode != null) ? mRightNode.mKey.ToString() : "null");
         }
