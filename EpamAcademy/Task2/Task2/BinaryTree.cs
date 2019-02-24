@@ -94,17 +94,41 @@ namespace Task2
                 ReplaceNode(node, node.mLeftNode);
             else
             {
-                Node<Key, Value> minNode = FindMinNode(node.mRightNode);
-                if (minNode.mParentNode != node)
+                Node<Key, Value> successorNode = FindMinNode(node.mRightNode);
+                if (successorNode.mParentNode != node)
                 {
-                    ReplaceNode(minNode, minNode.mRightNode);
-                    minNode.mRightNode = node.mRightNode;
-                    minNode.mRightNode.mParentNode = minNode;
+                    ReplaceNode(successorNode, successorNode.mRightNode);
+                    successorNode.mRightNode = node.mRightNode;
+                    successorNode.mRightNode.mParentNode = successorNode;
                 }
-                ReplaceNode(node, minNode);
-                minNode.mLeftNode = node.mLeftNode;
-                minNode.mLeftNode.mParentNode = minNode;
+                ReplaceNode(node, successorNode);
+                successorNode.mLeftNode = node.mLeftNode;
+                successorNode.mLeftNode.mParentNode = successorNode;
             }
+        }
+
+        public Node<Key, Value> FindMinNode(Node<Key, Value> rootNode)
+        {
+            Node<Key, Value> currentNode = rootNode;
+            while (currentNode.mLeftNode != null)
+                currentNode = currentNode.mLeftNode;
+
+            return currentNode;
+        }
+
+        public Node<Key, Value> FindSuccessorNode(Node<Key, Value> node)
+        {
+            if (node.mRightNode != null)
+                return FindMinNode(node.mRightNode);
+
+            Node<Key, Value> successorNode = node.mParentNode;
+            while ((successorNode != null) && (node == successorNode.mRightNode))
+            {
+                node = successorNode;
+                successorNode = successorNode.mParentNode;
+            }
+
+            return successorNode;
         }
 
         public void RemoveNode(Key key)
@@ -127,15 +151,6 @@ namespace Task2
             string right = BuildString(node.mRightNode);
 
             return left + current + right;
-        }
-
-        private Node<Key, Value> FindMinNode(Node<Key, Value> rootNode)
-        {
-            Node<Key, Value> currentNode = rootNode;
-            while (currentNode.mLeftNode != null)
-                currentNode = currentNode.mLeftNode;
-
-            return currentNode;
         }
 
         private void ReplaceNode(Node<Key, Value> oldNode, Node<Key, Value> newNode)

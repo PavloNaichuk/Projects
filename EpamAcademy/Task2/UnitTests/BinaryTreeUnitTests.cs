@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Task2;
@@ -75,11 +75,133 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void TestRemoveNodeNullArgument()
+        public void TestEmptyTree()
         {
             BinaryTree<string, string> binaryTree = new BinaryTree<string, string>();
-            Node<string, string> node = new Node<string, string>(null, null, null);
-            binaryTree.RemoveNode(node);
+            Assert.AreEqual(0, binaryTree.NodeCount);
+        }
+
+        [TestMethod]
+        public void TestRemoveNode_NoСhildren1()
+        {
+            BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
+            binaryTree.InsertNode(20, 2);
+            binaryTree.InsertNode(15, 6);
+            binaryTree.InsertNode(25, 6);
+
+            binaryTree.RemoveNode(15);
+            Assert.IsNull(binaryTree.FindNode(15));
+            Assert.AreEqual(2, binaryTree.NodeCount);
+        }
+
+        [TestMethod]
+        public void TestRemoveNode_NoСhildren2()
+        {
+            BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
+            binaryTree.InsertNode(20, 2);
+            binaryTree.InsertNode(15, 6);
+            binaryTree.InsertNode(25, 4);
+
+            binaryTree.RemoveNode(25);
+            Assert.IsNull(binaryTree.FindNode(25));
+            Assert.AreEqual(2, binaryTree.NodeCount);
+        }
+
+
+        [TestMethod]
+        public void TestRemoveNode_NoRightChild()
+        {
+            BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
+            binaryTree.InsertNode(20, 2);
+            binaryTree.InsertNode(15, 6);
+            binaryTree.InsertNode(25, 8);
+            binaryTree.InsertNode(10, 3);
+
+            binaryTree.RemoveNode(15);
+            Assert.IsNull(binaryTree.FindNode(15));
+            Assert.AreEqual(3, binaryTree.NodeCount);
+        }
+
+        [TestMethod]
+        public void TestRemoveNode_NoLeftChild()
+        {
+            BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
+            binaryTree.InsertNode(20, 2);
+            binaryTree.InsertNode(15, 6);
+            binaryTree.InsertNode(25, 8);
+            binaryTree.InsertNode(28, 3);
+
+            binaryTree.RemoveNode(25);
+            Assert.IsNull(binaryTree.FindNode(25));
+            Assert.AreEqual(3, binaryTree.NodeCount);
+        }
+
+        [TestMethod]
+        public void TestRemove_TwoChildren1()
+        {
+            BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
+            binaryTree.InsertNode(2, 2);
+            binaryTree.InsertNode(1, 6);
+            binaryTree.InsertNode(4, 3);
+            binaryTree.InsertNode(3, 8);
+            binaryTree.InsertNode(5, 3);
+
+            binaryTree.RemoveNode(2);
+            Assert.IsNull(binaryTree.FindNode(2));
+            Assert.AreEqual(4, binaryTree.NodeCount);
+        }
+
+        [TestMethod]
+        public void TestRemove_TwoChildren2()
+        {
+            BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
+            binaryTree.InsertNode(2, 2);
+            binaryTree.InsertNode(1, 6);
+            binaryTree.InsertNode(4, 5);
+            binaryTree.InsertNode(3, 8);
+            binaryTree.InsertNode(5, 1);
+
+            binaryTree.RemoveNode(4);
+            Assert.IsNull(binaryTree.FindNode(4));
+            Assert.AreEqual(4, binaryTree.NodeCount);
+        }
+
+        [TestMethod]
+        public void TestFindMinNode()
+        {
+            BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
+            binaryTree.InsertNode(15, 1);
+            binaryTree.InsertNode(10, 2);
+            binaryTree.InsertNode(7, 3);
+            binaryTree.InsertNode(12, 4);
+            binaryTree.InsertNode(25, 5);
+            binaryTree.InsertNode(20, 6);
+
+            Assert.AreEqual(7, binaryTree.FindMinNode(binaryTree.FindNode(15)).mKey);
+            Assert.AreEqual(7, binaryTree.FindMinNode(binaryTree.FindNode(10)).mKey);
+            Assert.AreEqual(7, binaryTree.FindMinNode(binaryTree.FindNode(7)).mKey);
+            Assert.AreEqual(12, binaryTree.FindMinNode(binaryTree.FindNode(12)).mKey);
+            Assert.AreEqual(20, binaryTree.FindMinNode(binaryTree.FindNode(25)).mKey);
+            Assert.AreEqual(20, binaryTree.FindMinNode(binaryTree.FindNode(20)).mKey);
+        }
+
+        [TestMethod]
+        public void FindSuccessorNode()
+        {
+            BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
+            binaryTree.InsertNode(15, 1);
+            binaryTree.InsertNode(10, 2);
+            binaryTree.InsertNode(7, 3);
+            binaryTree.InsertNode(12, 4);
+            binaryTree.InsertNode(25, 5);
+            binaryTree.InsertNode(20, 6);
+
+            Assert.AreEqual(20, binaryTree.FindSuccessorNode(binaryTree.FindNode(15)).mKey);
+            Assert.AreEqual(12, binaryTree.FindSuccessorNode(binaryTree.FindNode(10)).mKey);
+            Assert.AreEqual(10, binaryTree.FindSuccessorNode(binaryTree.FindNode(7)).mKey);
+            Assert.AreEqual(15, binaryTree.FindSuccessorNode(binaryTree.FindNode(12)).mKey);
+            Assert.AreEqual(25, binaryTree.FindSuccessorNode(binaryTree.FindNode(20)).mKey);
+            Assert.IsNull(binaryTree.FindSuccessorNode(binaryTree.FindNode(25)));
         }
     }
 }
