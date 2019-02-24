@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Task2
 {
-    public class BinaryTree<Key, Value>
+    public class BinaryTree<Key, Value> : IEnumerable
         where Key : IComparable
     {
         private Node<Key, Value> mRootNode;
@@ -16,9 +17,23 @@ namespace Task2
             mNodeCount = 0;
         }
 
+        public Node<Key, Value> RootNode
+        {
+            get { return mRootNode; }
+        }
+
         public int NodeCount
         {
             get { return mNodeCount; }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return (IEnumerator)GetEnumerator();
+        }
+        public IEnumerator GetEnumerator()
+        {
+            return new NodeEnumerator(this);
         }
 
         public bool InsertNode(Key key, Value value)
@@ -109,6 +124,9 @@ namespace Task2
 
         public Node<Key, Value> FindMinNode(Node<Key, Value> rootNode)
         {
+            if (rootNode == null)
+                throw new ArgumentNullException("rootNode", "Parameter is null");
+
             Node<Key, Value> currentNode = rootNode;
             while (currentNode.mLeftNode != null)
                 currentNode = currentNode.mLeftNode;
@@ -118,6 +136,9 @@ namespace Task2
 
         public Node<Key, Value> FindSuccessorNode(Node<Key, Value> node)
         {
+            if (node == null)
+                throw new ArgumentNullException("node", "Parameter is null");
+
             if (node.mRightNode != null)
                 return FindMinNode(node.mRightNode);
 
@@ -165,8 +186,54 @@ namespace Task2
             if (newNode != null)
                 newNode.mParentNode = oldNode.mParentNode;
         }
+
+        private class NodeEnumerator : IEnumerator
+        {
+            private BinaryTree<Key, Value> mTree;
+            private Node<Key, Value> mCurrentNode;
+            private bool mHasBeenReset;
+
+            public NodeEnumerator(BinaryTree<Key, Value> tree)
+            {
+                mTree = tree;
+                Reset();
+            }
+
+            object IEnumerator.Current
+            {
+                get { return mCurrentNode; }
+            }
+
+            public Node<Key, Value> Current
+            {
+                get { return mCurrentNode; }
+            }
+
+            public bool MoveNext()
+            {
+                if (mHasBeenReset)
+                {
+                    if (mTree.RootNode != null)
+                        mCurrentNode = mTree.FindMinNode(mTree.RootNode);
+
+                    mHasBeenReset = false;
+                }
+                else if (mCurrentNode != null)
+                {
+                    mCurrentNode = mTree.FindSuccessorNode(mCurrentNode);
+                }
+                return (mCurrentNode != null);
+            }
+
+            public void Reset()
+            {
+                mCurrentNode = null;
+                mHasBeenReset = true;
+            }
+        }
     }
 
+    /*
     public class Test
     {
         string mName;
@@ -212,4 +279,5 @@ namespace Task2
             mDate = date;
         }
     }
+    */
 }
