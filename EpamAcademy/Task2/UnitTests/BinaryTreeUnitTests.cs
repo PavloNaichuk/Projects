@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Task2;
@@ -202,7 +204,6 @@ namespace UnitTests
             binaryTree.RemoveNode(4);
             binaryTree.RemoveNode(3);
             binaryTree.RemoveNode(5);
-
             Assert.AreEqual(0, binaryTree.NodeCount);
             Assert.IsNull(binaryTree.RootNode);
         }
@@ -243,6 +244,43 @@ namespace UnitTests
             Assert.AreEqual(15, binaryTree.FindSuccessorNode(binaryTree.FindNode(12)).mKey);
             Assert.AreEqual(25, binaryTree.FindSuccessorNode(binaryTree.FindNode(20)).mKey);
             Assert.IsNull(binaryTree.FindSuccessorNode(binaryTree.FindNode(25)));
+        }
+
+        [TestMethod]
+        public void TestEnumerator_EmptyTree()
+        {
+            BinaryTree<string, int> binaryTree = new BinaryTree<string, int>();
+
+            IEnumerator<Node<string, int>> enumerator = binaryTree.GetEnumerator();
+            Assert.IsFalse(enumerator.MoveNext());
+
+            enumerator.Reset();
+            Assert.IsFalse(enumerator.MoveNext());
+        }
+
+        [TestMethod]
+        public void TestEnumerator_NotEmptyTree()
+        {
+            BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
+            binaryTree.InsertNode(15, 1);
+            binaryTree.InsertNode(10, 2);
+            binaryTree.InsertNode(7, 3);
+
+            IEnumerator<Node<int, int>> enumerator = binaryTree.GetEnumerator();
+
+            Assert.IsTrue(enumerator.MoveNext());
+            Assert.AreEqual(7, enumerator.Current.mKey);
+
+            Assert.IsTrue(enumerator.MoveNext());
+            Assert.AreEqual(10, enumerator.Current.mKey);
+
+            Assert.IsTrue(enumerator.MoveNext());
+            Assert.AreEqual(15, enumerator.Current.mKey);
+
+            enumerator.Reset();
+            Assert.IsTrue(enumerator.MoveNext());
+            Assert.AreEqual(7, enumerator.Current.mKey);
+
         }
     }
 }

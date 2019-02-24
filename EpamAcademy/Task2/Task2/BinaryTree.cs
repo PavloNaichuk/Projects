@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 
 namespace Task2
 {
-    public class BinaryTree<Key, Value> : IEnumerable
+    public class BinaryTree<Key, Value> : IEnumerable<Node<Key, Value>>
         where Key : IComparable
     {
         private Node<Key, Value> mRootNode;
@@ -29,9 +30,10 @@ namespace Task2
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return (IEnumerator)GetEnumerator();
+            return GetEnumerator();
         }
-        public IEnumerator GetEnumerator()
+
+        public IEnumerator<Node<Key, Value>> GetEnumerator()
         {
             return new NodeEnumerator(this);
         }
@@ -159,19 +161,12 @@ namespace Task2
 
         public override string ToString()
         {
-            return BuildString(mRootNode);
-        }
+            StringBuilder stringBuilder = new StringBuilder();
 
-        private string BuildString(Node<Key, Value> node)
-        {
-            if (node == null)
-                return "";
+            foreach (Node<Key, Value> node in this)
+                stringBuilder.AppendLine(node.ToString());
 
-            string left = BuildString(node.mLeftNode);
-            string current = node.ToString() + "\n";
-            string right = BuildString(node.mRightNode);
-
-            return left + current + right;
+            return stringBuilder.ToString();
         }
 
         private void ReplaceNode(Node<Key, Value> oldNode, Node<Key, Value> newNode)
@@ -187,7 +182,7 @@ namespace Task2
                 newNode.mParentNode = oldNode.mParentNode;
         }
 
-        private class NodeEnumerator : IEnumerator
+        private class NodeEnumerator : IEnumerator<Node<Key, Value>>
         {
             private BinaryTree<Key, Value> mTree;
             private Node<Key, Value> mCurrentNode;
@@ -229,6 +224,10 @@ namespace Task2
             {
                 mCurrentNode = null;
                 mHasBeenReset = true;
+            }
+
+            void IDisposable.Dispose()
+            {
             }
         }
     }

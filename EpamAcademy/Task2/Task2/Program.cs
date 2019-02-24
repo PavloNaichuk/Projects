@@ -6,19 +6,6 @@ namespace Task2
     {
         static void Main(string[] args)
         {
-            //BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
-
-            //binaryTree.InsertNode(20, 2);
-            //binaryTree.InsertNode(15, 6);
-            //binaryTree.InsertNode(24, 8);
-            //binaryTree.InsertNode(12, 5);
-            //binaryTree.InsertNode(17, 2);
-
-            //Console.WriteLine($"{ binaryTree.ToString()}");
-
-            //Node<int, int> foundNode = binaryTree.FindNode(24);
-            //Console.WriteLine($"Found node: { foundNode.ToString()}");
-
             {
                 Console.WriteLine($"Test 1");
                 BinaryTree<int, int> binaryTree = new BinaryTree<int, int>();
