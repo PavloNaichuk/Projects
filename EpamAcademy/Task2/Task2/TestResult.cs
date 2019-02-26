@@ -39,5 +39,10 @@ namespace Task2
                 mScore = value;
             }
         }
+
+        public override string ToString()
+        {
+            return $"Test result: date {Date}, score {Score}";
+        }
     }
 }

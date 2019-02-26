@@ -24,5 +24,10 @@ namespace Task2
                 mName = value;
             }
         }
+
+        public override string ToString()
+        {
+            return $"Student name: {Name}";
+        }
     }
 }

@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Task2
 {
-    class TestKey: IComparable
+    public class TestKey: IComparable
     {
         private int mTestId;
         private int mStudentId;
 
-        TestKey(int testId, int studentId)
+        public TestKey(int testId, int studentId)
         {
-            TestId = mTestId;
+            TestId = testId;
+            StudentId = studentId;
         }
 
         public int TestId
@@ -21,9 +22,6 @@ namespace Task2
             get { return mTestId; }
             set
             {
-                if (value == 0)
-                    throw new ArgumentException("Invalid parameter.The parameter should be greater than 0", "mTestId");
-
                 mTestId = value;
             }
         }
@@ -33,14 +31,11 @@ namespace Task2
             get { return mStudentId; }
             set
             {
-                if (value == 0)
-                    throw new ArgumentException("Invalid parameter.The parameter should be greater than 0", "mStudentId");
-
                 mStudentId = value;
             }
         }
 
-        int CompareTo(object otherObject)
+        public int CompareTo(object otherObject)
         {
             if (otherObject == null)
                 throw new ArgumentNullException("otherObject", "Parameter is null");
