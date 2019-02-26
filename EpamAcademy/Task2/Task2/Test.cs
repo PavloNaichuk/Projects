@@ -21,7 +21,7 @@ namespace Task2
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("name", "Parameter is null");
+                    throw new ArgumentNullException("mName", "Parameter is null");
                 mName = value;
             }
         }

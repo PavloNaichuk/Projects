@@ -70,7 +70,23 @@ namespace Task2
                 binaryTree.RemoveNode(4);
                 Console.WriteLine($"After:\n{ binaryTree.ToString()}");
             }
-   
+
+            {
+
+                Test test1 = new Test("TestName1");
+                Test test2 = new Test("TestName2");
+                Test test3 = new Test("TestName3");
+
+                Test[] tests = new Test[] { test1, test2, test3};
+
+                Student student1 = new Student("StudentName1");
+                Student student2 = new Student("StudentName2");
+                Student student3 = new Student("StudentName3");
+
+                Student[] students = new Student[] { student1, student2, student3 };
+
+            }
+
             Console.ReadKey();
         }
     }

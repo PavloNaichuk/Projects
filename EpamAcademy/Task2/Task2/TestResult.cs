@@ -19,11 +19,11 @@ namespace Task2
 
         public DateTime Date
         {
-            get { return Date; }
+            get { return mDate; }
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("date", "Parameter is null");
+                    throw new ArgumentNullException("mDate", "Parameter is null");
 
                 mDate = value;
             }
@@ -31,12 +31,12 @@ namespace Task2
 
         public float Score
         {
-            get { return Score; }
+            get { return mScore; }
             set
             {
                 if (value < 0)
-                    throw new ArgumentException("Invalid parameter.The parameter should be greater or equal 0", "score");
-                Score = value;
+                    throw new ArgumentException("Invalid parameter.The parameter should be greater or equal 0", "mScore");
+                mScore = value;
             }
         }
     }
