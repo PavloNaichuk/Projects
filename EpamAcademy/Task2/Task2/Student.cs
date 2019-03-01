@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Task2
 {
-    class Student
+    public class Student
     {
         private string mName;
         public Student(string name)
@@ -20,7 +16,7 @@ namespace Task2
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("mName", "Parameter is null");
+                    throw new ArgumentNullException("value", "Parameter is null");
                 mName = value;
             }
         }

@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 
 namespace Task2
 {
@@ -110,6 +109,103 @@ namespace Task2
                 }
             }
 
+            {
+                DynamicArray<int> array = new DynamicArray<int>(2);
+                array.Add(2);
+                array.Add(3);
+                array.Add(5);
+                array.Add(6);
+                array.Add(8);
+                array.Add(9);
+                Console.WriteLine($"Count:\n{ array.Count}");
+                Console.Write($"Array:");
+                for (int index = 0; index < array.Count; ++index)
+                {
+                    Console.Write($"{ array[index]},");
+                }
+
+            }
+
+            {
+                DynamicArray<int> array = new DynamicArray<int>(2);
+                array.Add(2);
+                array.Add(3);
+                array.Add(5);
+                array.Insert(1, 8);
+    
+                Console.WriteLine($"Count:\n{ array.Count}");
+                Console.Write($"Array:");
+                for (int index = 0; index < array.Count; ++index)
+                {
+                    Console.Write($"{ array[index]},");
+                }
+
+            }
+
+            {
+                DynamicArray<int> array = new DynamicArray<int>(2);
+                array.Insert(0, 8);
+
+                Console.WriteLine($"CountInsert:\n{ array.Count}");
+                Console.Write($"ArrayInsert:");
+                for (int index = 0; index < array.Count; ++index)
+                {
+                    Console.Write($"{ array[index]},");
+                }
+
+            }
+
+            {
+                DynamicArray<int> array = new DynamicArray<int>(2);
+                array.Add(2);
+                array.Add(3);
+                array.Add(5);
+                array.Add(6);
+                array.Add(8);
+                array.Add(9);
+
+                Console.Write($"Array:");
+                for (int index = 0; index < array.Count; ++index)
+                {
+                    Console.Write($"{ array[index]},");
+                }
+
+                array.RemoveAt(3);
+                Console.WriteLine($"CountRemoveAt:\n{ array.Count}");
+                Console.Write($"ArrayRemoveAt:");
+                for (int index = 0; index < array.Count; ++index)
+                {
+                    Console.Write($"{ array[index]},");
+                }
+
+            }
+
+
+            /*
+            {
+                DynamicArray<int> array = new DynamicArray<int>(2);
+                array.Add(2);
+                array.Add(3);
+                array.Add(5);
+                array.Add(6);
+                array.Add(8);
+                array.Add(9);
+
+                Console.Write($"Array:");
+                for (int index = 0; index < array.Count; ++index)
+                {
+                    Console.Write($"{ array[index]},");
+                }
+
+                array.Remove(5);
+                Console.WriteLine($"CountRemove:\n{ array.Count}");
+                Console.Write($"ArrayRemove:");
+                for (int index = 0; index < array.Count; ++index)
+                {
+                    Console.Write($"{ array[index]},");
+                }
+
+            }*/
             Console.ReadKey();
         }
     }

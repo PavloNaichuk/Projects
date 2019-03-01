@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Task2
 {
-    class TestResult
+    public class TestResult
     {
         private DateTime mDate;
         private float mScore;
@@ -23,7 +19,7 @@ namespace Task2
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("mDate", "Parameter is null");
+                    throw new ArgumentNullException("value", "Parameter is null");
 
                 mDate = value;
             }
