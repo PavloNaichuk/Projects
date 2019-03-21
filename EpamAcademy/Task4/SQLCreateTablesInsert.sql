@@ -1,8 +1,7 @@
-﻿create database [Task4]
-go
+﻿
 use [Task4]
 go
---СОЗДАНИЕ Таблиц
+--Create tables
 drop table if exists [dbo].[Position]
 CREATE TABLE [dbo].[Position](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -16,8 +15,7 @@ insert [Position] select 'senior'
 create index idx1 on [Position](id)
 go
 
---проекты - ID, название, дата создания, статус (справочник), дата закрытия
-
+-- Projects - ID, title, creation date, status (manual), closing date
 drop table if exists [dbo].[Project]
 CREATE TABLE [dbo].[Project](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -30,24 +28,20 @@ CREATE TABLE [dbo].[Project](
  go
  create index idx1 on [Project](id)
  go
-/****** стутасы проекта     ******/
 
+--Project stoves
 drop table if exists [dbo].[ProjectStatus]
 CREATE TABLE [dbo].[ProjectStatus](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[status_name] [nvarchar](100) NULL,
  CONSTRAINT [PK_ProjectStatus] PRIMARY KEY ([id])
  )
-
 insert [ProjectStatus] select 'Opened'
 insert [ProjectStatus] select 'Closed'
 create index idx1 on [ProjectStatus](id)
-
-
-
 go
---задачи - ID, сотрудник (справочник), должность на проект (спр), проект (спр), статус задачи (спр), дедлайн
 
+--Tasks - ID, employee (directory), position for a project, project, task status, deadline
 drop table if exists [dbo].[Task]
 CREATE TABLE [dbo].[Task](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -71,7 +65,6 @@ CREATE TABLE [dbo].[TaskStatus](
 	[status_name] [nvarchar](100) NULL,
  CONSTRAINT [PK_TaskStatus]  PRIMARY KEY ([id])
  )
-
 insert [TaskStatus] select 'Opened'
 insert [TaskStatus] select 'Completed'
 insert [TaskStatus] select 'NeedsSomeWork'
@@ -79,8 +72,7 @@ insert [TaskStatus] select 'Closed'
 create index idx1 on [TaskStatus](id)
 GO
 
---статус задачи - ID, задача (спр), сотрудник+должность того кто проставил статус (спр), статус (спр), дата установки статуса
-
+--Task status - ID, task, employee + position of the one who set the status, status, date of status setting
 drop table if exists [dbo].[TaskStatusLog]
 CREATE TABLE [dbo].[TaskStatusLog](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -88,12 +80,10 @@ CREATE TABLE [dbo].[TaskStatusLog](
 	[idTaskStatus] [int] NULL,
 	[SetTaskDate] [date] NULL
 ) ON [PRIMARY]
-
 create index idx1 on [TaskStatusLog](id)
 create index idx3 on [TaskStatusLog](id_worker)
 create index idx4 on [TaskStatusLog](idTaskStatus)
 create index idx5 on [TaskStatusLog](SetTaskDate)
-
 go
 
 drop table if exists [dbo].[Workers]
@@ -102,7 +92,6 @@ CREATE TABLE [dbo].[Workers](
 	[worker_lastName] [nvarchar](max) NULL,
  CONSTRAINT [PK_Workers] PRIMARY KEY ([id])
  )
-
 create index idx1 on [Workers](id)
 insert [Workers] select 'Naichuk'
 insert [Workers] select 'Shtepa'
@@ -148,10 +137,7 @@ REFERENCES [dbo].[Workers] ([id])
 
 ALTER TABLE [dbo].[TaskStatusLog] CHECK CONSTRAINT [FK_TaskStatusLog_Workers]
 
-
-
-
---ЗАПОЛНЕНИЕ БД
+--Create databases
 insert into Project 
 (project_name, p_createdate, idProjectStatus, p_closedate)
 values 

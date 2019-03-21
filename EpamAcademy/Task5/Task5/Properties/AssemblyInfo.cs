@@ -2,9 +2,9 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
+// General information about this build is provided by the following set
+// attribute set. Change the values ​​of these attributes to change the information
+// associated with the build.
 [assembly: AssemblyTitle("Task5")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -14,23 +14,23 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible
-// to COM components.  If you need to access a type in this assembly from
-// COM, set the ComVisible attribute to true on that type.
+// Setting the value to False for the ComVisible parameter makes the types in this assembly invisible
+// for COM components. If you need to refer to the type in this assembly through
+// COM, set the ComVisible attribute to TRUE for this type.
 [assembly: ComVisible(false)]
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5d7c389c-fcc3-4c0b-8893-246de83d0cde")]
+// The following GUID is used to identify the type library if this project is visible to COM
+[assembly: Guid("e9a7a18e-4895-4d11-9dc1-8a428f2c53f2")]
 
-// Version information for an assembly consists of the following four values:
+// Сведения о версии сборки состоят из указанных ниже четырех значений:
 //
-//      Major Version
-//      Minor Version
-//      Build Number
-//      Revision
+//      Основной номер версии
+//      Дополнительный номер версии
+//      Номер сборки
+//      Номер редакции
 //
-// You can specify all the values or you can default the Build and Revision Numbers
-// by using the '*' as shown below:
+// Можно задать все значения или принять номер сборки и номер редакции по умолчанию.
+// с помощью символа "*", как показано ниже:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
