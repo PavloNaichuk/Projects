@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Task5.Data.Model
@@ -12,9 +13,13 @@ namespace Task5.Data.Model
         public Guid VendorId { get; set; }
 
         [ForeignKey("CategoryId")]
+        [JsonIgnore]
         public virtual Category Category { get; set; }
 
         [ForeignKey("VendorId")]
+        [JsonIgnore]
         public virtual Vendor Vendor { get; set; }
+
+
     }
 }

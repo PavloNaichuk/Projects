@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Task5.Data
 {
@@ -29,7 +31,9 @@ namespace Task5.Data
         {
             MethodCallExpression whereExpression = (MethodCallExpression)expression;
             LambdaExpression lambdaExpression = (LambdaExpression)((UnaryExpression)(whereExpression.Arguments[1])).Operand;
-            // analysis of the expression tree
+            //анализ дерева выражений
+            //... 
+
             return default(TResult);
         }
     }
@@ -47,6 +51,7 @@ namespace Task5.Data
             this.Expression = expression ?? Expression.Constant(this);
             this.ElementType = expression == null ? typeof(TResult) : expression.Type;
         }
+
 
         public IEnumerator<TResult> GetEnumerator()
         {

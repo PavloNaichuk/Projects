@@ -22,6 +22,7 @@ namespace Task5.Data
     {
         public string connectionString { get; }
 
+
         public SqlRepository(string connectionString)
         {
             this.connectionString = connectionString;
@@ -32,16 +33,22 @@ namespace Task5.Data
             return GetTable().AsQueryable().FirstOrDefault(predicate);
         }
 
+
         public IQueryable<TEntity> Select()
         {
             return GetTable().AsQueryable();
-    
+            //return new QueryableResult<TEntity>(new SqlQueryProvider(),null); 
+            //для оптимизации запросов нужно написать транслятор дерева выражений в sql.
         }
 
-        public void Delete(TEntity enitty)
+
+        public void Delete(TEntity entity)
         {
-            throw new NotImplementedException();
+            var propList = entity.GetType().GetProperties();
+            var keyProperty = propList.FirstOrDefault(item => item.GetCustomAttributes(typeof(KeyAttribute), true).Length > 0);
+            ExecuteNonQuery($"delete from {GetTableName()} where [{keyProperty.Name}] = '{keyProperty.GetValue(entity)}'");
         }
+
 
         public void Delete(IEnumerable<TEntity> entityList)
         {
@@ -50,7 +57,19 @@ namespace Task5.Data
 
         public void Insert(TEntity entity)
         {
-            throw new NotImplementedException();
+            var propList = entity.GetType().GetProperties();
+            var keyProperty = propList.FirstOrDefault(item => item.GetCustomAttributes(typeof(KeyAttribute), true).Length > 0);
+            var sqlPropList = string.Join(",", propList.Where(item => item.Name != keyProperty.Name).Select(item => $"[{item.Name}]"));
+            var sqlValueList = string.Join(",", propList.Where(item => item.Name != keyProperty.Name).Select(item => item.GetValue(entity) is string ? $"'{item.GetValue(entity)}'" : $"{item.GetValue(entity)}"));
+
+            using (var sqlConnection = new SqlConnection(connectionString))
+            {
+                var sqlCommand = sqlConnection.CreateCommand();
+                sqlCommand.CommandText = $"insert into {GetTableName()} ({sqlPropList}) OUTPUT inserted.{keyProperty.Name} values({sqlValueList})";
+                sqlCommand.Connection.Open();
+                var id = sqlCommand.ExecuteScalar();
+                keyProperty.SetValue(entity, id);
+            }
         }
 
         public void Insert(IEnumerable<TEntity> entityList)
@@ -60,8 +79,10 @@ namespace Task5.Data
 
         public void Update(TEntity entity)
         {
-            throw new NotImplementedException();
-
+            var propList = entity.GetType().GetProperties();
+            var keyProperty = propList.FirstOrDefault(item => item.GetCustomAttributes(typeof(KeyAttribute), true).Length > 0);
+            var sqlPropList = string.Join(",", propList.Where(item => item.Name != keyProperty.Name).Select(item => item.GetValue(entity) is string ? $"[{item.Name}] = '{item.GetValue(entity)}'" : $"[{item.Name}] = {item.GetValue(entity)}"));
+            ExecuteNonQuery($"update {GetTableName()} set {sqlPropList} where [{keyProperty.Name}] = '{keyProperty.GetValue(entity)}'");
         }
 
         public void Update(IEnumerable<TEntity> entityList)
@@ -76,12 +97,14 @@ namespace Task5.Data
 
         private void ExecuteNonQuery(string Sql)
         {
-            using (var sqlConnection = new SqlCeConnection(connectionString))
+            using (var sqlConnection = new SqlConnection(connectionString))
             {
-                SqlCeCommand sqlCommand = new SqlCeCommand(Sql, sqlConnection);
+                SqlCommand sqlCommand = new SqlCommand(Sql, sqlConnection);
+                sqlCommand.Connection.Open();
                 sqlCommand.ExecuteNonQuery();
             }
         }
+
 
         private List<TEntity> GetTable(string where = null)
         {

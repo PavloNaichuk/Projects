@@ -27,11 +27,13 @@ namespace Task5.Data
             return dbContext.GetTable<TEntity>().AsQueryable();
         }
 
+
         public void Delete(TEntity entity)
         {
             dbContext.GetTable<TEntity>().DeleteOnSubmit(entity);
             dbContext.SubmitChanges();
         }
+
 
         public void Delete(IEnumerable<TEntity> entityList)
         {
@@ -58,7 +60,7 @@ namespace Task5.Data
 
         public void Update(IEnumerable<TEntity> entityList)
         {
-            throw new NotSupportedException("Bulk update method not supported");
+            throw new NotSupportedException("метод массового обновления не поддерживается");
         }
 
         public void Clear()

@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Task5.Data;
+using Task5.Data.Model;
+using Task5.Data.Services;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Data.SqlServerCe;
 using System.Linq;
-using Task5.Data;
-using Task5.Data.Model;
-using Task5.Data.Services;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Task5
 {
@@ -19,6 +21,8 @@ namespace Task5
 
         static void Main(string[] args)
         {
+            //InitDatabase();
+
             while (true)
             {
                 Console.Clear();
@@ -278,7 +282,7 @@ namespace Task5
                     Console.WriteLine($"List of products with a maximum price: ");
 
                     var productsByPrice = dataService.ProductsByMaxPrice();
-                    foreach (var product in productsByPrice) Console.WriteLine($"product: '{product.Name}' цена: {product.Price}");
+                    foreach (var product in productsByPrice) Console.WriteLine($"product: '{product.Name}' price: {product.Price}");
 
                     Console.ReadKey();
                     break;

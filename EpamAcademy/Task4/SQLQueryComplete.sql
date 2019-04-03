@@ -1,25 +1,25 @@
 ﻿use [Task4]
 
---Получить список всех должностей компании с количеством сотрудников на каждой из них
+-- Get a list of all company posts with the number of employees in each of them
 select p.position_name as [Position name],  count(t.id_Position) as [Count]
 from Position p
 left join Task t on p.id=t.id_Position
 group by p.position_name
 
---Определить список должностей компании, на которых нет сотрудников 
+-- Identify a list of company posts with no employees
 select p.position_name as [Position name],  count(t.id_Position) as [Count]
 from Position p
 left join Task t on p.id=t.id_Position
 group by p.position_name
 having count(t.id_Position)=0
 
---Получить список проектов с указанием, сколько сотрудников каждой должности работает на проекте
+-- Get a list of projects with an indication of how many employees of each position work on the project
 select p.project_name as [Project name], count(t.id_worker) as [Count]
 from Project p
 left join Task t on p.id=t.idProject
 group by p.project_name
 
---Посчитать на каждом проекте, какое в среднем количество задач приходится на каждого сотрудника
+-- Count on each project, what is the average number of tasks per employee
 select p.id, p.project_name as [Project name], t.id_worker, count(t.id_worker) as [NumberOfTasksOnTheProject]
 from Project p
 left join Task t on p.id=t.idProject
@@ -36,12 +36,12 @@ from (
 group by t.id_worker
 order by 1
 
---Подсчитать длительность выполнения каждого проекта
+-- Count the duration of each project
 select p.project_name as [Project name], case when p.p_closedate is null then 'Closing date  is not available.' else convert(nvarchar(20),DATEDIFF(day,p.p_createdate, p.p_closedate ))
 end as [Project Duration]
 from Project p
 
---Определить сотрудников с минимальным количеством незакрытых задач
+-- Identify employees with a minimum number of unclosed tasks
 select w.worker_lastName as [Last name], count(t.idTaskstatuslog) as [Count]
 from Workers w
 left join Task t on w.id=t.id_worker
@@ -49,7 +49,7 @@ inner join TaskStatusLog tsl on t.idTaskstatuslog=tsl.id and tsl.idTaskstatus<>4
 group by w.worker_lastName
 order by count(t.idTaskstatuslog)
 
---Определить сотрудников с максимальным количеством незакрытых задач, дедлайн которых уже истек
+-- Identify employees with the maximum number of unclosed tasks whose deadline has expired
 select w.worker_lastName as [Last name], count(t.idTaskstatuslog) as [Count]
 from Workers w
 left join Task t on w.id=t.id_worker
@@ -58,13 +58,13 @@ where t.t_deathline_date>getdate()
 group by w.worker_lastName
 order by count(t.idTaskstatuslog) desc
 
---Продлить дедлайн незакрытых задач на 5 дней
+-- Extend deadline for unclosed tasks for 5 days
 update t
 set t_deathline_date = DATEADD(day,5, t.t_deathline_date)
 from Task t
 inner join TaskStatusLog tsl on t.idTaskstatuslog=tsl.id and tsl.idTaskstatus<>4
 
---Перевести проекты в состояние закрыт, для которых все задачи закрыты и задать время закрытия временем закрытия задачи проекта, принятой последней
+-- Transfer projects to the closed state, for which all tasks are closed and set the closing time by the closing time of the project task that was accepted last
 update p
 set idProjectStatus=2, p_closedate=LastDateClosing.data
 from Project p
@@ -84,15 +84,14 @@ outer apply (select max(tsl.setTaskDate) data
              ) LastDateClosing
 where NumberOfTasks.number = NumberOfClosedTasks.number
 
---Выяснить по всем проектам, какие сотрудники на проекте не имеют незакрытых задач
+--Find out on all projects which employees on the project do not have unclosed tasks
 select w.* 
 from Project p
 inner join Task t on p.id=t.idProject
 inner join TaskStatusLog tsl on t.idTaskstatuslog=tsl.id and tsl.idTaskstatus=4
 inner join Workers w on t.id_worker=w.id
 
---Заданную задачу (по названию) проекта перевести на сотрудника с минимальным количеством выполняемых им задач 
-
+-- Assign a task (by title) to transfer the project to an employee with a minimum number of tasks performed by him
 declare @pn int = 2 
 declare @nz int = 6
 update t
