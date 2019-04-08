@@ -18,20 +18,19 @@ namespace Data.Repositories
             UserInfo userInfo = new UserInfo()
             {
                 Id = 0,
-                Login = "pappp",
-                Password = "123",
-                FirstName = "Pavlik",
-                LastName = "Nach",
-                Email = "pas@gmail.com",
+                Login = "ppвpwwwp",
+                Password = "12322223",
+                FirstName = "Hahaыhah",
+                LastName = "Hahыыыahaa",
+                Email = "paaaыфas@gmail.com",
                 RegistrationDate = date
             };
             DataBaseManager dataBaseManager = new DataBaseManager();
             dataBaseManager.AddUser(userInfo);
-            dataBaseManager.Print();
+            dataBaseManager.PrintUserInfo();
             Console.WriteLine("-------");
             dataBaseManager.RemoveUser(userInfo);
-            dataBaseManager.Print();
-
+            dataBaseManager.PrintUserInfo();
         }
 
     }

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SocialNetwork.Data.Models
 {
-   
+    [Table("UserInfo")]
     public class UserInfo
     {
         public UserInfo() { }

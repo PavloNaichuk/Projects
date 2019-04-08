@@ -9,6 +9,10 @@ namespace SocialNetwork
         {
             UserRepository userRepository = new UserRepository();
             userRepository.temp();
+            //MessageRepositories messageRepositories = new MessageRepositories();
+            //messageRepositories.temp();
+            //FriendRepository friendRepository = new FriendRepository();
+            //friendRepository.temp();
         }
 
     }

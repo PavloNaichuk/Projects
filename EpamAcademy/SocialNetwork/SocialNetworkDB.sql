@@ -27,8 +27,8 @@ CREATE TABLE [dbo].[Messages](
 	[SenderId] [int] NOT NULL,
     [ReceiverId] [int] NOT NULL,
 	[Message] [varchar](500) NOT NULL,
-	[Date] [datetime] NOT NULL,
-	[WasRead][bit] NOT NULL,
+	[date] [datetime] NOT NULL,
+	[WasRead][bit] NOT NULL
     CONSTRAINT FK_UserInfoSender FOREIGN KEY (SenderId)
 	REFERENCES [UserInfo](Id),
     CONSTRAINT FK_UserInfoReceiver FOREIGN KEY (ReceiverId)

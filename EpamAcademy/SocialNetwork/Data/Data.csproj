@@ -49,9 +49,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\DataBaseContext.cs" />
+    <Compile Include="Models\FriendInfo.cs" />
+    <Compile Include="Models\MassageInfo.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\DataBaseManager.cs" />
+    <Compile Include="Repositories\FriendRepositories.cs" />
+    <Compile Include="Repositories\MessageRepositories.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
