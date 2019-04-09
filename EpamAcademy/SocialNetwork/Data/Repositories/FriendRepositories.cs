@@ -14,9 +14,8 @@ namespace Data.Repositories
         {
             FriendInfo friendInfo = new FriendInfo()
             {
-                Id = 3,
-                UserId = 4,
-                FriendId = 2,
+                UserId = 2,
+                FriendId = 5,
 
             };
             DataBaseManager dataBaseManager = new DataBaseManager();

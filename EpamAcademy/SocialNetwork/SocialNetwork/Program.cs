@@ -7,12 +7,12 @@ namespace SocialNetwork
     {
         static void Main(string[] args)
         {
-            UserRepository userRepository = new UserRepository();
-            userRepository.temp();
+            //UserRepository userRepository = new UserRepository();
+            //userRepository.temp();
             //MessageRepositories messageRepositories = new MessageRepositories();
             //messageRepositories.temp();
-            //FriendRepository friendRepository = new FriendRepository();
-            //friendRepository.temp();
+            FriendRepository friendRepository = new FriendRepository();
+            friendRepository.temp();
         }
 
     }

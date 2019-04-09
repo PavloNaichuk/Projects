@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,8 @@ namespace SocialNetwork.Data.Models
     public class FriendInfo
     {
         public FriendInfo() { }
-        public int Id { get; set; }
+
+        [Key]
         public int UserId { get; set; }
         public int FriendId { get; set; }
 

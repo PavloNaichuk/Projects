@@ -41,15 +41,29 @@ namespace SocialNetwork
 
         public bool CheckIfUnreadMessagesArePresent()
         {
-            return true;
+            select* from messages
+            where wasRead = 1 order by  wasRead DESC
         }
 
-       /* public IList<UserInfo> FetchMessagesFromConversation(int userID1, int userID2)
+        public IList<UserInfo> FetchMessagesFromConversation(int userID1, int userID2)
         {
-           
+            select* from messages 
+            where userID1 = 1 and userID2 = 3 or userID1 = 3 and userID2 = 1 order by date DESC
         }
 
-        public IList<MessageInfo> FetchLastMessageFromEachConversation((int userID)) { }*/
+        public IList<MessageInfo> FetchLastMessageFromEachConversation((int userID))
+        {
+            select* from messages
+            where date in (
+            select max(date)
+            from messages
+            where date in (
+            select max(date)
+            from messages
+            group by userID, receiverid
+            order by date desc, userID, receiverid) 
+            group by if (userID < receiverid, concat(userID, "-", receiverid), concat(receiverid, "-", userID)));
+        }
 
         public void PrintUserInfo()
         {
@@ -79,7 +93,7 @@ namespace SocialNetwork
             Console.WriteLine("List:");
             foreach (FriendInfo friendInfo in friends)
             {
-                Console.WriteLine("{0}.\n{1} \n {2}\n", friendInfo.UserId, friendInfo.FriendId);
+                Console.WriteLine("{1} \n {2}\n", friendInfo.UserId, friendInfo.FriendId);
             }
         }
     }
