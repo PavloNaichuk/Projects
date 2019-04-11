@@ -1,7 +1,9 @@
-﻿using SocialNetwork.Data.Context;
+﻿using Data.Repositories;
+using SocialNetwork.Data.Context;
 using SocialNetwork.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SocialNetwork
 {
@@ -21,80 +23,68 @@ namespace SocialNetwork
             dataBaseContext.SaveChanges();
         }
 
-        public void AddFriend(FriendInfo friendInfo)
+        public void AddFriendConection(int userId1, int userId2)
         {
-            dataBaseContext.FriendInfo.Add(friendInfo);
+            dataBaseContext.FriendInfo.Add(new FriendInfo() { UserId = userId1, FriendId = userId2 });
+            dataBaseContext.FriendInfo.Add(new FriendInfo() { UserId = userId2, FriendId = userId1 });
             dataBaseContext.SaveChanges();
         }
 
-        public void RemoveFriend(FriendInfo friendInfo)
+        public void RemoveFriendConection(int userId1, int userId2)
         {
-            dataBaseContext.FriendInfo.Remove(friendInfo);
+            dataBaseContext.FriendInfo.Remove(new FriendInfo() { UserId = userId1, FriendId = userId2});
+            dataBaseContext.FriendInfo.Remove(new FriendInfo() { UserId = userId2, FriendId = userId1 });
             dataBaseContext.SaveChanges();
         }
 
-        public void SendMessage(MessageInfo messageInfo)
+        public void AddMessage(MessageInfo messageInfo)
         {
            dataBaseContext.MessageInfo.Add(messageInfo);
            dataBaseContext.SaveChanges();
         }
 
-        public bool CheckIfUnreadMessagesArePresent()
+        public int CountUnreadMessages(int userId)
         {
-            select* from messages
-            where wasRead = 1 order by  wasRead DESC
+            return dataBaseContext.MessageInfo.Count(item => item.ReceiverId == userId && item.Unread);
         }
 
-        public IList<UserInfo> FetchMessagesFromConversation(int userID1, int userID2)
+        public IList<MessageInfo> QueryMessagesFromConversation(int userId1, int userId2)
         {
-            select* from messages 
-            where userID1 = 1 and userID2 = 3 or userID1 = 3 and userID2 = 1 order by date DESC
+            int conversationId = QueryConversationId(userId1, userId2);
+
+            var query = from msg in dataBaseContext.MessageInfo
+                        where
+                        msg.ConversationId == conversationId
+                        select msg;
+
+            return query.ToList();
         }
 
-        public IList<MessageInfo> FetchLastMessageFromEachConversation((int userID))
+        public IList<MessageInfo> QueryLastMessageFromEachConversation(int userId)
         {
-            select* from messages
-            where date in (
-            select max(date)
-            from messages
-            where date in (
-            select max(date)
-            from messages
-            group by userID, receiverid
-            order by date desc, userID, receiverid) 
-            group by if (userID < receiverid, concat(userID, "-", receiverid), concat(receiverid, "-", userID)));
+            var query = from msg in dataBaseContext.MessageInfo
+                        where
+                        (msg.ReceiverId == userId || msg.SenderId == userId)
+                        select msg;
+
+            return query.ToList();
         }
 
-        public void PrintUserInfo()
+        public int QueryConversationId(int userId1, int userId2)
         {
-            var users = dataBaseContext.UserInfo;
-            Console.WriteLine("List:");
-            foreach (UserInfo userInfo in users)
-            {
-                Console.WriteLine("{0}. \n{1} \n {2}\n {3} \n {4} \n {5} \n {6}", userInfo.Id, userInfo.Login, userInfo.Password,
-                userInfo.FirstName, userInfo.LastName, userInfo.Email, userInfo.RegistrationDate);
-            }
-         }
+            if (userId1 <= 0)
+                throw new ArgumentException("Invalid parameter. The parameter should be greater than 0", "userId1");
 
-        public void PrintMessageInfo()
-        {
-            var messages = dataBaseContext.MessageInfo;
-            Console.WriteLine("List:");
-            foreach (MessageInfo messageInfo in messages)
-            {
-                Console.WriteLine("{0}. \n{1} \n {2}\n {3} \n {4} \n {5}", messageInfo.Id, messageInfo.SenderId, messageInfo.ReceiverId,
-                    messageInfo.Message, messageInfo.Date, messageInfo.WasRead);
-            }
-        }
+            if (userId2 <= 0)
+                throw new ArgumentException("Invalid parameter. The parameter should be greater than 0", "userId2");
 
-        public void PrintFriendInfo()
-        {
-            var friends = dataBaseContext.FriendInfo;
-            Console.WriteLine("List:");
-            foreach (FriendInfo friendInfo in friends)
-            {
-                Console.WriteLine("{1} \n {2}\n", friendInfo.UserId, friendInfo.FriendId);
-            }
+            if (userId1 == userId2)
+                throw new ArgumentException("Invalid parameters. The parameters are not alloved to be equal", "");
+
+            // There is no need to keep a separate table for conversation ids between two users.
+            // We can always generate a unique integer for a pair of integers on the application side.
+            // This allows us to decrease number of requests to database and speed up search. 
+            return MathHelpers.GenerateUniqueNumberFromPair(Math.Min(userId1, userId2), Math.Max(userId1, userId2));
         }
     }
 }

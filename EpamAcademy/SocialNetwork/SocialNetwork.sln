@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork", "SocialNetw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{2C3688C7-4C0F-476B-AB24-64D8B6DAF682}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTest\UnitTests.csproj", "{260AEE64-0766-43C4-B6FF-102C720F27A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2C3688C7-4C0F-476B-AB24-64D8B6DAF682}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C3688C7-4C0F-476B-AB24-64D8B6DAF682}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C3688C7-4C0F-476B-AB24-64D8B6DAF682}.Release|Any CPU.Build.0 = Release|Any CPU
+		{260AEE64-0766-43C4-B6FF-102C720F27A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{260AEE64-0766-43C4-B6FF-102C720F27A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{260AEE64-0766-43C4-B6FF-102C720F27A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{260AEE64-0766-43C4-B6FF-102C720F27A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,7 +12,7 @@ namespace Data.Repositories
 {
     public class UserRepository
     {
-        public void temp()
+        public void ConsoleWrite()
         {
             DateTime date = new DateTime(year: 2015, month: 7, day: 20, hour: 18, minute: 30, second: 25);
             UserInfo userInfo = new UserInfo()
@@ -29,8 +29,8 @@ namespace Data.Repositories
             dataBaseManager.AddUser(userInfo);
             dataBaseManager.PrintUserInfo();
             Console.WriteLine("-------");
-            dataBaseManager.RemoveUser(userInfo);
-            dataBaseManager.PrintUserInfo();
+            //dataBaseManager.RemoveUser(userInfo);
+            //dataBaseManager.PrintUserInfo();
         }
 
     }

@@ -10,12 +10,12 @@ namespace Data.Repositories
 {
     public class FriendRepository
     {
-        public void temp()
+        public void ConsoleWrite()
         {
             FriendInfo friendInfo = new FriendInfo()
             {
-                UserId = 2,
-                FriendId = 5,
+                UserId = 3,
+                FriendId = 6,
 
             };
             DataBaseManager dataBaseManager = new DataBaseManager();
