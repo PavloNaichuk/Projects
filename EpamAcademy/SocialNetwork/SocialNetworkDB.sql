@@ -81,14 +81,3 @@ GO
 ALTER TABLE Messages WITH CHECK 
 ADD CONSTRAINT [CK_Messages] CHECK (DATALENGTH(Date) > 0)
 GO
-
-
-SELECT OBJECT_NAME(object_id) AS ConstraintName,
-
-SCHEMA_NAME(schema_id) AS SchemaName,
-
-type_desc AS ConstraintType
-
-FROM sys.objects
-
-WHERE type_desc LIKE '%CONSTRAINT' AND OBJECT_NAME(parent_object_id)='Friends'

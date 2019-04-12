@@ -7,8 +7,11 @@ using System.Linq;
 
 namespace SocialNetwork
 {
-    public class DataBaseManager
+    public sealed class DataBaseManager
     {
+        public static readonly DataBaseManager Instance = new DataBaseManager();
+        private DataBaseManager() { }
+
         private DataBaseContext dataBaseContext = new DataBaseContext();
 
         public void AddUser(UserInfo userInfo)
@@ -62,12 +65,23 @@ namespace SocialNetwork
 
         public IList<MessageInfo> QueryLastMessageFromEachConversation(int userId)
         {
+
             var query = from msg in dataBaseContext.MessageInfo
+                        from userFriends in dataBaseContext.FriendInfo
                         where
-                        (msg.ReceiverId == userId || msg.SenderId == userId)
+                        userFriends.UserId == userId &&
+                        msg.SenderId == userFriends.FriendId &&
+                        msg.ReceiverId == userId
+                        orderby msg.Date descending
                         select msg;
 
-            return query.ToList();
+            var friendMsgList = query.ToList();
+
+            var resultList = new List<MessageInfo>();
+            var friendsGroupList = friendMsgList.GroupBy(item => item.SenderId);
+            foreach (var group in friendsGroupList)
+                resultList.Add(group.First());
+            return resultList;
         }
 
         public int QueryConversationId(int userId1, int userId2)
