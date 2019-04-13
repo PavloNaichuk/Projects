@@ -26,14 +26,14 @@ namespace SocialNetwork
             dataBaseContext.SaveChanges();
         }
 
-        public void AddFriendConection(int userId1, int userId2)
+        public void AddFriendConnection(int userId1, int userId2)
         {
             dataBaseContext.FriendInfo.Add(new FriendInfo() { UserId = userId1, FriendId = userId2 });
             dataBaseContext.FriendInfo.Add(new FriendInfo() { UserId = userId2, FriendId = userId1 });
             dataBaseContext.SaveChanges();
         }
 
-        public void RemoveFriendConection(int userId1, int userId2)
+        public void RemoveFriendConnection(int userId1, int userId2)
         {
             dataBaseContext.FriendInfo.Remove(new FriendInfo() { UserId = userId1, FriendId = userId2});
             dataBaseContext.FriendInfo.Remove(new FriendInfo() { UserId = userId2, FriendId = userId1 });
@@ -51,6 +51,9 @@ namespace SocialNetwork
             return dataBaseContext.MessageInfo.Count(item => item.ReceiverId == userId && item.Unread);
         }
 
+        public void MarkMessageAsRead(int messageId)
+        { }
+
         public IList<MessageInfo> QueryMessagesFromConversation(int userId1, int userId2)
         {
             int conversationId = QueryConversationId(userId1, userId2);
@@ -65,7 +68,6 @@ namespace SocialNetwork
 
         public IList<MessageInfo> QueryLastMessageFromEachConversation(int userId)
         {
-
             var query = from msg in dataBaseContext.MessageInfo
                         from userFriends in dataBaseContext.FriendInfo
                         where
@@ -99,6 +101,34 @@ namespace SocialNetwork
             // We can always generate a unique integer for a pair of integers on the application side.
             // This allows us to decrease number of requests to database and speed up search. 
             return MathHelpers.GenerateUniqueNumberFromPair(Math.Min(userId1, userId2), Math.Max(userId1, userId2));
+        }
+
+        public IList<FriendInfo> QueryAllFriendIds(int userId)
+        {
+            var query = from friend in dataBaseContext.FriendInfo
+                        where
+                        friend.UserId == userId
+                        select friend;
+            return query.ToList();
+        }
+
+       /* public IList<UserInfo> QueryAllFriends(int userId)
+        {
+            var query = from friend in dataBaseContext.FriendInfo
+                        where
+                        friend.UserId == userId
+                        select friend;
+
+            var friendsInfo = from userInfo in dataBaseContext.UserInfo
+                              where
+                              userInfo.Id == 
+                              select userInfo;
+            return friendsInfo.ToList();
+        }*/
+
+        public UserInfo QueryUserInfo(string login)
+        {
+            return dataBaseContext.UserInfo.First(item => item.Login == login);
         }
     }
 }
