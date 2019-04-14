@@ -13,9 +13,9 @@ CREATE TABLE [dbo].[UserInfo](
 GO
 
 CREATE TABLE [dbo].[Friends](
-	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	[UserId] [int] NOT NULL,
 	[FriendId] [int]  NOT NULL,
+	CONSTRAINT PK_UserInfoFriends PRIMARY KEY(UserId, FriendId),
 	CONSTRAINT FK_UserInfoFriend FOREIGN KEY (UserId)
 	REFERENCES [UserInfo](Id),
     CONSTRAINT FK_UserInfoFriend2 FOREIGN KEY (FriendId)

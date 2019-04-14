@@ -185,7 +185,13 @@ namespace UnitTests
             DataBaseManager.Instance.AddMessage(messageInfo3);
             DataBaseManager.Instance.AddMessage(messageInfo4);
 
-            
+            var messageList1 = DataBaseManager.Instance.CountUnreadMessages(2);
+            Assert.AreEqual(4, messageList1);
+
+            DataBaseManager.Instance.MarkMessageAsRead(1);
+
+            var messageList2 = DataBaseManager.Instance.CountUnreadMessages(2);
+            Assert.AreEqual(3, messageList2);
         }
 
         [TestMethod]
@@ -348,7 +354,10 @@ namespace UnitTests
             VerifyMessages(messageList[0], messageInfo3);
             VerifyMessages(messageList[1], messageInfo5);
             VerifyMessages(messageList[2], messageInfo8);
+
+            var messageList1 = DataBaseManager.Instance.QueryLastMessageFromEachConversation(100);
         }
+
 
         [TestMethod]
         public void QueryConversationId()
@@ -359,12 +368,52 @@ namespace UnitTests
             Assert.AreEqual(conversationId1, conversationId2);
         }
 
-        /*[TestMethod]
-         [ExpectedException(typeof(ArgumentException), "Expected ArgumentException")]
-         public void InvalidArgument1()
-         {
-             DataBaseManager.Instance.QueryConversationId(0, 1);
-         }*/
+        [TestMethod]
+        public void QueryAllFriends()
+        {
+            int userId1 = 1;
+            int userId2 = 2;
+            int userId3 = 3;
+
+            DataBaseManager.Instance.AddFriendConnection(userId1, userId2);
+            DataBaseManager.Instance.AddFriendConnection(userId1, userId3);
+
+            var friendsList = DataBaseManager.Instance.QueryAllFriends(1);
+            Assert.AreEqual(2, friendsList.Count);
+            Assert.AreEqual(userId2, friendsList[0]);
+            Assert.AreEqual(userId3, friendsList[1]);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "Expected ArgumentException")]
+        public void InvalidArgument1()
+        {
+            DataBaseManager.Instance.QueryConversationId(0, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "Expected ArgumentException")]
+        public void InvalidArgument2()
+        {
+            DataBaseManager.Instance.QueryConversationId(1, 0);
+        }
+
+        [TestMethod]
+        public void MarkMessageAsRead()
+        {
+            MessageInfo messageInfo1 = new MessageInfo()
+            {
+                ConversationId = DataBaseManager.Instance.QueryConversationId(1, 2),
+                SenderId = 1,
+                ReceiverId = 2,
+                Text = "Hello fm Canada",
+                Date = new DateTime(year: 2015, month: 2, day: 4, hour: 22, minute: 10, second: 25),
+                Unread = true
+            };
+            DataBaseManager.Instance.AddMessage(messageInfo1);
+            DataBaseManager.Instance.MarkMessageAsRead(4);
+        }
 
         private void VerifyMessages(MessageInfo messageInfo1, MessageInfo messageInfo2)
         {

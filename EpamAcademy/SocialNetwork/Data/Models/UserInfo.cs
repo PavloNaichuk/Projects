@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SocialNetwork.Data.Models
@@ -6,7 +7,7 @@ namespace SocialNetwork.Data.Models
     [Table("UserInfo")]
     public class UserInfo
     {
-        public UserInfo() { }
+        public UserInfo(){}
         public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }

@@ -3,6 +3,7 @@ using SocialNetwork.Data.Context;
 using SocialNetwork.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace SocialNetwork
@@ -52,7 +53,19 @@ namespace SocialNetwork
         }
 
         public void MarkMessageAsRead(int messageId)
-        { }
+        {
+            var query = from msg in dataBaseContext.MessageInfo
+                          where msg.Id == messageId
+                          select msg;
+
+            if (query.Count() == 1)
+            {
+                query.First().Unread = false;
+                dataBaseContext.SaveChanges();
+            }
+            else
+                Debug.Assert(false, "Unknown messageId");
+        }
 
         public IList<MessageInfo> QueryMessagesFromConversation(int userId1, int userId2)
         {
@@ -68,22 +81,17 @@ namespace SocialNetwork
 
         public IList<MessageInfo> QueryLastMessageFromEachConversation(int userId)
         {
-            var query = from msg in dataBaseContext.MessageInfo
-                        from userFriends in dataBaseContext.FriendInfo
+            var query = from message in dataBaseContext.MessageInfo
                         where
-                        userFriends.UserId == userId &&
-                        msg.SenderId == userFriends.FriendId &&
-                        msg.ReceiverId == userId
-                        orderby msg.Date descending
-                        select msg;
-
-            var friendMsgList = query.ToList();
-
-            var resultList = new List<MessageInfo>();
-            var friendsGroupList = friendMsgList.GroupBy(item => item.SenderId);
-            foreach (var group in friendsGroupList)
-                resultList.Add(group.First());
-            return resultList;
+                        message.ReceiverId == userId || message.SenderId == userId
+                        group message by message.ConversationId into messages
+                        select new
+                        {
+                            messages.Key,
+                            Message = messages.OrderByDescending(m => m.Id).FirstOrDefault()
+                        };
+            return query.Select(q => q.Message).ToList();
+                        
         }
 
         public int QueryConversationId(int userId1, int userId2)
@@ -112,23 +120,19 @@ namespace SocialNetwork
             return query.ToList();
         }
 
-       /* public IList<UserInfo> QueryAllFriends(int userId)
-        {
+         public IList<UserInfo> QueryAllFriends(int userId)
+         {
             var query = from friend in dataBaseContext.FriendInfo
+                        join userInfo in dataBaseContext.UserInfo on friend.FriendId equals userInfo.Id
                         where
-                        friend.UserId == userId
-                        select friend;
-
-            var friendsInfo = from userInfo in dataBaseContext.UserInfo
-                              where
-                              userInfo.Id == 
-                              select userInfo;
-            return friendsInfo.ToList();
-        }*/
+                            friend.FriendId == userId
+                        select userInfo;
+            return query.ToList();
+         }
 
         public UserInfo QueryUserInfo(string login)
         {
-            return dataBaseContext.UserInfo.First(item => item.Login == login);
+            return dataBaseContext.UserInfo.FirstOrDefault(item => item.Login == login);
         }
     }
 }

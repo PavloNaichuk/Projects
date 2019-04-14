@@ -12,9 +12,9 @@ namespace SocialNetwork.Data.Models
     public class FriendInfo
     {
         public FriendInfo() { }
-        public int Id { get; set; }
+        [Key, Column(Order = 0)]
         public int UserId { get; set; }
+        [Key, Column(Order = 1)]
         public int FriendId { get; set; }
-
     }
 }
