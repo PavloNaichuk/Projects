@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SpaConfigService, SpaConfigSettings, Icons } from '../spa/services/spa-config.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'SocialNetworkUI';
+ constructor( private spaConfigService: SpaConfigService) {
+   const config: SpaConfigSettings = {
+     showUserControls: true
+   };
+   spaConfigService.configure(config);
+ }
+
 }
