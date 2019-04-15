@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Data.Entity;
 using SocialNetwork.Data.Models;
 
@@ -10,6 +11,12 @@ namespace SocialNetwork.Data.Context
         {
            Database.SetInitializer<DataBaseContext>(null);
         }
+
+        public static void ExecuteCommand(string v)
+        {
+            throw new NotImplementedException();
+        }
+
         public DbSet<UserInfo> UserInfo { get; set; }
         public DbSet<MessageInfo> MessageInfo { get; set; }
         public DbSet<FriendInfo> FriendInfo { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SocialNetwork;
+using SocialNetwork.Data.Context;
 using SocialNetwork.Data.Models;
 using System;
 
@@ -11,6 +12,7 @@ namespace UnitTests
         [TestMethod]
         public void AddUser()
         {
+            DataBaseContext.ExecuteCommand("DELETE FROM SocialNetwork");
             UserInfo userInfo1 = new UserInfo()
             {
                 Login = "pashkvych",
@@ -268,7 +270,7 @@ namespace UnitTests
         [TestMethod]
         public void QueryLastMessageFromEachConversation()
         {
-            MessageInfo messageInfo1 = new MessageInfo()
+            /*MessageInfo messageInfo1 = new MessageInfo()
             {
                 ConversationId = DataBaseManager.Instance.QueryConversationId(13, 14),
                 SenderId = 13,
@@ -347,15 +349,48 @@ namespace UnitTests
                 Text = "How are you?",
                 Date = new DateTime(year: 2015, month: 2, day: 4, hour: 22, minute: 53, second: 23),
                 Unread = true
+            };*/
+
+            MessageInfo messageInfo1 = new MessageInfo()
+            {
+                ConversationId = DataBaseManager.Instance.QueryConversationId(1, 3),
+                SenderId = 1,
+                ReceiverId = 3,
+                Text = "Hello from New York",
+                Date = new DateTime(year: 2015, month: 2, day: 4, hour: 22, minute: 20, second: 25),
+                Unread = true
             };
 
-            var messageList = DataBaseManager.Instance.QueryLastMessageFromEachConversation(13);
-            Assert.AreEqual(3, messageList.Count);
-            VerifyMessages(messageList[0], messageInfo3);
-            VerifyMessages(messageList[1], messageInfo5);
-            VerifyMessages(messageList[2], messageInfo8);
+            MessageInfo messageInfo2 = new MessageInfo()
+            {
+                ConversationId = DataBaseManager.Instance.QueryConversationId(1, 4),
+                SenderId = 1,
+                ReceiverId = 4,
+                Text = "How are you?",
+                Date = new DateTime(year: 2015, month: 2, day: 4, hour: 22, minute: 25, second: 21),
+                Unread = true
+            };
 
-            var messageList1 = DataBaseManager.Instance.QueryLastMessageFromEachConversation(100);
+            MessageInfo messageInfo3 = new MessageInfo()
+            {
+                ConversationId = DataBaseManager.Instance.QueryConversationId(1, 3),
+                SenderId = 1,
+                ReceiverId = 3,
+                Text = "Hello. I am fine",
+                Date = new DateTime(year: 2015, month: 2, day: 4, hour: 22, minute: 30, second: 23),
+                Unread = true
+            };
+            DataBaseManager.Instance.AddMessage(messageInfo1);
+            DataBaseManager.Instance.AddMessage(messageInfo2);
+            DataBaseManager.Instance.AddMessage(messageInfo3);
+
+            var messageList = DataBaseManager.Instance.QueryLastMessageFromEachConversation(1);
+            Assert.AreEqual(2, messageList.Count);
+            VerifyMessages(messageList[0], messageInfo3);
+            //VerifyMessages(messageList[1], messageInfo5);
+            //VerifyMessages(messageList[2], messageInfo8);
+
+           // var messageList1 = DataBaseManager.Instance.QueryLastMessageFromEachConversation(100);
         }
 
 
