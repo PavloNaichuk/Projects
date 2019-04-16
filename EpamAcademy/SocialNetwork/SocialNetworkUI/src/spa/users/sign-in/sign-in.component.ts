@@ -12,7 +12,21 @@ import { NgForm } from '../../../../node_modules/@angular/forms';
 export class SignInComponent implements OnInit {
   submitting = false;
   formError: string;
-  constructor() { }
+  constructor(private userApi: UserApi, private userService:UserService, private router: Router) { }
+  onSubmit(signInForm: NgForm): void {
+    if (signInForm.valid) {
+      this.submitting = true;
+      this.formError = null;
+      this.userApi.signIn(signInForm.value.email, signInForm.value.password).subscribe((data) => {
+        console.log(data);
+        this.router.navigate(['/authenticated']);
+      },
+    (error) => {
+      this.submitting = false;
+      this.formError = error;
+    });
+    }
+  }
   ngOnInit() {
   }
 

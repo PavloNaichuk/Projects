@@ -11,11 +11,15 @@ export class UserService implements UserApi {
 
     }
     signIn(email: string, password: string): Observable<any> {
-        if (email === 'test@mail.ru' && password === '123')
+        if (email === 'pashkevych@gmail.com' && password === 'pavlik123')
         {
-        this.isAuthenticated = true;
-        return of({}).pipe(delay(2000));
-    } else {return throwError('Invalid email or password');}
+          this.isAuthenticated = true;
+          return of({}).pipe(delay(2000));
+        }
+        else
+        {
+          return throwError('Invalid email or password');
+        }
     }
     signOut(): Observable<any> {
         this.isAuthenticated = false;

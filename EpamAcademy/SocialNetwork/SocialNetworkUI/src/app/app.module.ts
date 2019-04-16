@@ -1,4 +1,3 @@
-import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
 import { AppFindComponent } from './routes/app-find/app-find.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -8,8 +7,10 @@ import { SpaModule } from '../spa/spa.module';
 import { AppHomeComponent } from './routes/app-home/app-home.component';
 import { RouterModule } from '../../node_modules/@angular/router';
 import { appRoutes } from './routes/app.routes';
-
-
+import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
+import { UserService } from './services/user.service';
+import { UserApi } from '../spa/users/user-api';
+import { AuthGuard } from './services/auth-guard.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +21,11 @@ import { appRoutes } from './routes/app.routes';
   imports: [
     BrowserModule, SpaModule, RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [UserService,
+     {
+    provide: UserApi, useExisting: UserService
+  },
+   AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
