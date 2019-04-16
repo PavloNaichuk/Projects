@@ -1,3 +1,4 @@
+import { SignInComponent } from './users/sign-in/sign-in.component';
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import { SpaBodyComponent } from './spa-body/spa-body.component';
@@ -13,11 +14,14 @@ import { MenuService } from './services/menu.service';
 import {MenuComponent} from './menus/menu/menu.component';
 import { MenuItemComponent } from './menus/menu-item/menu-item.component';
 import {RouterModule} from '@angular/router';
+import { RegistrationComponent } from './users/registration/registration.component';
+import { FormsModule } from '@angular/forms';
+
 @NgModule({
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, FormsModule],
     declarations: [SpaBodyComponent, SpaHeaderComponent, SpaContentComponent, SpaFooterComponent,
     IconBarComponent, ScreenSmallDirective, ScreenLargeDirective,
-    MenuComponent, MenuItemComponent
+    MenuComponent, MenuItemComponent, SignInComponent, RegistrationComponent
  ],
     exports: [SpaBodyComponent],
     providers: [SpaConfigService, ScreenService, MenuService]

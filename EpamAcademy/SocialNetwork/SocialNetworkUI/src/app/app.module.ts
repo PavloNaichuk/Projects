@@ -1,3 +1,4 @@
+import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
 import { AppFindComponent } from './routes/app-find/app-find.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -14,6 +15,7 @@ import { appRoutes } from './routes/app.routes';
     AppComponent,
     AppHomeComponent,
     AppFindComponent,
+    AuthenticatedComponent
   ],
   imports: [
     BrowserModule, SpaModule, RouterModule.forRoot(appRoutes)
