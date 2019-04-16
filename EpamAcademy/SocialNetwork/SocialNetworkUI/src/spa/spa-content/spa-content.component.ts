@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ScreenService } from '../services/screen.service';
+import { MenuService } from '../services/menu.service';
 
 @Component({
   selector: 'spa-content',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SpaContentComponent implements OnInit {
 
-  constructor() { }
+  constructor(private screenService: ScreenService, private menuService: MenuService) { }
 
   ngOnInit() {
   }

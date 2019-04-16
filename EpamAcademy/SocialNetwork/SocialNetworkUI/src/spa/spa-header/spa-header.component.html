@@ -1,9 +1,12 @@
-<div class='title-bar'>
+<div *screenLarge class='title-bar'>
     <p> Social Network </p>
     <div class="menu-area">
         <icon-bar></icon-bar>
-        <!--<spa-menu></spa-menu> -->
-
-
+        <spa-menu *ngIf="!menuService.isVertical"></spa-menu>
+    </div>
+</div>
+<div *screenSmall class='title-bar-small'>
+    <div class="small-icon-holder">
+        <a><img src="src/imgs/menu.png" (click)='menuService.toggleMenu()'></a>
     </div>
 </div>

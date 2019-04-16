@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SpaHeaderComponent } from './spa-header.component';
+import { AppFindComponent } from './app-find.component';
 
-describe('SpaHeaderComponent', () => {
-  let component: SpaHeaderComponent;
-  let fixture: ComponentFixture<SpaHeaderComponent>;
+describe('AppFindComponent', () => {
+  let component: AppFindComponent;
+  let fixture: ComponentFixture<AppFindComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SpaHeaderComponent ]
+      declarations: [ AppFindComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SpaHeaderComponent);
+    fixture = TestBed.createComponent(AppFindComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

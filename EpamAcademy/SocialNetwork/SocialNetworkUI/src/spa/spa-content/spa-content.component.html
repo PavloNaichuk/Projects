@@ -1,3 +1,5 @@
-<p>
-  spa-content works!
-</p>
+<spa-menu *ngIf="menuService.isVertical && screenService.isLarge() || 
+menuService.showVerticalMenu && !screenService.isLarge()" class='vertical-menu'></spa-menu>
+<div class='body-style'>
+    <router-outlet></router-outlet>
+</div>
