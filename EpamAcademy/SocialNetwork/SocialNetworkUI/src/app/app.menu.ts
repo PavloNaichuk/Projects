@@ -1,6 +1,10 @@
 import {MenuItem} from '../spa/services/menu.service';
 export const AppMenuItems: Array<MenuItem> = [
-{text: 'Find User',
+  {text: 'Friends',
+  icon: 'src/imgs/friends.png',
+  route: '/authenticated/friends',
+  submenu: null},
+  {text: 'Find User',
 icon: 'src/imgs/find.png',
 route: '/authenticated/find',
 submenu: null},

@@ -11,12 +11,14 @@ import { AuthenticatedComponent } from './routes/authenticated/authenticated.com
 import { UserService } from './services/user.service';
 import { UserApi } from '../spa/users/user-api';
 import { AuthGuard } from './services/auth-guard.service';
+import { AppFriendsComponent } from './routes/app-friends/app-friends.component';
 @NgModule({
   declarations: [
     AppComponent,
     AppHomeComponent,
     AppFindComponent,
-    AuthenticatedComponent
+    AuthenticatedComponent,
+    AppFriendsComponent
   ],
   imports: [
     BrowserModule, SpaModule, RouterModule.forRoot(appRoutes)
