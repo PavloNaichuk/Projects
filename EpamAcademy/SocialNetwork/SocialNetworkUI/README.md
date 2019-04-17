@@ -1,4 +1,8 @@
-# Social Network
+# CarFest
+SPA, using angular, json-server for http-request. User's able to register, sign-in into the app and look for 
+`home page`/`top-priced cars`/`CRUD operaions for cars`/`Changing menu orientation`/`Responsive for mobile/tablets/PC`.
+
+## FrameWork
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.2.
 
