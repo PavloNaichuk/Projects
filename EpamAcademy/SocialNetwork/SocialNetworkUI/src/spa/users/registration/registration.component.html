@@ -10,6 +10,10 @@
             <div class="alert alert-danger" [hidden]='password.valid || password.pristine'>Password is required</div>
         </div>
         <div class='form-group'>
+            <input type='password' autocomplete="off" name='password' required ngModel #password='ngModel' placeholder="Confirm password" class='form-control'>
+            <div class="alert alert-danger" [hidden]='password.valid || password.pristine'>Password is required</div>
+        </div>
+        <div class='form-group'>
             <input type='text' autocomplete="off" name='firstName' required placeholder="FirstName" ngModel #name='ngModel' class='form-control'>
             <div class="alert alert-danger" [hidden]='name.valid || name.pristine'>Please enter your name</div>
         </div>
@@ -21,11 +25,6 @@
             <input type='email' autocomplete="off" name='email' required placeholder="Email" ngModel #email='ngModel' class='form-control'>
             <div class="alert alert-danger" [hidden]='email.valid || email.pristine'>Please enter your email</div>
         </div>
-        <div class='form-group'>
-            <input type='datetime' autocomplete="off" name='date' required placeholder="Registration date" ngModel #email='ngModel' class='form-control'>
-            <div class="alert alert-danger" [hidden]='name.valid || name.pristine'>Please enter your email</div>
-        </div>
-
         <div class='alert alert-danger' *ngIf="formError">{{formError}}</div>
         <div *ngIf="!registering && !hasAdded">
             <button routerLink='/sign-in' class='btn btn-danger'>Cancel</button>

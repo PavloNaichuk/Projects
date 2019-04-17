@@ -3,14 +3,9 @@
   <div class="menu-area">
       <icon-bar [showIcons]='flagForIcons'></icon-bar>
       <spa-menu *ngIf="!menuService.isVertical"></spa-menu>
-
-
   </div>
 </div>
 <div *screenSmall class='title-bar-small'>
-  <div class="small-icon-holder">
-      <a><img src="src/imgs/menu.png" (click)='menuService.toggleMenu()'></a>
-  </div>
   <icon-bar [showIcons]='!flagForIcons'></icon-bar>
   <div class="small-image-holder">
       <img src="src/imgs/logo.png" alt="Car fest logo" class="small-image">
