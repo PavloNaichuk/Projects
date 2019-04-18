@@ -1,3 +1,4 @@
+import { AppMessageComponent } from './routes/app-message/app-message.component';
 import { AppFindComponent } from './routes/app-find/app-find.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -18,7 +19,8 @@ import { AppFriendsComponent } from './routes/app-friends/app-friends.component'
     AppHomeComponent,
     AppFindComponent,
     AuthenticatedComponent,
-    AppFriendsComponent
+    AppFriendsComponent,
+    AppMessageComponent
   ],
   imports: [
     BrowserModule, SpaModule, RouterModule.forRoot(appRoutes)

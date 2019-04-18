@@ -134,5 +134,18 @@ namespace SocialNetwork
         {
             return dataBaseContext.UserInfo.FirstOrDefault(item => item.Login == login);
         }
+
+        public void ClearDB()
+        {
+            var messages = from c in dataBaseContext.MessageInfo select c;
+            dataBaseContext.MessageInfo.RemoveRange(messages);
+
+            var friends = from c in dataBaseContext.FriendInfo select c;
+            dataBaseContext.FriendInfo.RemoveRange(friends);
+
+            var userInfo = from c in dataBaseContext.UserInfo select c;
+            dataBaseContext.UserInfo.RemoveRange(userInfo);
+            dataBaseContext.SaveChanges();
+        }
     }
 }

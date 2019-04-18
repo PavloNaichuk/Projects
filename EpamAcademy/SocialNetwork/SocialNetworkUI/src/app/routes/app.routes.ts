@@ -6,6 +6,7 @@ import { AuthenticatedComponent } from './authenticated/authenticated.component'
 import { SignInComponent } from 'src/spa/users/sign-in/sign-in.component';
 import { RegistrationComponent } from 'src/spa/users/registration/registration.component';
 import { AppFriendsComponent } from './app-friends/app-friends.component';
+import { AppMessageComponent } from './app-message/app-message.component';
 export const appRoutes: Routes = [
     {path: 'sign-in', component: SignInComponent},
     {path: 'register', component: RegistrationComponent},
@@ -13,6 +14,7 @@ export const appRoutes: Routes = [
     children:
     [
       {path: '', canActivateChild: [AuthGuard], children: [
+        {path: 'message', component: AppMessageComponent},
         {path: 'friends', component: AppFriendsComponent},
         {path: 'home', component: AppHomeComponent},
         {path: 'find', component: AppFindComponent},
