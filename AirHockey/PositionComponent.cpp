@@ -1,20 +1,24 @@
 #include "pch.h"
 #include "PositionComponent.h"
 
-PositionComponent::PositionComponent(const Point & center, const Vector & velocity, const Size & size)
+PositionComponent::PositionComponent(const Point& center)
+	: mCenter(center)
 {
 }
 
-void PositionComponent::Set(Vector position)
+Component::ComponentId PositionComponent::GetId() const 
 {
-	mPosition = position;
+	return COMPONENT_ID;
 }
 
-Vector PositionComponent::Get()
+void PositionComponent::SetCenter(const Point& center)
 {
-	return mPosition;
+	mCenter = center;
 }
 
-void PositionComponent::Update(float time)
+const Point& PositionComponent::GetCenter() const
 {
+	return mCenter;
 }
+
+

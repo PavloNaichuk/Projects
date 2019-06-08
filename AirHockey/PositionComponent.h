@@ -6,11 +6,15 @@
 class PositionComponent : public Component
 {
 public:
-	PositionComponent(const Point& center, const Vector& velocity, const Size& size);
+	PositionComponent(const Point& center);
+
 	static const ComponentId COMPONENT_ID = 2;
-	void Set(Vector position);
-	Vector Get();
+
+	ComponentId GetId() const override;
+
+	void SetCenter(const Point& center);
+	const Point& GetCenter() const;
 
 private:
-	Vector mPosition;
+	Point mCenter;
 };

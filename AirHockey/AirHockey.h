@@ -1,20 +1,23 @@
 #pragma once
 
 #include "Common.h"
-#include "GameUnit.h"
+#include "GameState.h"
+#include "ResourceManager.h"
 
-struct GameWorld;
-class AirHockey : public GameUnit
+class AirHockey
 {
 public:
-	AirHockey(State state, const Point& center, const Vector& velocity, const Size& size);
+	AirHockey();
+	~AirHockey();
 
-	void ProcessKeyPressed(SDL_Keycode key, GameWorld& gameWorld);
-	void ProcessKeyReleased(SDL_Keycode key);
-	void Update(float elapsedTime);
-	void RemoveLife();
+	void LaunchGame();
 
-	float mDirection;
-	int mScores;
-	int mLives;
+private:
+	void EnterState(std::unique_ptr<GameState> newState);
+
+private:
+	UniqueWindowPointer mWindow;
+	SharedRendererPointer mRenderer;
+	SharedResourceManagerPointer mResourceManager;
+	std::unique_ptr<GameState> mCurrentState;
 };
