@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "ResourceManager.h"
 
-bool ResourceManager::LoadResources(SharedRendererPointer renderer)
+bool ResourceManager::LoadResources(SharedRenderer renderer)
 {
 	std::array<const char*, NumResources> resourcePaths;
-	resourcePaths[PlayerStriker] = "Resource/Images/player.png";
-	resourcePaths[EnemyStriker] = "Resource/Images/enemy.png";
-	resourcePaths[Puck] = "Resource/Images/puck.png";
+	resourcePaths[BoardId] = "Resources/Images/board.png";
+	resourcePaths[PlayerStrikerId] = "Resources/Images/player.png";
+	resourcePaths[EnemyStrikerId] = "Resources/Images/enemy.png";
+	resourcePaths[PuckId] = "Resources/Images/puck.png";
 	
 	for (unsigned index = 0; index < resourcePaths.size(); ++index) 
 	{
@@ -28,7 +29,7 @@ bool ResourceManager::LoadResources(SharedRendererPointer renderer)
 	return true;
 }
 
-SharedTexturePointer ResourceManager::GetTexture(ResourceId resourceId) 
+SharedTexture ResourceManager::GetTexture(ResourceId resourceId) 
 {
 	return mTextures[resourceId];
 }

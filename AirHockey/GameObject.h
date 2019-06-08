@@ -8,7 +8,6 @@ class GameObject
 {
 public:
 	using GameObjectId = unsigned;
-	using ComponentPointer = std::unique_ptr<Component>;
 
 	GameObject(GameObjectId gameObjectId);
 
@@ -34,11 +33,13 @@ public:
 		return nullptr;
 	}
 
-	void AddComponent(ComponentPointer component);
+	void AddComponent(UniqueComponent component);
 
 private:
-	using ComponentMap = std::map<Component::ComponentId, ComponentPointer>;
+	using ComponentMap = std::map<Component::ComponentId, UniqueComponent>;
 
 	GameObjectId mGameObjectId;
 	ComponentMap mComponents;
 };
+
+using GameObjectUniquePointer = std::unique_ptr<GameObject>;

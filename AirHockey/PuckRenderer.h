@@ -9,12 +9,12 @@ class GameObject;
 class PuckRenderer : public RenderComponent
 {
 public:
-	PuckRenderer(SharedRendererPointer renderer, SharedResourceManagerPointer resourceManager);
+	PuckRenderer(SharedRenderer renderer, SharedResourceManager resourceManager);
 
 	ComponentId GetId() const override;
 	void Render(GameObject& gameObject) override;
 
 private:
-	SharedRendererPointer mRenderer;
-	SharedTexturePointer mTexture;
+	SharedRenderer mRenderer;
+	SharedTexture mTexture;
 };

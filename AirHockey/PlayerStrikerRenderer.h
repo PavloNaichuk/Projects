@@ -9,12 +9,12 @@ class GameObject;
 class PlayerStrikerRenderer : public RenderComponent
 {
 public:
-	PlayerStrikerRenderer(SharedRendererPointer renderer, SharedResourceManagerPointer resourceManager);
+	PlayerStrikerRenderer(SharedRenderer renderer, SharedResourceManager resourceManager);
 
 	ComponentId GetId() const override;
 	void Render(GameObject& gameObject) override;
 
 private:
-	SharedRendererPointer mRenderer;
-	SharedTexturePointer mTexture;
+	SharedRenderer mRenderer;
+	SharedTexture mTexture;
 };

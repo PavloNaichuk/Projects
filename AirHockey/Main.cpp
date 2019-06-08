@@ -4,6 +4,5 @@
 int main(int argc, char** argv)
 {
 	AirHockey airHockey;
-	airHockey.LaunchGame();
-	return 0;
+	return airHockey.LaunchGame();
 }

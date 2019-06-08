@@ -10,7 +10,7 @@
 class PlayGameState : public GameState
 {
 public:
-	PlayGameState(SharedRendererPointer renderer, SharedResourceManagerPointer resourceManager);
+	PlayGameState(SharedRenderer renderer, SharedResourceManager resourceManager);
 
 	void Enter() override;
 	void Update(float deltaTime) override;
@@ -18,13 +18,14 @@ public:
 	void Exit() override;
 
 private: 
-	/*GameObject CreatePlayerStriker(const Point& center, const Size& size);
-	GameObject CreateEnemyStriker(const Point& center, const Size& size);
-	GameObject CreatePuck(const Point& center, const Size& size);*/
+	GameObjectUniquePointer CreatePlayerStriker(const Point& center, const Size& size);
+	GameObjectUniquePointer CreateEnemyStriker(const Point& center, const Size& size);
+	GameObjectUniquePointer CreatePuck(const Point& center, const Size& size);
 
 private:
-	SharedRendererPointer mRenderer;
-	SharedResourceManagerPointer mResourceManager;
+	SharedRenderer mRenderer;
+	SharedResourceManager mResourceManager;
+	SharedTexture mBoardTexture;
 
-	std::vector<GameObject> mGameObjects;
+	std::vector<GameObjectUniquePointer> mGameObjects;
 };

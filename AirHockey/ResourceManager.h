@@ -7,18 +7,19 @@ class ResourceManager
 public:
 	enum ResourceId 
 	{
-		PlayerStriker,
-		EnemyStriker,
-		Puck,
+		BoardId,
+		PlayerStrikerId,
+		EnemyStrikerId,
+		PuckId,
 		NumResources
 	};
 
-	bool LoadResources(SharedRendererPointer renderer);
-	SharedTexturePointer GetTexture(ResourceId resourceId);
+	bool LoadResources(SharedRenderer renderer);
+	SharedTexture GetTexture(ResourceId resourceId);
 
 private:
-	std::array<SharedSurfacePointer, NumResources> mSurfaces;
-	std::array<SharedTexturePointer, NumResources> mTextures;
+	std::array<SharedSurface, NumResources> mSurfaces;
+	std::array<SharedTexture, NumResources> mTextures;
 };
 
-using SharedResourceManagerPointer = std::shared_ptr<ResourceManager>;
+using SharedResourceManager = std::shared_ptr<ResourceManager>;

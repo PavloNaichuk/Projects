@@ -4,9 +4,9 @@
 #include "PositionComponent.h"
 #include "SizeComponent.h"
 
-PuckRenderer::PuckRenderer(SharedRendererPointer renderer, SharedResourceManagerPointer resourceManager)
+PuckRenderer::PuckRenderer(SharedRenderer renderer, SharedResourceManager resourceManager)
 	: mRenderer(renderer)
-	, mTexture(resourceManager->GetTexture(ResourceManager::Puck))
+	, mTexture(resourceManager->GetTexture(ResourceManager::PuckId))
 {
 	assert(mTexture);
 }
@@ -24,5 +24,6 @@ void PuckRenderer::Render(GameObject& gameObject)
 	Point topLeft = positionComponent->GetCenter() - 0.5f * sizeComponent->Get();
 	SDL_Rect destRect = {int(topLeft.mX), int(topLeft.mY), int(sizeComponent->Get().mX), int(sizeComponent->Get().mY)};
 
+	SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_ADD);
 	SDL_RenderCopy(mRenderer.get(), mTexture.get(), nullptr, &destRect);
 }

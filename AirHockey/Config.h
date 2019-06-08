@@ -1,7 +1,7 @@
 #pragma once
 
-const int WINDOW_WIDTH = 1280;
-const int WINDOW_HEIGHT = 720;
+const int BOARD_WIDTH = 700;
+const int BOARD_HEIGHT = 400;
 
 const float PLAYER_WIDTH = 50.0f;
 const float PLAYER_HEIGHT = 75.0f;

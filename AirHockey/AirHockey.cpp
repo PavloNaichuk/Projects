@@ -1,56 +1,82 @@
 #include "pch.h"
 #include "AirHockey.h"
 #include "PlayGameState.h"
+#include "Config.h"
 
-AirHockey::AirHockey()
-	: mWindow(nullptr, SDL_DestroyWindow)
+int AirHockey::LaunchGame()
+{
+	int statusCode = Init();
+	if (statusCode != 0)
+		return statusCode;
+
+	GameLoop();
+
+	return Deinit();
+}
+
+int AirHockey::Init() 
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
+		assert(false);
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-		return;
+		return -1;
 	}
 	if (TTF_Init() != 0)
 	{
+		assert(false);
 		SDL_Log("Unable to initialize TTF: %s", TTF_GetError());
-		return;
+		return -2;
 	}
 
-	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
-	int initted = IMG_Init(flags);
-	if ((initted & flags) != flags)
+	const int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+	if ((IMG_Init(flags) & flags) != flags)
 	{
+		assert(false);
 		SDL_Log("Failed to init required jpg and png support! %s", IMG_GetError());
-		return;
+		return -3;
 	}
+
+	mWindow.reset(SDL_CreateWindow("AirHockey by Pavlo Naichuk", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		BOARD_WIDTH, BOARD_HEIGHT, SDL_WINDOW_OPENGL), SDL_DestroyWindow);
+
+	if (mWindow == nullptr)
+	{
+		assert(false);
+		SDL_Log("Unable to create window: %s", SDL_GetError());
+		return -4;
+	}
+
+	mRenderer.reset(SDL_CreateRenderer(mWindow.get(), -1, SDL_RENDERER_ACCELERATED), SDL_DestroyRenderer);
+	if (mRenderer == nullptr)
+	{
+		assert(false);
+		SDL_Log("Unable to create renderer: %s", SDL_GetError());
+		return -5;
+	}
+
+	mResourceManager.reset(new ResourceManager());
+	if (mResourceManager->LoadResources(mRenderer) == false) 
+	{
+		assert(false);
+		SDL_Log("Unable to load resources");
+		return -6;
+	}
+
+	return 0;
 }
 
-AirHockey::~AirHockey()
+int AirHockey::Deinit() 
 {
 	IMG_Quit();
 	TTF_Quit();
 	SDL_Quit();
+
+	return 0;
 }
 
-void AirHockey::LaunchGame()
+void AirHockey::GameLoop() 
 {
-	const int windowWidth = 1280;
-	const int windowHeight = 720;
-
-	mWindow.reset(SDL_CreateWindow(
-		"AirHockey by Pavlo Naichuk",
-		SDL_WINDOWPOS_UNDEFINED,
-		SDL_WINDOWPOS_UNDEFINED,
-		windowWidth,
-		windowHeight,
-		SDL_WINDOW_OPENGL
-	));
-	if (mWindow == nullptr)
-	{
-		SDL_Log("Unable to created window: %s", SDL_GetError());
-		return;
-	}
-
 	EnterState(std::make_unique<PlayGameState>(mRenderer, mResourceManager));
 
 	SDL_Event event;
@@ -71,6 +97,7 @@ void AirHockey::LaunchGame()
 		mCurrentState->Render();
 	}
 }
+
 
 void AirHockey::EnterState(std::unique_ptr<GameState> newState)
 {

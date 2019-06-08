@@ -6,7 +6,7 @@ GameObject::GameObject(GameObjectId gameObjectId)
 {
 }
 
-void GameObject::AddComponent(ComponentPointer component) 
+void GameObject::AddComponent(UniqueComponent component) 
 {
 	mComponents.emplace(component->GetId(), std::move(component));
 }

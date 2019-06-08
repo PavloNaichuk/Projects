@@ -8,5 +8,5 @@ class PlayerStrikerMovement : public MovementComponent
 {
 public:
 	ComponentId GetId() const override;
-	void Update(GameObject& gameObject, float deltaTime);
+	void Update(GameObject& gameObject, float deltaTime) override;
 };

@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Config.h"
 #include "PlayGameState.h"
 #include "RenderComponent.h"
 #include "MovementComponent.h"
@@ -22,76 +23,86 @@ enum GameObjectId
 	NumGameObjects
 };
 
-PlayGameState::PlayGameState(SharedRendererPointer renderer, SharedResourceManagerPointer resourceManager) 
+PlayGameState::PlayGameState(SharedRenderer renderer, SharedResourceManager resourceManager) 
 	: mRenderer(renderer)
 	, mResourceManager(resourceManager)
 {}
 
 void PlayGameState::Enter()
 {
+	mBoardTexture = mResourceManager->GetTexture(ResourceManager::BoardId);
+	assert(mBoardTexture);
+
 	mGameObjects.reserve(NumGameObjects);
-	/*mGameObjects.emplace_back(CreatePlayerStriker(Point(0.0f, 0.0f), Size(47.0f, 47.0f)));
+	mGameObjects.emplace_back(CreatePlayerStriker(Point(0.0f, 0.0f), Size(47.0f, 47.0f)));
 	mGameObjects.emplace_back(CreateEnemyStriker(Point(0.0f, 0.0f), Size(46.0f, 47.0f)));
-	mGameObjects.emplace_back(CreatePuck(Point(0.0f, 0.0f), Size(29.0f, 30.0f)));*/
+	mGameObjects.emplace_back(CreatePuck(Point(0.0f, 0.0f), Size(29.0f, 30.0f)));
 }
 
 void PlayGameState::Update(float deltaTime)
 {
-	for (GameObject& gameObject : mGameObjects)
+	for (const auto& gameObject : mGameObjects)
 	{
-		MovementComponent* component = gameObject.GetComponent<MovementComponent>(MovementComponent::COMPONENT_ID);
-		component->Update(gameObject, deltaTime);
+		MovementComponent* component = gameObject->GetComponent<MovementComponent>(MovementComponent::COMPONENT_ID);
+		component->Update(*gameObject, deltaTime);
 	}
 }
 
 void PlayGameState::Render() 
 {
-	for (GameObject& gameObject : mGameObjects)
+	SDL_Rect destRect = {0, 0, BOARD_WIDTH, BOARD_HEIGHT};
+
+	SDL_SetTextureBlendMode(mBoardTexture.get(), SDL_BLENDMODE_NONE);
+	SDL_RenderCopy(mRenderer.get(), mBoardTexture.get(), nullptr, &destRect);
+
+	for (const auto& gameObject : mGameObjects)
 	{
-		RenderComponent* component = gameObject.GetComponent<RenderComponent>(RenderComponent::COMPONENT_ID);
-		component->Render(gameObject);
+		RenderComponent* component = gameObject->GetComponent<RenderComponent>(RenderComponent::COMPONENT_ID);
+		component->Render(*gameObject);
 	}
+
+	SDL_RenderPresent(mRenderer.get());
 }
 
 void PlayGameState::Exit()
 {
 
 }
-/**
-GameObject PlayGameState::CreatePlayerStriker(const Point& center, const Size& size) 
+
+GameObjectUniquePointer PlayGameState::CreatePlayerStriker(const Point& center, const Size& size)
 {
-	GameObject gameObject(PlayerStrikerId);
-	gameObject.AddComponent(std::make_unique<PositionComponent>(center));
-	gameObject.AddComponent(std::make_unique<SizeComponent>(size));
-	gameObject.AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
-	gameObject.AddComponent(std::make_unique<ScoreComponent>(0));
-	gameObject.AddComponent(std::make_unique<PlayerStrikerMovement>());
-	gameObject.AddComponent(std::make_unique<PlayerStrikerRenderer>(mRenderer, mResourceManager));
+	GameObjectUniquePointer gameObject = std::make_unique<GameObject>(PlayerStrikerId);
+	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
+	gameObject->AddComponent(std::make_unique<SizeComponent>(size));
+	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
+	gameObject->AddComponent(std::make_unique<ScoreComponent>(0));
+	gameObject->AddComponent(std::make_unique<PlayerStrikerMovement>());
+	gameObject->AddComponent(std::make_unique<PlayerStrikerRenderer>(mRenderer, mResourceManager));
 	
 	return gameObject;
 }
 
-GameObject PlayGameState::CreateEnemyStriker(const Point& center, const Size& size) 
+GameObjectUniquePointer PlayGameState::CreateEnemyStriker(const Point& center, const Size& size)
 {
-	GameObject gameObject(EnemyStrikerId);
-	gameObject.AddComponent(std::make_unique<PositionComponent>(center));
-	gameObject.AddComponent(std::make_unique<SizeComponent>(size));
-	gameObject.AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
-	gameObject.AddComponent(std::make_unique<ScoreComponent>(0));
-	gameObject.AddComponent(std::make_unique<EnemyStrikerMovement>());
-	gameObject.AddComponent(std::make_unique<EnemyStrikerRenderer>(mRenderer, mResourceManager));
+	GameObjectUniquePointer gameObject = std::make_unique<GameObject>(EnemyStrikerId);
+	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
+	gameObject->AddComponent(std::make_unique<SizeComponent>(size));
+	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
+	gameObject->AddComponent(std::make_unique<ScoreComponent>(0));
+	gameObject->AddComponent(std::make_unique<EnemyStrikerMovement>());
+	gameObject->AddComponent(std::make_unique<EnemyStrikerRenderer>(mRenderer, mResourceManager));
 
 	return gameObject;
 }
 
-GameObject PlayGameState::CreatePuck(const Point& center, const Size& size) 
+GameObjectUniquePointer PlayGameState::CreatePuck(const Point& center, const Size& size)
 {
-	GameObject gameObject(PuckId);
-	gameObject.AddComponent(std::make_unique<PositionComponent>(center));
-	gameObject.AddComponent(std::make_unique<SizeComponent>(size));
-	gameObject.AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
-	gameObject.AddComponent(std::make_unique<PuckMovement>());
-	gameObject.AddComponent(std::make_unique<PuckRenderer>(mRenderer, mResourceManager));
+	GameObjectUniquePointer gameObject = std::make_unique<GameObject>(PuckId);
+	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
+	gameObject->AddComponent(std::make_unique<SizeComponent>(size));
+	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
+	gameObject->AddComponent(std::make_unique<PuckMovement>());
+	gameObject->AddComponent(std::make_unique<PuckRenderer>(mRenderer, mResourceManager));
 
 	return gameObject;
-}*/
+}

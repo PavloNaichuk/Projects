@@ -7,17 +7,18 @@
 class AirHockey
 {
 public:
-	AirHockey();
-	~AirHockey();
-
-	void LaunchGame();
+	int LaunchGame();
 
 private:
+	int Init();
+	int Deinit();
+	void GameLoop();
+
 	void EnterState(std::unique_ptr<GameState> newState);
 
 private:
-	UniqueWindowPointer mWindow;
-	SharedRendererPointer mRenderer;
-	SharedResourceManagerPointer mResourceManager;
+	SharedWindow mWindow;
+	SharedRenderer mRenderer;
+	SharedResourceManager mResourceManager;
 	std::unique_ptr<GameState> mCurrentState;
 };
