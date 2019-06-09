@@ -42,4 +42,4 @@ private:
 	ComponentMap mComponents;
 };
 
-using GameObjectUniquePointer = std::unique_ptr<GameObject>;
+using UniqueGameObject = std::unique_ptr<GameObject>;

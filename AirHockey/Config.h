@@ -8,3 +8,6 @@ const float STRIKER_SPEED = 80.0f;
 
 const float PUCK_RADIUS = 16.0f;
 const float PUCK_SPEED = 80.0f;
+
+const float GOAL_RADIUS = 256.0f;
+

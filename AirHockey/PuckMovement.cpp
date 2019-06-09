@@ -8,7 +8,7 @@
 
 Component::ComponentId PuckMovement::GetId() const
 {
-	return MovementComponent::COMPONENT_ID;
+	return AIComponent::COMPONENT_ID;
 }
 
 void PuckMovement::Update(GameObject& gameObject, float deltaTime)

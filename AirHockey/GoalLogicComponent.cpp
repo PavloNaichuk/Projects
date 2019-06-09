@@ -1,12 +1,11 @@
 #include "pch.h"
-#include "GoalLogicComponent.h"
-#include "GameObject.h"
+#include "GoalLogic.h"
 
-Component::ComponentId GoalLogicComponent::GetId() const
+Component::ComponentId GoalLogic::GetId() const
 {
-	return MovementComponent::COMPONENT_ID;
+	return AIComponent::COMPONENT_ID;
 }
 
-void GoalLogicComponent::Update(GameObject& gameObject, float deltaTime)
+void GoalLogic::Update(GameObject& gameObject, float deltaTime)
 {
 }

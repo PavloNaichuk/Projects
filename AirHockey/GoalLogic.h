@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MovementComponent.h"
+#include "AIComponent.h"
 
 class GameObject;
 
-class GoalLogicComponent : public MovementComponent
+class GoalLogic : public AIComponent
 {
 public:
 	ComponentId GetId() const override;

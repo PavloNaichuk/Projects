@@ -18,14 +18,16 @@ public:
 	void Exit() override;
 
 private: 
-	GameObjectUniquePointer CreatePlayerStriker(const Point& center, float radius);
-	GameObjectUniquePointer CreateEnemyStriker(const Point& center, float radius);
-	GameObjectUniquePointer CreatePuck(const Point& center, float radius);
+	UniqueGameObject CreatePlayerStriker(const Point& center, float radius);
+	UniqueGameObject CreatePlayerGoal(const Point& center, float radius);
+	UniqueGameObject CreateEnemyStriker(const Point& center, float radius);
+	UniqueGameObject CreateEnemyGoal(const Point& center, float radius);
+	UniqueGameObject CreatePuck(const Point& center, float radius);
 
 private:
 	SharedRenderer mRenderer;
 	SharedResourceManager mResourceManager;
 	SharedTexture mBoardTexture;
 
-	std::vector<GameObjectUniquePointer> mGameObjects;
+	std::vector<UniqueGameObject> mGameObjects;
 };

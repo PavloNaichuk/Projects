@@ -33,11 +33,11 @@ int AirHockey::Init()
 	if ((IMG_Init(flags) & flags) != flags)
 	{
 		assert(false);
-		SDL_Log("Failed to init required jpg and png support! %s", IMG_GetError());
+		SDL_Log("Failed to init required jpg and png support: %s", IMG_GetError());
 		return -3;
 	}
 
-	mWindow.reset(SDL_CreateWindow("AirHockey by Pavlo Naichuk", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+	mWindow.reset(SDL_CreateWindow("Air Hockey by Pavlo Naichuk", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		BOARD_WIDTH, BOARD_HEIGHT, SDL_WINDOW_OPENGL), SDL_DestroyWindow);
 
 	if (mWindow == nullptr)

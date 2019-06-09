@@ -8,7 +8,7 @@
 
 Component::ComponentId PlayerStrikerMovement::GetId() const
 {
-	return MovementComponent::COMPONENT_ID;
+	return AIComponent::COMPONENT_ID;
 }
 
 void PlayerStrikerMovement::Update(GameObject& gameObject, float deltaTime)
