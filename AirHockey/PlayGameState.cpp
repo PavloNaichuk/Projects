@@ -19,10 +19,10 @@
 
 enum GameObjectId 
 {
-	PlayerStrikerId,
-	EnemyStrikerId,
-	PuckId,
-	NumGameObjects
+	PLAYER_STRIKER_ID,
+	ENEMY_STRIKER_ID,
+	PUCK_ID,
+	NUM_GAME_OBJECTS
 };
 
 PlayGameState::PlayGameState(SharedRenderer renderer, SharedResourceManager resourceManager) 
@@ -32,10 +32,10 @@ PlayGameState::PlayGameState(SharedRenderer renderer, SharedResourceManager reso
 
 void PlayGameState::Enter()
 {
-	mBoardTexture = mResourceManager->GetTexture(ResourceManager::BoardId);
+	mBoardTexture = mResourceManager->GetTexture(ResourceManager::BOARD_ID);
 	assert(mBoardTexture);
 
-	mGameObjects.reserve(NumGameObjects);
+	mGameObjects.reserve(NUM_GAME_OBJECTS);
 	mGameObjects.emplace_back(CreatePlayerStriker(Point(BOARD_WIDTH - STRIKER_RADIUS, BOARD_HEIGHT / 2), STRIKER_RADIUS));
 	mGameObjects.emplace_back(CreateEnemyStriker(Point(STRIKER_RADIUS, BOARD_HEIGHT / 2), STRIKER_RADIUS));
 	mGameObjects.emplace_back(CreatePuck(Point(BOARD_WIDTH - BOARD_WIDTH / 4, BOARD_HEIGHT / 2), PUCK_RADIUS));
@@ -79,7 +79,7 @@ void PlayGameState::Exit()
 
 GameObjectUniquePointer PlayGameState::CreatePlayerStriker(const Point& center, float radius)
 {
-	GameObjectUniquePointer gameObject = std::make_unique<GameObject>(PlayerStrikerId);
+	GameObjectUniquePointer gameObject = std::make_unique<GameObject>(PLAYER_STRIKER_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
 	gameObject->AddComponent(std::make_unique<SizeComponent>(radius));
 	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
@@ -93,7 +93,7 @@ GameObjectUniquePointer PlayGameState::CreatePlayerStriker(const Point& center, 
 
 GameObjectUniquePointer PlayGameState::CreateEnemyStriker(const Point& center, float radius)
 {
-	GameObjectUniquePointer gameObject = std::make_unique<GameObject>(EnemyStrikerId);
+	GameObjectUniquePointer gameObject = std::make_unique<GameObject>(ENEMY_STRIKER_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
 	gameObject->AddComponent(std::make_unique<SizeComponent>(radius));
 	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
@@ -107,7 +107,7 @@ GameObjectUniquePointer PlayGameState::CreateEnemyStriker(const Point& center, f
 
 GameObjectUniquePointer PlayGameState::CreatePuck(const Point& center, float radius)
 {
-	GameObjectUniquePointer gameObject = std::make_unique<GameObject>(PuckId);
+	GameObjectUniquePointer gameObject = std::make_unique<GameObject>(PUCK_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
 	gameObject->AddComponent(std::make_unique<SizeComponent>(radius));
 	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));

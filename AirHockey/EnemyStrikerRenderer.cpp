@@ -6,7 +6,7 @@
 
 EnemyStrikerRenderer::EnemyStrikerRenderer(SharedRenderer renderer, SharedResourceManager resourceManager)
 	: mRenderer(renderer)
-	, mTexture(resourceManager->GetTexture(ResourceManager::EnemyStrikerId))
+	, mTexture(resourceManager->GetTexture(ResourceManager::ENEMY_STRIKER_ID))
 {
 	assert(mTexture);
 }

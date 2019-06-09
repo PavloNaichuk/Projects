@@ -3,11 +3,11 @@
 
 bool ResourceManager::LoadResources(SharedRenderer renderer)
 {
-	std::array<const char*, NumResources> resourcePaths;
-	resourcePaths[BoardId] = "Resources/Images/board.png";
-	resourcePaths[PlayerStrikerId] = "Resources/Images/player.png";
-	resourcePaths[EnemyStrikerId] = "Resources/Images/enemy.png";
-	resourcePaths[PuckId] = "Resources/Images/puck.png";
+	std::array<const char*, NUM_RESOURCES> resourcePaths;
+	resourcePaths[BOARD_ID] = "Resources/Images/board.png";
+	resourcePaths[PLAYER_STRIKER_ID] = "Resources/Images/player.png";
+	resourcePaths[ENEMY_STRIKER_ID] = "Resources/Images/enemy.png";
+	resourcePaths[PUCK_ID] = "Resources/Images/puck.png";
 	
 	for (unsigned index = 0; index < resourcePaths.size(); ++index) 
 	{

@@ -6,7 +6,7 @@
 
 PlayerStrikerRenderer::PlayerStrikerRenderer(SharedRenderer renderer, SharedResourceManager resourceManager) 
 	: mRenderer(renderer)
-	, mTexture(resourceManager->GetTexture(ResourceManager::PlayerStrikerId))
+	, mTexture(resourceManager->GetTexture(ResourceManager::PLAYER_STRIKER_ID))
 {
 	assert(mTexture);
 }

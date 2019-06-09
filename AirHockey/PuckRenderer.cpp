@@ -6,7 +6,7 @@
 
 PuckRenderer::PuckRenderer(SharedRenderer renderer, SharedResourceManager resourceManager)
 	: mRenderer(renderer)
-	, mTexture(resourceManager->GetTexture(ResourceManager::PuckId))
+	, mTexture(resourceManager->GetTexture(ResourceManager::PUCK_ID))
 {
 	assert(mTexture);
 }
