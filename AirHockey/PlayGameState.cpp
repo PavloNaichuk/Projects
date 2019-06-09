@@ -11,6 +11,8 @@
 #include "PlayerStrikerMovement.h"
 #include "EnemyStrikerMovement.h"
 #include "PuckMovement.h"
+#include "StrikerPhysics.h"
+#include "PuckPhysics.h"
 #include "ScoreComponent.h"
 #include "VelocityComponent.h"
 #include "GameObject.h"
@@ -41,10 +43,16 @@ void PlayGameState::Enter()
 
 void PlayGameState::Update(float deltaTime)
 {
-	for (const auto& gameObject : mGameObjects)
+	for (auto& gameObject : mGameObjects)
 	{
 		MovementComponent* component = gameObject->GetComponent<MovementComponent>(MovementComponent::COMPONENT_ID);
 		component->Update(*gameObject, deltaTime);
+	}
+
+	for (auto& gameObject : mGameObjects) 
+	{
+		PhysicsComponent* component = gameObject->GetComponent<PhysicsComponent>(PhysicsComponent::COMPONENT_ID);
+		component->Update(*gameObject);
 	}
 }
 
@@ -55,7 +63,7 @@ void PlayGameState::Render()
 	SDL_SetTextureBlendMode(mBoardTexture.get(), SDL_BLENDMODE_NONE);
 	SDL_RenderCopy(mRenderer.get(), mBoardTexture.get(), nullptr, &destRect);
 
-	for (const auto& gameObject : mGameObjects)
+	for (auto& gameObject : mGameObjects)
 	{
 		RenderComponent* component = gameObject->GetComponent<RenderComponent>(RenderComponent::COMPONENT_ID);
 		component->Render(*gameObject);
@@ -78,6 +86,7 @@ GameObjectUniquePointer PlayGameState::CreatePlayerStriker(const Point& center, 
 	gameObject->AddComponent(std::make_unique<ScoreComponent>(0));
 	gameObject->AddComponent(std::make_unique<PlayerStrikerMovement>());
 	gameObject->AddComponent(std::make_unique<PlayerStrikerRenderer>(mRenderer, mResourceManager));
+	gameObject->AddComponent(std::make_unique<StrikerPhysics>());
 	
 	return gameObject;
 }
@@ -91,6 +100,7 @@ GameObjectUniquePointer PlayGameState::CreateEnemyStriker(const Point& center, c
 	gameObject->AddComponent(std::make_unique<ScoreComponent>(0));
 	gameObject->AddComponent(std::make_unique<EnemyStrikerMovement>());
 	gameObject->AddComponent(std::make_unique<EnemyStrikerRenderer>(mRenderer, mResourceManager));
+	gameObject->AddComponent(std::make_unique<StrikerPhysics>());
 
 	return gameObject;
 }
@@ -103,6 +113,7 @@ GameObjectUniquePointer PlayGameState::CreatePuck(const Point& center, const Siz
 	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
 	gameObject->AddComponent(std::make_unique<PuckMovement>());
 	gameObject->AddComponent(std::make_unique<PuckRenderer>(mRenderer, mResourceManager));
+	gameObject->AddComponent(std::make_unique<PuckPhysics>());
 
 	return gameObject;
 }

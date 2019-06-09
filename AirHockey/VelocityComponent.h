@@ -8,7 +8,7 @@ class VelocityComponent : public Component
 public:
 	VelocityComponent(const Vector& velocity);
 
-	static const ComponentId COMPONENT_ID = 5;
+	static const ComponentId COMPONENT_ID = 6;
 	ComponentId GetId() const override;
 
 	void Set(const Vector& velocity);

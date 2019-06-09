@@ -8,7 +8,7 @@ class SizeComponent : public Component
 public:
 	SizeComponent(const Size& size);
 
-	static const ComponentId COMPONENT_ID = 6;
+	static const ComponentId COMPONENT_ID = 5;
 	ComponentId GetId() const override;
 
 	void Set(const Size& size);

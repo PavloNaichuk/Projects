@@ -7,7 +7,7 @@ class ScoreComponent : public Component
 public:
 	ScoreComponent(unsigned score);
 
-	static const ComponentId COMPONENT_ID = 4;
+	static const ComponentId COMPONENT_ID = 7;
 	ComponentId GetId() const override;
 
 	void Set(unsigned score);

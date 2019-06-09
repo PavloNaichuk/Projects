@@ -8,7 +8,7 @@ class PositionComponent : public Component
 public:
 	PositionComponent(const Point& center);
 
-	static const ComponentId COMPONENT_ID = 2;
+	static const ComponentId COMPONENT_ID = 4;
 
 	ComponentId GetId() const override;
 
