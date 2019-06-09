@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "SizeComponent.h"
 
-SizeComponent::SizeComponent(const Size& size)
-	: mSize(size)
+SizeComponent::SizeComponent(float radius)
+	: mRadius(radius)
 {
 }
 
@@ -11,12 +11,12 @@ Component::ComponentId SizeComponent::GetId() const
 	return COMPONENT_ID;
 }
 
-void SizeComponent::Set(const Size& size)
+void SizeComponent::SetRadius(float radius)
 {
-	mSize = size;
+	mRadius = radius;
 }
 
-const Size& SizeComponent::Get() const
+float SizeComponent::GetRadius() const
 {
-	return mSize;
+	return mRadius;
 }

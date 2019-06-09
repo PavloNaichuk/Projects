@@ -6,14 +6,14 @@
 class SizeComponent : public Component
 {
 public:
-	SizeComponent(const Size& size);
+	SizeComponent(float radius);
 
 	static const ComponentId COMPONENT_ID = 5;
 	ComponentId GetId() const override;
 
-	void Set(const Size& size);
-	const Size& Get() const;
+	void SetRadius(float radius);
+	float GetRadius() const;
 
 private:
-	Size mSize;
+	float mRadius;
 };

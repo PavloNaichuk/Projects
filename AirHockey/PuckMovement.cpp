@@ -14,10 +14,6 @@ Component::ComponentId PuckMovement::GetId() const
 void PuckMovement::Update(GameObject& gameObject, float deltaTime)
 {
 	Vector velocity(0, 0);
-	velocity.mX = -50;
-	velocity.mX = 50;
-	velocity.mY = -50;
-	velocity.mY = 50;
 	VelocityComponent* velocityComponent = gameObject.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
 	velocityComponent->Set(velocity);
 

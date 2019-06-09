@@ -18,9 +18,9 @@ public:
 	void Exit() override;
 
 private: 
-	GameObjectUniquePointer CreatePlayerStriker(const Point& center, const Size& size);
-	GameObjectUniquePointer CreateEnemyStriker(const Point& center, const Size& size);
-	GameObjectUniquePointer CreatePuck(const Point& center, const Size& size);
+	GameObjectUniquePointer CreatePlayerStriker(const Point& center, float radius);
+	GameObjectUniquePointer CreateEnemyStriker(const Point& center, float radius);
+	GameObjectUniquePointer CreatePuck(const Point& center, float radius);
 
 private:
 	SharedRenderer mRenderer;

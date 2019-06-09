@@ -13,16 +13,13 @@ Component::ComponentId EnemyStrikerMovement::GetId() const
 
 void EnemyStrikerMovement::Update(GameObject& gameObject, float deltaTime)
 {
-	Vector velocity(0, 0);
-	velocity.mX = -ENEMY_SPEED;
-	velocity.mX = ENEMY_SPEED;
-	velocity.mY = -ENEMY_SPEED;
-	velocity.mY = ENEMY_SPEED;
-
 	VelocityComponent* velocityComponent = gameObject.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
+	PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+
+	Vector velocity(0, 0);
+
 	velocityComponent->Set(velocity);
 
-	PositionComponent* positionComponent = gameObject.GetComponent < PositionComponent>(PositionComponent::COMPONENT_ID);
 	const Point& oldCenter = positionComponent->GetCenter();
 
 	Point newCenter = oldCenter + deltaTime * velocity;

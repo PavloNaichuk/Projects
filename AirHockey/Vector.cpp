@@ -17,9 +17,29 @@ const Vector operator+ (const Vector& vec1, const Vector& vec2)
 	return Vector(vec1.mX + vec2.mX, vec1.mY + vec2.mY);
 }
 
+const Vector operator+ (float scalar, const Vector& vec) 
+{
+	return Vector(scalar + vec.mX, scalar + vec.mY);
+}
+
+const Vector operator+ (const Vector& vec, float scalar) 
+{
+	return Vector(scalar + vec.mX, scalar + vec.mY);
+}
+
 const Vector operator- (const Vector& vec1, const Vector& vec2)
 {
 	return Vector(vec1.mX - vec2.mX, vec1.mY - vec2.mY);
+}
+
+const Vector operator- (float scalar, const Vector& vec) 
+{
+	return Vector(scalar - vec.mX, scalar - vec.mY);
+}
+
+const Vector operator- (const Vector& vec, float scalar) 
+{
+	return Vector(vec.mX - scalar, vec.mY - scalar);
 }
 
 const Vector operator* (const Vector& vec, float scalar)
@@ -37,9 +57,14 @@ const Vector operator* (const Vector& vec1, const Vector& vec2)
 	return Vector(vec1.mX * vec2.mX, vec1.mY * vec2.mY);
 }
 
-const Vector operator/(const Vector & vec, float scalar)
+const Vector operator/(const Vector& vec, float scalar)
 {
 	return (1.0f / scalar) * vec;
+}
+
+const Vector operator/ (float scalar, const Vector& vec) 
+{
+	return Vector(scalar / vec.mX, scalar / vec.mY);
 }
 
 const Vector& operator+= (Vector& vec1, const Vector& vec2)

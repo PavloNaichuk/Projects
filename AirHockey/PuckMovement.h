@@ -1,4 +1,5 @@
 #pragma once
+
 #include "MovementComponent.h"
 
 class GameObject;
