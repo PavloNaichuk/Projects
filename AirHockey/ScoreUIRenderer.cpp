@@ -29,7 +29,7 @@ void ScoreUIRenderer::Render(GameObject& gameObject)
 	SDL_Color textColor = { 255, 255, 255 };
 
 	char textBuffer[16];
-	std::snprintf(textBuffer, sizeof(textBuffer), "Score %d:%d", currentPlayerStrikerScore, currentEnemyStrikerScore);
+	std::snprintf(textBuffer, sizeof(textBuffer), "Score: %d - %d", currentPlayerStrikerScore, currentEnemyStrikerScore);
 
 	mTextSurface.reset(TTF_RenderText_Solid(mTextFont.get(), textBuffer, textColor), SDL_FreeSurface);
 	assert(mTextSurface);
