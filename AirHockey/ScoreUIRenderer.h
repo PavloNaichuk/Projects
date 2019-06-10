@@ -14,4 +14,8 @@ public:
 private:
 	SharedRenderer mRenderer;
 	SharedFont mTextFont;
+	SharedSurface mTextSurface;
+	SharedTexture mTextTexture;
+
+	int mPrevScore;
 };

@@ -189,7 +189,7 @@ UniqueGameObject PlayGameState::CreateScoreUI(const Point& topLeft, int width, i
 {
 	UniqueGameObject gameObject = std::make_unique<GameObject>(SCORE_UI_ID);
 	gameObject->AddComponent(std::make_unique<BoxComponent>(topLeft, width, height));
-	gameObject->AddComponent(std::make_unique<ScoreUILogic>());
+	gameObject->AddComponent(std::make_unique<ScoreUILogic>(SCORE_PUCKS));
 	gameObject->AddComponent(std::make_unique<ScoreUIRenderer>(mRenderer, mResourceManager));
 
 	return gameObject;
