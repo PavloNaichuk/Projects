@@ -5,14 +5,19 @@
 #include "AIComponent.h"
 #include "PositionComponent.h"
 #include "SizeComponent.h"
+#include "BoxComponent.h"
 #include "PlayerStrikerRenderer.h"
 #include "EnemyStrikerRenderer.h"
 #include "PuckRenderer.h"
 #include "GoalRenderer.h"
+#include "ScoreUIRenderer.h"
+#include "TimerUIRenderer.h"
 #include "PlayerStrikerMovement.h"
 #include "EnemyStrikerMovement.h"
 #include "PuckMovement.h"
 #include "GoalLogic.h"
+#include "ScoreUILogic.h"
+#include "TimerUILogic.h"
 #include "StrikerPhysics.h"
 #include "PuckPhysics.h"
 #include "GoalPhysics.h"
@@ -28,6 +33,13 @@ enum GameObjectId
 	ENEMY_GOAL_ID,
 	PUCK_ID,
 	NUM_GAME_OBJECTS
+};
+
+enum UIObjectId 
+{
+	SCORE_UI_ID,
+	TIMER_UI_ID,
+	NUM_UI_OBJECTS
 };
 
 PlayGameState::PlayGameState(SharedRenderer renderer, SharedResourceManager resourceManager) 
@@ -46,6 +58,10 @@ void PlayGameState::Enter()
 	mGameObjects.emplace_back(CreateEnemyStriker(Point(STRIKER_RADIUS, BOARD_HEIGHT / 2), STRIKER_RADIUS));
 	mGameObjects.emplace_back(CreateEnemyGoal(Point(0.0f, BOARD_HEIGHT / 2), GOAL_RADIUS));
 	mGameObjects.emplace_back(CreatePuck(Point(BOARD_WIDTH - BOARD_WIDTH / 4, BOARD_HEIGHT / 2), PUCK_RADIUS));
+
+	mUIObjects.reserve(NUM_UI_OBJECTS);
+	mUIObjects.emplace_back(CreateScoreUI(Point(0.0f, 0.0f), BOARD_WIDTH / 2, UI_AREA_HEIGHT));
+	mUIObjects.emplace_back(CreateTimerUI(Point(BOARD_WIDTH / 2, 0.0f), BOARD_WIDTH / 2, UI_AREA_HEIGHT));
 }
 
 void PlayGameState::Update(float deltaTime)
@@ -61,12 +77,32 @@ void PlayGameState::Update(float deltaTime)
 		PhysicsComponent* component = gameObject->GetComponent<PhysicsComponent>(PhysicsComponent::COMPONENT_ID);
 		component->Update(*gameObject);
 	}
+
+	for (auto& gameObject : mUIObjects) 
+	{
+		AIComponent* component = gameObject->GetComponent<AIComponent>(AIComponent::COMPONENT_ID);
+		component->Update(*gameObject, deltaTime);
+	}
 }
 
 void PlayGameState::Render() 
 {
-	SDL_Rect destRect = {0, 0, BOARD_WIDTH, BOARD_HEIGHT};
+	SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0);
+	SDL_RenderClear(mRenderer.get());
 
+	SDL_Rect UIViewport = {0, 0, BOARD_WIDTH, UI_AREA_HEIGHT};
+	SDL_RenderSetViewport(mRenderer.get(), &UIViewport);
+
+	for (auto& gameObject : mUIObjects) 
+	{
+		RenderComponent* component = gameObject->GetComponent<RenderComponent>(RenderComponent::COMPONENT_ID);
+		component->Render(*gameObject);
+	}
+
+	SDL_Rect boardViewport = {0, UI_AREA_HEIGHT, BOARD_WIDTH, BOARD_HEIGHT};
+	SDL_RenderSetViewport(mRenderer.get(), &boardViewport);
+
+	SDL_Rect destRect = {0, 0, BOARD_WIDTH, BOARD_HEIGHT};
 	SDL_SetTextureBlendMode(mBoardTexture.get(), SDL_BLENDMODE_NONE);
 	SDL_RenderCopy(mRenderer.get(), mBoardTexture.get(), nullptr, &destRect);
 
@@ -145,6 +181,26 @@ UniqueGameObject PlayGameState::CreatePuck(const Point& center, float radius)
 	gameObject->AddComponent(std::make_unique<PuckMovement>());
 	gameObject->AddComponent(std::make_unique<PuckRenderer>(mRenderer, mResourceManager));
 	gameObject->AddComponent(std::make_unique<PuckPhysics>());
+
+	return gameObject;
+}
+
+UniqueGameObject PlayGameState::CreateScoreUI(const Point& topLeft, int width, int height)
+{
+	UniqueGameObject gameObject = std::make_unique<GameObject>(SCORE_UI_ID);
+	gameObject->AddComponent(std::make_unique<BoxComponent>(topLeft, width, height));
+	gameObject->AddComponent(std::make_unique<ScoreUILogic>());
+	gameObject->AddComponent(std::make_unique<ScoreUIRenderer>(mRenderer, mResourceManager));
+
+	return gameObject;
+}
+
+UniqueGameObject PlayGameState::CreateTimerUI(const Point& topLeft, int width, int height)
+{
+	UniqueGameObject gameObject = std::make_unique<GameObject>(TIMER_UI_ID);
+	gameObject->AddComponent(std::make_unique<BoxComponent>(topLeft, width, height));
+	gameObject->AddComponent(std::make_unique<TimerUILogic>(PLAY_TIME));
+	gameObject->AddComponent(std::make_unique<TimerUIRenderer>(mRenderer, mResourceManager));
 
 	return gameObject;
 }

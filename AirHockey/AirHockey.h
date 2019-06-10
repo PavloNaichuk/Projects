@@ -10,15 +10,18 @@ public:
 	int LaunchGame();
 
 private:
+	using UniqueGameState = std::unique_ptr<GameState>;
+
 	int Init();
 	int Deinit();
 	void GameLoop();
 
-	void EnterState(std::unique_ptr<GameState> newState);
+	void EnterState(UniqueGameState newState);
 
 private:
 	SharedWindow mWindow;
 	SharedRenderer mRenderer;
 	SharedResourceManager mResourceManager;
-	std::unique_ptr<GameState> mCurrentState;
+
+	UniqueGameState mCurrentState;
 };

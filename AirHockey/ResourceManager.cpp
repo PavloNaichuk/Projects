@@ -21,7 +21,23 @@ bool ResourceManager::LoadResources(SharedRenderer renderer)
 		mTextures[index].reset(SDL_CreateTextureFromSurface(renderer.get(), mSurfaces[index].get()), SDL_DestroyTexture);
 		if (mTextures[index] == nullptr) 
 		{
+			assert(false);
 			SDL_Log("Unable to create texture: %s", SDL_GetError());
+			return false;
+		}
+	}
+
+	std::array<int, NUM_TEXT_FONTS> textFontSizes;
+	textFontSizes[SCORE_TEXT_ID] = 25;
+	textFontSizes[TIMER_TEXT_ID] = 25;
+
+	for (unsigned index = 0; index < textFontSizes.size(); ++index) 
+	{
+		mTextFonts[index].reset(TTF_OpenFont("Resources/Fonts/Arial.ttf", textFontSizes[index]), TTF_CloseFont);
+		if (mTextFonts[index] == nullptr) 
+		{
+			assert(false);
+			SDL_Log("Unable to open font: %s", TTF_GetError());
 			return false;
 		}
 	}
@@ -32,4 +48,9 @@ bool ResourceManager::LoadResources(SharedRenderer renderer)
 SharedTexture ResourceManager::GetTexture(ResourceId resourceId) 
 {
 	return mTextures[resourceId];
+}
+
+SharedFont ResourceManager::GetTextFont(TextFontId textFontId) 
+{
+	return mTextFonts[textFontId];
 }

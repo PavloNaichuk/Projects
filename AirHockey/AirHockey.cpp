@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AirHockey.h"
 #include "PlayGameState.h"
+#include "EventCenter.h"
 #include "Config.h"
 
 int AirHockey::LaunchGame()
@@ -20,31 +21,31 @@ int AirHockey::Init()
 	{
 		assert(false);
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-		return -1;
+		return 1;
 	}
 	if (TTF_Init() != 0)
 	{
 		assert(false);
 		SDL_Log("Unable to initialize TTF: %s", TTF_GetError());
-		return -2;
+		return 2;
 	}
-
+	
 	const int flags = IMG_INIT_JPG | IMG_INIT_PNG;
 	if ((IMG_Init(flags) & flags) != flags)
 	{
 		assert(false);
 		SDL_Log("Failed to init required jpg and png support: %s", IMG_GetError());
-		return -3;
+		return 4;
 	}
 
 	mWindow.reset(SDL_CreateWindow("Air Hockey by Pavlo Naichuk", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		BOARD_WIDTH, BOARD_HEIGHT, SDL_WINDOW_OPENGL), SDL_DestroyWindow);
+		BOARD_WIDTH, UI_AREA_HEIGHT + BOARD_HEIGHT, SDL_WINDOW_OPENGL), SDL_DestroyWindow);
 
 	if (mWindow == nullptr)
 	{
 		assert(false);
 		SDL_Log("Unable to create window: %s", SDL_GetError());
-		return -4;
+		return 5;
 	}
 
 	mRenderer.reset(SDL_CreateRenderer(mWindow.get(), -1, SDL_RENDERER_ACCELERATED), SDL_DestroyRenderer);
@@ -52,7 +53,7 @@ int AirHockey::Init()
 	{
 		assert(false);
 		SDL_Log("Unable to create renderer: %s", SDL_GetError());
-		return -5;
+		return 6;
 	}
 
 	mResourceManager.reset(new ResourceManager());
@@ -60,7 +61,7 @@ int AirHockey::Init()
 	{
 		assert(false);
 		SDL_Log("Unable to load resources");
-		return -6;
+		return 7;
 	}
 
 	return 0;
@@ -77,6 +78,15 @@ int AirHockey::Deinit()
 
 void AirHockey::GameLoop() 
 {
+	auto handleEvent = [this](const Event& event) 
+	{
+		if (event.mEventId == Event::PLAY_TIME_FINISHED_ID) 
+		{
+
+		}
+	};
+	EventCenter::GetInstance().Subscribe(handleEvent);
+
 	EnterState(std::make_unique<PlayGameState>(mRenderer, mResourceManager));
 
 	SDL_Event event;
@@ -95,11 +105,13 @@ void AirHockey::GameLoop()
 
 		mCurrentState->Update(elapsedTime);
 		mCurrentState->Render();
+
+		EventCenter::GetInstance().Update();
 	}
 }
 
 
-void AirHockey::EnterState(std::unique_ptr<GameState> newState)
+void AirHockey::EnterState(UniqueGameState newState)
 {
 	if (mCurrentState != nullptr)
 		mCurrentState->Exit();

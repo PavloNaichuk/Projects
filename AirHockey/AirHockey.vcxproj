@@ -163,6 +163,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BoxComponent.h" />
+    <ClInclude Include="EventCenter.h" />
     <ClInclude Include="GoalPhysics.h" />
     <ClInclude Include="GoalRenderer.h" />
     <ClInclude Include="Helpers.h" />
@@ -189,15 +191,21 @@
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="ScoreUILogic.h" />
+    <ClInclude Include="ScoreUIRenderer.h" />
     <ClInclude Include="SizeComponent.h" />
     <ClInclude Include="StrikerPhysics.h" />
+    <ClInclude Include="TimerUILogic.h" />
+    <ClInclude Include="TimerUIRenderer.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VelocityComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AirHockey.cpp" />
+    <ClCompile Include="BoxComponent.cpp" />
     <ClCompile Include="EnemyStrikerMovement.cpp" />
     <ClCompile Include="EnemyStrikerRenderer.cpp" />
+    <ClCompile Include="EventCenter.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GoalLogicComponent.cpp" />
     <ClCompile Include="GoalPhysics.cpp" />
@@ -219,8 +227,12 @@
     <ClCompile Include="PuckRenderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="ScoreUILogic.cpp" />
+    <ClCompile Include="ScoreUIRenderer.cpp" />
     <ClCompile Include="SizeComponent.cpp" />
     <ClCompile Include="StrikerPhysics.cpp" />
+    <ClCompile Include="TimerUILogic.cpp" />
+    <ClCompile Include="TimerUIRenderer.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="VelocityComponent.cpp" />
   </ItemGroup>

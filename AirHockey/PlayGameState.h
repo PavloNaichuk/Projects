@@ -24,10 +24,14 @@ private:
 	UniqueGameObject CreateEnemyGoal(const Point& center, float radius);
 	UniqueGameObject CreatePuck(const Point& center, float radius);
 
+	UniqueGameObject CreateScoreUI(const Point& topLeft, int width, int height);
+	UniqueGameObject CreateTimerUI(const Point& topLeft, int width, int height);
+
 private:
 	SharedRenderer mRenderer;
 	SharedResourceManager mResourceManager;
 	SharedTexture mBoardTexture;
 
+	std::vector<UniqueGameObject> mUIObjects;
 	std::vector<UniqueGameObject> mGameObjects;
 };

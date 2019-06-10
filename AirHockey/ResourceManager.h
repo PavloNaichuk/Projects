@@ -14,12 +14,23 @@ public:
 		NUM_RESOURCES
 	};
 
+	enum TextFontId 
+	{
+		SCORE_TEXT_ID,
+		TIMER_TEXT_ID,
+		NUM_TEXT_FONTS
+	};
+
 	bool LoadResources(SharedRenderer renderer);
+
 	SharedTexture GetTexture(ResourceId resourceId);
+	SharedFont GetTextFont(TextFontId textFontId);
 
 private:
 	std::array<SharedSurface, NUM_RESOURCES> mSurfaces;
 	std::array<SharedTexture, NUM_RESOURCES> mTextures;
+
+	std::array<SharedFont, NUM_TEXT_FONTS> mTextFonts;
 };
 
 using SharedResourceManager = std::shared_ptr<ResourceManager>;

@@ -11,9 +11,11 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <queue>
+#include <cstdio>
 
 using SharedWindow = std::shared_ptr<SDL_Window>;
 using SharedRenderer = std::shared_ptr<SDL_Renderer>;
 using SharedSurface = std::shared_ptr<SDL_Surface>;
 using SharedTexture = std::shared_ptr<SDL_Texture>;
-using UniqueFont = std::unique_ptr<TTF_Font, std::function<void(TTF_Font*)>>;
+using SharedFont = std::shared_ptr<TTF_Font>;
