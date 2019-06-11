@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AirHockey.h"
 #include "PlayGameState.h"
+#include "EndMenuState.h"
 #include "EventCenter.h"
 #include "Config.h"
 
@@ -67,10 +68,15 @@ int AirHockey::Init()
 	return 0;
 }
 
-int AirHockey::Deinit() 
+int AirHockey::Deinit()
 {
-	IMG_Quit();
+	mCurrentState.reset();
+	mResourceManager.reset();
+	mRenderer.reset();
+	mWindow.reset();
+
 	TTF_Quit();
+	IMG_Quit();
 	SDL_Quit();
 
 	return 0;
@@ -88,6 +94,7 @@ void AirHockey::GameLoop()
 	EventCenter::GetInstance().Subscribe(handleEvent);
 
 	EnterState(std::make_unique<PlayGameState>(mRenderer, mResourceManager));
+	//EnterState(std::make_unique<EndMenuState>(mRenderer, BOARD_WIDTH, BOARD_HEIGHT));
 
 	SDL_Event event;
 	std::uint32_t prevTime = SDL_GetTicks();
