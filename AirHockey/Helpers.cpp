@@ -10,3 +10,10 @@ Region::Region(const Point& topLeft, const Point& bottonRight)
 	, mBottonRight(bottonRight)
 {
 }
+
+BoardWall::BoardWall(const Point& start, const Point& end, const Vector& orientation) 
+	: mStart(start)
+	, mEnd(end)
+	, mOrientation(orientation)
+{
+}

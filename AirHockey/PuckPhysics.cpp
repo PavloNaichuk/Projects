@@ -1,5 +1,14 @@
 #include "pch.h"
 #include "PuckPhysics.h"
+#include "PositionComponent.h"
+#include "VelocityComponent.h"
+#include "SizeComponent.h"
+#include "GameObject.h"
+
+PuckPhysics::PuckPhysics(std::vector<BoardWall> boardWalls) 
+	: mBoardWalls(std::move(boardWalls))
+{
+}
 
 Component::ComponentId PuckPhysics::GetId() const 
 {
@@ -8,5 +17,8 @@ Component::ComponentId PuckPhysics::GetId() const
 
 void PuckPhysics::Update(GameObject& gameObject) 
 {
+	PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+	VelocityComponent* velocityComponent = gameObject.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
+	SizeComponent* sizeComponent = gameObject.GetComponent<SizeComponent>(SizeComponent::COMPONENT_ID);
 
 }

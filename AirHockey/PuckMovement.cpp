@@ -13,13 +13,14 @@ Component::ComponentId PuckMovement::GetId() const
 
 void PuckMovement::Update(GameObject& gameObject, float deltaTime)
 {
-	Vector velocity(0, 0);
 	VelocityComponent* velocityComponent = gameObject.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
+	PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+
+	Vector velocity = (1.0f - BOARD_FRICTION) * velocityComponent->Get();
 	velocityComponent->Set(velocity);
-
-	PositionComponent* positionComponent = gameObject.GetComponent < PositionComponent>(PositionComponent::COMPONENT_ID);
+	
 	const Point& oldCenter = positionComponent->GetCenter();
-
 	Point newCenter = oldCenter + deltaTime * velocity;
+
 	positionComponent->SetCenter(newCenter);
 }

@@ -201,13 +201,22 @@ UniqueGameObject PlayGameState::CreateEnemyGoal(const Point& center, float radiu
 
 UniqueGameObject PlayGameState::CreatePuck(const Point& center, float radius)
 {
+	std::vector<BoardWall> boardWalls = {
+		BoardWall(Point(0.0f, 0.0f), Point(BOARD_WIDTH, 0.0f), Vector(0.0f, 1.0f)), // Top
+		BoardWall(Point(0.0f, BOARD_HEIGHT), Point(BOARD_WIDTH, BOARD_HEIGHT), Vector(0.0f, -1.0f)), // Bottom 
+		BoardWall(Point(0.0f, 0.0f), Point(0.0f, GOAL_TOP_OFFSET), Vector(1.0f, 0.0f)), // Top left
+		BoardWall(Point(0.0f, GOAL_BOTTOM_OFFSET), Point(0.0f, BOARD_HEIGHT), Vector(1.0f, 0.0f)), // Bottom left
+		BoardWall(Point(BOARD_WIDTH, 0.0f), Point(BOARD_WIDTH, GOAL_TOP_OFFSET), Vector(-1.0f, 0.0f)), // Top right
+		BoardWall(Point(BOARD_WIDTH, GOAL_BOTTOM_OFFSET), Point(BOARD_WIDTH, BOARD_HEIGHT), Vector(-1.0f, 0.0f)) // Bottom right
+	};
+
 	UniqueGameObject gameObject = std::make_unique<GameObject>(PUCK_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
 	gameObject->AddComponent(std::make_unique<SizeComponent>(radius));
 	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
 	gameObject->AddComponent(std::make_unique<PuckMovement>());
 	gameObject->AddComponent(std::make_unique<PuckRenderer>(mRenderer, mResourceManager));
-	gameObject->AddComponent(std::make_unique<PuckPhysics>());
+	gameObject->AddComponent(std::make_unique<PuckPhysics>(std::move(boardWalls)));
 
 	return gameObject;
 }

@@ -101,7 +101,12 @@ std::ostream& operator<< (std::ostream& os, const Vector& vec)
 	return os;
 }
 
-Vector Reflect(const Vector& incidentRay, const Vector& normal)
+float Dot(const Vector& vec1, const Vector& vec2) 
 {
-	return (incidentRay - (2.0f * (incidentRay * normal)) * normal);
+	return (vec1.mX * vec2.mX + vec1.mY * vec2.mY);
+}
+
+const Vector Reflect(const Vector& incident, const Vector& normal)
+{
+	return (incident - (2.0f * Dot(incident, normal)) * normal);
 }

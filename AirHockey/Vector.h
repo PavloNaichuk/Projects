@@ -34,4 +34,5 @@ const Vector& operator*= (Vector& vec, float scalar);
 
 std::ostream& operator <<(std::ostream& os, const Vector& vec);
 
-Vector Reflect(const Vector& incidentRay, const Vector& normal);
+float Dot(const Vector& vec1, const Vector& vec2);
+const Vector Reflect(const Vector& incident, const Vector& normal);
