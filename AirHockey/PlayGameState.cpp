@@ -4,7 +4,7 @@
 #include "RenderComponent.h"
 #include "AIComponent.h"
 #include "PositionComponent.h"
-#include "SizeComponent.h"
+#include "RadiusComponent.h"
 #include "BoxComponent.h"
 #include "PlayerStrikerRenderer.h"
 #include "EnemyStrikerRenderer.h"
@@ -151,7 +151,7 @@ UniqueGameObject PlayGameState::CreatePlayerStriker(const Point& center, float r
 {
 	UniqueGameObject gameObject = std::make_unique<GameObject>(PLAYER_STRIKER_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
-	gameObject->AddComponent(std::make_unique<SizeComponent>(radius));
+	gameObject->AddComponent(std::make_unique<RadiusComponent>(radius));
 	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
 	gameObject->AddComponent(std::make_unique<ScoreComponent>(0));
 	gameObject->AddComponent(std::make_unique<PlayerStrikerMovement>());
@@ -165,7 +165,7 @@ UniqueGameObject PlayGameState::CreatePlayerGoal(const Point& center, float radi
 {
 	UniqueGameObject gameObject = std::make_unique<GameObject>(PLAYER_GOAL_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
-	gameObject->AddComponent(std::make_unique<SizeComponent>(radius));
+	gameObject->AddComponent(std::make_unique<RadiusComponent>(radius));
 	gameObject->AddComponent(std::make_unique<GoalLogic>());
 	gameObject->AddComponent(std::make_unique<GoalPhysics>());
 	gameObject->AddComponent(std::make_unique<GoalRenderer>());
@@ -177,7 +177,7 @@ UniqueGameObject PlayGameState::CreateEnemyStriker(const Point& center, float ra
 {
 	UniqueGameObject gameObject = std::make_unique<GameObject>(ENEMY_STRIKER_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
-	gameObject->AddComponent(std::make_unique<SizeComponent>(radius));
+	gameObject->AddComponent(std::make_unique<RadiusComponent>(radius));
 	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
 	gameObject->AddComponent(std::make_unique<ScoreComponent>(0));
 	gameObject->AddComponent(std::make_unique<EnemyStrikerMovement>());
@@ -191,7 +191,7 @@ UniqueGameObject PlayGameState::CreateEnemyGoal(const Point& center, float radiu
 {
 	UniqueGameObject gameObject = std::make_unique<GameObject>(ENEMY_GOAL_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
-	gameObject->AddComponent(std::make_unique<SizeComponent>(radius));
+	gameObject->AddComponent(std::make_unique<RadiusComponent>(radius));
 	gameObject->AddComponent(std::make_unique<GoalLogic>());
 	gameObject->AddComponent(std::make_unique<GoalPhysics>());
 	gameObject->AddComponent(std::make_unique<GoalRenderer>());
@@ -212,7 +212,7 @@ UniqueGameObject PlayGameState::CreatePuck(const Point& center, float radius)
 
 	UniqueGameObject gameObject = std::make_unique<GameObject>(PUCK_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
-	gameObject->AddComponent(std::make_unique<SizeComponent>(radius));
+	gameObject->AddComponent(std::make_unique<RadiusComponent>(radius));
 	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
 	gameObject->AddComponent(std::make_unique<PuckMovement>());
 	gameObject->AddComponent(std::make_unique<PuckRenderer>(mRenderer, mResourceManager));

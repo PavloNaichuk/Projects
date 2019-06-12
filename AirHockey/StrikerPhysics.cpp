@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "StrikerPhysics.h"
-#include "SizeComponent.h"
+#include "RadiusComponent.h"
 #include "PositionComponent.h"
 #include "GameObject.h"
 
@@ -17,7 +17,7 @@ Component::ComponentId StrikerPhysics::GetId() const
 void StrikerPhysics::Update(GameObject& gameObject) 
 {
 	PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
-	SizeComponent* sizeComponent = gameObject.GetComponent<SizeComponent>(SizeComponent::COMPONENT_ID);
+	RadiusComponent* sizeComponent = gameObject.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
 
 	const float radius = sizeComponent->GetRadius();
 	Point center = positionComponent->GetCenter();
@@ -33,4 +33,6 @@ void StrikerPhysics::Update(GameObject& gameObject)
 		center.mY = mMovementRegion.mBottonRight.mY - radius;
 
 	positionComponent->SetCenter(center);
+
+
 }

@@ -195,7 +195,8 @@
     <ClInclude Include="ScoreUIData.h" />
     <ClInclude Include="ScoreUILogic.h" />
     <ClInclude Include="ScoreUIRenderer.h" />
-    <ClInclude Include="SizeComponent.h" />
+    <ClInclude Include="RadiusComponent.h" />
+    <ClInclude Include="StartMenuState.h" />
     <ClInclude Include="StrikerPhysics.h" />
     <ClInclude Include="TimerUIData.h" />
     <ClInclude Include="TimerUILogic.h" />
@@ -234,7 +235,8 @@
     <ClCompile Include="ScoreUIData.cpp" />
     <ClCompile Include="ScoreUILogic.cpp" />
     <ClCompile Include="ScoreUIRenderer.cpp" />
-    <ClCompile Include="SizeComponent.cpp" />
+    <ClCompile Include="RadiusComponent.cpp" />
+    <ClCompile Include="StartMenuState.cpp" />
     <ClCompile Include="StrikerPhysics.cpp" />
     <ClCompile Include="TimerUILogic.cpp" />
     <ClCompile Include="TimerUIRenderer.cpp" />

@@ -2,7 +2,7 @@
 #include "PlayerStrikerRenderer.h"
 #include "GameObject.h"
 #include "PositionComponent.h"
-#include "SizeComponent.h"
+#include "RadiusComponent.h"
 
 PlayerStrikerRenderer::PlayerStrikerRenderer(SharedRenderer renderer, SharedResourceManager resourceManager) 
 	: mRenderer(renderer)
@@ -19,7 +19,7 @@ Component::ComponentId PlayerStrikerRenderer::GetId() const
 void PlayerStrikerRenderer::Render(GameObject& gameObject)
 {
 	const PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
-	const SizeComponent* sizeComponent = gameObject.GetComponent<SizeComponent>(SizeComponent::COMPONENT_ID);
+	const RadiusComponent* sizeComponent = gameObject.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
 
 	Point topLeft = positionComponent->GetCenter() - sizeComponent->GetRadius();
 	SDL_Rect destRect = {int(topLeft.mX), int(topLeft.mY), int(2.0f * sizeComponent->GetRadius()), int(2.0f * sizeComponent->GetRadius())};

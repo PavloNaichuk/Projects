@@ -18,6 +18,7 @@ public:
 	{
 		SCORE_TEXT_ID,
 		TIMER_TEXT_ID,
+		GAME_OVER_ID,
 		NUM_TEXT_FONTS
 	};
 

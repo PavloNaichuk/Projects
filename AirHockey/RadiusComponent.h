@@ -3,10 +3,10 @@
 #include "Component.h"
 #include "Vector.h"
 
-class SizeComponent : public Component
+class RadiusComponent : public Component
 {
 public:
-	SizeComponent(float radius);
+	RadiusComponent(float radius);
 
 	static const ComponentId COMPONENT_ID = 5;
 	ComponentId GetId() const override;

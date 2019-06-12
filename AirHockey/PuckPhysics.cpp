@@ -2,7 +2,7 @@
 #include "PuckPhysics.h"
 #include "PositionComponent.h"
 #include "VelocityComponent.h"
-#include "SizeComponent.h"
+#include "RadiusComponent.h"
 #include "GameObject.h"
 
 PuckPhysics::PuckPhysics(std::vector<BoardWall> boardWalls) 
@@ -19,6 +19,8 @@ void PuckPhysics::Update(GameObject& gameObject)
 {
 	PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
 	VelocityComponent* velocityComponent = gameObject.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
-	SizeComponent* sizeComponent = gameObject.GetComponent<SizeComponent>(SizeComponent::COMPONENT_ID);
+	RadiusComponent* sizeComponent = gameObject.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
+
+
 
 }
