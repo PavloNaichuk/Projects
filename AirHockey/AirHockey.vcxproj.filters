@@ -126,6 +126,12 @@
     <ClInclude Include="EndMenuState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ScoreUIData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerUIData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -216,6 +222,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EndMenuState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreUIData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeUIData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

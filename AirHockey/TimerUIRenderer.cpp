@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "TimerUIRenderer.h"
-#include "TimerUILogic.h"
+#include "TimerUIData.h"
 #include "BoxComponent.h"
 #include "GameObject.h"
 
@@ -18,10 +18,10 @@ Component::ComponentId TimerUIRenderer::GetId() const
 
 void TimerUIRenderer::Render(GameObject& gameObject)
 {
-	TimerUILogic* logic = gameObject.GetComponent<TimerUILogic>(TimerUILogic::COMPONENT_ID);
+	TimerUIData* UIData = gameObject.GetComponent<TimerUIData>(TimerUIData::COMPONENT_ID);
 	BoxComponent* boxComponent = gameObject.GetComponent<BoxComponent>(BoxComponent::COMPONENT_ID);
 
-	int currentTime = int(logic->GetTime());
+	int currentTime = int(UIData->GetTime());
 	if (mPrevTime != currentTime) 
 	{
 		SDL_Color textColor = {255, 255, 255};
@@ -43,6 +43,13 @@ void TimerUIRenderer::Render(GameObject& gameObject)
 	assert(textWidth <= boxComponent->GetWidth());
 	assert(textHeight <= boxComponent->GetHeight());
 
-	SDL_Rect destRect = {int(boxComponent->GetTopLeft().mX), int(boxComponent->GetTopLeft().mY), textWidth, textHeight};
+	SDL_Rect destRect = 
+	{
+		int(boxComponent->GetTopLeft().mX) + (boxComponent->GetWidth() - textWidth) / 2, 
+		int(boxComponent->GetTopLeft().mY) + (boxComponent->GetHeight() - textHeight) / 2, 
+		textWidth, 
+		textHeight
+	};
+
 	SDL_RenderCopy(mRenderer.get(), mTextTexture.get(), nullptr, &destRect);
 }

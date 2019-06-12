@@ -11,6 +11,8 @@
 #include "PuckRenderer.h"
 #include "GoalRenderer.h"
 #include "ScoreUIRenderer.h"
+#include "ScoreUIData.h"
+#include "TimerUIData.h"
 #include "TimerUIRenderer.h"
 #include "PlayerStrikerMovement.h"
 #include "EnemyStrikerMovement.h"
@@ -24,6 +26,7 @@
 #include "ScoreComponent.h"
 #include "VelocityComponent.h"
 #include "GameObject.h"
+#include "EventCenter.h"
 
 enum GameObjectId 
 {
@@ -52,16 +55,40 @@ void PlayGameState::Enter()
 	mBoardTexture = mResourceManager->GetTexture(ResourceManager::BOARD_ID);
 	assert(mBoardTexture);
 
-	mGameObjects.reserve(NUM_GAME_OBJECTS);
-	mGameObjects.emplace_back(CreatePlayerStriker(Point(BOARD_WIDTH - STRIKER_RADIUS, BOARD_HEIGHT / 2), STRIKER_RADIUS));
-	mGameObjects.emplace_back(CreatePlayerGoal(Point(BOARD_WIDTH, BOARD_HEIGHT / 2), GOAL_RADIUS));
-	mGameObjects.emplace_back(CreateEnemyStriker(Point(STRIKER_RADIUS, BOARD_HEIGHT / 2), STRIKER_RADIUS));
-	mGameObjects.emplace_back(CreateEnemyGoal(Point(0.0f, BOARD_HEIGHT / 2), GOAL_RADIUS));
-	mGameObjects.emplace_back(CreatePuck(Point(BOARD_WIDTH - BOARD_WIDTH / 4, BOARD_HEIGHT / 2), PUCK_RADIUS));
+	mGameObjects.resize(NUM_GAME_OBJECTS);
+	mGameObjects[PLAYER_STRIKER_ID] = CreatePlayerStriker(Point(BOARD_WIDTH - STRIKER_RADIUS, BOARD_HEIGHT / 2), STRIKER_RADIUS);
+	mGameObjects[PLAYER_GOAL_ID] = CreatePlayerGoal(Point(BOARD_WIDTH, BOARD_HEIGHT / 2), GOAL_RADIUS);
+	mGameObjects[ENEMY_STRIKER_ID] = CreateEnemyStriker(Point(STRIKER_RADIUS, BOARD_HEIGHT / 2), STRIKER_RADIUS);
+	mGameObjects[ENEMY_GOAL_ID] = CreateEnemyGoal(Point(0.0f, BOARD_HEIGHT / 2), GOAL_RADIUS);
+	mGameObjects[PUCK_ID] = CreatePuck(Point(BOARD_WIDTH - BOARD_WIDTH / 4, BOARD_HEIGHT / 2), PUCK_RADIUS);
 
-	mUIObjects.reserve(NUM_UI_OBJECTS);
-	mUIObjects.emplace_back(CreateScoreUI(Point(0.0f, 0.0f), BOARD_WIDTH / 2, UI_AREA_HEIGHT));
-	mUIObjects.emplace_back(CreateTimerUI(Point(BOARD_WIDTH / 2, 0.0f), BOARD_WIDTH / 2, UI_AREA_HEIGHT));
+	mUIObjects.resize(NUM_UI_OBJECTS);
+	mUIObjects[SCORE_UI_ID] = CreateScoreUI(Point(0.0f, 0.0f), BOARD_WIDTH / 2, UI_AREA_HEIGHT);
+	mUIObjects[TIMER_UI_ID] = CreateTimerUI(Point(BOARD_WIDTH / 2, 0.0f), BOARD_WIDTH / 2, UI_AREA_HEIGHT);
+
+	auto handleEvent = [this](const Event& event)
+	{
+		if (event.mEventId == Event::GOAL_SCORED_ID) 
+		{
+			ScoreUIData* UIData = mUIObjects[SCORE_UI_ID]->GetComponent<ScoreUIData>(ScoreUIData::COMPONENT_ID);
+
+			if (event.mSenderId == ENEMY_GOAL_ID)
+			{
+				 ScoreComponent* scoreComponent = mGameObjects[PLAYER_STRIKER_ID]->GetComponent<ScoreComponent>(ScoreComponent::COMPONENT_ID);
+				 scoreComponent->Set(scoreComponent->Get() + 1);
+
+				 UIData->SetPlayerScore(scoreComponent->Get());
+			}
+			else 
+			{
+				ScoreComponent* scoreComponent = mGameObjects[ENEMY_STRIKER_ID]->GetComponent<ScoreComponent>(ScoreComponent::COMPONENT_ID);
+				scoreComponent->Set(scoreComponent->Get() + 1);
+				
+				UIData->SetEnemyScore(scoreComponent->Get());
+			}
+		}
+	};
+	EventCenter::GetInstance().Subscribe(handleEvent);
 }
 
 void PlayGameState::Update(float deltaTime)
@@ -188,18 +215,20 @@ UniqueGameObject PlayGameState::CreatePuck(const Point& center, float radius)
 UniqueGameObject PlayGameState::CreateScoreUI(const Point& topLeft, int width, int height)
 {
 	UniqueGameObject gameObject = std::make_unique<GameObject>(SCORE_UI_ID);
+	gameObject->AddComponent(std::make_unique<ScoreUIData>(0, 0));
 	gameObject->AddComponent(std::make_unique<BoxComponent>(topLeft, width, height));
-	gameObject->AddComponent(std::make_unique<ScoreUILogic>(SCORE_PUCKS));
+	gameObject->AddComponent(std::make_unique<ScoreUILogic>());
 	gameObject->AddComponent(std::make_unique<ScoreUIRenderer>(mRenderer, mResourceManager));
-
+	
 	return gameObject;
 }
 
 UniqueGameObject PlayGameState::CreateTimerUI(const Point& topLeft, int width, int height)
 {
 	UniqueGameObject gameObject = std::make_unique<GameObject>(TIMER_UI_ID);
+	gameObject->AddComponent(std::make_unique<TimerUIData>(PLAY_TIME));
 	gameObject->AddComponent(std::make_unique<BoxComponent>(topLeft, width, height));
-	gameObject->AddComponent(std::make_unique<TimerUILogic>(PLAY_TIME));
+	gameObject->AddComponent(std::make_unique<TimerUILogic>());
 	gameObject->AddComponent(std::make_unique<TimerUIRenderer>(mRenderer, mResourceManager));
 
 	return gameObject;

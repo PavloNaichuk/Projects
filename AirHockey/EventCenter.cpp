@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "EventCenter.h"
 
-Event::Event(EventId eventId) 
+Event::Event(EventId eventId, int senderId) 
 	: mEventId(eventId)
+	, mSenderId(senderId)
 {
 }
 

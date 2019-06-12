@@ -88,13 +88,12 @@ void AirHockey::GameLoop()
 	{
 		if (event.mEventId == Event::PLAY_TIME_FINISHED_ID) 
 		{
-
+			EnterState(std::make_unique<EndMenuState>(mRenderer, BOARD_WIDTH, BOARD_HEIGHT));
 		}
 	};
 	EventCenter::GetInstance().Subscribe(handleEvent);
 
 	EnterState(std::make_unique<PlayGameState>(mRenderer, mResourceManager));
-	//EnterState(std::make_unique<EndMenuState>(mRenderer, BOARD_WIDTH, BOARD_HEIGHT));
 
 	SDL_Event event;
 	std::uint32_t prevTime = SDL_GetTicks();

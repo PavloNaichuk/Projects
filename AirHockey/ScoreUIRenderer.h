@@ -17,5 +17,6 @@ private:
 	SharedSurface mTextSurface;
 	SharedTexture mTextTexture;
 
-	int mPrevScore;
+	int mPrevPlayerScore;
+	int mPrevEnemyScore;
 };

@@ -1,20 +1,8 @@
 #include "pch.h"
 #include "TimerUILogic.h"
+#include "TimerUIData.h"
 #include "EventCenter.h"
-
-TimerUILogic::TimerUILogic(float time) 
-	: mTime(time)
-{}
-
-float TimerUILogic::GetTime() 
-{
-	return mTime;
-}
-
-void TimerUILogic::SetTime(float time) 
-{
-	mTime = time;
-}
+#include "GameObject.h"
 
 Component::ComponentId TimerUILogic::GetId() const
 {
@@ -23,10 +11,9 @@ Component::ComponentId TimerUILogic::GetId() const
 
 void TimerUILogic::Update(GameObject& gameObject, float deltaTime)
 {
-	mTime -= deltaTime;
-	if (mTime < 0.0f) 
-	{
-		mTime = 0.0f;
-		EventCenter::GetInstance().Send(std::make_unique<Event>(Event::PLAY_TIME_FINISHED_ID));
-	}
+	TimerUIData* UIData = gameObject.GetComponent<TimerUIData>(TimerUIData::COMPONENT_ID);
+	UIData->SetTime(std::max(0.0f, UIData->GetTime() - deltaTime));
+
+	if (UIData->GetTime() == 0.0f)
+		EventCenter::GetInstance().Send(std::make_unique<Event>(Event::PLAY_TIME_FINISHED_ID, gameObject.GetId()));
 }

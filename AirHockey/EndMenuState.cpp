@@ -10,6 +10,7 @@ EndMenuState::EndMenuState(SharedRenderer renderer, const int windowWidth, const
 {
 	if (mGameOverTextFont == nullptr)
 	{
+
 		SDL_Log("Unable to create font: %s", TTF_GetError());
 	}
 	if (mGameOverTextSurface == nullptr)

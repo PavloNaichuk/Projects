@@ -13,5 +13,3 @@ const float PUCK_SPEED = 80.0f;
 const float GOAL_RADIUS = 256.0f;
 
 const float PLAY_TIME = 30.0f;
-const unsigned SCORE_PUCKS = 0;
-
