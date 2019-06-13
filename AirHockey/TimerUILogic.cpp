@@ -9,7 +9,7 @@ Component::ComponentId TimerUILogic::GetId() const
 	return AIComponent::COMPONENT_ID;
 }
 
-void TimerUILogic::Update(GameObject& gameObject, float deltaTime)
+void TimerUILogic::Update(GameObject& gameObject, float deltaTime, GameObjectList& gameObjectList)
 {
 	TimerUIData* UIData = gameObject.GetComponent<TimerUIData>(TimerUIData::COMPONENT_ID);
 	UIData->SetTime(std::max(0.0f, UIData->GetTime() - deltaTime));

@@ -6,7 +6,7 @@ Component::ComponentId ScoreUILogic::GetId() const
 	return AIComponent::COMPONENT_ID;
 }
 
-void ScoreUILogic::Update(GameObject& gameObject, float deltaTime)
+void ScoreUILogic::Update(GameObject& gameObject, float deltaTime, GameObjectList& gameObjectList)
 {
 
 }

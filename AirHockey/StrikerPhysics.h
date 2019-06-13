@@ -9,7 +9,7 @@ public:
 	StrikerPhysics(const Region& movementRegion);
 
 	ComponentId GetId() const override;
-	void Update(GameObject& gameObject) override;
+	void Update(GameObject& gameObject, GameObjectList& gameObjectList) override;
 
 private:
 	Region mMovementRegion;

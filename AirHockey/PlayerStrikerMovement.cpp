@@ -11,7 +11,7 @@ Component::ComponentId PlayerStrikerMovement::GetId() const
 	return AIComponent::COMPONENT_ID;
 }
 
-void PlayerStrikerMovement::Update(GameObject& gameObject, float deltaTime)
+void PlayerStrikerMovement::Update(GameObject& gameObject, float deltaTime, GameObjectList& gameObjectList)
 {
 	VelocityComponent* velocityComponent = gameObject.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
 	PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
@@ -31,6 +31,10 @@ void PlayerStrikerMovement::Update(GameObject& gameObject, float deltaTime)
 
 	if (keyboardState[SDL_SCANCODE_DOWN] == 1)
 		velocity.mY = STRIKER_SPEED;
+
+	if (keyboardState[SDL_SCANCODE_LCTRL] == 1)
+	{
+	}
 
 	velocityComponent->Set(velocity);
 

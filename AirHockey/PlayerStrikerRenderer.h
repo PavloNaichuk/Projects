@@ -4,8 +4,6 @@
 #include "Common.h"
 #include "ResourceManager.h"
 
-class GameObject;
-
 class PlayerStrikerRenderer : public RenderComponent
 {
 public:

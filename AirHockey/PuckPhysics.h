@@ -9,7 +9,7 @@ public:
 	PuckPhysics(std::vector<BoardWall> boardWalls);
 
 	ComponentId GetId() const override;
-	void Update(GameObject& gameObject) override;
+	void Update(GameObject& gameObject, GameObjectList& gameObjectList) override;
 
 private: 
 	std::vector<BoardWall> mBoardWalls;

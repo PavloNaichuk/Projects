@@ -6,5 +6,5 @@ class GoalPhysics : public PhysicsComponent
 {
 public:
 	ComponentId GetId() const override;
-	void Update(GameObject& gameObject) override;
+	void Update(GameObject& gameObject, GameObjectList& gameObjectList) override;
 };

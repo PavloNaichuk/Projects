@@ -3,16 +3,15 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
-#include <iostream>
+#include <cassert>
+#include <cstdio>
+#include <cmath>
 #include <memory>
 #include <functional>
-#include <string>
-#include <sstream>
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <queue>
-#include <cstdio>
+#include <map>
 
 using SharedWindow = std::shared_ptr<SDL_Window>;
 using SharedRenderer = std::shared_ptr<SDL_Renderer>;

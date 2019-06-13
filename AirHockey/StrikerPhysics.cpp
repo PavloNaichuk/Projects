@@ -14,25 +14,39 @@ Component::ComponentId StrikerPhysics::GetId() const
 	return PhysicsComponent::COMPONENT_ID;
 }
 
-void StrikerPhysics::Update(GameObject& gameObject) 
+void StrikerPhysics::Update(GameObject& gameObject, GameObjectList& gameObjectList)
 {
-	PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
-	RadiusComponent* sizeComponent = gameObject.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
+	GameObject& puck = *gameObjectList[PUCK_ID];
 
-	const float radius = sizeComponent->GetRadius();
-	Point center = positionComponent->GetCenter();
+	PositionComponent* strikerPositionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+	RadiusComponent* strikerRadiusComponent = gameObject.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
+		
+	PositionComponent* puckPositionComponent = puck.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+	RadiusComponent* puckRadiusComponent = puck.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
+	
+	Point strikerCenter = strikerPositionComponent->GetCenter();
+	float strikerRadius = strikerRadiusComponent->GetRadius();
 
-	if (center.mX - radius < mMovementRegion.mTopLeft.mX)
-		center.mX = mMovementRegion.mTopLeft.mX + radius;
-	else if (center.mX + radius > mMovementRegion.mBottonRight.mX)
-		center.mX = mMovementRegion.mBottonRight.mX - radius;
+	Point puckCenter = puckPositionComponent->GetCenter();
+	float puckRadius = puckRadiusComponent->GetRadius();
 
-	if (center.mY - radius < mMovementRegion.mTopLeft.mY)
-		center.mY = mMovementRegion.mTopLeft.mY + radius;
-	else if (center.mY + radius > mMovementRegion.mBottonRight.mY)
-		center.mY = mMovementRegion.mBottonRight.mY - radius;
+	if (strikerCenter.mX - strikerRadius < mMovementRegion.mTopLeft.mX)
+		strikerCenter.mX = mMovementRegion.mTopLeft.mX + strikerRadius;
+	else if (strikerCenter.mX + strikerRadius > mMovementRegion.mBottonRight.mX)
+		strikerCenter.mX = mMovementRegion.mBottonRight.mX - strikerRadius;
 
-	positionComponent->SetCenter(center);
+	if (strikerCenter.mY - strikerRadius < mMovementRegion.mTopLeft.mY)
+		strikerCenter.mY = mMovementRegion.mTopLeft.mY + strikerRadius;
+	else if (strikerCenter.mY + strikerRadius > mMovementRegion.mBottonRight.mY)
+		strikerCenter.mY = mMovementRegion.mBottonRight.mY - strikerRadius;
 
+	strikerPositionComponent->SetCenter(strikerCenter);
 
+	if (CirclesHitEachOther(strikerCenter, strikerRadius, puckCenter, puckRadius))
+	{
+		Vector dirBetweenCenters = Normalize(puckCenter - strikerCenter);
+
+		Point puckNewCenter = strikerCenter + (strikerRadius + puckRadius) * dirBetweenCenters;
+		puckPositionComponent->SetCenter(puckNewCenter);
+	}
 }

@@ -12,10 +12,10 @@ struct Event
 		PUCK_BOARD_WALL_HIT_ID
 	};
 
-	Event(EventId eventId, int senderId);
+	Event(EventId eventId, unsigned senderId);
 
 	EventId mEventId;
-	int mSenderId;
+	unsigned mSenderId;
 };
 
 using UniqueEvent = std::unique_ptr<Event>;

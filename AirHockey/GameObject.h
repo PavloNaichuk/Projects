@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include <memory>
-#include <map>
+#include "Common.h"
 
 class GameObject
 {
@@ -42,4 +41,22 @@ private:
 	ComponentMap mComponents;
 };
 
+enum GameObjectId
+{
+	PLAYER_STRIKER_ID,
+	PLAYER_GOAL_ID,
+	ENEMY_STRIKER_ID,
+	ENEMY_GOAL_ID,
+	PUCK_ID,
+	NUM_GAME_OBJECTS
+};
+
+enum UIObjectId
+{
+	SCORE_UI_ID,
+	TIMER_UI_ID,
+	NUM_UI_OBJECTS
+};
+
 using UniqueGameObject = std::unique_ptr<GameObject>;
+using GameObjectList = std::vector<UniqueGameObject>;

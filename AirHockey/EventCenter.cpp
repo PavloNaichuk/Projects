@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "EventCenter.h"
 
-Event::Event(EventId eventId, int senderId) 
+Event::Event(EventId eventId, unsigned senderId)
 	: mEventId(eventId)
 	, mSenderId(senderId)
 {

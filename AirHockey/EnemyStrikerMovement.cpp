@@ -11,7 +11,7 @@ Component::ComponentId EnemyStrikerMovement::GetId() const
 	return AIComponent::COMPONENT_ID;
 }
 
-void EnemyStrikerMovement::Update(GameObject& gameObject, float deltaTime)
+void EnemyStrikerMovement::Update(GameObject& gameObject, float deltaTime, GameObjectList& gameObjectList)
 {
 	VelocityComponent* velocityComponent = gameObject.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
 	PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);

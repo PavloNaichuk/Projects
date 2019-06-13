@@ -28,23 +28,6 @@
 #include "GameObject.h"
 #include "EventCenter.h"
 
-enum GameObjectId 
-{
-	PLAYER_STRIKER_ID,
-	PLAYER_GOAL_ID,
-	ENEMY_STRIKER_ID,
-	ENEMY_GOAL_ID,
-	PUCK_ID,
-	NUM_GAME_OBJECTS
-};
-
-enum UIObjectId 
-{
-	SCORE_UI_ID,
-	TIMER_UI_ID,
-	NUM_UI_OBJECTS
-};
-
 PlayGameState::PlayGameState(SharedRenderer renderer, SharedResourceManager resourceManager) 
 	: mRenderer(renderer)
 	, mResourceManager(resourceManager)
@@ -96,19 +79,19 @@ void PlayGameState::Update(float deltaTime)
 	for (auto& gameObject : mGameObjects)
 	{
 		AIComponent* component = gameObject->GetComponent<AIComponent>(AIComponent::COMPONENT_ID);
-		component->Update(*gameObject, deltaTime);
+		component->Update(*gameObject, deltaTime, mGameObjects);
 	}
 
-	for (auto& gameObject : mGameObjects) 
+	for (auto& gameObject : mGameObjects)
 	{
 		PhysicsComponent* component = gameObject->GetComponent<PhysicsComponent>(PhysicsComponent::COMPONENT_ID);
-		component->Update(*gameObject);
+		component->Update(*gameObject, mGameObjects);
 	}
 
 	for (auto& gameObject : mUIObjects) 
 	{
 		AIComponent* component = gameObject->GetComponent<AIComponent>(AIComponent::COMPONENT_ID);
-		component->Update(*gameObject, deltaTime);
+		component->Update(*gameObject, deltaTime, mUIObjects);
 	}
 }
 

@@ -31,8 +31,7 @@ private:
 	SharedRenderer mRenderer;
 	SharedResourceManager mResourceManager;
 	SharedTexture mBoardTexture;
-
-
-	std::vector<UniqueGameObject> mUIObjects;
-	std::vector<UniqueGameObject> mGameObjects;
+	
+	GameObjectList mUIObjects;
+	GameObjectList mGameObjects;
 };
