@@ -91,6 +91,10 @@ void AirHockey::GameLoop()
 		{
 			EnterState(std::make_unique<EndMenuState>(mRenderer, mResourceManager));
 		}
+		if (event.mEventId == Event::START_GAME_ID)
+		{
+			EnterState(std::make_unique<PlayGameState>(mRenderer, mResourceManager));
+		}
 	};
 	EventCenter::GetInstance().Subscribe(handleEvent);
 

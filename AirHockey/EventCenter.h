@@ -6,6 +6,7 @@ struct Event
 {
 	enum EventId
 	{
+		START_GAME_ID,
 		PLAY_TIME_FINISHED_ID,
 		GOAL_SCORED_ID,
 		PUCK_STRIKER_HIT_ID,

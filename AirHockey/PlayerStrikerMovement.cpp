@@ -34,6 +34,7 @@ void PlayerStrikerMovement::Update(GameObject& gameObject, float deltaTime, Game
 
 	if (keyboardState[SDL_SCANCODE_LCTRL] == 1)
 	{
+		
 	}
 
 	velocityComponent->Set(velocity);

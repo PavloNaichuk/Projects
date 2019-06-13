@@ -5,6 +5,7 @@
 #include "GameState.h"
 #include "ResourceManager.h"
 #include "GameObject.h"
+#include "EventCenter.h"
 
 class StartMenuStateListener
 {
@@ -20,6 +21,7 @@ public:
 
 	void Enter() override;
 	void Exit() override;
+	void ProcessKeyPressed(Event& event);
 	void Update(float elapsedTime) override;
 	void Render() override;
 

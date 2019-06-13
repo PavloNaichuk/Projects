@@ -21,6 +21,17 @@ void StartMenuState::Exit()
 {
 }
 
+void StartMenuState::ProcessKeyPressed(Event& event)
+{
+
+	const Uint8* keyboardState = SDL_GetKeyboardState(nullptr);
+
+	if (keyboardState[SDL_SCANCODE_SPACE] == 1) 
+	{
+		event.mSenderId = Event::START_GAME_ID;
+	}
+	
+}
 void StartMenuState::Update(float elapsedTime)
 {
 }
