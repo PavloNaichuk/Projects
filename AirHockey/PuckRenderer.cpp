@@ -19,10 +19,10 @@ Component::ComponentId PuckRenderer::GetId() const
 void PuckRenderer::Render(GameObject& gameObject)
 {
 	const PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
-	const RadiusComponent* sizeComponent = gameObject.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
+	const RadiusComponent* radiusComponent = gameObject.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
 
-	Point topLeft = positionComponent->GetCenter() - sizeComponent->GetRadius();
-	SDL_Rect destRect = {int(topLeft.mX), int(topLeft.mY), int(2.0f * sizeComponent->GetRadius()), int(2.0f * sizeComponent->GetRadius())};
+	Point topLeft = positionComponent->GetCenter() - radiusComponent->GetRadius();
+	SDL_Rect destRect = {int(topLeft.mX), int(topLeft.mY), int(2.0f * radiusComponent->GetRadius()), int(2.0f * radiusComponent->GetRadius())};
 
 	SDL_SetTextureBlendMode(mTexture.get(), SDL_BLENDMODE_ADD);
 	SDL_RenderCopy(mRenderer.get(), mTexture.get(), nullptr, &destRect);

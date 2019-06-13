@@ -26,7 +26,6 @@ public:
 private:
 	SharedRenderer mRenderer;
 	SharedResourceManager mResourceManager;
-	SDL_Color mTextColor;
 	
 	SharedTexture mAirHockeyTexture;
 	SharedFont mAirHockeyTextFont;

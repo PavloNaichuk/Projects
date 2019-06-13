@@ -89,7 +89,7 @@ void AirHockey::GameLoop()
 	{
 		if (event.mEventId == Event::PLAY_TIME_FINISHED_ID) 
 		{
-			EnterState(std::make_unique<EndMenuState>(mRenderer, BOARD_WIDTH, BOARD_HEIGHT));
+			EnterState(std::make_unique<EndMenuState>(mRenderer, mResourceManager));
 		}
 	};
 	EventCenter::GetInstance().Subscribe(handleEvent);

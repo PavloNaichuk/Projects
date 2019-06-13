@@ -1,30 +1,12 @@
 #include "pch.h"
 #include "EndMenuState.h"
+#include "Config.h"
 
-EndMenuState::EndMenuState(SharedRenderer renderer, const int windowWidth, const int windowHeight)
+EndMenuState::EndMenuState(SharedRenderer renderer, SharedResourceManager resourceManager)
 	: mRenderer(renderer)
-	, mTextColor({ 255, 255, 255, 255 })
-	, mGameOverTextFont(TTF_OpenFont("Resources/Fonts/Arial.TTF", 80), TTF_CloseFont)
-	, mGameOverTextSurface(TTF_RenderText_Solid(mGameOverTextFont.get(), "Game Over", mTextColor), SDL_FreeSurface)
-	, mGameOverTextTexture(SDL_CreateTextureFromSurface(renderer.get(), mGameOverTextSurface.get()), SDL_DestroyTexture)
+	, mResourceManager(resourceManager)
+	, mGameOverTextFont(resourceManager->GetTextFont(ResourceManager::GAME_OVER_ID))
 {
-	if (mGameOverTextFont == nullptr)
-	{
-
-		SDL_Log("Unable to create font: %s", TTF_GetError());
-	}
-	if (mGameOverTextSurface == nullptr)
-	{
-		SDL_Log("Unable to create surface: %s", TTF_GetError());
-	}
-	if (mGameOverTextTexture == nullptr)
-	{
-		SDL_Log("Unable to create texture: %s", SDL_GetError());
-	}
-
-	SDL_QueryTexture(mGameOverTextTexture.get(), nullptr, nullptr, &mGameOverTextRect.w, &mGameOverTextRect.h);
-	mGameOverTextRect.x = (windowWidth - mGameOverTextRect.w) / 2;
-	mGameOverTextRect.y = (windowHeight - mGameOverTextRect.h) / 2 - 50;
 }
 
 void EndMenuState::Enter()
@@ -37,8 +19,22 @@ void EndMenuState::Update(float deltaTime)
 
 void EndMenuState::Render()
 {
-	SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 255, 0);
-	SDL_RenderClear(mRenderer.get());
+	SDL_Color textColor = { 255, 255, 255 };
+
+	char textBuffer[64];
+	std::snprintf(textBuffer, sizeof(textBuffer), "Game Over");
+
+	mGameOverTextSurface.reset(TTF_RenderText_Solid(mGameOverTextFont.get(), textBuffer, textColor), SDL_FreeSurface);
+	assert(mGameOverTextSurface);
+
+	mGameOverTextTexture.reset(SDL_CreateTextureFromSurface(mRenderer.get(), mGameOverTextSurface.get()), SDL_DestroyTexture);
+	assert(mGameOverTextTexture);
+
+	SDL_QueryTexture(mGameOverTextTexture.get(), nullptr, nullptr, &mGameOverTextRect.w, &mGameOverTextRect.h);
+
+	mGameOverTextRect.x = (BOARD_WIDTH - mGameOverTextRect.w) / 2;
+	mGameOverTextRect.y = (BOARD_HEIGHT - mGameOverTextRect.h) / 2 - 50;
+
 	SDL_RenderCopy(mRenderer.get(), mGameOverTextTexture.get(), nullptr, &mGameOverTextRect);
 	SDL_RenderPresent(mRenderer.get());
 }

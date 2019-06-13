@@ -30,6 +30,9 @@ bool ResourceManager::LoadResources(SharedRenderer renderer)
 	std::array<int, NUM_TEXT_FONTS> textFontSizes;
 	textFontSizes[SCORE_TEXT_ID] = 25;
 	textFontSizes[TIMER_TEXT_ID] = 25;
+	textFontSizes[START_ID] = 100;
+	textFontSizes[ENTER_ID] = 50;
+	textFontSizes[GAME_OVER_ID] = 80;
 
 	for (unsigned index = 0; index < textFontSizes.size(); ++index) 
 	{

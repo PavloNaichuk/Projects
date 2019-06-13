@@ -19,6 +19,8 @@ public:
 		SCORE_TEXT_ID,
 		TIMER_TEXT_ID,
 		GAME_OVER_ID,
+		START_ID,
+		ENTER_ID,
 		NUM_TEXT_FONTS
 	};
 

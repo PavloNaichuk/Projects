@@ -2,11 +2,13 @@
 
 #include "GameState.h"
 #include "Common.h"
+#include "ResourceManager.h"
+#include "GameObject.h"
 
 class EndMenuState : public GameState
 {
 public:
-	EndMenuState(SharedRenderer renderer, const int windowWidth, const int windowHeight);
+	EndMenuState(SharedRenderer renderer, SharedResourceManager resourceManager);
 
 	void Enter() override;
 	void Update(float deltaTime) override;
@@ -15,7 +17,7 @@ public:
 
 private:
 	SharedRenderer mRenderer;
-	SDL_Color mTextColor;
+	SharedResourceManager mResourceManager;
 	SharedFont mGameOverTextFont;
 	SharedSurface mGameOverTextSurface;
 	SharedTexture mGameOverTextTexture;
