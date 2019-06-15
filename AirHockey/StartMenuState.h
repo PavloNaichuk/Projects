@@ -21,7 +21,6 @@ public:
 
 	void Enter() override;
 	void Exit() override;
-	void ProcessKeyPressed(Event& event);
 	void Update(float elapsedTime) override;
 	void Render() override;
 
@@ -29,14 +28,19 @@ private:
 	SharedRenderer mRenderer;
 	SharedResourceManager mResourceManager;
 	
-	SharedTexture mAirHockeyTexture;
 	SharedFont mAirHockeyTextFont;
 	SharedSurface mAirHockeyTextSurface;
+	SharedTexture mAirHockeyTexture;
 	SDL_Rect mAirHockeyTextRect;
 
-	SharedTexture mEnterTexture;
-	SharedFont mEnterTextFont;
-	SharedSurface mEnterTextSurface;
-	SDL_Rect mEnterTextRect;
+	SharedFont mNavigationTextFont;
+	SharedSurface mNavigationTextSurface;
+	SharedTexture mNavigationTexture;
+	SDL_Rect mNavigationTextRect;
+
+	SharedFont mStartGameTextFont;
+	SharedSurface mStartGameTextSurface;
+	SharedTexture mStartGameTexture;
+	SDL_Rect mStartGameTextRect;
 };
 

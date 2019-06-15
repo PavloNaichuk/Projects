@@ -5,19 +5,11 @@
 EndMenuState::EndMenuState(SharedRenderer renderer, SharedResourceManager resourceManager)
 	: mRenderer(renderer)
 	, mResourceManager(resourceManager)
-	, mGameOverTextFont(resourceManager->GetTextFont(ResourceManager::GAME_OVER_ID))
+	, mGameOverTextFont(resourceManager->GetTextFont(ResourceManager::GAME_OVER_TEXT_ID))
 {
 }
 
 void EndMenuState::Enter()
-{
-}
-
-void EndMenuState::Update(float deltaTime)
-{
-}
-
-void EndMenuState::Render()
 {
 	SDL_Color textColor = { 255, 255, 255 };
 
@@ -34,8 +26,15 @@ void EndMenuState::Render()
 
 	mGameOverTextRect.x = (BOARD_WIDTH - mGameOverTextRect.w) / 2;
 	mGameOverTextRect.y = (BOARD_HEIGHT - mGameOverTextRect.h) / 2 - 50;
+}
 
-	SDL_SetRenderDrawColor(mRenderer.get(), 0, 255, 0, 0);
+void EndMenuState::Update(float deltaTime)
+{
+}
+
+void EndMenuState::Render()
+{
+	SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0);
 	SDL_RenderClear(mRenderer.get());
 	SDL_RenderCopy(mRenderer.get(), mGameOverTextTexture.get(), nullptr, &mGameOverTextRect);
 	SDL_RenderPresent(mRenderer.get());
