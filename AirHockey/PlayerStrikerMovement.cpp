@@ -36,8 +36,7 @@ void PlayerStrikerMovement::Update(GameObject& gameObject, float deltaTime, Game
 	strikerVelocityComponent->Set(strikerVelocity);
 
 	Point strikerNewCenter = strikerPositionComponent->GetCenter() + deltaTime * strikerVelocity;
-	strikerPositionComponent->SetCenter(strikerNewCenter);
-		
+			
 	if (keyboardState[SDL_SCANCODE_LCTRL] == 1)
 	{
 		GameObject& puck = *gameObjectList[PUCK_ID];
@@ -54,8 +53,13 @@ void PlayerStrikerMovement::Update(GameObject& gameObject, float deltaTime, Game
 		
 		if (CirclesHitEachOther(strikerNewCenter, strikerRadius, puckCenter, puckRadius))
 		{
-			Vector puckVelocity = PUCK_SPEED * Normalize(puckCenter - strikerNewCenter);
+			Vector puckMoveDir = Normalize(puckCenter - strikerNewCenter);
+			Vector puckVelocity = PUCK_SPEED * puckMoveDir;
+
 			puckVelocityComponent->Set(puckVelocity);
+			puckPositionComponent->SetCenter(puckCenter + 0.1f * puckMoveDir);
 		}
 	}
+
+	strikerPositionComponent->SetCenter(strikerNewCenter);
 }

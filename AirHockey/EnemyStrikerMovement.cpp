@@ -7,6 +7,8 @@
 #include "PositionComponent.h"
 #include "RadiusComponent.h"
 
+const float SMALL_VALUE = 0.001f;
+
 class EnemyStrikerMovement::State 
 {
 public:
@@ -112,7 +114,7 @@ void ReturnToPositionState::Update(GameObject& gameObject, float deltaTime, Game
 	const Point& strikerCenter = strikerPositionComponent->GetCenter();
 	const float distToTarget = Distance(strikerCenter, mReturnPosition);
 
-	if (AreEqual(distToTarget, 0.0f))
+	if (distToTarget < SMALL_VALUE)
 	{
 		strikerVelocityComponent->Set(Vector(0.0f, 0.0f));
 		strikerMovementComponent->Enter(std::make_unique<DefendState>());
@@ -149,6 +151,7 @@ void KickPuckState::Update(GameObject& gameObject, float deltaTime, GameObjectLi
 		GameObject& puck = *gameObjectList[PUCK_ID];
 
 		EnemyStrikerMovement* strikerMovementComponent = gameObject.GetComponent<EnemyStrikerMovement>(EnemyStrikerMovement::COMPONENT_ID);
+		PositionComponent* strikerPositionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
 
 		PositionComponent* goalPositionComponent = goal.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
 		RadiusComponent* goalRadiusComponent = goal.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
@@ -171,6 +174,7 @@ void KickPuckState::Update(GameObject& gameObject, float deltaTime, GameObjectLi
 		float puckSpeed = Random(0.5f * PUCK_SPEED, PUCK_SPEED);
 		puckVelocityComponent->Set(puckSpeed * puckMoveDir);
 
+		puckPositionComponent->SetCenter(puckCenter + 0.1f * puckMoveDir);
 		strikerMovementComponent->Enter(std::make_unique<ReturnToPositionState>(gameObjectList));
 	}
 	else
@@ -202,7 +206,7 @@ void GoToKickPositionState::Update(GameObject& gameObject, float deltaTime, Game
 	const Point& strikerCenter = strikerPositionComponent->GetCenter();
 	const float distToKickPosition = Distance(strikerCenter, mKickPosition);
 
-	if (AreEqual(distToKickPosition, 0.0f))
+	if (distToKickPosition < SMALL_VALUE)
 	{
 		strikerVelocityComponent->Set(Vector(0.0f, 0.0f));
 		strikerMovement->Enter(std::make_unique<KickPuckState>());
