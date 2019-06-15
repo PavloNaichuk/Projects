@@ -164,9 +164,6 @@
     <ClCompile Include="VelocityComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GoalLogicComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PlayGameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -231,6 +228,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StartMenuState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GoalLogic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

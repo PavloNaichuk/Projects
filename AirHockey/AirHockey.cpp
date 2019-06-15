@@ -19,7 +19,7 @@ int AirHockey::LaunchGame()
 
 int AirHockey::Init() 
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	if (SDL_Init(SDL_INIT_AUDIO) != 0 )
 	{
 		assert(false);
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
@@ -36,7 +36,7 @@ int AirHockey::Init()
 	if ((IMG_Init(flags) & flags) != flags)
 	{
 		assert(false);
-		SDL_Log("Failed to init required jpg and png support: %s", IMG_GetError());
+		SDL_Log("Unable to initialize required jpg and png support: %s", IMG_GetError());
 		return 4;
 	}
 
@@ -91,7 +91,7 @@ void AirHockey::GameLoop()
 		{
 			EnterState(std::make_unique<EndMenuState>(mRenderer, mResourceManager));
 		}
-		if (event.mEventId == Event::START_GAME_ID)
+		else if (event.mEventId == Event::START_GAME_ID)
 		{
 			EnterState(std::make_unique<PlayGameState>(mRenderer, mResourceManager));
 		}
@@ -111,10 +111,10 @@ void AirHockey::GameLoop()
 		}
 
 		std::uint32_t currTime = SDL_GetTicks();
-		float elapsedTime = float(currTime - prevTime) / 1000.0f;
+		float deltaTime = float(currTime - prevTime) / 1000.0f;
 		prevTime = currTime;
 
-		mCurrentState->Update(elapsedTime);
+		mCurrentState->Update(deltaTime);
 		mCurrentState->Render();
 
 		EventCenter::GetInstance().Update();

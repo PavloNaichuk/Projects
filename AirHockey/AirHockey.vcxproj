@@ -211,7 +211,7 @@
     <ClCompile Include="EnemyStrikerRenderer.cpp" />
     <ClCompile Include="EventCenter.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GoalLogicComponent.cpp" />
+    <ClCompile Include="GoalLogic.cpp" />
     <ClCompile Include="GoalPhysics.cpp" />
     <ClCompile Include="GoalRenderer.cpp" />
     <ClCompile Include="Helpers.cpp" />

@@ -35,6 +35,8 @@ void EndMenuState::Render()
 	mGameOverTextRect.x = (BOARD_WIDTH - mGameOverTextRect.w) / 2;
 	mGameOverTextRect.y = (BOARD_HEIGHT - mGameOverTextRect.h) / 2 - 50;
 
+	SDL_SetRenderDrawColor(mRenderer.get(), 0, 255, 0, 0);
+	SDL_RenderClear(mRenderer.get());
 	SDL_RenderCopy(mRenderer.get(), mGameOverTextTexture.get(), nullptr, &mGameOverTextRect);
 	SDL_RenderPresent(mRenderer.get());
 }

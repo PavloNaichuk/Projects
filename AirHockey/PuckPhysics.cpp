@@ -5,6 +5,7 @@
 #include "RadiusComponent.h"
 #include "EventCenter.h"
 #include "GameObject.h"
+#include "Config.h"
 
 PuckPhysics::PuckPhysics(std::vector<BoardWall> boardWalls) 
 	: mBoardWalls(std::move(boardWalls))
@@ -46,14 +47,17 @@ void PuckPhysics::Update(GameObject& gameObject, GameObjectList& gameObjectList)
 			bool hitBetweenRaysHappened = TestHit(ray1, ray2, hitParam1, hitParam2);
 			
 			bool collisionHappened = (0.0f <= hitParam1) && (hitParam1 <= 1.0f) && (0.0f <= hitParam2) && (hitParam2 <= 1.0f);
-			Point collisionPoint = CalcPointOnRay(ray1, hitParam1);
-
-			float penetrationSquaredDist = SquaredDistance(collisionPoint, outmostPoint);
-			if (penetrationSquaredDist > largestPenetrationSquaredDist)
+			if (collisionHappened)
 			{
-				collisionBoardWall = &boardWall;
-				largestPenetrationSquaredDist = penetrationSquaredDist;
-				outmostCollisionPoint = collisionPoint;
+				Point collisionPoint = CalcPointOnRay(ray1, hitParam1);
+
+				float penetrationSquaredDist = SquaredDistance(collisionPoint, outmostPoint);
+				if (penetrationSquaredDist > largestPenetrationSquaredDist)
+				{
+					collisionBoardWall = &boardWall;
+					largestPenetrationSquaredDist = penetrationSquaredDist;
+					outmostCollisionPoint = collisionPoint;
+				}
 			}
 		}
 	}
@@ -62,6 +66,9 @@ void PuckPhysics::Update(GameObject& gameObject, GameObjectList& gameObjectList)
 	{
 		const Point newCenter = outmostCollisionPoint + radius * collisionBoardWall->mOrientation;
 		positionComponent->SetCenter(newCenter);
+
+		const Vector newVelocity = BOARD_WALL_RESTITUTION * Reflect(velocity, collisionBoardWall->mOrientation);
+		velocityComponent->Set(newVelocity);
 
 		EventCenter::GetInstance().Send(std::make_unique<Event>(Event::PUCK_BOARD_WALL_HIT_ID, gameObject.GetId()));
 	}

@@ -2,6 +2,7 @@
 #include "PlayerStrikerMovement.h"
 #include "VelocityComponent.h"
 #include "PositionComponent.h"
+#include "RadiusComponent.h"
 #include "GameObject.h"
 #include "Common.h"
 #include "Config.h"
@@ -13,34 +14,48 @@ Component::ComponentId PlayerStrikerMovement::GetId() const
 
 void PlayerStrikerMovement::Update(GameObject& gameObject, float deltaTime, GameObjectList& gameObjectList)
 {
-	VelocityComponent* velocityComponent = gameObject.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
-	PositionComponent* positionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
-
 	const Uint8* keyboardState = SDL_GetKeyboardState(nullptr);
 
-	Vector velocity(0, 0);
-
+	PositionComponent* strikerPositionComponent = gameObject.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+	VelocityComponent* strikerVelocityComponent = gameObject.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
+			
+	Vector strikerVelocity(0, 0);
+	
 	if (keyboardState[SDL_SCANCODE_LEFT] == 1)
-		velocity.mX = -STRIKER_SPEED;
-
+		strikerVelocity.mX = -STRIKER_SPEED;
+	
 	if (keyboardState[SDL_SCANCODE_RIGHT] == 1)
-		velocity.mX = STRIKER_SPEED;
-
+		strikerVelocity.mX = STRIKER_SPEED;
+	
 	if (keyboardState[SDL_SCANCODE_UP] == 1)
-		velocity.mY = -STRIKER_SPEED;
-
+		strikerVelocity.mY = -STRIKER_SPEED;
+	
 	if (keyboardState[SDL_SCANCODE_DOWN] == 1)
-		velocity.mY = STRIKER_SPEED;
+		strikerVelocity.mY = STRIKER_SPEED;
 
+	strikerVelocityComponent->Set(strikerVelocity);
+
+	Point strikerNewCenter = strikerPositionComponent->GetCenter() + deltaTime * strikerVelocity;
+	strikerPositionComponent->SetCenter(strikerNewCenter);
+		
 	if (keyboardState[SDL_SCANCODE_LCTRL] == 1)
 	{
+		GameObject& puck = *gameObjectList[PUCK_ID];
+
+		PositionComponent* puckPositionComponent = puck.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+		VelocityComponent* puckVelocityComponent = puck.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
+								
+		RadiusComponent* strikerRadiusComponent = gameObject.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
+		RadiusComponent* puckRadiusComponent = puck.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
+
+		const Point& puckCenter = puckPositionComponent->GetCenter();
+		float strikerRadius = strikerRadiusComponent->GetRadius();
+		float puckRadius = puckRadiusComponent->GetRadius();
 		
+		if (CirclesHitEachOther(strikerNewCenter, strikerRadius, puckCenter, puckRadius))
+		{
+			Vector puckVelocity = PUCK_SPEED * Normalize(puckCenter - strikerNewCenter);
+			puckVelocityComponent->Set(puckVelocity);
+		}
 	}
-
-	velocityComponent->Set(velocity);
-
-	const Point& oldCenter = positionComponent->GetCenter();
-	Point newCenter = oldCenter + deltaTime * velocity;
-
-	positionComponent->SetCenter(newCenter);
 }

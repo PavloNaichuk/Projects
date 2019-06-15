@@ -14,7 +14,7 @@ StartMenuState::StartMenuState(SharedRenderer renderer, SharedResourceManager re
 
 void StartMenuState::Enter()
 {
-
+	SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 255, 0);
 }
 
 void StartMenuState::Exit()
@@ -64,6 +64,8 @@ void StartMenuState::Render()
 	mEnterTextRect.x = (BOARD_WIDTH - mEnterTextRect.w) / 2;
 	mEnterTextRect.y = (BOARD_HEIGHT - mEnterTextRect.h) / 2 + mEnterTextRect.h + 50;
 
+	SDL_SetRenderDrawColor(mRenderer.get(), 0, 255, 0, 0);
+	SDL_RenderClear(mRenderer.get());
 	SDL_RenderCopy(mRenderer.get(), mAirHockeyTexture.get(), nullptr, &mAirHockeyTextRect);
 	SDL_RenderCopy(mRenderer.get(), mEnterTexture.get(), nullptr, &mEnterTextRect);
 

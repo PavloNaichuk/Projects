@@ -55,20 +55,39 @@ void PlayGameState::Enter()
 		{
 			ScoreUIData* UIData = mUIObjects[SCORE_UI_ID]->GetComponent<ScoreUIData>(ScoreUIData::COMPONENT_ID);
 
+			PositionComponent* playerPositionComponent = mGameObjects[PLAYER_STRIKER_ID]->GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+			ScoreComponent* playerScoreComponent = mGameObjects[PLAYER_STRIKER_ID]->GetComponent<ScoreComponent>(ScoreComponent::COMPONENT_ID);
+			VelocityComponent* playerVelocityComponent = mGameObjects[PLAYER_STRIKER_ID]->GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
+		
+			PositionComponent* enemyPositionComponent = mGameObjects[ENEMY_STRIKER_ID]->GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+			ScoreComponent* enemyScoreComponent = mGameObjects[ENEMY_STRIKER_ID]->GetComponent<ScoreComponent>(ScoreComponent::COMPONENT_ID);
+			VelocityComponent* enemyVelocityComponent = mGameObjects[ENEMY_STRIKER_ID]->GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
+			
+			PositionComponent* puckPositionComponent = mGameObjects[PUCK_ID]->GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+			VelocityComponent* puckVelocityComponent = mGameObjects[PUCK_ID]->GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
+
 			if (event.mSenderId == ENEMY_GOAL_ID)
 			{
-				 ScoreComponent* scoreComponent = mGameObjects[PLAYER_STRIKER_ID]->GetComponent<ScoreComponent>(ScoreComponent::COMPONENT_ID);
-				 scoreComponent->Set(scoreComponent->Get() + 1);
+				playerScoreComponent->Set(playerScoreComponent->Get() + 1);
+				UIData->SetPlayerScore(playerScoreComponent->Get());
 
-				 UIData->SetPlayerScore(scoreComponent->Get());
+				puckPositionComponent->SetCenter(Point(BOARD_WIDTH / 4, BOARD_HEIGHT / 2));
 			}
 			else 
 			{
-				ScoreComponent* scoreComponent = mGameObjects[ENEMY_STRIKER_ID]->GetComponent<ScoreComponent>(ScoreComponent::COMPONENT_ID);
-				scoreComponent->Set(scoreComponent->Get() + 1);
-				
-				UIData->SetEnemyScore(scoreComponent->Get());
+				enemyScoreComponent->Set(enemyScoreComponent->Get() + 1);
+				UIData->SetEnemyScore(enemyScoreComponent->Get());
+
+				puckPositionComponent->SetCenter(Point(BOARD_WIDTH - BOARD_WIDTH / 4, BOARD_HEIGHT / 2));
 			}
+
+			puckVelocityComponent->Set(Vector(0.0f, 0.0f));
+			
+			playerPositionComponent->SetCenter(Point(BOARD_WIDTH - STRIKER_RADIUS, BOARD_HEIGHT / 2));
+			playerVelocityComponent->Set(Vector(0.0f, 0.0f));
+
+			enemyPositionComponent->SetCenter(Point(STRIKER_RADIUS, BOARD_HEIGHT / 2));
+			enemyVelocityComponent->Set(Vector(0.0f, 0.0f));
 		}
 	};
 	EventCenter::GetInstance().Subscribe(handleEvent);
