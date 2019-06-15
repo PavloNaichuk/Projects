@@ -62,7 +62,8 @@ void PlayGameState::Enter()
 			PositionComponent* enemyPositionComponent = mGameObjects[ENEMY_STRIKER_ID]->GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
 			ScoreComponent* enemyScoreComponent = mGameObjects[ENEMY_STRIKER_ID]->GetComponent<ScoreComponent>(ScoreComponent::COMPONENT_ID);
 			VelocityComponent* enemyVelocityComponent = mGameObjects[ENEMY_STRIKER_ID]->GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
-			
+			EnemyStrikerMovement* enemyMovementComponent = mGameObjects[ENEMY_STRIKER_ID]->GetComponent<EnemyStrikerMovement>(EnemyStrikerMovement::COMPONENT_ID);
+
 			PositionComponent* puckPositionComponent = mGameObjects[PUCK_ID]->GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
 			VelocityComponent* puckVelocityComponent = mGameObjects[PUCK_ID]->GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
 
@@ -88,6 +89,7 @@ void PlayGameState::Enter()
 
 			enemyPositionComponent->SetCenter(Point(STRIKER_RADIUS, BOARD_HEIGHT / 2));
 			enemyVelocityComponent->Set(Vector(0.0f, 0.0f));
+			enemyMovementComponent->Reset();
 		}
 	};
 	EventCenter::GetInstance().Subscribe(handleEvent);
@@ -177,14 +179,16 @@ UniqueGameObject PlayGameState::CreatePlayerGoal(const Point& center, float radi
 
 UniqueGameObject PlayGameState::CreateEnemyStriker(const Point& center, float radius)
 {
+	const Region movementRegion(Point(0, 0), Point(BOARD_WIDTH / 2, BOARD_HEIGHT));
+
 	UniqueGameObject gameObject = std::make_unique<GameObject>(ENEMY_STRIKER_ID);
 	gameObject->AddComponent(std::make_unique<PositionComponent>(center));
 	gameObject->AddComponent(std::make_unique<RadiusComponent>(radius));
 	gameObject->AddComponent(std::make_unique<VelocityComponent>(Vector(0.0f, 0.0f)));
 	gameObject->AddComponent(std::make_unique<ScoreComponent>(0));
-	gameObject->AddComponent(std::make_unique<EnemyStrikerMovement>());
+	gameObject->AddComponent(std::make_unique<EnemyStrikerMovement>(movementRegion));
 	gameObject->AddComponent(std::make_unique<EnemyStrikerRenderer>(mRenderer, mResourceManager));
-	gameObject->AddComponent(std::make_unique<StrikerPhysics>(Region(Point(0, 0), Point(BOARD_WIDTH / 2, BOARD_HEIGHT))));
+	gameObject->AddComponent(std::make_unique<StrikerPhysics>(movementRegion));
 
 	return gameObject;
 }

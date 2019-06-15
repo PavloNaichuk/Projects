@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Vector.h"
+#include "Math.h"
 #include "Common.h"
 
 Vector::Vector()
@@ -103,7 +103,7 @@ const Vector& operator*= (Vector& vec, float scalar)
 
 bool AreEqual(float value1, float value2)
 {
-	return (std::abs(value1 - value2) < 0.000001f);
+	return (std::abs(value1 - value2) < 0.0001f);
 }
 
 const Vector Perp(const Vector& vec)
@@ -147,6 +147,11 @@ float SquaredDistance(const Point& point1, const Point& point2)
 	return SquaredLength(point1 - point2);
 }
 
+bool IsZero(const Vector& vec) 
+{
+	return (AreEqual(vec.mX, 0.0f) && AreEqual(vec.mY, 0.0f));
+}
+
 Ray::Ray(const Point& origin, const Vector& direction)
 	: mOrigin(origin)
 	, mDirection(direction)
@@ -179,4 +184,10 @@ float Square(float value)
 bool CirclesHitEachOther(const Point& center1, float radius1, const Point& center2, float radius2)
 {
 	return (SquaredDistance(center1, center2) <= Square(radius1 + radius2));
+}
+
+float Random(float from, float to) 
+{
+	float random = (float)std::rand() / (float)RAND_MAX;
+	return (from + random * (to - from));
 }

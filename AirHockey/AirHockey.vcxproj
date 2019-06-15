@@ -200,7 +200,7 @@
     <ClInclude Include="TimerUIData.h" />
     <ClInclude Include="TimerUILogic.h" />
     <ClInclude Include="TimerUIRenderer.h" />
-    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="VelocityComponent.h" />
   </ItemGroup>
   <ItemGroup>
@@ -240,7 +240,7 @@
     <ClCompile Include="TimerUILogic.cpp" />
     <ClCompile Include="TimerUIRenderer.cpp" />
     <ClCompile Include="TimeUIData.cpp" />
-    <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="Math.cpp" />
     <ClCompile Include="VelocityComponent.cpp" />
   </ItemGroup>
   <ItemGroup>

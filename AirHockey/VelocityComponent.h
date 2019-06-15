@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include "Vector.h"
+#include "Math.h"
 
 class VelocityComponent : public Component
 {

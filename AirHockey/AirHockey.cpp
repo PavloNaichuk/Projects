@@ -66,6 +66,7 @@ int AirHockey::Init()
 		return 7;
 	}
 
+	std::srand((unsigned int)std::time(nullptr));
 	return 0;
 }
 

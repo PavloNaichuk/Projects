@@ -4,7 +4,7 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Common.h"
-#include "Vector.h"
+#include "Math.h"
 #include <vector>
 
 class PlayGameState : public GameState

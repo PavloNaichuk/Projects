@@ -2,7 +2,7 @@
 #include "PuckMovement.h"
 #include "GameObject.h"
 #include "Config.h"
-#include "Vector.h"
+#include "Math.h"
 #include "VelocityComponent.h"
 #include "PositionComponent.h"
 

@@ -41,6 +41,7 @@ float Length(const Vector& vec);
 float SquaredLength(const Vector& vec);
 float Distance(const Point& point1, const Point& point2);
 float SquaredDistance(const Point& point1, const Point& point2);
+bool IsZero(const Vector& vec);
 
 struct Ray
 {
@@ -55,3 +56,5 @@ bool TestHit(const Ray& ray1, const Ray& ray2, float& hitParam1, float& hitParam
 
 float Square(float value);
 bool CirclesHitEachOther(const Point& center1, float radius1, const Point& center2, float radius2);
+
+float Random(float from, float to);

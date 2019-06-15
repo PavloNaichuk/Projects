@@ -4,7 +4,7 @@
 #include "RadiusComponent.h"
 #include "VelocityComponent.h"
 #include "GameObject.h"
-#include "Vector.h"
+#include "Math.h"
 #include "Config.h"
 #include "EventCenter.h"
 #include "PlayGameState.h"

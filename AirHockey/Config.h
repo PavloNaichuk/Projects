@@ -17,3 +17,6 @@ const float STRIKER_SPEED = 80.0f;
 
 const float PUCK_RADIUS = 16.0f;
 const float PUCK_SPEED = 360.0f;
+
+const float ENEMY_MIN_WAIT_KICK_TIME_IN_SEC = 0.5f;
+const float ENEMY_MAX_WAIT_KICK_TIME_IN_SEC = 2.0f;

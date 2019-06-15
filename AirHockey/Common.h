@@ -5,7 +5,9 @@
 #include <SDL_image.h>
 #include <cassert>
 #include <cstdio>
+#include <cstdlib>
 #include <cmath>
+#include <ctime>
 #include <memory>
 #include <functional>
 #include <algorithm>
