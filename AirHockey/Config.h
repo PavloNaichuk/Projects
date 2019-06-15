@@ -1,6 +1,6 @@
 #pragma once
 
-const float PLAY_TIME = 3600.0f;
+const float PLAY_TIME_IN_SEC = 600.0f;
 const int UI_AREA_HEIGHT = 50;
 
 const int BOARD_WIDTH = 700;

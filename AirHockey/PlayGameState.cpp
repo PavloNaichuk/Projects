@@ -237,7 +237,7 @@ UniqueGameObject PlayGameState::CreateScoreUI(const Point& topLeft, int width, i
 UniqueGameObject PlayGameState::CreateTimerUI(const Point& topLeft, int width, int height)
 {
 	UniqueGameObject gameObject = std::make_unique<GameObject>(TIMER_UI_ID);
-	gameObject->AddComponent(std::make_unique<TimerUIData>(PLAY_TIME));
+	gameObject->AddComponent(std::make_unique<TimerUIData>(PLAY_TIME_IN_SEC));
 	gameObject->AddComponent(std::make_unique<BoxComponent>(topLeft, width, height));
 	gameObject->AddComponent(std::make_unique<TimerUILogic>());
 	gameObject->AddComponent(std::make_unique<TimerUIRenderer>(mRenderer, mResourceManager));
