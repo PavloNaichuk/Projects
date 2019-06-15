@@ -2,6 +2,7 @@
 #include "StrikerPhysics.h"
 #include "RadiusComponent.h"
 #include "PositionComponent.h"
+#include "VelocityComponent.h"
 #include "GameObject.h"
 
 StrikerPhysics::StrikerPhysics(const Region& movementRegion) 
@@ -22,8 +23,9 @@ void StrikerPhysics::Update(GameObject& gameObject, GameObjectList& gameObjectLi
 	RadiusComponent* strikerRadiusComponent = gameObject.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
 		
 	PositionComponent* puckPositionComponent = puck.GetComponent<PositionComponent>(PositionComponent::COMPONENT_ID);
+	VelocityComponent* puckVelocityComponent = puck.GetComponent<VelocityComponent>(VelocityComponent::COMPONENT_ID);
 	RadiusComponent* puckRadiusComponent = puck.GetComponent<RadiusComponent>(RadiusComponent::COMPONENT_ID);
-	
+		
 	Point strikerCenter = strikerPositionComponent->GetCenter();
 	float strikerRadius = strikerRadiusComponent->GetRadius();
 
@@ -48,5 +50,7 @@ void StrikerPhysics::Update(GameObject& gameObject, GameObjectList& gameObjectLi
 
 		Point puckNewCenter = strikerCenter + (strikerRadius + puckRadius) * dirBetweenCenters;
 		puckPositionComponent->SetCenter(puckNewCenter);
+
+		puckVelocityComponent->Set(Vector(0.0f, 0.0f));
 	}
 }
