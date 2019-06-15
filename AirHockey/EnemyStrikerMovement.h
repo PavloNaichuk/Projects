@@ -22,4 +22,5 @@ public:
 private:
 	Region mMovemenetRegion;
 	UniqueState mState;
+	UniqueState mPendingState;
 };

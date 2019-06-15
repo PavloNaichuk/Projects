@@ -37,10 +37,11 @@ void GoalLogic::Update(GameObject& gameObject, float deltaTime, GameObjectList& 
 	Ray ray2(oldPuckCenter, puckCenter - oldPuckCenter);
 
 	float hitParam1, hitParam2;
-	bool hitHappened = TestHit(ray1, ray2, hitParam1, hitParam2);
-
-	if (hitHappened && (0.0f <= hitParam1) && (hitParam1 <= 1.0f) && (0.0f <= hitParam2) && (hitParam2 <= 1.0f))
+	if (TestHit(ray1, ray2, hitParam1, hitParam2))
 	{
-		EventCenter::GetInstance().Send(std::make_unique<Event>(Event::GOAL_SCORED_ID, gameObject.GetId()));
+		if ((0.0f <= hitParam1) && (hitParam1 <= 1.0f) && (0.0f <= hitParam2) && (hitParam2 <= 1.0f))
+		{
+			EventCenter::GetInstance().Send(std::make_unique<Event>(Event::GOAL_SCORED_ID, gameObject.GetId()));
+		}
 	}
 }

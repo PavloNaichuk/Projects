@@ -68,6 +68,11 @@ Component::ComponentId EnemyStrikerMovement::GetId() const
 
 void EnemyStrikerMovement::Update(GameObject& gameObject, float deltaTime, GameObjectList& gameObjectList)
 {
+	if (mPendingState)
+	{
+		mState = std::move(mPendingState);
+		mPendingState = nullptr;
+	}
 	mState->Update(gameObject, deltaTime, gameObjectList);
 }
 
@@ -83,7 +88,7 @@ const Region& EnemyStrikerMovement::GetMovementRegion() const
 
 void EnemyStrikerMovement::Enter(UniqueState state) 
 {
-	mState = std::move(state);
+	mPendingState = std::move(state);
 }
 
 ReturnToPositionState::ReturnToPositionState(GameObjectList& gameObjectList)

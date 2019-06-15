@@ -44,19 +44,19 @@ void PuckPhysics::Update(GameObject& gameObject, GameObjectList& gameObjectList)
 			Ray ray2(boardWall.mStart, boardWall.mEnd - boardWall.mStart);
 
 			float hitParam1, hitParam2;
-			bool hitBetweenRaysHappened = TestHit(ray1, ray2, hitParam1, hitParam2);
-			
-			bool collisionHappened = (0.0f <= hitParam1) && (hitParam1 <= 1.0f) && (0.0f <= hitParam2) && (hitParam2 <= 1.0f);
-			if (collisionHappened)
+			if (TestHit(ray1, ray2, hitParam1, hitParam2))
 			{
-				Point collisionPoint = CalcPointOnRay(ray1, hitParam1);
-
-				float penetrationSquaredDist = SquaredDistance(collisionPoint, outmostPoint);
-				if (penetrationSquaredDist > largestPenetrationSquaredDist)
+				if ((0.0f <= hitParam1) && (hitParam1 <= 1.0f) && (0.0f <= hitParam2) && (hitParam2 <= 1.0f))
 				{
-					collisionBoardWall = &boardWall;
-					largestPenetrationSquaredDist = penetrationSquaredDist;
-					outmostCollisionPoint = collisionPoint;
+					Point collisionPoint = CalcPointOnRay(ray1, hitParam1);
+
+					float penetrationSquaredDist = SquaredDistance(collisionPoint, outmostPoint);
+					if (penetrationSquaredDist > largestPenetrationSquaredDist)
+					{
+						collisionBoardWall = &boardWall;
+						largestPenetrationSquaredDist = penetrationSquaredDist;
+						outmostCollisionPoint = collisionPoint;
+					}
 				}
 			}
 		}
