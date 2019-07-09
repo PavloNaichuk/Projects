@@ -5,8 +5,8 @@ CREATE TABLE [dbo].[Users](
 	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	[Login] [varchar](50) NOT NULL,
 	[Password] [varchar](50) NOT NULL,
-	[FirstName] [nchar](10) NOT NULL,
-	[LastName] [nchar](10) NOT NULL,
+	[FirstName] [nchar](50) NOT NULL,
+	[LastName] [nchar](50) NOT NULL,
 	[Email] [varchar](50) NOT NULL,
 	[RegistrationDate] [datetime] NOT NULL,
 )
@@ -16,7 +16,8 @@ CREATE TABLE [dbo].[Sellers](
 	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	[Login] [varchar](50) NOT NULL,
 	[Password] [varchar](50) NOT NULL,
-	[TheaterName] [nchar](10) NOT NULL,
+	[Name] [nchar](50) NOT NULL,
+	[Address] [nchar](50) NOT NULL,
 	[Email] [varchar](50) NOT NULL,
 	[RegistrationDate] [datetime] NOT NULL,
 )
@@ -27,7 +28,6 @@ CREATE TABLE [dbo].[Shows](
 	[SellerId] [int] NOT NULL,
     [Name] [varchar](50) NOT NULL,
 	[Date] [datetime] NOT NULL,
-	[NumberOfSeats] [int] NOT NULL,
 	CONSTRAINT FK_Sellers FOREIGN KEY (SellerId)
 	REFERENCES [Sellers](Id),
 )
