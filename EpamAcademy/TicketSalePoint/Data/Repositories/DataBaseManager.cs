@@ -15,16 +15,16 @@ namespace TicketSalePoint
 
         private DataBaseContext dataBaseContext = new DataBaseContext();
 
-        public void AddUser(UserInfo userInfo)
+        public void AddUser(Users user)
         {
-            dataBaseContext.UserInfo.Add(userInfo);
+            dataBaseContext.Users.Add(user);
             dataBaseContext.SaveChanges();
         }
 
-        public void RemoveUser(UserInfo userInfo)
+        public void RemoveUser(Users user)
         {
-            dataBaseContext.UserInfo.Remove(userInfo);
+            dataBaseContext.Users.Remove(user);
             dataBaseContext.SaveChanges();
         }
-
     }
+}

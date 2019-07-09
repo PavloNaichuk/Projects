@@ -17,6 +17,6 @@ namespace TicketSalePoint.Data.Context
             throw new NotImplementedException();
         }
 
-        public DbSet<UserInfo> UserInfo { get; set; }
+        public DbSet<Users> Users { get; set; }
     }
 }
