@@ -1,0 +1,83 @@
+USE [TicketSalePoint]
+GO
+
+CREATE TABLE [dbo].[Users](
+	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	[Login] [varchar](50) NOT NULL,
+	[Password] [varchar](50) NOT NULL,
+	[FirstName] [nchar](10) NOT NULL,
+	[LastName] [nchar](10) NOT NULL,
+	[Email] [varchar](50) NOT NULL,
+	[RegistrationDate] [datetime] NOT NULL,
+)
+GO
+
+CREATE TABLE [dbo].[Sellers](
+	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	[Login] [varchar](50) NOT NULL,
+	[Password] [varchar](50) NOT NULL,
+	[TheaterName] [nchar](10) NOT NULL,
+	[Email] [varchar](50) NOT NULL,
+	[RegistrationDate] [datetime] NOT NULL,
+)
+GO
+
+CREATE TABLE [dbo].[Shows](
+	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	[SellerId] [int] NOT NULL,
+    [Name] [varchar](50) NOT NULL,
+	[Date] [datetime] NOT NULL,
+	[NumberOfSeats] [int] NOT NULL,
+	CONSTRAINT FK_Sellers FOREIGN KEY (SellerId)
+	REFERENCES [Sellers](Id),
+)
+GO
+
+CREATE TABLE [dbo].[Tickets](
+	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    [ShowId] [int] NOT NULL,
+    CONSTRAINT FK_Shows FOREIGN KEY (ShowId)
+    REFERENCES [Shows](Id),
+	[RowNumber] [int] NOT NULL,
+	[SeatNumber] [int] NOT NULL,
+	[Price] [int] NOT NULL,
+	[Status] [int] DEFAULT 1,
+)
+GO
+
+ALTER TABLE [dbo].[Users] 
+ADD  CONSTRAINT [DF_Users_RegistrationDate]  DEFAULT (getdate()) FOR [RegistrationDate]
+GO
+
+ALTER TABLE Users
+ADD  CONSTRAINT DF_Users_Login_Unique  UNIQUE (Login)
+GO
+
+ALTER TABLE Users
+ADD  CONSTRAINT DF_Users_Email_Unique  UNIQUE (Email)
+GO
+
+ALTER TABLE Users WITH CHECK  
+ADD CONSTRAINT [CK_Users1] CHECK  (([Login]<>N''))
+GO
+	
+ALTER TABLE Users WITH CHECK 
+ADD CONSTRAINT [CK_Users2] CHECK  (([Password]<>N''))
+GO
+
+ALTER TABLE Users WITH CHECK 
+ADD CONSTRAINT [CK_Users3] CHECK  (([FirstName]<>N''))
+GO
+
+ALTER TABLE Users WITH CHECK 
+ADD CONSTRAINT [CK_Users4] CHECK  (([LastName]<>N''))
+GO
+
+ALTER TABLE Users WITH CHECK 
+ADD CONSTRAINT [CK_Users5] CHECK  (([Email]<>N''))
+GO
+
+ALTER TABLE Users WITH CHECK 
+ADD CONSTRAINT [CK_Users6] CHECK (DATALENGTH(RegistrationDate) > 0)
+GO
+
