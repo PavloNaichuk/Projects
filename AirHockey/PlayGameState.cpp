@@ -84,10 +84,12 @@ void PlayGameState::Enter()
 
 			puckVelocityComponent->Set(Vector(0.0f, 0.0f));
 			
-			playerPositionComponent->SetCenter(Point(BOARD_WIDTH - STRIKER_RADIUS, BOARD_HEIGHT / 2));
+			for (float index = 0.0f; index < STRIKER_RADIUS; ++index) 
+			{
+				playerPositionComponent->SetCenter(Point(BOARD_WIDTH - index, BOARD_HEIGHT / 2));
+				enemyPositionComponent->SetCenter(Point(index, BOARD_HEIGHT / 2));
+			}
 			playerVelocityComponent->Set(Vector(0.0f, 0.0f));
-
-			enemyPositionComponent->SetCenter(Point(STRIKER_RADIUS, BOARD_HEIGHT / 2));
 			enemyVelocityComponent->Set(Vector(0.0f, 0.0f));
 			enemyMovementComponent->Reset();
 		}
