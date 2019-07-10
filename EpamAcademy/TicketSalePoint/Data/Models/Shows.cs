@@ -12,5 +12,7 @@ namespace TicketSalePoint.Data.Models
         public int SellerId { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
+
+        public virtual ICollection<Tickets> Tickets { get; set; }
     }
 }

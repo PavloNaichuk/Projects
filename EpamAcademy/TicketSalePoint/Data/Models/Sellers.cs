@@ -14,5 +14,7 @@ namespace TicketSalePoint.Data.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime RegistrationDate { get; set; }
+
+        public virtual ICollection<Shows> Shows { get; set; }
     }
 }

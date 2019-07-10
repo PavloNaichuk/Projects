@@ -21,5 +21,8 @@ namespace TicketSalePoint.Data.Models
         public int SeatNumber { get; set; }
         public int Price { get; set; }
         public Status? Status { get; set; }
+
+        public virtual ICollection<Shows> Shows { get; set; }
+        public virtual ICollection<Users> Users { get; set; }
     }
 }
