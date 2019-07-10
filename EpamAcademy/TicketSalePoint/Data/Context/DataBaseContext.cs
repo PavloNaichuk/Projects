@@ -18,5 +18,8 @@ namespace TicketSalePoint.Data.Context
         }
 
         public DbSet<Users> Users { get; set; }
+        public DbSet<Sellers> Sellers { get; set; }
+        public DbSet<Shows> Shows { get; set; }
+        public DbSet<Tickets> Tickets { get; set; }
     }
 }

@@ -26,5 +26,43 @@ namespace TicketSalePoint
             dataBaseContext.Users.Remove(user);
             dataBaseContext.SaveChanges();
         }
+
+        public void AddSeller(Sellers seller)
+        {
+            dataBaseContext.Sellers.Add(seller);
+            dataBaseContext.SaveChanges();
+        }
+
+        public void RemoveSeller(Sellers seller)
+        {
+            dataBaseContext.Sellers.Remove(seller);
+            dataBaseContext.SaveChanges();
+        }
+
+        public void AddShow(Shows show)
+        {
+            dataBaseContext.Shows.Add(show);
+            dataBaseContext.SaveChanges();
+        }
+
+        public void RemoveShow(Shows show)
+        {
+            dataBaseContext.Shows.Remove(show);
+            dataBaseContext.SaveChanges();
+        }
+
+        public void AddTicket(Tickets ticket)
+        {
+            dataBaseContext.Tickets.Add(ticket);
+            dataBaseContext.SaveChanges();
+        }
+
+        public void RemoveTicket(Tickets ticket)
+        {
+            dataBaseContext.Tickets.Remove(ticket);
+            dataBaseContext.SaveChanges();
+        }
+
+
     }
 }
