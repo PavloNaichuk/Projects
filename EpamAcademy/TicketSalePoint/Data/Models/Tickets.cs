@@ -4,6 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketSalePoint.Data.Models
 {
+    public enum Status
+    {
+        SOLD,
+        FREE,
+        RESERVED
+    }
+
     [Table("Tickets")]
     public class Tickets
     {
@@ -13,6 +20,6 @@ namespace TicketSalePoint.Data.Models
         public int RowNumber { get; set; }
         public int SeatNumber { get; set; }
         public int Price { get; set; }
-        public int Status { get; set; }
+        public Status? Status { get; set; }
     }
 }
