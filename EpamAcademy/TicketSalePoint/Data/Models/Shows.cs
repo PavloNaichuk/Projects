@@ -14,5 +14,8 @@ namespace TicketSalePoint.Data.Models
         public DateTime Date { get; set; }
 
         public virtual ICollection<Tickets> Tickets { get; set; }
+        public virtual Sellers Sellers { get; set; }
+        public virtual Users Users { get; set; }
+        public virtual Tickets Tickets { get; set; }
     }
 }
