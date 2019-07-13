@@ -63,6 +63,41 @@ namespace TicketSalePoint
             dataBaseContext.SaveChanges();
         }
 
+        public Users QueryUser(string login)
+        {
+            return dataBaseContext.Users.FirstOrDefault(item => item.Login == login);
+        }
 
+        public Sellers QuerySeller(string login)
+        {
+            return dataBaseContext.Sellers.FirstOrDefault(item => item.Login == login);
+        }
+
+        public Shows QueryShow(string name)
+        {
+            return dataBaseContext.Shows.FirstOrDefault(item => item.Name == name);
+        }
+
+        public Tickets QueryTicket(int rowNumber)
+        {
+            return dataBaseContext.Tickets.FirstOrDefault(item => item.RowNumber == rowNumber);
+        }
+
+        public void ClearDB()
+        {
+           //var tickets = from c in dataBaseContext.Tickets select c;
+           //dataBaseContext.Tickets.RemoveRange(tickets);
+
+            var users = from c in dataBaseContext.Users select c;
+            dataBaseContext.Users.RemoveRange(users);
+
+            var sellers = from c in dataBaseContext.Sellers select c;
+            dataBaseContext.Sellers.RemoveRange(sellers);
+
+            //var shows = from c in dataBaseContext.Shows select c;
+            //dataBaseContext.Shows.RemoveRange(shows);
+
+            dataBaseContext.SaveChanges();
+        }
     }
 }
