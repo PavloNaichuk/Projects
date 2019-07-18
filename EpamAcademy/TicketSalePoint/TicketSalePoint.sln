@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{B8A9E0A6-86B9-400C-B8EF-AA5024DA62A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSalePointWebAPI", "TicketSalePointWebAPI\TicketSalePointWebAPI.csproj", "{59EF2360-63D5-4CC3-9C58-429953F07E81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,26 @@ Global
 		{B8A9E0A6-86B9-400C-B8EF-AA5024DA62A6}.Release|x64.Build.0 = Debug|Any CPU
 		{B8A9E0A6-86B9-400C-B8EF-AA5024DA62A6}.Release|x86.ActiveCfg = Release|Any CPU
 		{B8A9E0A6-86B9-400C-B8EF-AA5024DA62A6}.Release|x86.Build.0 = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|ARM.Build.0 = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|x64.Build.0 = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Debug|x86.Build.0 = Debug|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|ARM.ActiveCfg = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|ARM.Build.0 = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|ARM64.Build.0 = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|x64.ActiveCfg = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|x64.Build.0 = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|x86.ActiveCfg = Release|Any CPU
+		{59EF2360-63D5-4CC3-9C58-429953F07E81}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
