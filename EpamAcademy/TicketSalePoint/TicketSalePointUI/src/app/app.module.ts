@@ -1,7 +1,9 @@
+import { SellersService } from './shared/sellers.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,15 +29,16 @@ const appRoutes: Routes = [
     LeftRegionComponent,
     BottomRegionComponent,
     CenterRegionComponent,
-    UserComponent
+    UserComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(appRoutes),
-    HttpModule
+    HttpModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [SellersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

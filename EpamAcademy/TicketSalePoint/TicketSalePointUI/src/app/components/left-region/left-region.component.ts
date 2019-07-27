@@ -1,5 +1,6 @@
+import { SellersService } from './../../shared/sellers.service';
 import { Component, OnInit } from '@angular/core';
-import {Http} from '@angular/http';
+
 
 @Component({
   selector: 'left-region',
@@ -8,7 +9,7 @@ import {Http} from '@angular/http';
 })
 export class LeftRegionComponent implements OnInit {
 
-  constructor()
+  constructor(private service : SellersService)
    {
    }
 
