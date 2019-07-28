@@ -1,3 +1,4 @@
+import { Sellers } from './../../shared/sellers/sellers.model';
 import { SellersService } from '../../shared/sellers/sellers.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -9,11 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LeftRegionComponent implements OnInit {
 
+  sellers = Sellers;
   constructor(private service : SellersService)
    {
    }
 
   ngOnInit() {
   }
-
 }

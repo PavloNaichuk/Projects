@@ -2,7 +2,7 @@ import { BottomRegionComponent } from './../components/bottom-region/bottom-regi
 import { TopRegionComponent } from './../components/top-region/top-region.component';
 import { CenterRegionComponent } from './../components/center-region/center-region.component';
 import { LeftRegionComponent } from './../components/left-region/left-region.component';
-import { SingUpComponent } from './../components/sing-up/sing-up.component';
+import { SingUpComponent } from '../components/users/sing-up/sing-up.component';
 import {Routes} from '@angular/router';
 import { AuthenticatedComponent } from './authenticated/authenticated.component';
 

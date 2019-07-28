@@ -11,13 +11,11 @@ import { TopRegionComponent } from './components/top-region/top-region.component
 import { LeftRegionComponent } from './components/left-region/left-region.component';
 import { BottomRegionComponent } from './components/bottom-region/bottom-region.component';
 import { CenterRegionComponent } from './components/center-region/center-region.component';
-import { UserComponent } from './components/user/user.component';
-import { SingUpComponent } from './components/sing-up/sing-up.component';
+import { SingUpComponent } from './components/users/sing-up/sing-up.component';
 import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
 
 const appRoutes: Routes = [
   {path: '', component: AppComponent},
-  {path: 'user', component: UserComponent},
   {path: 'left-region', component: LeftRegionComponent},
   {path: 'top-region', component: TopRegionComponent},
   {path: 'bottom-region', component: BottomRegionComponent},
@@ -32,7 +30,6 @@ const appRoutes: Routes = [
     LeftRegionComponent,
     BottomRegionComponent,
     CenterRegionComponent,
-    UserComponent,
     SingUpComponent,
     AuthenticatedComponent,
   ],
@@ -40,7 +37,6 @@ const appRoutes: Routes = [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(appRoutes),
-    HttpModule,
     FormsModule,
   ],
   providers: [SellersService],
