@@ -21,5 +21,19 @@ namespace TicketSalePointWebAPI.Controllers
                 return Ok(await query.ToListAsync());
             }
         }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> GetDateFromSellersNames(DateTime date)
+        {
+            using (var dataBaseContext = new DataBaseContext())
+            {
+                var query = from show in dataBaseContext.Shows
+                            where
+                            show.Date == date
+                            orderby show.SellerId
+                            select show.Name;
+                return Ok(await query.ToListAsync());
+            }
+        }
     }
 }

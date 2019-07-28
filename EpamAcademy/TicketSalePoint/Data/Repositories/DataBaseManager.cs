@@ -85,17 +85,11 @@ namespace TicketSalePoint
 
         public void ClearDB()
         {
-           //var tickets = from c in dataBaseContext.Tickets select c;
-           //dataBaseContext.Tickets.RemoveRange(tickets);
-
             var users = from c in dataBaseContext.Users select c;
             dataBaseContext.Users.RemoveRange(users);
 
             var sellers = from c in dataBaseContext.Sellers select c;
             dataBaseContext.Sellers.RemoveRange(sellers);
-
-            //var shows = from c in dataBaseContext.Shows select c;
-            //dataBaseContext.Shows.RemoveRange(shows);
 
             dataBaseContext.SaveChanges();
         }
