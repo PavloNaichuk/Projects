@@ -1,4 +1,4 @@
-import { SellersService } from './shared/sellers.service';
+import { SellersService } from './shared/sellers/sellers.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -12,6 +12,8 @@ import { LeftRegionComponent } from './components/left-region/left-region.compon
 import { BottomRegionComponent } from './components/bottom-region/bottom-region.component';
 import { CenterRegionComponent } from './components/center-region/center-region.component';
 import { UserComponent } from './components/user/user.component';
+import { SingUpComponent } from './components/sing-up/sing-up.component';
+import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
 
 const appRoutes: Routes = [
   {path: '', component: AppComponent},
@@ -20,6 +22,7 @@ const appRoutes: Routes = [
   {path: 'top-region', component: TopRegionComponent},
   {path: 'bottom-region', component: BottomRegionComponent},
   {path: 'center-region', component: CenterRegionComponent},
+  {path: 'sing-up', component: SingUpComponent},
 ]
 
 @NgModule({
@@ -30,13 +33,15 @@ const appRoutes: Routes = [
     BottomRegionComponent,
     CenterRegionComponent,
     UserComponent,
+    SingUpComponent,
+    AuthenticatedComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(appRoutes),
     HttpModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [SellersService],
   bootstrap: [AppComponent]

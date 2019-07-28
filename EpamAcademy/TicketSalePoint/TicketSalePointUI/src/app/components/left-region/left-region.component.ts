@@ -1,4 +1,4 @@
-import { SellersService } from './../../shared/sellers.service';
+import { SellersService } from '../../shared/sellers/sellers.service';
 import { Component, OnInit } from '@angular/core';
 
 
