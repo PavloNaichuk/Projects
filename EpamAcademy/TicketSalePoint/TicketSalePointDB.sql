@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[Users](
 )
 GO
 
-CREATE TABLE [dbo].[Sellers](
+CREATE TABLE [dbo].[Theatres](
 	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	[Login] [varchar](50) NOT NULL,
 	[Password] [varchar](50) NOT NULL,
@@ -25,11 +25,11 @@ GO
 
 CREATE TABLE [dbo].[Shows](
 	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[SellerId] [int] NOT NULL,
+	[TheatreId] [int] NOT NULL,
     [Name] [varchar](50) NOT NULL,
 	[Date] [datetime] NOT NULL,
-	CONSTRAINT FK_Sellers FOREIGN KEY (SellerId)
-	REFERENCES [Sellers](Id),
+	CONSTRAINT FK_Theatres FOREIGN KEY (TheatreId)
+	REFERENCES [Theatres](Id),
 )
 GO
 
@@ -40,8 +40,9 @@ CREATE TABLE [dbo].[Tickets](
     REFERENCES [Shows](Id),
 	[RowNumber] [int] NOT NULL,
 	[SeatNumber] [int] NOT NULL,
-	[Price] [int] NOT NULL,
+	[PriceCents] [int] NOT NULL,
 	[Status] [int] DEFAULT 1,
+	[ReservationDate] [datetime] NOT NULL,
 )
 GO
 

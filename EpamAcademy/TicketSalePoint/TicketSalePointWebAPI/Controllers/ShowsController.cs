@@ -10,26 +10,24 @@ namespace TicketSalePointWebAPI.Controllers
     public class ShowsController : ApiController
     {
         [HttpGet]
-        public async Task<IHttpActionResult> GetDateNames(DateTime date)
+        public async Task<IHttpActionResult> GetShowsSortedByDateForAllTheatres()
         {
             using (var dataBaseContext = new DataBaseContext())
             {
                 var query = from show in dataBaseContext.Shows
-                            where
-                            show.Date == date
+                      
                             select show.Name;
+
                 return Ok(await query.ToListAsync());
             }
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetDateFromSellersNames(DateTime date)
+        public async Task<IHttpActionResult> GetShowsSortedByDateForTheatre(int theatreId)
         {
             using (var dataBaseContext = new DataBaseContext())
             {
                 var query = from show in dataBaseContext.Shows
-                            where
-                            show.Date == date
                             orderby show.SellerId
                             select show.Name;
                 return Ok(await query.ToListAsync());

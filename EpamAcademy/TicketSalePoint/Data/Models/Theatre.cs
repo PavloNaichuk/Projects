@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketSalePoint.Data.Models
 {
-    [Table("Sellers")]
-    public class Sellers
+    [Table("Theatres")]
+    public class Theatre
     {
-        public Sellers() { }
+        public Theatre() { }
         public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
@@ -16,6 +16,6 @@ namespace TicketSalePoint.Data.Models
         public string Email { get; set; }
         public DateTime RegistrationDate { get; set; }
 
-        public virtual ICollection<Shows> Shows { get; set; }
+        public virtual ICollection<Show> Show { get; set; }
     }
 }

@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TicketSalePoint.Data.Models
 {
     [Table("Users")]
-    public class Users
+    public class User
     {
-        public Users(){}
+        public User(){}
         public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
@@ -16,6 +16,6 @@ namespace TicketSalePoint.Data.Models
         public string Email { get; set; }
         public DateTime RegistrationDate { get; set; }
 
-        public virtual ICollection<Tickets> Tickets { get; set; }
+        public virtual ICollection<Ticket> Ticket { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace TicketSalePointWebAPI.Controllers
     public class UsersController : ApiController
     {
         [HttpGet]
-        public async Task<IHttpActionResult> Getuser(int id)
+        public async Task<IHttpActionResult> GetUser(int id)
         {
             using (var dataBaseContext = new DataBaseContext())
             {

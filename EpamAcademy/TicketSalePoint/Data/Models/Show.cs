@@ -5,15 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TicketSalePoint.Data.Models
 {
     [Table("Shows")]
-    public class Shows
+    public class Show
     {
-        public Shows() { }
+        public Show() { }
         public int Id { get; set; }
-        public int SellerId { get; set; }
+        public int TheatreId { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
 
-        public virtual ICollection<Tickets> Tickets { get; set; }
-        public virtual Sellers Sellers { get; set; }
+        public virtual ICollection<Ticket> Ticket { get; set; }
+        public virtual Theatre Theatre { get; set; }
     }
 }
