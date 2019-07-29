@@ -13,7 +13,7 @@ namespace TicketSalePoint.Data.Models
         public string Name { get; set; }
         public DateTime Date { get; set; }
 
-        public virtual ICollection<Ticket> Ticket { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual Theatre Theatre { get; set; }
     }
 }

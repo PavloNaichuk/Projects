@@ -40,7 +40,7 @@ CREATE TABLE [dbo].[Tickets](
     REFERENCES [Shows](Id),
 	[Row] [int] NOT NULL,
 	[Seat] [int] NOT NULL,
-	[PriceCents] [int] NOT NULL,
+	[PriceInCents] [int] NOT NULL,
 	[Status] [int] DEFAULT 1,
 	[ReservationDate] [datetime] NOT NULL,
 )

@@ -18,7 +18,7 @@ namespace TicketSalePoint.Data.Models
         public int ShowId { get; set; }
         public int Row { get; set; }
         public int Seat { get; set; }
-        public int PriceCents { get; set; }
+        public int PriceInCents { get; set; }
         public Status? Status { get; set; }
         public DateTime ReservationDate { get; set; }
 
