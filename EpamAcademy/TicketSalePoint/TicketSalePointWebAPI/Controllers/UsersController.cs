@@ -14,10 +14,9 @@ namespace TicketSalePointWebAPI.Controllers
         {
             using (var dataBaseContext = new DataBaseContext())
             {
-                var user = await dataBaseContext.Users.FirstOrDefaultAsync((t) => t.Id == id);
-                if (user == null)
-                    return NotFound();
-                return Ok(user);
+                var query = from user in dataBaseContext.Users
+                            select new { user.Id, user.Login, user.FirstName, user.LastName };
+                return Ok(await query.ToListAsync());
             }
         }
     }

@@ -15,8 +15,8 @@ namespace TicketSalePointWebAPI.Controllers
             using (var dataBaseContext = new DataBaseContext())
             {
                 var query = from show in dataBaseContext.Shows
-                select show.Name, show.Id, show.TheatreId;
-
+                            select new { show.Name, show.Id, show.TheatreId, show.Date, TheatreName = show.Theatre.Name};
+                            query.OrderByDescending(date => date.Date);
                 return Ok(await query.ToListAsync());
             }
         }
@@ -27,8 +27,10 @@ namespace TicketSalePointWebAPI.Controllers
             using (var dataBaseContext = new DataBaseContext())
             {
                 var query = from show in dataBaseContext.Shows
-                            orderby show.TheatreId
-                            select show.Name;
+                            where
+                            show.TheatreId == theatreId
+                            select new { show.Name, show.Id, show.Date};
+                            query.OrderByDescending(date => date.Date);
                 return Ok(await query.ToListAsync());
             }
         }
