@@ -38,8 +38,8 @@ CREATE TABLE [dbo].[Tickets](
     [ShowId] [int] NOT NULL,
     CONSTRAINT FK_Shows FOREIGN KEY (ShowId)
     REFERENCES [Shows](Id),
-	[RowNumber] [int] NOT NULL,
-	[SeatNumber] [int] NOT NULL,
+	[Row] [int] NOT NULL,
+	[Seat] [int] NOT NULL,
 	[PriceCents] [int] NOT NULL,
 	[Status] [int] DEFAULT 1,
 	[ReservationDate] [datetime] NOT NULL,
