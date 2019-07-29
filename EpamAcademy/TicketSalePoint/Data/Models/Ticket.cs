@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketSalePoint.Data.Models
 {
-    public enum Status
+    public enum TicketStatus
     {
         SOLD,
         FREE,
@@ -19,7 +19,7 @@ namespace TicketSalePoint.Data.Models
         public int Row { get; set; }
         public int Seat { get; set; }
         public int PriceInCents { get; set; }
-        public Status? Status { get; set; }
+        public TicketStatus? Status { get; set; }
         public DateTime ReservationDate { get; set; }
 
         public virtual Show Show { get; set; }
