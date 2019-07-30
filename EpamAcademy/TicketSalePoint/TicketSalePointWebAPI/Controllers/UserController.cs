@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TicketSalePointWebAPI.Controllers
 {
-    public class UsersController : ApiController
+    public class UserController : ApiController
     {
         [HttpGet]
         public async Task<IHttpActionResult> GetUser(int id)

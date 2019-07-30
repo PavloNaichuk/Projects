@@ -1,4 +1,4 @@
-import { Sellers } from './sellers.model';
+import { Sellers } from './theatres.model';
 
 describe('Sellers', () => {
   it('should create an instance', () => {

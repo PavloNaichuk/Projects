@@ -1,9 +1,10 @@
-import { SellersService } from './shared/sellers/sellers.service';
+import { InMemoryDataService } from './shared/theatres/in-memory-data.service';
+import { TheatresService } from './shared/theatres/theatres.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +14,7 @@ import { BottomRegionComponent } from './components/bottom-region/bottom-region.
 import { CenterRegionComponent } from './components/center-region/center-region.component';
 import { SingUpComponent } from './components/users/sing-up/sing-up.component';
 import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: '', component: AppComponent},
@@ -38,8 +40,12 @@ const appRoutes: Routes = [
     AppRoutingModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
+    HttpClientModule,
+    HttpClientInMemoryWebApiModule.forRoot(
+      InMemoryDataService, {dataEncapsulation: false}
+    )
   ],
-  providers: [SellersService],
+  providers: [TheatresService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
