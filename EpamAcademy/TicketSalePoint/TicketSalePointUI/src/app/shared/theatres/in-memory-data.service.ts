@@ -9,7 +9,7 @@ export class InMemoryDataServiceTheatre implements InMemoryDbService {
   createDb() {
     const theatres = [
       { id: 11, name: 'Національний  тетар України' },
-      { id: 12, name: 'Національна опера України' },
+      { id: 12, name: 'Національна опера України'},
       { id: 13, name: 'Національна оперета України' },
     ];
     return {theatres};
@@ -19,9 +19,9 @@ export class InMemoryDataServiceTheatre implements InMemoryDbService {
 export class InMemoryDataServiceShows implements InMemoryDbService {
   createDb() {
     const shows = [
-      { id: 11, name: 'Розпрягайте  хлопці коні', theatreId: 1, theatreName: 'Національна опера України'},
-      { id: 12, name: 'Весілля в малинівці', theatreId: 1, theatreName: 'Національна опера України'},
-      { id: 13, name: 'Хто сказав', theatreId: 1, theatreName: 'Національна опера України'},
+      { id: 11, name: 'Розпрягайте  хлопці коні', theatreId: 1, theatreName: 'Національна опера України', date: 11/2/1989},
+      { id: 12, name: 'Весілля в малинівці', theatreId: 1, theatreName: 'Національна опера України', date: 12/2/1989},
+      { id: 13, name: 'Хто сказав', theatreId: 1, theatreName: 'Національна опера України', date: 13/2/1989},
     ];
     return {shows};
   }

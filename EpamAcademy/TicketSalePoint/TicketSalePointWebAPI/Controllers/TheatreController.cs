@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TicketSalePointWebAPI.Controllers
 {
+    [AllowAnonymous]
     public class TheatreController : ApiController
     {
         [HttpGet]
@@ -13,6 +14,7 @@ namespace TicketSalePointWebAPI.Controllers
         {
             using (var dataBaseContext = new DataBaseContext())
             {
+                dataBaseContext.Database.Connection.Open();
                 var query = from theatre in dataBaseContext.Theatres
                             select new { theatre.Id, theatre.Name };
 

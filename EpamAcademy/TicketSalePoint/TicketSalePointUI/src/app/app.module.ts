@@ -46,10 +46,9 @@ const appRoutes: Routes = [
     HttpClientInMemoryWebApiModule.forRoot(
       InMemoryDataServiceTheatre, {dataEncapsulation: false}
     ),
-
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataServiceShows, {dataEncapsulation: false}
-    )
+    //HttpClientInMemoryWebApiModule.forRoot(
+      //InMemoryDataServiceShows, {dataEncapsulation: false}
+    //)
   ],
   providers: [TheatresService, ShowsService],
   bootstrap: [AppComponent]

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    class SellerRepository
+    class TheatreRepository
     {
     }
 }

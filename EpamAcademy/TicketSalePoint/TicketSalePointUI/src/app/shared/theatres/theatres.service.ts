@@ -11,7 +11,7 @@ import {MessageService} from './message.service';
    providedIn: 'root'
 })
 export class TheatresService {
-  private theatreUrl = 'api/theatres';
+  private theatreUrl = 'api/Theatre';
 
   httpOptions = {
     headers: new HttpHeaders({'Content-type': 'application.json' })
