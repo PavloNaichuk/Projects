@@ -13,8 +13,8 @@ namespace TicketSalePointWebAPI.Controllers
         {
             using (var dataBaseContext = new DataBaseContext())
             {
-                var query = from seller in dataBaseContext.Theatres
-                            select seller.Name;
+                var query = from theatre in dataBaseContext.Theatres
+                            select new { theatre.Id, theatre.Name };
 
                 return Ok(await query.ToListAsync());
             }
