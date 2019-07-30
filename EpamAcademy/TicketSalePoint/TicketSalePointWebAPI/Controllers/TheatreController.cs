@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TicketSalePointWebAPI.Controllers
 {
-    public class SellersController : ApiController
+    public class TheatreController : ApiController
     {
         [HttpGet]
         public async Task<IHttpActionResult> GetNames()
