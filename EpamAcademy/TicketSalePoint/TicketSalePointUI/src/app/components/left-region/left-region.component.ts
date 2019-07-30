@@ -1,8 +1,6 @@
 import { TheatresService } from './../../shared/theatres/theatres.service';
 import { Theatre } from '../../shared/theatres/theatres.model';
 import { Component, OnInit } from '@angular/core';
-import { THEATRES } from 'src/app/shared/theatres/mock-theatres';
-
 
 @Component({
   selector: 'left-region',

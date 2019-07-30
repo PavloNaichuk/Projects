@@ -5,13 +5,14 @@ import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import {MessageService} from './message.service';
+import { Shows } from './shows.model';
 
 
 @Injectable({
    providedIn: 'root'
 })
-export class TheatresService {
-  private theatreUrl = 'api/theatres';
+export class ShowsService {
+  private showUrl = 'api/shows';
 
   httpOptions = {
     headers: new HttpHeaders({'Content-type': 'application.json' })
@@ -19,35 +20,35 @@ export class TheatresService {
   handleError: any;
 
    constructor(private http: HttpClient, private messageService: MessageService) {}
-   /** Get teatres from the server */
-   getTheatres(): Observable<Theatre[]> {
-     return this.http.get<Theatre[]>(this.theatreUrl)
+   /** Get shows from the server */
+   getShows(): Observable<Shows[]> {
+    return this.http.get<Shows[]>(this.showUrl)
 
-     .pipe(
-       tap(_=>this.log('fetched theatre')),
-       catchError(this.handlError<Theatre[]>('getTheatre', []))
-     );
-   }
+    .pipe(
+      tap(_=>this.log('fetched show')),
+      catchError(this.handlError<Shows[]>('getShow', []))
+    );
+  }
 
-     /** GET theatre by id. Return `undefined` when id not found */
-  getTheatreNo404<Data>(id: number): Observable<Theatre> {
-    const url = `${this.theatreUrl}/?id=${id}`;
-    return this.http.get<Theatre[]>(url)
+     /** GET shows by id. Return `undefined` when id not found */
+  getTheatreNo404<Data>(id: number): Observable<Shows> {
+    const url = `${this.showUrl}/?id=${id}`;
+    return this.http.get<Shows[]>(url)
       .pipe(
-        map(theatre => theatre[0]), // returns a {0|1} element array
+        map(show => show[0]), // returns a {0|1} element array
         tap(h => {
           const outcome = h ? `fetched` : `did not find`;
           this.log(`${outcome} theatre id=${id}`);
         }),
-        catchError(this.handlError<Theatre>(`getHero id=${id}`))
+        catchError(this.handlError<Shows>(`getHero id=${id}`))
       );
   }
 
-  getTheatre(id: number): Observable<Theatre> {
-    const url = `${this.theatreUrl}/${id}`;
-    return this.http.get<Theatre>(url).pipe(
-      tap(_ => this.log(`fetched theatre id=${id}`)),
-      catchError(this.handlError<Theatre>(`getTheatre id=${id}`))
+  getShow(id: number): Observable<Shows> {
+    const url = `${this.showUrl}/${id}`;
+    return this.http.get<Shows>(url).pipe(
+      tap(_ => this.log(`fetched show id=${id}`)),
+      catchError(this.handlError<Shows>(`getShow id=${id}`))
     );
   }
 
@@ -65,8 +66,8 @@ export class TheatresService {
     };
   }
 
-  /** Log a TheatreService message with the MessageService */
+  /** Log a ShowService message with the MessageService */
   private log(message: string) {
-    this.messageService.add(`TheatresService: ${message}`);
+    this.messageService.add(`ShowsService: ${message}`);
   }
 }

@@ -1,4 +1,5 @@
-import { Theatre } from './../../shared/theatres/theatres.model';
+import { ShowsService } from './../../shared/theatres/shows.service';
+import { Shows } from '../../shared/theatres/shows.model';
 import { Component, OnInit, Input } from '@angular/core';
 
 
@@ -9,11 +10,18 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CenterRegionComponent implements OnInit {
 
-  @Input() theatre: Theatre;
+  shows: Shows[];
 
-  constructor() { }
+  constructor(private showsService: ShowsService)
+   {
+   }
 
   ngOnInit() {
+    this.getShows();
   }
 
+  getShows(): void {
+    this.showsService.getShows()
+      .subscribe(theatres => this.shows = theatres);
+  }
 }

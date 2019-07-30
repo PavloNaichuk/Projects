@@ -1,4 +1,6 @@
-import { InMemoryDataService } from './shared/theatres/in-memory-data.service';
+import { ShowsService } from './shared/theatres/shows.service';
+import { InMemoryDataServiceTheatre } from './shared/theatres/in-memory-data.service';
+import { InMemoryDataServiceShows } from './shared/theatres/in-memory-data.service';
 import { TheatresService } from './shared/theatres/theatres.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -42,10 +44,14 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, {dataEncapsulation: false}
+      InMemoryDataServiceTheatre, {dataEncapsulation: false}
+    ),
+
+    HttpClientInMemoryWebApiModule.forRoot(
+      InMemoryDataServiceShows, {dataEncapsulation: false}
     )
   ],
-  providers: [TheatresService],
+  providers: [TheatresService, ShowsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
