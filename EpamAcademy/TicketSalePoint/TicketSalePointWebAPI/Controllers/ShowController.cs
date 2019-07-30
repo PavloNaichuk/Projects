@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TicketSalePointWebAPI.Controllers
 {
-    public class ShowsController : ApiController
+    public class ShowController : ApiController
     {
         [HttpGet]
         public async Task<IHttpActionResult> GetShowsSortedByDateForAllTheatres()
