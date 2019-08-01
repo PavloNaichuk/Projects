@@ -1,32 +1,40 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { TopRegionComponent } from './components/top-region/top-region.component';
+import { LeftRegionComponent } from './components/left-region/left-region.component';
+import { BottomRegionComponent } from './components/bottom-region/bottom-region.component';
+import { CenterRegionComponent } from './components/center-region/center-region.component';
+import { SingUpComponent } from './components/users/sing-up/sing-up.component';
+
+import { HttpClientModule } from '@angular/common/http';
+
+const appRoutes: Routes = [
+  { path: '', component: AppComponent },
+  { path: 'left-region', component: LeftRegionComponent },
+  { path: 'top-region', component: TopRegionComponent },
+  { path: 'bottom-region', component: BottomRegionComponent },
+  { path: 'center-region', component: CenterRegionComponent },
+  { path: 'sing-up', component: SingUpComponent },
+]
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    FetchDataComponent
+    TopRegionComponent,
+    LeftRegionComponent,
+    BottomRegionComponent,
+    CenterRegionComponent,
+    SingUpComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
+    BrowserModule,
+    RouterModule.forRoot(appRoutes),
     FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-    ])
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
