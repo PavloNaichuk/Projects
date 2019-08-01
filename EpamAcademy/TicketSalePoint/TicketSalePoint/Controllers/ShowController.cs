@@ -3,44 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TicketSalePoint.Repositories;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TicketSalePoint.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/show")]
     public class ShowController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ShowRepository showRepository;
+
+        public ShowController(ShowRepository showRepository)
         {
-            return new string[] { "value1", "value2" };
+            this.showRepository = showRepository;
         }
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetShowsSortedByDateForAllTheatres()
         {
-            return "value";
+            return Ok(await this.showRepository.GetShowsSortedByDateForAllTheatres());
         }
 
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<IActionResult> GetShowsSortedByDateForTheatre(int theatreId)
         {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok(await this.showRepository.GetShowsSortedByDateForTheatre(theatreId));
         }
     }
+      
 }
