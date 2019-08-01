@@ -10,28 +10,28 @@ namespace TicketSalePoint.Repositories
 {
     public class TheatreRepository : ITheatreRepository
     {
-        public void Add(Theatre theatre)
+        public async Task Add(Theatre theatre)
         {
             using (var dataBaseContext = new DataBaseContext())
             {
                 dataBaseContext.Theatres.Add(theatre);
-                dataBaseContext.SaveChanges();
+                await dataBaseContext.SaveChangesAsync();
             }
         }
 
-        public void Remove(Theatre theatre)
+        public async Task Remove(Theatre theatre)
         {
             using (var dataBaseContext = new DataBaseContext())
             {
                 dataBaseContext.Theatres.Remove(theatre);
-                dataBaseContext.SaveChanges();
+                await dataBaseContext.SaveChangesAsync();
             }
         }
 
-        public Theatre Query(int id)
+        public async Task<Theatre> Query(int id)
         {
             using (var dataBaseContext = new DataBaseContext())
-                return dataBaseContext.Theatres.FirstOrDefault(item => item.Id == id);
+                return await dataBaseContext.Theatres.FirstOrDefaultAsync(item => item.Id == id);
         }
 
         public async Task<IEnumerable<TheatreSortInfo>> GetNames()
