@@ -9,13 +9,8 @@ namespace TicketSalePoint.Context
 {
     public class DataBaseContext : DbContext
     {
-        public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
+        public DataBaseContext(DbContextOptions options) : base(options)
         {
-        }
-
-        public static void ExecuteCommand(string command)
-        {
-            throw new NotImplementedException();
         }
 
         public DbSet<User> Users { get; set; }
