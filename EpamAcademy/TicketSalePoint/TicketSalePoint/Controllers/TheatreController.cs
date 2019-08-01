@@ -5,33 +5,35 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketSalePoint.Context;
 using TicketSalePoint.Models;
+using TicketSalePoint.Repositories;
 
 namespace TicketSalePoint.Controllers
 {
-/*    [Route("api/[controller]")]
+    [Route("api/theatre")]
     [ApiController]
     public class TheatreController : Controller
     {
-        private readonly Theatre theatre;
-        public TheatreController(Theatre theatre)
+        private readonly TheatreRepository theatreRepository;
+
+        public TheatreController(TheatreRepository theatreRepository)
         {
-            this.theatre = theatre;
+            this.theatreRepository = theatreRepository;
         }
 
-        public Task<Result> TheatreController()
+        public async Task<IActionResult> GetTheatreNames()
         {
-            return await this.resultProvider.ProvideResult();
+            return Ok(await this.theatreRepository.GetNames());
         }
     }
 
-    class BusinessLogicResultGenerator : IResultProvider
+    class BusinessLogicResultGenerator : TheatreRepository
     {
-        Task<Result> ProvideResult()
+        Task<IActionResult> TheatreResult()
         {
             // write logic here
         }
     }
-    // GET api/<controller>/5
+    /*// GET api/<controller>/5
     [HttpGet("{id}")]
         public string Get(int id)
         {
