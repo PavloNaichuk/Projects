@@ -9,9 +9,9 @@ namespace TicketSalePoint.Repositories
 {
     interface ITheatreRepository
     {
-        void Add(Theatre theatre);
-        void Remove(Theatre theatre);
-        Theatre Query(int id);
+        Task Add(Theatre theatre);
+        Task Remove(Theatre theatre);
+        Task<Theatre> Query(int id);
         Task<IEnumerable<TheatreSortInfo>> GetNames();
     }
 }
