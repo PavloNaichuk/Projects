@@ -10,9 +10,9 @@ namespace TicketSalePoint.Repositories
 {
     interface ITicketRepository
     {
-        Task Add(Ticket ticket);
-        Task Remove(Ticket ticket);
-        Task<Ticket> Query(int id);
+        void Add(Ticket ticket);
+        void Remove(Ticket ticket);
+        Ticket Query(int id);
         Task<IEnumerable<TicketSortInfo>> GetAvailableTickets(int showId);
     }
 }

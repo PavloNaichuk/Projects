@@ -8,9 +8,9 @@ namespace TicketSalePoint.Repositories
 {
     interface IShowRepository
     {
-        Task Add(Show show);
-        Task Remove(Show show);
-        Task<Show> Query(int id);
+        void Add(Show show);
+        void Remove(Show show);
+        Show Query(int id);
         Task<IEnumerable<ShowSortInfo>> GetShowsSortedByDateForAllTheatres();
         Task<IEnumerable<ShowSortInfo>> GetShowsSortedByDateForTheatre(int theatreId);
     }
