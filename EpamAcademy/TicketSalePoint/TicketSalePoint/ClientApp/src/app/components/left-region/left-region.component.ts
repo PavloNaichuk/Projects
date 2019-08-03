@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Theatre } from '../../shared/theatres/theatre.model';
+import { TheatreService } from '../../shared/theatres/theatre.service';
 
 @Component({
   selector: 'left-region',
@@ -6,12 +8,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./left-region.component.css']
 })
 export class LeftRegionComponent implements OnInit {
-  constructor()
-   {
-   }
+  theatres: Theatre[];
 
-  ngOnInit()
-  {
+  constructor(private theatreService: TheatreService) { }
+
+  ngOnInit() {
+    this.getTheatre();
+  }
+
+  getTheatre(): void {
+    this.theatreService.getTheatre()
+      .subscribe(theatres => this.theatres = theatres);
   }
 }
 

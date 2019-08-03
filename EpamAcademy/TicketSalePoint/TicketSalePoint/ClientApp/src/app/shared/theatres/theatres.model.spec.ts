@@ -1,7 +1,7 @@
-import { Sellers } from './theatres.model';
+import { Theatre } from './theatre.model';
 
-describe('Sellers', () => {
+describe('Theatre', () => {
   it('should create an instance', () => {
-    expect(new Sellers()).toBeTruthy();
+    expect(new Theatre()).toBeTruthy();
   });
 });

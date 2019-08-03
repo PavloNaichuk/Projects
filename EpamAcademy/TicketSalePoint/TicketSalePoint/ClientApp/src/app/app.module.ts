@@ -11,6 +11,7 @@ import { CenterRegionComponent } from './components/center-region/center-region.
 import { SingUpComponent } from './components/users/sing-up/sing-up.component';
 
 import { HttpClientModule } from '@angular/common/http';
+import { TheatreService } from './shared/theatres/theatre.service';
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [TheatreService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
