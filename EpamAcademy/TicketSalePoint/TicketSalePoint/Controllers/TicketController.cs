@@ -10,11 +10,12 @@ using TicketSalePoint.Repositories;
 namespace TicketSalePoint.Controllers
 {
     [Route("api/ticket")]
+    [ApiController]
     public class TicketController : Controller
     {
-        private readonly TicketRepository ticketRepository;
+        private readonly ITicketRepository ticketRepository;
 
-        public TicketController(TicketRepository ticketRepository)
+        public TicketController(ITicketRepository ticketRepository)
         {
             this.ticketRepository = ticketRepository;
         }

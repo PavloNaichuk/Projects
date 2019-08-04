@@ -6,7 +6,7 @@ using TicketSalePoint.Models;
 
 namespace TicketSalePoint.Repositories
 {
-    interface IUserRepository
+    public interface IUserRepository
     {
         Task Add(User user);
         Task Remove(User user);

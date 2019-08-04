@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TicketSalePoint.Models
 {
-    public class Show : DbContext
+    public class Show
     {
         [Key]
         public int Id { get; set; }

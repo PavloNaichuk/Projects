@@ -33,10 +33,12 @@ namespace TicketSalePoint.Repositories
             return await dataBaseContext.Theatres.FirstOrDefaultAsync(item => item.Id == id);
         }
 
-        public async Task<IEnumerable<TheatreSortInfo>> GetNames()
+        public async Task<IEnumerable<Theatre>> GetNames()
         {
             var query = from theatre in dataBaseContext.Theatres
-                        select new TheatreSortInfo { Id = theatre.Id, Name = theatre.Name };
+                            select new Theatre { Id = theatre.Id, Name = theatre.Name };
+            var query1 = from theatre in dataBaseContext.Theatres
+                select theatre;
 
             return await query.ToListAsync();
         }

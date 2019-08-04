@@ -37,11 +37,15 @@ namespace TicketSalePoint
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataBaseContext>(opt => opt.UseInMemoryDatabase("TicketSalePoint"));
+            services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TicketSalePoint")));
+
             services.ConfigureCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddTransient<Repositories.ITheatreRepository, Repositories.TheatreRepository>();
+            services.AddTransient<Repositories.IShowRepository, Repositories.ShowRepository>();
+            services.AddTransient<Repositories.ITicketRepository, Repositories.TicketRepository>();
+            services.AddTransient<Repositories.IUserRepository, Repositories.UserRepository>();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -69,9 +73,7 @@ namespace TicketSalePoint
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                routes.MapRoute("default", "api/{controller}/{id}");
             });
 
             app.UseSpa(spa =>
@@ -89,3 +91,4 @@ namespace TicketSalePoint
         }
     }
 }
+

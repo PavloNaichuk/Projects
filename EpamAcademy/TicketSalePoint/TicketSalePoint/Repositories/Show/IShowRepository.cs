@@ -6,12 +6,12 @@ using TicketSalePoint.Models;
 
 namespace TicketSalePoint.Repositories
 {
-    interface IShowRepository
+    public interface IShowRepository
     {
         Task Add(Show show);
         Task Remove(Show show);
         Task<Show> Query(int id);
-        Task<IEnumerable<ShowSortInfo>> GetShowsSortedByDateForAllTheatres();
-        Task<IEnumerable<ShowSortInfo>> GetShowsSortedByDateForTheatre(int theatreId);
+        Task<IEnumerable<Show>> GetShowsSortedByDateForAllTheatres();
+        Task<IEnumerable<Show>> GetShowsSortedByDateForTheatre(int theatreId);
     }
 }

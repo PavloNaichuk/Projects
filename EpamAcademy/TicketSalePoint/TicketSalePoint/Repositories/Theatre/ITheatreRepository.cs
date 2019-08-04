@@ -12,7 +12,7 @@ namespace TicketSalePoint.Repositories
         Task Add(Theatre theatre);
         Task Remove(Theatre theatre);
         Task<Theatre> Query(int id);
-        Task<IEnumerable<TheatreSortInfo>> GetNames();
+        Task<IEnumerable<Theatre>> GetNames();
     }
 }
 

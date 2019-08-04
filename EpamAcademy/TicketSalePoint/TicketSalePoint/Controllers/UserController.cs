@@ -11,9 +11,9 @@ namespace TicketSalePoint.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly UserRepository userRepository;
+        private readonly IUserRepository userRepository;
 
-        public UserController(UserRepository userRepository)
+        public UserController(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
         }

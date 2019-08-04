@@ -8,7 +8,7 @@ using TicketSalePoint.Models;
 
 namespace TicketSalePoint.Repositories
 {
-    interface ITicketRepository
+    public interface ITicketRepository
     {
         Task Add(Ticket ticket);
         Task Remove(Ticket ticket);

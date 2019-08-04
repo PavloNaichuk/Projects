@@ -12,7 +12,7 @@ namespace TicketSalePoint.Models
         RESERVED
     }
 
-    public class Ticket : DbContext
+    public class Ticket
     {
         [Key]
         public int Id { get; set; }

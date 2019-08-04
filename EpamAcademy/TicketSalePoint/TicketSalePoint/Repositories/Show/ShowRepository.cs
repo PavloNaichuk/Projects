@@ -10,52 +10,46 @@ namespace TicketSalePoint.Repositories
 {
     public class ShowRepository : IShowRepository
     {
+        private readonly DataBaseContext dataBaseContext;
+
+        public ShowRepository(DataBaseContext context)
+        {
+            this.dataBaseContext = context;
+        }
+
         public async Task Add(Show show)
         {
-            using (var dataBaseContext = new DataBaseContext())
-            {
-                dataBaseContext.Shows.Add(show);
-                await dataBaseContext.SaveChangesAsync();
-            }
+            dataBaseContext.Shows.Add(show);
+            await dataBaseContext.SaveChangesAsync();
         }
 
         public async Task Remove(Show show)
         {
-            using (var dataBaseContext = new DataBaseContext())
-            {
-                dataBaseContext.Shows.Remove(show);
-                await dataBaseContext.SaveChangesAsync();
-            }
+            dataBaseContext.Shows.Remove(show);
+            await dataBaseContext.SaveChangesAsync();
         }
 
         public async Task<Show> Query(int id)
         {
-            using (var dataBaseContext = new DataBaseContext())
-                return  await dataBaseContext.Shows.FirstOrDefaultAsync(item => item.Id == id);
+            return  await dataBaseContext.Shows.FirstOrDefaultAsync(item => item.Id == id);
         }
 
-        public async Task<IEnumerable<ShowSortInfo>> GetShowsSortedByDateForAllTheatres()
+        public async Task<IEnumerable<Show>> GetShowsSortedByDateForAllTheatres()
         {
-            using (var dataBaseContext = new DataBaseContext())
-            {
-                var query = from show in dataBaseContext.Shows
-                            select new ShowSortInfo { Id = show.Id, Name = show.Name,  TheatreId  = show.TheatreId, Date = show.Date,  TheatreName = show.Theatre.Name };
-                query.OrderByDescending(date => date.Date);
-                return await query.ToListAsync();
-            }
+            var query = from show in dataBaseContext.Shows
+                        select new Show { Id = show.Id, Name = show.Name, TheatreId = show.TheatreId, Date = show.Date, Theatre = show.Theatre };
+            query.OrderByDescending(date => date.Date);
+            return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<ShowSortInfo>> GetShowsSortedByDateForTheatre(int theatreId)
+        public async Task<IEnumerable<Show>> GetShowsSortedByDateForTheatre(int theatreId)
         {
-            using (var dataBaseContext = new DataBaseContext())
-            {
-                var query = from show in dataBaseContext.Shows
-                            where
-                            show.TheatreId == theatreId
-                            select new  ShowSortInfo { Id = show.Id, Name = show.Name, Date = show.Date };
-                query.OrderByDescending(date => date.Date);
-                return await query.ToListAsync();
-            }
+            var query = from show in dataBaseContext.Shows
+                        where
+                        show.TheatreId == theatreId
+                        select new Show { Id = show.Id, Name = show.Name, Date = show.Date };
+            query.OrderByDescending(date => date.Date);
+            return await query.ToListAsync();
         }
     }
 }

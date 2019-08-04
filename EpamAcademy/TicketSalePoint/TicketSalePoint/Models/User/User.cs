@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TicketSalePoint.Models
 {
-    public class User : DbContext
+    public class User
     {
         [Key]
         public int Id { get; set; }
