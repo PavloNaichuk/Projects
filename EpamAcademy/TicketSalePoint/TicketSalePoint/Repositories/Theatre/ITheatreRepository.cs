@@ -7,7 +7,7 @@ using TicketSalePoint.Models;
 
 namespace TicketSalePoint.Repositories
 {
-    interface ITheatreRepository
+    public interface ITheatreRepository
     {
         Task Add(Theatre theatre);
         Task Remove(Theatre theatre);

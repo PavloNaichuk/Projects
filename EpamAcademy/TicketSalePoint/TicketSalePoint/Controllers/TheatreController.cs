@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TicketSalePoint.Context;
-using TicketSalePoint.Models;
 using TicketSalePoint.Repositories;
 
 namespace TicketSalePoint.Controllers
@@ -13,9 +8,9 @@ namespace TicketSalePoint.Controllers
     [ApiController]
     public class TheatreController : Controller
     {
-        private readonly TheatreRepository theatreRepository;
+        private readonly ITheatreRepository theatreRepository;
 
-        public TheatreController(TheatreRepository theatreRepository)
+        public TheatreController(ITheatreRepository theatreRepository)
         {
             this.theatreRepository = theatreRepository;
         }
@@ -26,11 +21,4 @@ namespace TicketSalePoint.Controllers
         }
     }
 
-    class BusinessLogicResultGenerator : TheatreRepository
-    {
-        /*Task<IActionResult> TheatreResult()
-        {
-         
-        }*/
-    }
-  }
+}

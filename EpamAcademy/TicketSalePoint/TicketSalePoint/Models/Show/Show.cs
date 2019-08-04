@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace TicketSalePoint.Models
 {
@@ -12,7 +11,7 @@ namespace TicketSalePoint.Models
         [Key]
         public int Id { get; set; }
 
-        [Key]
+        [ForeignKey("Theatre")]
         public int TheatreId { get; set; }
 
         [Required(ErrorMessage = "Name is required")]

@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace TicketSalePoint.Models
 {
@@ -19,7 +17,7 @@ namespace TicketSalePoint.Models
         [Key]
         public int Id { get; set; }
 
-        [Key]
+        [ForeignKey("Show")]
         public int ShowId { get; set; }
 
         [Required(ErrorMessage = "Row is required")]
