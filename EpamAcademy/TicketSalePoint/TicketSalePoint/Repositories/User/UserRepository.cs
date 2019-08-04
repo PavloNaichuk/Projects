@@ -35,10 +35,10 @@ namespace TicketSalePoint.Repositories
 
         }
 
-        public async Task<IEnumerable<UserSortInfo>> GetUser(int id)
+        public async Task<IEnumerable<User>> GetUser(int id)
         {
             var query = from user in dataBaseContext.Users
-                        select new UserSortInfo { Id = user.Id, Login = user.Login, FirstName = user.FirstName, LastName = user.LastName };
+                        select new User { Id = user.Id, Login = user.Login, FirstName = user.FirstName, LastName = user.LastName };
             return await query.ToListAsync();
         } 
     }

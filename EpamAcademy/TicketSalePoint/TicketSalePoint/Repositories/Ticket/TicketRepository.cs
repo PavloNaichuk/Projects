@@ -34,12 +34,12 @@ namespace TicketSalePoint.Repositories
             return await dataBaseContext.Tickets.FirstOrDefaultAsync(item => item.Id == id);
         }
 
-        public async Task<IEnumerable<TicketSortInfo>> GetAvailableTickets(int showId)
+        public async Task<IEnumerable<Ticket>> GetAvailableTickets(int showId)
         {
             var query = from ticket in dataBaseContext.Tickets
                         where
                             ticket.ShowId == showId
-                        select new TicketSortInfo { Id = ticket.Id, Row = ticket.Row, Seat = ticket.Seat, PriceInCents = ticket.PriceInCents, ShowId = ticket.ShowId };
+                        select new Ticket { Id = ticket.Id, Row = ticket.Row, Seat = ticket.Seat, PriceInCents = ticket.PriceInCents, ShowId = ticket.ShowId };
             return await query.ToListAsync();
         }
     }

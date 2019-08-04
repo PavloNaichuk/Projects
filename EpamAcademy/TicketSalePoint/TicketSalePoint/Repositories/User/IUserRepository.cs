@@ -11,6 +11,6 @@ namespace TicketSalePoint.Repositories
         Task Add(User user);
         Task Remove(User user);
         Task<User> Query(int id);
-        Task<IEnumerable<UserSortInfo>> GetUser(int id);
+        Task<IEnumerable<User>> GetUser(int id);
     }
 }

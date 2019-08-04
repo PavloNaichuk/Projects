@@ -12,6 +12,7 @@ import { SingUpComponent } from './components/users/sing-up/sing-up.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { TheatreService } from './shared/theatres/theatre.service';
+import { ShowService } from './shared/shows/show.service';
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
@@ -37,7 +38,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule
   ],
-  providers: [TheatreService],
+  providers: [TheatreService, ShowService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

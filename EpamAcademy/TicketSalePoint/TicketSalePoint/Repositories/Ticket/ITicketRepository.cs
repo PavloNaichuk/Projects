@@ -13,6 +13,6 @@ namespace TicketSalePoint.Repositories
         Task Add(Ticket ticket);
         Task Remove(Ticket ticket);
         Task<Ticket> Query(int id);
-        Task<IEnumerable<TicketSortInfo>> GetAvailableTickets(int showId);
+        Task<IEnumerable<Ticket>> GetAvailableTickets(int showId);
     }
 }
