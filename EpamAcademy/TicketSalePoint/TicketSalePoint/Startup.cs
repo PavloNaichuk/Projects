@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,11 +5,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
 using TicketSalePoint.Context;
-using TicketSalePoint.Models;
 
 namespace TicketSalePoint
 {
@@ -41,9 +36,6 @@ namespace TicketSalePoint
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Inject AppSetings
-            services.Configure<ApplicationSettings>(Configuration.GetSection("AplicationSettings"));
-
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TicketSalePoint")));
 
             services.ConfigureCors();
@@ -58,27 +50,6 @@ namespace TicketSalePoint
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
-            });
-
-            //Jwt Authentication
-            var key = Encoding.UTF8.GetBytes(Configuration["AplicationSettings:JWT_Secret"].ToString());
-
-            services.AddAuthentication(x=> 
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x=> {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = false;
-                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                };
             });
         }
 
@@ -116,12 +87,6 @@ namespace TicketSalePoint
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-
-            app.UseCors(builder => builder.WithOrigins(Configuration["AplicationSettings:Client_URL"].ToString())
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                );
-            app.UseAuthentication();
         }
     }
 }
