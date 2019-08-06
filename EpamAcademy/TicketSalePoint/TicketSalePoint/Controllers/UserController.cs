@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using TicketSalePoint.Models;
 using TicketSalePoint.Repositories;
 
@@ -13,10 +18,12 @@ namespace TicketSalePoint.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository userRepository;
+        private readonly ApplicationSettings applicationSettings;
     
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IOptions<ApplicationSettings> applicationSettings)
         {
             this.userRepository = userRepository;
+            this.applicationSettings = applicationSettings.Value;
         }
         [HttpGet()]
         public async Task<IActionResult> GetUser(int id)
@@ -25,9 +32,9 @@ namespace TicketSalePoint.Controllers
         }
 
         [HttpPost("register")]
-        public async Task PostUser(User user)
+        public async Task<IActionResult> PostUser(User user)
         {
-            await this.userRepository.Add(user);
+            return Ok(this.userRepository.Add(user));
         }
     }
 }

@@ -8,10 +8,13 @@ import { TopRegionComponent } from './components/top-region/top-region.component
 import { LeftRegionComponent } from './components/left-region/left-region.component';
 import { BottomRegionComponent } from './components/bottom-region/bottom-region.component';
 import { CenterRegionComponent } from './components/center-region/center-region.component';
+import { LoginComponent } from './components/user/login/login.component';
+import { RegistrationComponent } from './components/user/registration/registration.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { TheatreService } from './shared/theatres/theatre.service';
 import { ShowService } from './shared/shows/show.service';
+
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
@@ -28,6 +31,8 @@ const appRoutes: Routes = [
     LeftRegionComponent,
     BottomRegionComponent,
     CenterRegionComponent,
+    RegistrationComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
