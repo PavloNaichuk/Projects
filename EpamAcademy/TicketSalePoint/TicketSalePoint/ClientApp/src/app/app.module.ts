@@ -8,7 +8,6 @@ import { TopRegionComponent } from './components/top-region/top-region.component
 import { LeftRegionComponent } from './components/left-region/left-region.component';
 import { BottomRegionComponent } from './components/bottom-region/bottom-region.component';
 import { CenterRegionComponent } from './components/center-region/center-region.component';
-import { SingUpComponent } from './components/users/sing-up/sing-up.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { TheatreService } from './shared/theatres/theatre.service';
@@ -20,7 +19,6 @@ const appRoutes: Routes = [
   { path: 'top-region', component: TopRegionComponent },
   { path: 'bottom-region', component: BottomRegionComponent },
   { path: 'center-region', component: CenterRegionComponent },
-  { path: 'sing-up', component: SingUpComponent },
 ]
 
 @NgModule({
@@ -30,7 +28,6 @@ const appRoutes: Routes = [
     LeftRegionComponent,
     BottomRegionComponent,
     CenterRegionComponent,
-    SingUpComponent
   ],
   imports: [
     BrowserModule,
