@@ -38,7 +38,7 @@ namespace TicketSalePoint.Repositories
         {
             var query = from show in dataBaseContext.Shows
                         select new Show { Id = show.Id, Name = show.Name, TheatreId = show.TheatreId, Date = show.Date, Theatre = show.Theatre };
-            query.OrderByDescending(date => date.Date);
+            query = query.OrderBy(date => date.Date);
             return await query.ToListAsync();
         }
 
@@ -48,7 +48,7 @@ namespace TicketSalePoint.Repositories
                         where
                         show.TheatreId == theatreId
                         select new Show { Id = show.Id, Name = show.Name, Date = show.Date };
-            query.OrderByDescending(date => date.Date);
+            query = query.OrderBy(date => date.Date);
             return await query.ToListAsync();
         }
     }

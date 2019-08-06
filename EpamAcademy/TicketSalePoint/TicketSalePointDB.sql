@@ -26,7 +26,7 @@ GO
 CREATE TABLE [dbo].[Shows](
 	[Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	[TheatreId] [int] NOT NULL,
-    [Name] [varchar](50) NOT NULL,
+    [Name] [nvarchar](50) NOT NULL,
 	[Date] [datetime] NOT NULL,
 	CONSTRAINT FK_Theatres FOREIGN KEY (TheatreId)
 	REFERENCES [Theatres](Id),
