@@ -1,8 +1,6 @@
-<div class="p-3 px-md-4 mb-3 bg-white">
-  
-      
-  <li *ngFor="let show of shows">
-    {{show.date}}
+<ul class="p-3 px-md-4 mb-3 bg-white noneStyled">
+  <li *ngFor="let show of shows; index as i">
+    {{formatedDate(i)}}
     <br>
     <a routerLink="{{show.id}}">
 
@@ -10,10 +8,10 @@
     </a>
     <br>
     <a routerLink="{{show.theatre.id}}">
-       ({{show.theatre.name}})
-     </a>
-      <br>
-      <br>
+      ({{show.theatre.name}})
+    </a>
+    <br>
+    <br>
 
   </li>
-</div>
+</ul>

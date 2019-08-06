@@ -12,6 +12,7 @@ import { CenterRegionComponent } from './components/center-region/center-region.
 import { HttpClientModule } from '@angular/common/http';
 import { TheatreService } from './shared/theatres/theatre.service';
 import { ShowService } from './shared/shows/show.service';
+import { SpaBodyComponent } from './components/spa-body/spa-body.component';
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
@@ -28,6 +29,7 @@ const appRoutes: Routes = [
     LeftRegionComponent,
     BottomRegionComponent,
     CenterRegionComponent,
+    SpaBodyComponent
   ],
   imports: [
     BrowserModule,
