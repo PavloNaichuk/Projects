@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TicketSalePoint.Context;
 
-
 namespace TicketSalePoint
 {
     public static class ServiceExtensions
@@ -41,7 +40,7 @@ namespace TicketSalePoint
 
             services.ConfigureCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+       
             services.AddTransient<Repositories.ITheatreRepository, Repositories.TheatreRepository>();
             services.AddTransient<Repositories.IShowRepository, Repositories.ShowRepository>();
             services.AddTransient<Repositories.ITicketRepository, Repositories.TicketRepository>();
