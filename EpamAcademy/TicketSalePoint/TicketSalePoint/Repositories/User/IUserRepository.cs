@@ -8,9 +8,6 @@ namespace TicketSalePoint.Repositories
 {
     public interface IUserRepository
     {
-        Task Add(User user);
-        Task Remove(User user);
-        Task<User> Query(int id);
-        Task<IEnumerable<User>> GetUser(int id);
+
     }
 }
