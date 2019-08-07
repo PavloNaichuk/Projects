@@ -11,14 +11,30 @@ namespace TicketSalePoint.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private UserManager<ApplicationUser> userManager;
-        private SignInManager<ApplicationUser> signInManager;
-
         private readonly DataBaseContext dataBaseContext;
 
         public UserRepository(DataBaseContext context)
         {
             this.dataBaseContext = context;
+        }
+
+        public Task<User> Authenticate(string login, string password)
+        {
+            throw new NotImplementedException();
+        }
+        public Task Add(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> AuthenticateExternal(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> AddExternal(int id, string name, string email)
+        {
+            throw new NotImplementedException();
         }
     }
 }

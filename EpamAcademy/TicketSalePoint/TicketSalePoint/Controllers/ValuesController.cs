@@ -16,6 +16,17 @@ namespace TicketSalePoint.Controllers
 
         }
 
+        [HttpGet("getId")]
+        public ActionResult<string> GetId()
+        {
+            var idClaim = User.Claims.FirstOrDefault(x => x.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+            if (idClaim != null)
+            {
+                return Ok($"This is your Id: {idClaim.Value}");
+            }
+            return BadRequest("No claim");
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
@@ -34,18 +45,21 @@ namespace TicketSalePoint.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
+
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
+
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+
         }
     }
 }

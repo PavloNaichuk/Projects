@@ -8,6 +8,11 @@ namespace TicketSalePoint.Repositories
 {
     public interface IUserRepository
     {
+        Task<User> Authenticate(string login, string password);
+        Task Add(User user);
+
+        Task<User> AuthenticateExternal(int id);
+        Task<User> AddExternal(int id, string name, string email);
 
     }
 }
