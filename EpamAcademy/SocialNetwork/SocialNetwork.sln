@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.539
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork", "SocialNetwork\SocialNetwork.csproj", "{564E52B8-D76F-4A11-BB44-82EEAB7E7667}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{2C3688C7-4C0F-476B-AB24-64D8B6DAF682}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTest\UnitTests.csproj", "{260AEE64-0766-43C4-B6FF-102C720F27A9}"
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{564E52B8-D76F-4A11-BB44-82EEAB7E7667}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{564E52B8-D76F-4A11-BB44-82EEAB7E7667}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{564E52B8-D76F-4A11-BB44-82EEAB7E7667}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{564E52B8-D76F-4A11-BB44-82EEAB7E7667}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C3688C7-4C0F-476B-AB24-64D8B6DAF682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C3688C7-4C0F-476B-AB24-64D8B6DAF682}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C3688C7-4C0F-476B-AB24-64D8B6DAF682}.Release|Any CPU.ActiveCfg = Release|Any CPU
