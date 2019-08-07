@@ -17,7 +17,7 @@ namespace TicketSalePoint.Context
         {
         }
 
-        public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Theatre> Theatres { get; set; }
         public DbSet<Show> Shows { get; set; }
         public DbSet<Ticket> Tickets { get; set; }

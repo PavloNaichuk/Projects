@@ -5,60 +5,132 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using TicketSalePoint.Helpers;
 using TicketSalePoint.Models;
 using TicketSalePoint.Repositories;
+using AutoMapper;
 
 namespace TicketSalePoint.Controllers
 {
+    [Authorize]
     [Route("api/users")]
     [ApiController]
     public class UserController : Controller
     {
-        private readonly IUserRepository userRepository;
-    
-        public UserController(IUserRepository userRepository)
+        private IUserRepository userRepository;
+        private IMapper mapper;
+        private readonly AppSettings appSettings;
+
+        public UserController(
+                IUserRepository userRepository,
+                IMapper mapper,
+                IOptions<AppSettings> appSettings)
         {
             this.userRepository = userRepository;
+            this.mapper = mapper;
+            this.appSettings = appSettings.Value;
         }
-      
-        [HttpPost("token")]
-        public ActionResult GetToken()
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody]UserDto userDto)
         {
-            //security key
-            string securityKey = "this_is_our_supper_long_security_key_for_token_validation_project_2018_09_07$smesk.in";
+            var user = userRepository.Authenticate(userDto.Login, userDto.Password);
 
-            //symmetric security key
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
 
-            //signing credentials
-            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
 
-            //add claims
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
-            claims.Add(new Claim(ClaimTypes.Role, "Reader"));
-            claims.Add(new Claim("Our_Custom_Claim", "Our custom value"));
-            claims.Add(new Claim("Id", "110"));
-
-            //create token
-            var token = new JwtSecurityToken(
-                issuer: "smesk.in",
-                audience: "readers",
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: signingCredentials, 
-                claims: claims
-                );
-            //return token
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            // return basic user info (without password) and token to store client side
+            return Ok(new
+            {
+                Id = user.Id,
+                Login = user.Login,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Token = tokenString
+            });
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
-        public async Task PostUser(User user)
+        public IActionResult Register([FromBody]UserDto userDto)
         {
-            await this.userRepository.Add(user);
+            // map dto to entity
+            var user = mapper.Map<User>(userDto);
+
+            try
+            {
+                // save 
+                userRepository.Create(user, userDto.Password);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var users = userRepository.GetAll();
+            var userDtos = mapper.Map<IList<UserDto>>(users);
+            return Ok(userDtos);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var user = userRepository.GetById(id);
+            var userDto = mapper.Map<UserDto>(user);
+            return Ok(userDto);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody]UserDto userDto)
+        {
+            // map dto to entity and set id
+            var user = mapper.Map<User>(userDto);
+            user.Id = id;
+
+            try
+            {
+                // save 
+                userRepository.Update(user, userDto.Password);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            userRepository.Delete(id);
+            return Ok();
         }
     }
 }

@@ -8,11 +8,12 @@ namespace TicketSalePoint.Repositories
 {
     public interface IUserRepository
     {
-        Task<User> Authenticate(string login, string password);
-        Task Add(User user);
-
-        Task<User> AuthenticateExternal(int id);
-        Task<User> AddExternal(int id, string name, string email);
+        User Authenticate(string login, string password);
+        IEnumerable<User> GetAll();
+        User GetById(int id);
+        User Create(User user, string password);
+        void Update(User user, string password = null);
+        void Delete(int id);
 
     }
 }

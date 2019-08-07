@@ -16,8 +16,11 @@ namespace TicketSalePoint.Models
         [Required(ErrorMessage = "Login is required")]
         public string Login { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "PasswordHash is required")]
+        public byte[] PasswordHash { get; set; }
+
+        [Required(ErrorMessage = "PasswordSalt is required")]
+        public byte[] PasswordSalt { get; set; }
 
         [Required(ErrorMessage = "First name is required")]
         public string FirstName { get; set; }
