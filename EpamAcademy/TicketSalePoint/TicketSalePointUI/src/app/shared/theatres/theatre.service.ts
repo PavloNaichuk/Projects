@@ -3,10 +3,10 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Theatre } from './theatre.model';
 import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 
 export class TheatreService {
-  private theatreUrl = 'http/localhost:49384/api/theatre';
+  private theatreUrl = 'api/theatre';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

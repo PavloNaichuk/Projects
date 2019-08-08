@@ -10,15 +10,15 @@ export class UserService {
     constructor(private http: HttpClient) { }
 
     getAll() {
-        return this.http.get<User[]>(`${config.apiUrl}/users`);
+        return this.http.get<User[]>(`${config.variables}/users`);
     }
 
     getById(id: number) {
-        return this.http.get(`${config.apiUrl}/users/` + id);
+        return this.http.get(`${config.variables}/users/` + id);
     }
 
     register(user: User) {
-        return this.http.post(`${config.apiUrl}/users/register`, user);
+        return this.http.post(`${config.variables}/users/registration`, user);
     }
 
     update(user: User) {

@@ -6,7 +6,7 @@ import { Show } from './show.model';
 @Injectable()
 
 export class ShowService {
-  private showUrl = 'http/localhost:49384/api/shows';
+  private showUrl = 'api/shows';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
