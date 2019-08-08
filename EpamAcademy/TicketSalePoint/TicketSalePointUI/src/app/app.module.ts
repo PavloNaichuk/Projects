@@ -1,3 +1,8 @@
+import { AuthGuard } from './guard/authGuard';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { AlertService } from './shared/user/alert.service';
+import { AuthenticationService } from './shared/authentication/authentication.service';
+import { UserService } from './shared/user/user.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -9,7 +14,7 @@ import { LeftRegionComponent } from './components/left-region/left-region.compon
 import { BottomRegionComponent } from './components/bottom-region/bottom-region.component';
 import { CenterRegionComponent } from './components/center-region/center-region.component';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TheatreService } from './shared/theatres/theatre.service';
 import { ShowService } from './shared/shows/show.service';
 import { SpaBodyComponent } from './components/spa-body/spa-body.component';
@@ -37,7 +42,14 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule
   ],
-  providers: [TheatreService, ShowService],
+  providers: [TheatreService,
+    ShowService,
+    AuthGuard,
+    AlertService,
+    AuthenticationService,
+    UserService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

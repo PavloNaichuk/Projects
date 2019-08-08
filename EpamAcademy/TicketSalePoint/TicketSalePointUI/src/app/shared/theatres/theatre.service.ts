@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 
 export class TheatreService {
-  private theatreUrl = 'api/theatre';
+  private theatreUrl = 'http/localhost:49384/api/theatre';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
