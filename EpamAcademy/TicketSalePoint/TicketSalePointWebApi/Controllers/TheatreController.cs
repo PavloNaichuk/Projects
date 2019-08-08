@@ -1,0 +1,24 @@
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using TicketSalePointData.Repositories;
+
+namespace TicketSalePointData.Controllers
+{
+    [Route("api/theatre")]
+    [ApiController]
+    public class TheatreController : Controller
+    {
+        private readonly ITheatreRepository theatreRepository;
+
+        public TheatreController(ITheatreRepository theatreRepository)
+        {
+            this.theatreRepository = theatreRepository;
+        }
+
+        public async Task<IActionResult> GetNames()
+        {
+            return Ok(await this.theatreRepository.GetNames());
+        }
+    }
+
+}
