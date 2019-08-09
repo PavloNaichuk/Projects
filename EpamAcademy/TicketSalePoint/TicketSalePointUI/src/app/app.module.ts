@@ -1,55 +1,28 @@
-import { AuthGuard } from './guard/authGuard';
-import { JwtInterceptor } from './helpers/jwt.interceptor';
-import { AlertService } from './shared/user/alert.service';
-import { AuthenticationService } from './shared/authentication/authentication.service';
-import { UserService } from './shared/user/user.service';
+import { ShowService } from './shared/shows/show.service';
+import { TheatreService } from './shared/theatres/theatre.service';
+import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
+import { appRoutes, AppRoutingModule } from './app.routes.modul';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { TopRegionComponent } from './components/top-region/top-region.component';
-import { LeftRegionComponent } from './components/left-region/left-region.component';
-import { BottomRegionComponent } from './components/bottom-region/bottom-region.component';
-import { CenterRegionComponent } from './components/center-region/center-region.component';
-
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TheatreService } from './shared/theatres/theatre.service';
-import { ShowService } from './shared/shows/show.service';
-import { SpaBodyComponent } from './components/spa-body/spa-body.component';
-
-const appRoutes: Routes = [
-  { path: '', component: AppComponent },
-  { path: 'left-region', component: LeftRegionComponent },
-  { path: 'top-region', component: TopRegionComponent },
-  { path: 'bottom-region', component: BottomRegionComponent },
-  { path: 'center-region', component: CenterRegionComponent },
-]
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TopRegionComponent,
-    LeftRegionComponent,
-    BottomRegionComponent,
-    CenterRegionComponent,
-    SpaBodyComponent
+    AuthenticatedComponent,
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
-  providers: [TheatreService,
-    ShowService,
-    AuthGuard,
-    AlertService,
-    AuthenticationService,
-    UserService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-  ],
+  providers: [TheatreService, ShowService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
