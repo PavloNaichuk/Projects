@@ -6,7 +6,7 @@ import { Ticket } from './ticket.model';
 @Injectable()
 
 export class TicketService {
-  private ticketUrl = 'api/shows';
+  private ticketUrl = 'api/ticket';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

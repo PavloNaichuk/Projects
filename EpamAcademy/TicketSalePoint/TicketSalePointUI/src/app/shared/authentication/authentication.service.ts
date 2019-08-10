@@ -7,8 +7,8 @@ import { config } from 'process';
 export class AuthenticationService {
     constructor(private http: HttpClient) { }
 
-    login(username: string, password: string) {
-        return this.http.post<any>(`${config.apiUrl}/users/authenticate`, { username: username, password: password })
+    login(login: string, password: string) {
+        return this.http.post<any>(`${config.apiUrl}/users/authenticate`, { login: login, password: password })
             .pipe(map(user => {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {

@@ -1,21 +1,33 @@
-<div class="login-in-form">
-    <h4>Login in</h4>
-    <form novalidate (ngSubmit)="onSubmit(loginInForm)" #signInForm='ngForm'>
-        <div class='form-group'>
-            <input type='text' autocomplete="off" name='email' required placeholder="Email" ngModel #email='ngModel' class='form-control'>
-            <div class="alert alert-danger" [hidden]='email.valid || email.pristine'>Please enter your email</div>
-        </div>
-        <div class='form-group'>
-            <input type='password' autocomplete="off" name='password' required ngModel #password='ngModel' placeholder="Password" class='form-control'>
-            <div class="alert alert-danger" [hidden]='password.valid || password.pristine'>Password is required</div>
-        </div>
+<button type="button" class="btn btn-primary" (click)="openModal(login)">Login in</button>
+<ng-template #login>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Login in</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="login-in-form">
+      <form novalidate (ngSubmit)="onSubmit(loginInForm)" #signInForm='ngForm'>
+          <div class='form-group'>
+              <input type='text' autocomplete="off" name='email' required placeholder="Email" ngModel #email='ngModel' class='form-control'>
+              <div class="alert alert-danger" [hidden]='email.valid || email.pristine'>Please enter your email</div>
+          </div>
+          <div class='form-group'>
+              <input type='password' autocomplete="off" name='password' required ngModel #password='ngModel' placeholder="Password" class='form-control'>
+              <div class="alert alert-danger" [hidden]='password.valid || password.pristine'>Password is required</div>
+          </div>
 
-        <div *ngIf="!submitting">
-            <button [disabled]='signInForm.invalid' type='submit' class='btn btn-primary'>Login in</button>
-        </div>
-        <div *ngIf="submitting">
-            <span class='message'>Signing in ...</span>
-        </div>
+          <div *ngIf="!submitting">
+              <button [disabled]='signInForm.invalid' type='submit' class='btn btn-primary'>Login in</button>
+          </div>
+          <div *ngIf="submitting">
+              <span class='message'>Signing in ...</span>
+          </div>
 
-    </form>
-</div>
+      </form>
+  </div>
+  </div>
+</ng-template>
+
+

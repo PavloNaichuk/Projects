@@ -7,17 +7,20 @@ import { config } from 'process';
 
 @Injectable()
 export class UserService {
-    constructor(private http: HttpClient) { }
+  private userUrl = 'api/users';
+  private userUrlId = 'api/users/id';
 
-    getAll() {
-        return this.http.get<User[]>(`${config.variables}/users`);
+  constructor(private http: HttpClient) { }
+
+  getAll() {
+        return this.http.get<User[]>(this.userUrl);
+  }
+
+  getById(id: number) {
+        return this.http.get<User[]>(this.userUrlId);
     }
 
-    getById(id: number) {
-        return this.http.get(`${config.variables}/users/` + id);
-    }
-
-    register(user: User) {
+  register(user: User) {
         return this.http.post(`${config.variables}/users/registration`, user);
     }
 

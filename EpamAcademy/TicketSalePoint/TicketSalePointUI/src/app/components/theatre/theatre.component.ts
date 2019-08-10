@@ -1,6 +1,7 @@
 import { ShowService } from './../../shared/shows/show.service';
 import { Show } from './../../shared/shows/show.model';
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd, ActivationEnd } from '@angular/router';
 
 @Component({
   selector: 'theatre',
@@ -9,12 +10,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TheatreComponent implements OnInit {
   shows: Show[];
-  constructor(private showsService: ShowService)
+  id: number;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private showsService: ShowService
+    )
    {
+    this.router.events.subscribe(e => {
+      if (e instanceof ActivationEnd) {
+        this.id = e.snapshot.params.id;
+        this.getShowWithTheatre();
+      }
+
+
+    })
    }
 
   ngOnInit() {
-    this.getShows();
+    this.id = this.route.snapshot.params.id;
+    // this.getShows();
     this.getShowWithTheatre();
   }
 
@@ -24,7 +40,7 @@ export class TheatreComponent implements OnInit {
   }
 
   getShowWithTheatre(): void {
-    this.showsService.getShowWithTheatre()
+    this.showsService.getShowWithTheatre(this.id)
       .subscribe(shows => this.shows = shows);
   }
 

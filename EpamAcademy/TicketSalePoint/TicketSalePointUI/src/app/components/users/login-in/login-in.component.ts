@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UserApi } from '../user-api';
 import { Router } from '@angular/router';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -13,19 +13,19 @@ export class LoginInComponent implements OnInit {
 
   submitting = false;
   formError: string;
-  constructor(private userApi: UserApi,  private router: Router) { }
+
+  modalRef: BsModalRef;
+
+  constructor(private router: Router, private modalService: BsModalService) { }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
+
   onSubmit(loginInForm: NgForm): void {
     if (loginInForm.valid) {
       this.submitting = true;
       this.formError = null;
-      this.userApi.signIn(loginInForm.value.email, loginInForm.value.password).subscribe((data) => {
-        console.log(data);
-        this.router.navigate(['/authenticated']);
-      },
-    (error) => {
-      this.submitting = false;
-      this.formError = error;
-    });
     }
   }
   ngOnInit() {

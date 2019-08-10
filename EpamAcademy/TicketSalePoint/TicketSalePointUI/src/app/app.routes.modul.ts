@@ -19,7 +19,7 @@ export const appRoutes: Routes = [
     {path: 'center-region', component: CenterRegionComponent},
     {path: 'top-region', component: TopRegionComponent},
     {path: 'bottom-region', component: BottomRegionComponent},
-    {path: 'theatre', component: TheatreComponent},
+    {path: 'theatre/:id', component: TheatreComponent},
     {path: 'show', component: ShowComponent},
     {path: 'ticket', component: TicketComponent}
 

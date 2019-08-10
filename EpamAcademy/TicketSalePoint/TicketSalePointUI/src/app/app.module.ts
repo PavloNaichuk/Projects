@@ -1,3 +1,5 @@
+import { AlertService } from './shared/user/alert.service';
+import { UserService } from './shared/user/user.service';
 import { TicketService } from './shared/tickets/ticket.service';
 import { TicketComponent } from './components/ticket/ticket.component';
 import { ShowComponent } from './components/show/show.component';
@@ -8,7 +10,7 @@ import { appRoutes } from './app.routes.modul';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { TopRegionComponent } from './components/top-region/top-region.component';
@@ -21,6 +23,9 @@ import { TheatreService } from './shared/theatres/theatre.service';
 import { ShowService } from './shared/shows/show.service';
 import { SpaBodyComponent } from './components/spa-body/spa-body.component';
 import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalModule } from 'ngx-bootstrap';
+import { UserApi } from './components/users/user-api';
 
 @NgModule({
   declarations: [
@@ -42,10 +47,13 @@ import { AuthenticatedComponent } from './routes/authenticated/authenticated.com
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ModalModule.forRoot(),
+    ReactiveFormsModule,
   ],
   providers: [TheatreService,
-    ShowService, TicketService
+    ShowService, TicketService, UserService, AlertService
   ],
   bootstrap: [AppComponent]
 })

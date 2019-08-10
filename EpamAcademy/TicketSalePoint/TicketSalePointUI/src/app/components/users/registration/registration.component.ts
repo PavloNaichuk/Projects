@@ -1,25 +1,34 @@
 import { AlertService } from './../../../shared/user/alert.service';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, NgModule, TemplateRef } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../shared/user/user.service';
 import { first } from 'rxjs/operators';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
+
 export class RegistrationComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
   submitted = false;
+  modalRef: BsModalRef;
 
   constructor(
       private formBuilder: FormBuilder,
       private router: Router,
       private userService: UserService,
-      private alertService: AlertService) { }
+      private alertService: AlertService,
+      private modalService: BsModalService) { }
+
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
 
   ngOnInit() {
       this.registerForm = this.formBuilder.group({
