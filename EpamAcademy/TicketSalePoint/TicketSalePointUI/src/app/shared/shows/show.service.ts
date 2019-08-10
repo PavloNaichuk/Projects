@@ -7,6 +7,7 @@ import { Show } from './show.model';
 
 export class ShowService {
   private showUrl = 'api/shows';
+  private showTheatreUrl = 'api/shows/Get/id';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -16,5 +17,8 @@ export class ShowService {
 
   getShows(): Observable<Show[]> {
     return this.http.get<Show[]>(this.showUrl)
+  }
+  getShowWithTheatre(): Observable<Show[]> {
+    return this.http.get<Show[]>(this.showTheatreUrl)
   }
 }

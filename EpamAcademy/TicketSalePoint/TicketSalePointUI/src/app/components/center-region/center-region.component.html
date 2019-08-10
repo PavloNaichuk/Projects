@@ -2,12 +2,12 @@
   <li *ngFor="let show of shows; index as i">
     {{formatedDate(i)}}
     <br>
-    <a routerLink="{{show.id}}">
+    <a routerLink="/show/{{show.id}}">
 
       {{show.name}}
     </a>
     <br>
-    <a routerLink="{{show.theatre.id}}">
+    <a routerLink="/theatre/id{{show.theatre.id}}">
       ({{show.theatre.name}})
     </a>
     <br>

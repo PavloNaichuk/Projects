@@ -1,3 +1,6 @@
+import { TicketComponent } from './components/ticket/ticket.component';
+import { ShowComponent } from './components/show/show.component';
+import { TheatreComponent } from './components/theatre/theatre.component';
 import { RegistrationComponent } from './components/users/registration/registration.component';
 import { LoginInComponent } from './components/users/login-in/login-in.component';
 import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
@@ -16,6 +19,9 @@ export const appRoutes: Routes = [
     {path: 'center-region', component: CenterRegionComponent},
     {path: 'top-region', component: TopRegionComponent},
     {path: 'bottom-region', component: BottomRegionComponent},
+    {path: 'theatre', component: TheatreComponent},
+    {path: 'show', component: ShowComponent},
+    {path: 'ticket', component: TicketComponent}
 
 ];
 

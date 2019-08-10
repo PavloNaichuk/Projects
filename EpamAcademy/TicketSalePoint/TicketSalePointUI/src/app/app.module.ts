@@ -1,3 +1,7 @@
+import { TicketService } from './shared/tickets/ticket.service';
+import { TicketComponent } from './components/ticket/ticket.component';
+import { ShowComponent } from './components/show/show.component';
+import { TheatreComponent } from './components/theatre/theatre.component';
 import { RegistrationComponent } from './components/users/registration/registration.component';
 import { LoginInComponent } from './components/users/login-in/login-in.component';
 import { appRoutes } from './app.routes.modul';
@@ -28,7 +32,10 @@ import { AuthenticatedComponent } from './routes/authenticated/authenticated.com
     SpaBodyComponent,
     AuthenticatedComponent,
     LoginInComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    TheatreComponent,
+    ShowComponent,
+    TicketComponent
 
   ],
   imports: [
@@ -38,7 +45,7 @@ import { AuthenticatedComponent } from './routes/authenticated/authenticated.com
     HttpClientModule
   ],
   providers: [TheatreService,
-    ShowService
+    ShowService, TicketService
   ],
   bootstrap: [AppComponent]
 })
