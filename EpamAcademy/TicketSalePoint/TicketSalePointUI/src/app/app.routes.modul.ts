@@ -10,7 +10,7 @@ import { LeftRegionComponent } from './components/left-region/left-region.compon
 
 export const appRoutes: Routes = [
     {path: 'authenticated', component: AuthenticatedComponent},
-    {path: 'log-in', component: LoginInComponent},
+    {path: 'login-in', component: LoginInComponent},
     {path: 'registration', component: RegistrationComponent},
     {path: 'left-region', component: LeftRegionComponent},
     {path: 'center-region', component: CenterRegionComponent},
