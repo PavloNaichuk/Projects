@@ -1,3 +1,6 @@
+import { RegistrationComponent } from './components/users/registration/registration.component';
+import { LoginInComponent } from './components/users/login-in/login-in.component';
+import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { BottomRegionComponent } from './components/bottom-region/bottom-region.component';
@@ -6,6 +9,9 @@ import { CenterRegionComponent } from './components/center-region/center-region.
 import { LeftRegionComponent } from './components/left-region/left-region.component';
 
 export const appRoutes: Routes = [
+    {path: 'authenticated', component: AuthenticatedComponent},
+    {path: 'log-in', component: LoginInComponent},
+    {path: 'registration', component: RegistrationComponent},
     {path: 'left-region', component: LeftRegionComponent},
     {path: 'center-region', component: CenterRegionComponent},
     {path: 'top-region', component: TopRegionComponent},

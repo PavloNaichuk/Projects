@@ -1,3 +1,5 @@
+import { RegistrationComponent } from './components/users/registration/registration.component';
+import { LoginInComponent } from './components/users/login-in/login-in.component';
 import { appRoutes } from './app.routes.modul';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -14,6 +16,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TheatreService } from './shared/theatres/theatre.service';
 import { ShowService } from './shared/shows/show.service';
 import { SpaBodyComponent } from './components/spa-body/spa-body.component';
+import { AuthenticatedComponent } from './routes/authenticated/authenticated.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,11 @@ import { SpaBodyComponent } from './components/spa-body/spa-body.component';
     LeftRegionComponent,
     BottomRegionComponent,
     CenterRegionComponent,
-    SpaBodyComponent
+    SpaBodyComponent,
+    AuthenticatedComponent,
+    LoginInComponent,
+    RegistrationComponent
+
   ],
   imports: [
     BrowserModule,
