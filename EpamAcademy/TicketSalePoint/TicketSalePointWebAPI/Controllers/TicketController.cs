@@ -20,6 +20,7 @@ namespace TicketSalePoint.Controllers
             this.ticketRepository = ticketRepository;
         }
 
+        [HttpGet("Get/{showId}")]
         public async Task<IActionResult> GetAvailableTickets(int showId)
         {
             return Ok(await this.ticketRepository.GetAvailableTickets(showId));

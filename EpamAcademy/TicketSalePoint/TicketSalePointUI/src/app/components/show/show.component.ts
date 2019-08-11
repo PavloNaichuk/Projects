@@ -29,7 +29,26 @@ export class ShowComponent implements OnInit {
   }
 
   getTicket(): void {
-    this.ticketService.getTicket()
+    this.ticketService.getTicket(this.id)
       .subscribe(tickets => this.tickets = tickets);
+  }
+
+  get renderTickets(): string{
+    if (!this.tickets) return '<div>No tickets</div>';
+    const rows = this.tickets.reduce( (prev, ticket) => {
+      if (!prev.includes(ticket.row)) {
+        prev.push(ticket.row);
+      }
+      return prev;
+    }, []);
+    let ticketsRendered = 'Seats:';
+    rows.forEach(_row => {
+      const ticketInRow = this.tickets.filter(({row}) => _row === row);
+      const rowRendered = ticketInRow.reduce((prev, cur) => {
+        return prev + '<div placement="right" ngbTooltip="Tooltip on right" data-id="' + cur.id + '">' + cur.id + '</div>';
+      }, '');
+      ticketsRendered += rowRendered;
+    });
+    return ticketsRendered;
   }
 }

@@ -6,7 +6,7 @@ import { Ticket } from './ticket.model';
 @Injectable()
 
 export class TicketService {
-  private ticketUrl = 'api/ticket';
+  private ticketUrl = 'api/ticket/Get/';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -14,7 +14,7 @@ export class TicketService {
 
   constructor(private http: HttpClient) { }
 
-  getTicket(): Observable<Ticket[]> {
-    return this.http.get<Ticket[]>(this.ticketUrl)
+  getTicket(id : number): Observable<Ticket[]> {
+    return this.http.get<Ticket[]>(this.ticketUrl + id)
   }
 }
