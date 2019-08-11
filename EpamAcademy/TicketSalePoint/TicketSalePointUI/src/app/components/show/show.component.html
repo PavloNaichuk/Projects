@@ -1,18 +1,36 @@
-<ul class="p-3 px-md-4 mb-3 bg-white noneStyled">
-  <li *ngFor="let show of shows; index as i">
-    {{formatedDate(i)}}
-    <br>
-    <a routerLink="/show/{{show.id}}">
+       {{tickets.show.name}}
 
-      {{show.name}}
-    </a>
-    <br>
-    <a routerLink="/theatre/id{{show.theatre.id}}">
-      ({{show.theatre.name}})
-    </a>
-    <br>
-    <br>
+<div class="row">
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+</div>
 
-  </li>
-</ul>
+<div class="row">
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+</div>
 
+<div class="row">
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+</div>
+
+<div class="row">
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+  <div class="seat"></div>
+</div>
+
+<button class='my-2 my-md-0 mr-md-3'>Reserve</button>
+<button class='my-2 my-md-0 mr-md-3'>Buy</button>

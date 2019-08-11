@@ -32,4 +32,6 @@ export class ShowComponent implements OnInit {
     this.ticketService.getTicket()
       .subscribe(tickets => this.tickets = tickets);
   }
+
+
 }
