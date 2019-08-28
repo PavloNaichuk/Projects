@@ -3,6 +3,8 @@ import { TicketService } from './../../shared/tickets/ticket.service';
 import { Ticket } from './../../shared/tickets/ticket.model';
 import { Component, OnInit } from '@angular/core';
 
+
+
 @Component({
   selector: 'show',
   templateUrl: './show.component.html',
@@ -11,6 +13,7 @@ import { Component, OnInit } from '@angular/core';
 export class ShowComponent implements OnInit {
   tickets: Ticket[];
   id: number;
+
 
   constructor( private route: ActivatedRoute,
     private router: Router,
@@ -29,9 +32,8 @@ export class ShowComponent implements OnInit {
   }
 
   getTicket(): void {
-    this.ticketService.getTicket()
+    this.ticketService.getTicket(this.id)
       .subscribe(tickets => this.tickets = tickets);
   }
-
 
 }

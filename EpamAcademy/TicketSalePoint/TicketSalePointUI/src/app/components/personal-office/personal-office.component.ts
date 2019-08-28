@@ -1,3 +1,4 @@
+import { User } from './../../shared/user/user.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./personal-office.component.css']
 })
 export class PersonalOfficeComponent implements OnInit {
+  user: User[];
 
   constructor() { }
 

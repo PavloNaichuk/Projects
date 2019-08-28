@@ -16,3 +16,7 @@
 .seat::before {
   content: counter( seat ) ". ";
 }
+
+#seats {
+  margin: 15px;
+}
