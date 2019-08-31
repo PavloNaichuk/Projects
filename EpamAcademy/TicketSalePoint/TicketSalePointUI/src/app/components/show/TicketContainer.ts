@@ -7,24 +7,22 @@ export default class TicketContainer extends Container {
   ticketText: Text;
   ticketBackground: Graphics;
   infoBox: Graphics;
+  reserved: boolean;
 
   WIDTH: number;
   HEIGHT: number;
 
-  onMouseOver: Function;
-  onMouseOut: Function;
-
   constructor(seatsInfo: Ticket) {
     super();
+
+    this.interactive = true;
+    this.buttonMode = true;
 
     this.WIDTH = 30;
     this.HEIGHT = 30;
     this.seatsInfo = seatsInfo;
 
-    this.onMouseOver = this.mouseOver.bind(this);
-    this.onMouseOut = this.mouseOut.bind(this);
-
-    this._initTicket();    
+    this._initTicket();
   }
 
   _initTicket() {
@@ -35,17 +33,13 @@ export default class TicketContainer extends Container {
 
     this.ticketBackground = this._initBackground();
     this.ticketText = this._initText(this.seatsInfo.seat, {
-      x: this.WIDTH / 2, 
-      y: this.HEIGHT / 2, 
-      fill: this.seatsInfo.status ? "black" : "white"
+      x: this.WIDTH / 2,
+      y: this.HEIGHT / 2,
+      fill: this.seatsInfo.status ? 'black' : 'white'
     });
     this.ticketBackground.addChild(this.ticketText);
-    this.ticketBackground.interactive = true;
+    // this.ticketBackground.interactive = true;
 
-    this.infoBox = this._initInfo();
-    this.hideInfoBox();
-
-    this.addChild(this.infoBox);
     this.addChild(this.ticketBackground);
 
     this.addEventListeners();
@@ -57,7 +51,6 @@ export default class TicketContainer extends Container {
     graphics.beginFill(this.seatsInfo.status ? 0xEEEEEE : 0x0000FF);
     graphics.drawRoundedRect(0, 0, this.WIDTH, this.HEIGHT, 5);
     graphics.endFill();
-    graphics.buttonMode = true; 
 
     return graphics;
   }
@@ -77,7 +70,7 @@ export default class TicketContainer extends Container {
     this.ticketBackground.clear();
     this.ticketBackground.beginFill(color);
     this.ticketBackground.drawRoundedRect(0, 0, this.WIDTH, this.HEIGHT, 5);
-    this.ticketBackground.endFill(); 
+    this.ticketBackground.endFill();
   }
 
   _initInfo() {
@@ -85,16 +78,16 @@ export default class TicketContainer extends Container {
 
     const startX = this.WIDTH / 2;
     const startY = 0;
-    
+
     graphics.beginFill(0xFFFFFF);
     graphics.drawPolygon([
-      startX, startY, 
-      startX - 5, startY -10, 
+      startX, startY,
+      startX - 5, startY -10,
       startX - 40, startY -10,
       startX - 40, startY - 70,
       startX + 40, startY - 70,
       startX + 40, startY -10,
-      startX + 5, startY -10, 
+      startX + 5, startY -10,
     ]);
     graphics.endFill();
 
@@ -106,27 +99,28 @@ export default class TicketContainer extends Container {
   }
 
   showInfoBox() {
-    this.infoBox.alpha = 1;
+    this.infoBox = this._initInfo();
+    this.addChild(this.infoBox);
   }
 
-  hideInfoBox() {   
-    this.infoBox.alpha = 0;
+  hideInfoBox() {
+    this.removeChild(this.infoBox);
+    this.infoBox = null;
   }
-
 
   mouseOver() {
     this.showInfoBox();
-    this.ticketBackground.alpha = .5;    
+    this.ticketBackground.alpha = .5;
   }
 
   mouseOut() {
     this.hideInfoBox();
-    this.ticketBackground.alpha = 1;    
+    this.ticketBackground.alpha = 1;
   }
 
   addEventListeners() {
-    this.ticketBackground.on('mouseover', this.onMouseOver);
-    this.ticketBackground.on('mouseout', this.onMouseOut);
+    this.on('mouseover', this.mouseOver);
+    this.on('mouseout', this.mouseOut);
   }
 
   seat() {
@@ -139,26 +133,26 @@ export default class TicketContainer extends Container {
       fontFamily: 'Arial',
       fontSize: 12,
       fontWeight: 'bold',
-    });    
+    });
     const itemStyle = new TextStyle({
       fontFamily: 'Arial',
       fontSize: 12,
       fontStyle: 'italic',
       fontWeight: 'normal',
-    })   
+    });
 
     const rowContainer = new Container();
     const rowProp = new Text('Row: ', propStyle);
     const rowItem = new Text(String(row), itemStyle);
-    rowItem.position.set(50, 0)
+    rowItem.position.set(50, 0);
     rowContainer.addChild(rowProp);
     rowContainer.addChild(rowItem);
-    
+
     const seatContainer = new Container();
     seatContainer.position.set(0, 15);
     const seatProp = new Text('Seat: ', propStyle);
     const seatItem = new Text(String(seat), itemStyle);
-    seatItem.position.set(50, 0)
+    seatItem.position.set(50, 0);
     seatContainer.addChild(seatProp);
     seatContainer.addChild(seatItem);
 
@@ -166,7 +160,7 @@ export default class TicketContainer extends Container {
     priceContainer.position.set(0, 35);
     const priceProp = new Text('Price: ', propStyle);
     const priceItem = new Text(String(priceInCents), itemStyle);
-    priceItem.position.set(45, 0)
+    priceItem.position.set(45, 0);
     priceContainer.addChild(priceProp);
     priceContainer.addChild(priceItem);
 
@@ -175,6 +169,10 @@ export default class TicketContainer extends Container {
     textContainer.addChild(priceContainer);
 
     return textContainer;
+  }
+
+  redrawBackground() {
+    this.changeColor(this.reserved ? 0xDD0000 : 0x0000FF);
   }
 
 }
