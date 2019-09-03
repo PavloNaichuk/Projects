@@ -2,15 +2,15 @@
     <div class="row">
         <div id="seats" class="col-md-7"></div>
         <div class="col-md-5">
-            <div *ngIf="flag | async">
-            Reserved
-            </div> 
+            <ul>
+              <li *ngFor="let element of reserved; trackBy: trackByFn">{{element.row}}, {{element.seat}}</li>
+            </ul>
         </div>
     </div>
     <div class="row">
         <div class="col">
             <button class='my-2 my-md-0 mr-md-3'>Reserve</button>
             <button class='my-2 my-md-0 mr-md-3'>Buy</button>
-        </div>        
+        </div>
     </div>
 </div>

@@ -22,17 +22,17 @@ export default class TicketContainer extends Container {
     this.HEIGHT = 30;
     this.seatsInfo = seatsInfo;
 
-    this._initTicket();
+    this.initTicket();
   }
 
-  _initTicket() {
+  initTicket() {
     const x = +this.seatsInfo.seat * (this.WIDTH + 10);
     const y = +this.seatsInfo.row * (this.HEIGHT + 10);
 
     this.position.set(x, y);
 
-    this.ticketBackground = this._initBackground();
-    this.ticketText = this._initText(this.seatsInfo.seat, {
+    this.ticketBackground = this.initBackground();
+    this.ticketText = this.initText(this.seatsInfo.seat, {
       x: this.WIDTH / 2,
       y: this.HEIGHT / 2,
       fill: this.seatsInfo.status ? 'black' : 'white'
@@ -45,7 +45,7 @@ export default class TicketContainer extends Container {
     this.addEventListeners();
   }
 
-  _initBackground() {
+  initBackground() {
     const graphics = new Graphics();
 
     graphics.beginFill(this.seatsInfo.status ? 0xEEEEEE : 0x0000FF);
@@ -55,7 +55,7 @@ export default class TicketContainer extends Container {
     return graphics;
   }
 
-  _initText(_text, {x, y, fill = "black"}) {
+  initText(_text, {x, y, fill = "black"}) {
     const text = new Text(_text);
 
     text.style.fill = fill;
@@ -73,7 +73,7 @@ export default class TicketContainer extends Container {
     this.ticketBackground.endFill();
   }
 
-  _initInfo() {
+  initInfo() {
     const graphics = new Graphics();
 
     const startX = this.WIDTH / 2;
@@ -82,12 +82,12 @@ export default class TicketContainer extends Container {
     graphics.beginFill(0xFFFFFF);
     graphics.drawPolygon([
       startX, startY,
-      startX - 5, startY -10,
-      startX - 40, startY -10,
+      startX - 5, startY - 10,
+      startX - 40, startY - 10,
       startX - 40, startY - 70,
       startX + 40, startY - 70,
-      startX + 40, startY -10,
-      startX + 5, startY -10,
+      startX + 40, startY - 10,
+      startX + 5, startY - 10,
     ]);
     graphics.endFill();
 
@@ -99,7 +99,7 @@ export default class TicketContainer extends Container {
   }
 
   showInfoBox() {
-    this.infoBox = this._initInfo();
+    this.infoBox = this.initInfo();
     this.addChild(this.infoBox);
   }
 
