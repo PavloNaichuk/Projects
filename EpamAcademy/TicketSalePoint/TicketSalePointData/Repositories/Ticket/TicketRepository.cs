@@ -39,7 +39,7 @@ namespace TicketSalePoint.Repositories
             var query = from ticket in dataBaseContext.Tickets
                         where
                             ticket.ShowId == showId
-                        select new Ticket { Id = ticket.Id, Row = ticket.Row, Seat = ticket.Seat, PriceInCents = ticket.PriceInCents, ShowId = ticket.ShowId };
+                        select new Ticket { Id = ticket.Id, Row = ticket.Row, Seat = ticket.Seat, PriceInCents = ticket.PriceInCents, Status= ticket.Status, ReservationDate = ticket.ReservationDate, ShowId = ticket.ShowId };
             return await query.ToListAsync();
         }
     }

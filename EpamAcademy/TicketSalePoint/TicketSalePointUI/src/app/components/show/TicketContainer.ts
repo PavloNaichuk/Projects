@@ -1,3 +1,4 @@
+import { Status } from './../../shared/tickets/status.model';
 import { Graphics, Text, Container, TextStyle } from 'pixi.js';
 import { Ticket } from '../../shared/tickets/ticket.model';
 
@@ -14,13 +15,12 @@ export default class TicketContainer extends Container {
 
   constructor(seatsInfo: Ticket) {
     super();
-
-    this.interactive = true;
-    this.buttonMode = true;
-
     this.WIDTH = 30;
     this.HEIGHT = 30;
     this.seatsInfo = seatsInfo;
+    this.interactive = this.seatsInfo.status === Status.FREE;
+    console.error(this.seatsInfo.status);
+    this.buttonMode = true;
 
     this.initTicket();
   }
@@ -35,7 +35,7 @@ export default class TicketContainer extends Container {
     this.ticketText = this.initText(this.seatsInfo.seat, {
       x: this.WIDTH / 2,
       y: this.HEIGHT / 2,
-      fill: this.seatsInfo.status ? 'black' : 'white'
+      fill: this.seatsInfo.status === Status.FREE ? 'white' : 'black'
     });
     this.ticketBackground.addChild(this.ticketText);
     // this.ticketBackground.interactive = true;
@@ -48,14 +48,14 @@ export default class TicketContainer extends Container {
   initBackground() {
     const graphics = new Graphics();
 
-    graphics.beginFill(this.seatsInfo.status ? 0xEEEEEE : 0x0000FF);
+    graphics.beginFill(this.seatsInfo.status === Status.FREE ? 0x0000FF : 0xEEEEEE);
     graphics.drawRoundedRect(0, 0, this.WIDTH, this.HEIGHT, 5);
     graphics.endFill();
 
     return graphics;
   }
 
-  initText(_text, {x, y, fill = "black"}) {
+  initText(_text, {x, y, fill = 'black'}) {
     const text = new Text(_text);
 
     text.style.fill = fill;
