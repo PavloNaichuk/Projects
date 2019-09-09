@@ -25,5 +25,18 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	struct MeshSection
+	{
+		TArray<FVector> Vertices;
+		TArray<int32> Triangles;
+		TArray<FVector> Normals;
+		TArray<FVector2D> UV0;
+		TArray<FColor> VertexColors;
+		TArray<FProcMeshTangent> Tangents;
+	};
+
+	static void GenerateBoxVertices(MeshSection& Section, const FVector& Center, const FVector& HalfSize, const FColor& Color);
+
+private:
 	UProceduralMeshComponent* ProceduralMeshComponent;
 };
