@@ -41,9 +41,11 @@ void AWallActor::BeginPlay()
 		bCreateCollision);
 }
 
-void AWallActor::GenerateBoxVertices(MeshSection& Section, const FVector& Center, const FVector& HalfSize, const FColor& Color)
+void AWallActor::GenerateBoxVertices(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color)
 {
-	Section.Vertices =
+	Result.Empty();
+
+	Result.Vertices =
 	{ 
 		// -X
 		FVector(Center.X - HalfSize.X, Center.Y - HalfSize.Y, Center.Z + HalfSize.Z), 
@@ -82,7 +84,7 @@ void AWallActor::GenerateBoxVertices(MeshSection& Section, const FVector& Center
 		FVector(Center.X + HalfSize.X, Center.Y - HalfSize.Y, Center.Z + HalfSize.Z)
 	};
 
-	Section.Triangles =
+	Result.Triangles =
 	{
 		// -X
 		0, 1, 2, 1, 3, 2,
@@ -103,7 +105,7 @@ void AWallActor::GenerateBoxVertices(MeshSection& Section, const FVector& Center
 		22, 21, 20, 22, 23, 21
 	};
 
-	Section.Normals =
+	Result.Normals =
 	{
 		// -X
 		FVector(-1.0f, 0.0f, 0.0f), FVector(-1.0f, 0.0f, 0.0f), FVector(-1.0f, 0.0f, 0.0f), FVector(-1.0f, 0.0f, 0.0f),
@@ -124,16 +126,55 @@ void AWallActor::GenerateBoxVertices(MeshSection& Section, const FVector& Center
 		FVector(0.0f, 0.0f, 1.0f), FVector(0.0f, 0.0f, 1.0f), FVector(0.0f, 0.0f, 1.0f), FVector(0.0f, 0.0f, 1.0f)
 	};
 
-	Section.VertexColors.Init(Color, Section.Vertices.Num());
-
-	Section.UV0 = {};
-	Section.Tangents = {};
+	Result.VertexColors.Init(Color, Result.Vertices.Num());
 }
 
-void AWallActor::GenerateWall(MeshSection & Section, const FVector & Center, const FVector & HalfSize, const FColor & Color)
+void AWallActor::GenerateWindow(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color)
 {
-	
 }
+
+void AWallActor::MergeSections(MeshSection& Result, const TArray<MeshSection*>& SectionsToMerge)
+{
+	Result.Empty();
+
+	int32 NumVertices = 0;
+	int32 NumIndices = 0;
+	int32 NumNormals = 0;
+	int32 NumUV0 = 0;
+	int32 NumVertexColors = 0;
+	int32 NumTangents = 0;
+
+	for (const MeshSection* Section : SectionsToMerge)
+	{
+		NumVertices += Section->Vertices.Num();
+		NumIndices += Section->Triangles.Num();
+		NumNormals += Section->Normals.Num();
+		NumUV0 += Section->UV0.Num();
+		NumVertexColors += Section->VertexColors.Num();
+		NumTangents += Section->Tangents.Num();
+	}
+
+	Result.Vertices.Reserve(NumVertices);
+	Result.Triangles.Reserve(NumIndices);
+	Result.Normals.Reserve(NumNormals);
+	Result.UV0.Reserve(NumUV0);
+	Result.VertexColors.Reserve(NumVertexColors);
+	Result.Tangents.Reserve(NumTangents);
+
+	for (const MeshSection* Section : SectionsToMerge)
+	{
+		const int32 VertexOffset = Result.Vertices.Num();
+		for (int32 Index : Section->Triangles)
+			Result.Triangles.Push(Index + VertexOffset);
+
+		Result.Vertices.Append(Section->Vertices);
+		Result.Triangles.Append(Section->Triangles);
+		Result.Normals.Append(Section->Normals);
+		Result.UV0.Append(Section->UV0);
+		Result.VertexColors.Append(Section->VertexColors);
+		Result.Tangents.Append(Section->Tangents);
+	}
+};
 
 // Called every frame
 void AWallActor::Tick(float DeltaTime)

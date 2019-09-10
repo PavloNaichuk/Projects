@@ -33,10 +33,21 @@ private:
 		TArray<FVector2D> UV0;
 		TArray<FColor> VertexColors;
 		TArray<FProcMeshTangent> Tangents;
+
+		void Empty()
+		{
+			Vertices.Empty();
+			Triangles.Empty();
+			Normals.Empty();
+			UV0.Empty();
+			VertexColors.Empty();
+			Tangents.Empty();
+		}
 	};
 
-	static void GenerateBoxVertices(MeshSection& Section, const FVector& Center, const FVector& HalfSize, const FColor& Color);
-	static void GenerateWall(MeshSection& Section, const FVector& Center, const FVector& HalfSize, const FColor& Color);
+	static void GenerateBoxVertices(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color);
+	static void GenerateWindow(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color);
+	static void MergeSections(MeshSection& Result, const TArray<MeshSection*>& SectionsToMerge);
 
 private:
 	UProceduralMeshComponent* ProceduralMeshComponent;
