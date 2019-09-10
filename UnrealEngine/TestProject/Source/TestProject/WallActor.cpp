@@ -28,7 +28,7 @@ void AWallActor::BeginPlay()
 	
 	FVector Center(0.0f, 20.0f, 20.0f);
 	FVector HalfSize(20.0f, 20.0f, 20.0f);
-	FColor Color(255, 255, 255, 255);
+	FColor Color(255, 0, 0, 255);
 
 	GenerateBoxVertices(Section, Center, HalfSize, Color);
 	ProceduralMeshComponent->CreateMeshSection(SectionIndex, 
@@ -88,10 +88,10 @@ void AWallActor::GenerateBoxVertices(MeshSection& Section, const FVector& Center
 		0, 1, 2, 1, 3, 2,
 
 		// X
-		4, 5, 6, 5, 7, 6,
+		6, 5, 4, 6, 7, 5,
 
 		// -Y
-		8, 9, 10, 9, 11, 10,
+		10, 9, 8, 10, 11, 9,
 
 		// Y
 		12, 13, 14, 13, 15, 14,
@@ -100,7 +100,7 @@ void AWallActor::GenerateBoxVertices(MeshSection& Section, const FVector& Center
 		16, 17, 18, 17, 19, 18,
 
 		// Z
-		20, 21, 22, 21, 23, 22
+		22, 21, 20, 22, 23, 21
 	};
 
 	Section.Normals =
@@ -112,22 +112,27 @@ void AWallActor::GenerateBoxVertices(MeshSection& Section, const FVector& Center
 		FVector(1.0f, 0.0f, 0.0f), FVector(1.0f, 0.0f, 0.0f), FVector(1.0f, 0.0f, 0.0f), FVector(1.0f, 0.0f, 0.0f),
 
 		// -Y
-		FVector(0.0f, 1.0f, 0.0f), FVector(0.0f, 1.0f, 0.0f), FVector(0.0f, 1.0f, 0.0f), FVector(0.0f, 1.0f, 0.0f),
-
-		// Y
 		FVector(0.0f, -1.0f, 0.0f), FVector(0.0f, -1.0f, 0.0f), FVector(0.0f, -1.0f, 0.0f), FVector(0.0f, -1.0f, 0.0f),
 
+		// Y
+		FVector(0.0f, 1.0f, 0.0f), FVector(0.0f, 1.0f, 0.0f), FVector(0.0f, 1.0f, 0.0f), FVector(0.0f, 1.0f, 0.0f),
+
 		// -Z
-		//FVector(0.0f, 0.0f, 1.0f), FVector(0.0f, 0.0f, -1.0f), FVector(0.0f, 0.0f, -1.0f), FVector(0.0f, 0.0f, -1.0f),
+		FVector(0.0f, 0.0f, -1.0f), FVector(0.0f, 0.0f, -1.0f), FVector(0.0f, 0.0f, -1.0f), FVector(0.0f, 0.0f, -1.0f),
 
 		// Z
-		//FVector(0.0f, 0.0f, -1.0f), FVector(0.0f, 0.0f, -1.0f), FVector(0.0f, 0.0f, -1.0f), FVector(0.0f, 0.0f, -1.0f)
+		FVector(0.0f, 0.0f, 1.0f), FVector(0.0f, 0.0f, 1.0f), FVector(0.0f, 0.0f, 1.0f), FVector(0.0f, 0.0f, 1.0f)
 	};
 
 	Section.VertexColors.Init(Color, Section.Vertices.Num());
 
 	Section.UV0 = {};
 	Section.Tangents = {};
+}
+
+void AWallActor::GenerateWall(MeshSection & Section, const FVector & Center, const FVector & HalfSize, const FColor & Color)
+{
+	
 }
 
 // Called every frame

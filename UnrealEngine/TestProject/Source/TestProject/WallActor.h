@@ -36,6 +36,7 @@ private:
 	};
 
 	static void GenerateBoxVertices(MeshSection& Section, const FVector& Center, const FVector& HalfSize, const FColor& Color);
+	static void GenerateWall(MeshSection& Section, const FVector& Center, const FVector& HalfSize, const FColor& Color);
 
 private:
 	UProceduralMeshComponent* ProceduralMeshComponent;
