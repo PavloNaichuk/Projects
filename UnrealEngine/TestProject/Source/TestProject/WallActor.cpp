@@ -30,7 +30,7 @@ void AWallActor::BeginPlay()
 	FVector HalfSize(20.0f, 20.0f, 20.0f);
 	FColor Color(255, 0, 0, 255);
 
-	GenerateBoxVertices(Section, Center, HalfSize, Color);
+	GenerateBox(Section, Center, HalfSize, Color);
 	ProceduralMeshComponent->CreateMeshSection(SectionIndex, 
 		Section.Vertices, 
 		Section.Triangles,
@@ -41,7 +41,7 @@ void AWallActor::BeginPlay()
 		bCreateCollision);
 }
 
-void AWallActor::GenerateBoxVertices(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color)
+void AWallActor::GenerateBox(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color)
 {
 	Result.Empty();
 
@@ -129,8 +129,32 @@ void AWallActor::GenerateBoxVertices(MeshSection& Result, const FVector& Center,
 	Result.VertexColors.Init(Color, Result.Vertices.Num());
 }
 
-void AWallActor::GenerateWindow(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color)
+void AWallActor::GenerateWindow(MeshSection& Result, const FVector& Center, const FColor& Color, FVector FrameSize, float FrameWidth, float RailWidth)
 {
+	Result.Empty();
+
+	// 1 section
+	FVector Center(0.0f, 20.0f, 20.0f);
+	FVector HalfSize(20.0f, 20.0f, 20.0f);
+
+	//2 section
+	FVector Center1(0.0f, 10.0f, 80.0f);
+	FVector HalfSize1(10.0f, 20.0f, 30.0f);
+
+	// 3 section
+
+	FVector Center2(0.0f, 10.0f, 80.0f);
+	FVector HalfSize2(10.0f, 20.0f, 30.0f);
+
+	FColor Color(255, 0, 0, 255);
+
+
+	GenerateBox(Result, Center, HalfSize, Color);
+	GenerateBox(Result, Center1, HalfSize1, Color);
+	GenerateBox(Result, Center2, HalfSize2, Color);
+
+	TArray<MeshSection*>& SectionsToMerge{};
+	MergeSections(Result, SectionsToMerge);
 }
 
 void AWallActor::MergeSections(MeshSection& Result, const TArray<MeshSection*>& SectionsToMerge)

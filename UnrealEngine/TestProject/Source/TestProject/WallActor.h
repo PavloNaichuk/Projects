@@ -45,8 +45,8 @@ private:
 		}
 	};
 
-	static void GenerateBoxVertices(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color);
-	static void GenerateWindow(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color);
+	static void GenerateBox(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color);
+	static void GenerateWindow(MeshSection& Result, const FVector& Center, const FColor& Color, FVector FrameSize, float FrameWidth, float RailWidth);
 	static void MergeSections(MeshSection& Result, const TArray<MeshSection*>& SectionsToMerge);
 
 private:
