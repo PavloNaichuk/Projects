@@ -26,11 +26,14 @@ void AWallActor::BeginPlay()
 
 	MeshSection Section;
 	
-	FVector Center(0.0f, 20.0f, 20.0f);
-	FVector HalfSize(20.0f, 20.0f, 20.0f);
+	FVector Center(0.0f, 10.0f, 10.0f);
+	FVector FrameSize(2.0f, 2.0f, 40.0f);
+	float RailWidth = 2.5f;
 	FColor Color(255, 0, 0, 255);
 
-	GenerateBox(Section, Center, HalfSize, Color);
+	//GenerateBox(Section, Center, HalfSize, Color);
+
+	GenerateWindow(Section, Center, FrameSize, RailWidth, Color);
 	ProceduralMeshComponent->CreateMeshSection(SectionIndex, 
 		Section.Vertices, 
 		Section.Triangles,
@@ -129,32 +132,30 @@ void AWallActor::GenerateBox(MeshSection& Result, const FVector& Center, const F
 	Result.VertexColors.Init(Color, Result.Vertices.Num());
 }
 
-void AWallActor::GenerateWindow(MeshSection& Result, const FVector& Center, const FColor& Color, FVector FrameSize, float FrameWidth, float RailWidth)
+void AWallActor::GenerateWindow(MeshSection& Result, const FVector& FrameCenter, const FVector& FrameSize, float RailWidth, const FColor& Color)
 {
 	Result.Empty();
 
-	// 1 section
-	FVector Center(0.0f, 20.0f, 20.0f);
-	FVector HalfSize(20.0f, 20.0f, 20.0f);
+	const FVector FrameHalfSize = 0.5f * FrameSize;
 
-	//2 section
-	FVector Center1(0.0f, 10.0f, 80.0f);
-	FVector HalfSize1(10.0f, 20.0f, 30.0f);
+	// 1 
+	FVector BoxCenter1(FrameCenter.X, FrameCenter.Y - FrameHalfSize.Y + FrameHalfSize.X, FrameCenter.Z);
+	FVector BoxSize1(FrameSize.X, FrameSize.X, FrameSize.Z - 2.0f * FrameSize.X);
 
-	// 3 section
+	MeshSection Section1;
+	GenerateBox(Section1, BoxCenter1, 0.5f * BoxSize1, Color);
 
+	/*// 2 
 	FVector Center2(0.0f, 10.0f, 80.0f);
 	FVector HalfSize2(10.0f, 20.0f, 30.0f);
 
-	FColor Color(255, 0, 0, 255);
+	// 3
 
+	FVector Center3(0.0f, 10.0f, 80.0f);
+	FVector HalfSize3(10.0f, 20.0f, 30.0f);*/
 
-	GenerateBox(Result, Center, HalfSize, Color);
-	GenerateBox(Result, Center1, HalfSize1, Color);
-	GenerateBox(Result, Center2, HalfSize2, Color);
-
-	TArray<MeshSection*>& SectionsToMerge{};
-	MergeSections(Result, SectionsToMerge);
+	TArray<MeshSection*> Sections = {&Section1};
+	MergeSections(Result, Sections);
 }
 
 void AWallActor::MergeSections(MeshSection& Result, const TArray<MeshSection*>& SectionsToMerge)
