@@ -159,21 +159,27 @@ void AWallActor::GenerateWindow(MeshSection& Result, const FVector& FrameCenter,
 	MeshSection BottomFramePart;
 	GenerateBox(BottomFramePart, BottomFramePartCenter, 0.5f * TopFramePartSize, Color);
 
-	FVector TopRailPartCenter(FrameCenter.X, FrameCenter.Y, FrameCenter.Z + 5.5f * FrameWidth);
-	FVector TopRailPartSize(FrameSize.X, FrameSize.Y - 2.0f * FrameWidth, RailWidth);
-	MeshSection TopRailPart;
-	GenerateBox(TopRailPart, TopRailPartCenter, 0.5f * TopRailPartSize, Color);
+	FVector FrameInnerSize(FrameSize.X, FrameSize.Y - 2.0f * FrameWidth, FrameSize.Z - 2.0f * FrameWidth);
+	FVector FrameHalfInnerSize = 0.5f * FrameInnerSize;
 
-	FVector LeftRailPartCenter(FrameCenter.X, FrameCenter.Y - (FrameSize.Y - 2.0f * FrameWidth) / 3, FrameCenter.Z);
-	FVector LeftRailPartSize(FrameSize.X, RailWidth, FrameSize.Z - 2.0f / 3.0f * FrameWidth);
-	MeshSection LeftRailPart;
-	GenerateBox(LeftRailPart, LeftRailPartCenter, 0.5f * LeftRailPartSize, Color);
+	FVector TopRailCenter(FrameCenter.X, FrameCenter.Y, FrameCenter.Z + 0.5f * FrameHalfInnerSize.Z);
+	FVector TopRailSize(RailWidth, FrameInnerSize.Y, RailWidth);
 
-	FVector RightRailPartCenter(FrameCenter.X, FrameCenter.Y - 0.5f * (FrameSize.Y - 2.0f * FrameWidth) / 3, FrameCenter.Z);
-	MeshSection RightRailPart;
-	GenerateBox(RightRailPart, RightRailPartCenter, 0.5f * LeftRailPartSize, Color);
+	MeshSection TopRail;
+	GenerateBox(TopRail, TopRailCenter, 0.5f * TopRailSize, Color);
 
-	TArray<MeshSection*> Sections = { &LeftFramePart, &RightFramePart, &TopFramePart, &BottomFramePart, &TopRailPart, &LeftRailPart, &RightRailPart};
+	const float RailOffset = FrameInnerSize.Y / 3.0f;
+	FVector LeftRailSize(RailWidth, RailWidth, TopRailCenter.Z - 0.5f * RailWidth - (FrameCenter.Z - FrameHalfInnerSize.Z));
+	FVector LeftRailCenter(FrameCenter.X, FrameCenter.Y - FrameHalfInnerSize.Y + RailOffset, TopRailCenter.Z - 0.5f * RailWidth - 0.5f * LeftRailSize.Z);
+	FVector RightRailCenter(LeftRailCenter.X, FrameCenter.Y + FrameHalfInnerSize.Y - RailOffset, LeftRailCenter.Z);
+
+	MeshSection LeftRail;
+	GenerateBox(LeftRail, LeftRailCenter, 0.5f * LeftRailSize, Color);
+
+	MeshSection RightRail;
+	GenerateBox(RightRail, RightRailCenter, 0.5f * LeftRailSize, Color);
+
+	TArray<MeshSection*> Sections = {&LeftFramePart, &RightFramePart, &TopFramePart, &BottomFramePart, &TopRail, &LeftRail, &RightRail};
 	MergeSections(Result, Sections);
 }
 
