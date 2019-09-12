@@ -9,10 +9,10 @@
 // Sets default values
 AWallActor::AWallActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	ProceduralMeshComponent = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("GeneratedMesh"));
+	ProceduralMeshComponent = CreateDefaultSubobject<UProceduralMeshComponent>("WallMesh");
 	ProceduralMeshComponent->bUseAsyncCooking = true;
 	ProceduralMeshComponent->SetupAttachment(RootComponent);
 }
@@ -25,30 +25,10 @@ void AWallActor::BeginPlay()
 	int32 SectionIndex = 0;
 	bool bCreateCollision = true;
 
-	
-	
-	/*FVector Center(20.0f, 200.0f, 60.0f);
-	FVector FrameSize(10.0f, 60.0f, 80.0f);
-	float FrameWidth = 2.0f;
-	float RailWidth = 1.0f;
-	FColor Color(255, 0, 0, 255);
-
-	MeshSection Section;
-	GenerateWindow(Section, Center, FrameSize, FrameWidth, RailWidth, Color);
-
-	ProceduralMeshComponent->CreateMeshSection(SectionIndex, 
-		Section.Vertices, 
-		Section.Triangles,
-		Section.Normals,
-		Section.UV0,
-		Section.VertexColors, 
-		Section.Tangents, 
-		bCreateCollision);*/
-	
 	FVector WallCenter(0.0f, 0.0f, 50.0f);
 	FVector WallSize(10.0f, 500.0f, 100.0f);
-	FColor WallColor(255, 0, 0, 255);
-	int32 NumWindows = 1;
+	FColor WallColor(0, 0, 255, 255);
+	int32 NumWindows = 4;
 	FVector WindowFrameSize(5.0f, 50.0f, 50.0f);
 	float WindowFrameWidth = 5.0f;
 	float WindowRailWidth = 4.0f;
@@ -61,7 +41,6 @@ void AWallActor::BeginPlay()
 	GenerateWall(Section, WallCenter, WallSize, WallColor,
 		NumWindows, WindowFrameSize, WindowFrameWidth, WindowRailWidth,
 		WindowLeftOffset, WindowTopOffset, DistBetweenWindows, WindowColor);
-
 	ProceduralMeshComponent->CreateMeshSection(SectionIndex,
 		Section.Vertices,
 		Section.Triangles,

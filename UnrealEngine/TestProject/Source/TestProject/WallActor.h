@@ -47,6 +47,7 @@ private:
 
 	static void MergeSections(MeshSection& Result, const TArray<MeshSection>& Sections);
 
-private:
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UProceduralMeshComponent* ProceduralMeshComponent;
 };
