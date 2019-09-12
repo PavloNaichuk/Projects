@@ -34,18 +34,10 @@ private:
 		TArray<FColor> VertexColors;
 		TArray<FProcMeshTangent> Tangents;
 
-		void Empty()
-		{
-			Vertices.Empty();
-			Triangles.Empty();
-			Normals.Empty();
-			UV0.Empty();
-			VertexColors.Empty();
-			Tangents.Empty();
-		}
+		void Empty();
 	};
 
-	static void GenerateBox(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color);
+	static void GenerateBox(MeshSection& Result, const FVector& Center, const FVector& Size, const FColor& Color);
 	static void GenerateWindow(MeshSection& Result, const FVector& FrameCenter, const FVector& FrameSize, float FrameWidth, float RailWidth, const FColor& Color);
 	static void MergeSections(MeshSection& Result, const TArray<MeshSection*>& SectionsToMerge);
 

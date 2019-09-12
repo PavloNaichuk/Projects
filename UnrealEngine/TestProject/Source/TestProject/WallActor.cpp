@@ -32,8 +32,6 @@ void AWallActor::BeginPlay()
 	float RailWidth = 1.0f;
 	FColor Color(255, 0, 0, 255);
 
-	//GenerateBox(Section, Center, HalfSize, Color);
-
 	GenerateWindow(Section, Center, FrameSize, FrameWidth, RailWidth, Color);
 	ProceduralMeshComponent->CreateMeshSection(SectionIndex, 
 		Section.Vertices, 
@@ -45,9 +43,10 @@ void AWallActor::BeginPlay()
 		bCreateCollision);
 }
 
-void AWallActor::GenerateBox(MeshSection& Result, const FVector& Center, const FVector& HalfSize, const FColor& Color)
+void AWallActor::GenerateBox(MeshSection& Result, const FVector& Center, const FVector& Size, const FColor& Color)
 {
 	Result.Empty();
+	const FVector HalfSize(0.5f * Size);
 
 	Result.Vertices =
 	{ 
@@ -140,24 +139,24 @@ void AWallActor::GenerateWindow(MeshSection& Result, const FVector& FrameCenter,
 	const float RailHalfWidth = 0.5f * RailWidth;
 
 	FVector LeftFramePartCenter(FrameCenter.X, FrameCenter.Y - FrameHalfSize.Y + FrameHalfWidth, FrameCenter.Z);
-	FVector RightFramePartCenter(FrameCenter.X, FrameCenter.Y + FrameHalfSize.Y - FrameHalfWidth, FrameCenter.Z);
+	FVector RightFramePartCenter(LeftFramePartCenter.X, FrameCenter.Y + FrameHalfSize.Y - FrameHalfWidth, LeftFramePartCenter.Z);
 	FVector LeftFramePartSize(FrameSize.X, FrameWidth, FrameSize.Z - 2.0f * FrameWidth);
 
 	MeshSection LeftFramePart;
-	GenerateBox(LeftFramePart, LeftFramePartCenter, 0.5f * LeftFramePartSize, Color);
+	GenerateBox(LeftFramePart, LeftFramePartCenter, LeftFramePartSize, Color);
 
 	MeshSection RightFramePart;
-	GenerateBox(RightFramePart, RightFramePartCenter, 0.5f * LeftFramePartSize, Color);
+	GenerateBox(RightFramePart, RightFramePartCenter, LeftFramePartSize, Color);
 
 	FVector TopFramePartCenter(FrameCenter.X, FrameCenter.Y, FrameCenter.Z + FrameHalfSize.Z - FrameHalfWidth);
-	FVector BottomFramePartCenter(FrameCenter.X, FrameCenter.Y, FrameCenter.Z - FrameHalfSize.Z + FrameHalfWidth);
+	FVector BottomFramePartCenter(TopFramePartCenter.X, TopFramePartCenter.Y, FrameCenter.Z - FrameHalfSize.Z + FrameHalfWidth);
 	FVector TopFramePartSize(FrameSize.X, FrameSize.Y, FrameWidth);
 
 	MeshSection TopFramePart;
-	GenerateBox(TopFramePart, TopFramePartCenter, 0.5f * TopFramePartSize, Color);
+	GenerateBox(TopFramePart, TopFramePartCenter, TopFramePartSize, Color);
 
 	MeshSection BottomFramePart;
-	GenerateBox(BottomFramePart, BottomFramePartCenter, 0.5f * TopFramePartSize, Color);
+	GenerateBox(BottomFramePart, BottomFramePartCenter, TopFramePartSize, Color);
 
 	FVector FrameInnerSize(FrameSize.X, FrameSize.Y - 2.0f * FrameWidth, FrameSize.Z - 2.0f * FrameWidth);
 	FVector FrameHalfInnerSize = 0.5f * FrameInnerSize;
@@ -166,7 +165,7 @@ void AWallActor::GenerateWindow(MeshSection& Result, const FVector& FrameCenter,
 	FVector TopRailSize(RailWidth, FrameInnerSize.Y, RailWidth);
 
 	MeshSection TopRail;
-	GenerateBox(TopRail, TopRailCenter, 0.5f * TopRailSize, Color);
+	GenerateBox(TopRail, TopRailCenter, TopRailSize, Color);
 
 	const float RailOffset = FrameInnerSize.Y / 3.0f;
 	FVector LeftRailSize(RailWidth, RailWidth, TopRailCenter.Z - 0.5f * RailWidth - (FrameCenter.Z - FrameHalfInnerSize.Z));
@@ -174,10 +173,10 @@ void AWallActor::GenerateWindow(MeshSection& Result, const FVector& FrameCenter,
 	FVector RightRailCenter(LeftRailCenter.X, FrameCenter.Y + FrameHalfInnerSize.Y - RailOffset, LeftRailCenter.Z);
 
 	MeshSection LeftRail;
-	GenerateBox(LeftRail, LeftRailCenter, 0.5f * LeftRailSize, Color);
+	GenerateBox(LeftRail, LeftRailCenter, LeftRailSize, Color);
 
 	MeshSection RightRail;
-	GenerateBox(RightRail, RightRailCenter, 0.5f * LeftRailSize, Color);
+	GenerateBox(RightRail, RightRailCenter, LeftRailSize, Color);
 
 	TArray<MeshSection*> Sections = {&LeftFramePart, &RightFramePart, &TopFramePart, &BottomFramePart, &TopRail, &LeftRail, &RightRail};
 	MergeSections(Result, Sections);
@@ -233,3 +232,12 @@ void AWallActor::Tick(float DeltaTime)
 
 }
 
+void AWallActor::MeshSection::Empty()
+{
+	Vertices.Empty();
+	Triangles.Empty();
+	Normals.Empty();
+	UV0.Empty();
+	VertexColors.Empty();
+	Tangents.Empty();
+}
