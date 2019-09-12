@@ -4,6 +4,7 @@
 #include "WallActor.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Engine/Classes/Materials/Material.h"
+#include "Runtime/Core/Public/Misc/AssertionMacros.h"
 
 // Sets default values
 AWallActor::AWallActor()
@@ -24,15 +25,17 @@ void AWallActor::BeginPlay()
 	int32 SectionIndex = 0;
 	bool bCreateCollision = true;
 
-	MeshSection Section;
 	
-	FVector Center(20.0f, 200.0f, 60.0f);
+	
+	/*FVector Center(20.0f, 200.0f, 60.0f);
 	FVector FrameSize(10.0f, 60.0f, 80.0f);
 	float FrameWidth = 2.0f;
 	float RailWidth = 1.0f;
 	FColor Color(255, 0, 0, 255);
 
+	MeshSection Section;
 	GenerateWindow(Section, Center, FrameSize, FrameWidth, RailWidth, Color);
+
 	ProceduralMeshComponent->CreateMeshSection(SectionIndex, 
 		Section.Vertices, 
 		Section.Triangles,
@@ -40,6 +43,32 @@ void AWallActor::BeginPlay()
 		Section.UV0,
 		Section.VertexColors, 
 		Section.Tangents, 
+		bCreateCollision);*/
+	
+	FVector WallCenter(0.0f, 0.0f, 50.0f);
+	FVector WallSize(10.0f, 500.0f, 100.0f);
+	FColor WallColor(255, 0, 0, 255);
+	int32 NumWindows = 1;
+	FVector WindowFrameSize(5.0f, 50.0f, 50.0f);
+	float WindowFrameWidth = 5.0f;
+	float WindowRailWidth = 4.0f;
+	float WindowLeftOffset = 10.0f;
+	float WindowTopOffset = 20.0f;
+	float DistBetweenWindows = 10.0f;
+	FColor WindowColor(255, 255, 0, 255);
+
+	MeshSection Section;
+	GenerateWall(Section, WallCenter, WallSize, WallColor,
+		NumWindows, WindowFrameSize, WindowFrameWidth, WindowRailWidth,
+		WindowLeftOffset, WindowTopOffset, DistBetweenWindows, WindowColor);
+
+	ProceduralMeshComponent->CreateMeshSection(SectionIndex,
+		Section.Vertices,
+		Section.Triangles,
+		Section.Normals,
+		Section.UV0,
+		Section.VertexColors,
+		Section.Tangents,
 		bCreateCollision);
 }
 
@@ -138,25 +167,28 @@ void AWallActor::GenerateWindow(MeshSection& Result, const FVector& FrameCenter,
 	const float FrameHalfWidth = 0.5f * FrameWidth;
 	const float RailHalfWidth = 0.5f * RailWidth;
 
+	TArray<MeshSection> Sections;
+	Sections.Reserve(7);
+
 	FVector LeftFramePartCenter(FrameCenter.X, FrameCenter.Y - FrameHalfSize.Y + FrameHalfWidth, FrameCenter.Z);
 	FVector RightFramePartCenter(LeftFramePartCenter.X, FrameCenter.Y + FrameHalfSize.Y - FrameHalfWidth, LeftFramePartCenter.Z);
 	FVector LeftFramePartSize(FrameSize.X, FrameWidth, FrameSize.Z - 2.0f * FrameWidth);
 
-	MeshSection LeftFramePart;
-	GenerateBox(LeftFramePart, LeftFramePartCenter, LeftFramePartSize, Color);
+	Sections.Push(MeshSection());
+	GenerateBox(Sections.Last(0), LeftFramePartCenter, LeftFramePartSize, Color);
 
-	MeshSection RightFramePart;
-	GenerateBox(RightFramePart, RightFramePartCenter, LeftFramePartSize, Color);
+	Sections.Push(MeshSection());
+	GenerateBox(Sections.Last(0), RightFramePartCenter, LeftFramePartSize, Color);
 
 	FVector TopFramePartCenter(FrameCenter.X, FrameCenter.Y, FrameCenter.Z + FrameHalfSize.Z - FrameHalfWidth);
 	FVector BottomFramePartCenter(TopFramePartCenter.X, TopFramePartCenter.Y, FrameCenter.Z - FrameHalfSize.Z + FrameHalfWidth);
 	FVector TopFramePartSize(FrameSize.X, FrameSize.Y, FrameWidth);
 
-	MeshSection TopFramePart;
-	GenerateBox(TopFramePart, TopFramePartCenter, TopFramePartSize, Color);
+	Sections.Push(MeshSection());
+	GenerateBox(Sections.Last(0), TopFramePartCenter, TopFramePartSize, Color);
 
-	MeshSection BottomFramePart;
-	GenerateBox(BottomFramePart, BottomFramePartCenter, TopFramePartSize, Color);
+	Sections.Push(MeshSection());
+	GenerateBox(Sections.Last(0), BottomFramePartCenter, TopFramePartSize, Color);
 
 	FVector FrameInnerSize(FrameSize.X, FrameSize.Y - 2.0f * FrameWidth, FrameSize.Z - 2.0f * FrameWidth);
 	FVector FrameHalfInnerSize = 0.5f * FrameInnerSize;
@@ -164,25 +196,92 @@ void AWallActor::GenerateWindow(MeshSection& Result, const FVector& FrameCenter,
 	FVector TopRailCenter(FrameCenter.X, FrameCenter.Y, FrameCenter.Z + 0.5f * FrameHalfInnerSize.Z);
 	FVector TopRailSize(RailWidth, FrameInnerSize.Y, RailWidth);
 
-	MeshSection TopRail;
-	GenerateBox(TopRail, TopRailCenter, TopRailSize, Color);
+	Sections.Push(MeshSection());
+	GenerateBox(Sections.Last(0), TopRailCenter, TopRailSize, Color);
 
 	const float RailOffset = FrameInnerSize.Y / 3.0f;
 	FVector LeftRailSize(RailWidth, RailWidth, TopRailCenter.Z - 0.5f * RailWidth - (FrameCenter.Z - FrameHalfInnerSize.Z));
 	FVector LeftRailCenter(FrameCenter.X, FrameCenter.Y - FrameHalfInnerSize.Y + RailOffset, TopRailCenter.Z - 0.5f * RailWidth - 0.5f * LeftRailSize.Z);
 	FVector RightRailCenter(LeftRailCenter.X, FrameCenter.Y + FrameHalfInnerSize.Y - RailOffset, LeftRailCenter.Z);
 
-	MeshSection LeftRail;
-	GenerateBox(LeftRail, LeftRailCenter, LeftRailSize, Color);
+	Sections.Push(MeshSection());
+	GenerateBox(Sections.Last(0), LeftRailCenter, LeftRailSize, Color);
 
-	MeshSection RightRail;
-	GenerateBox(RightRail, RightRailCenter, LeftRailSize, Color);
+	Sections.Push(MeshSection());
+	GenerateBox(Sections.Last(0), RightRailCenter, LeftRailSize, Color);
 
-	TArray<MeshSection*> Sections = {&LeftFramePart, &RightFramePart, &TopFramePart, &BottomFramePart, &TopRail, &LeftRail, &RightRail};
 	MergeSections(Result, Sections);
 }
 
-void AWallActor::MergeSections(MeshSection& Result, const TArray<MeshSection*>& SectionsToMerge)
+void AWallActor::GenerateWall(MeshSection& Result, const FVector& WallCenter, const FVector& WallSize, const FColor& WallColor,
+	int32 NumWindows, const FVector& WindowFrameSize, float WindowFrameWidth, float WindowRailWidth, 
+	float WindowLeftOffset, float WindowTopOffset, float DistBetweenWindows, const FColor& WindowColor)
+{
+	if (NumWindows > 0)
+	{
+		const FVector WallHalfSize(0.5f * WallSize);
+		const FVector WindowFrameHalfSize(0.5f * WindowFrameSize);
+
+		TArray<FVector> WindowCenters;
+		WindowCenters.Reserve(NumWindows);
+
+		float WindowYOffset = WallCenter.Y - WallHalfSize.Y + WindowLeftOffset;
+		for (int32 Index = 0; Index < NumWindows; ++Index)
+		{
+			WindowCenters.Emplace(WallCenter.X, WindowYOffset + WindowFrameHalfSize.Y, WallSize.Z - WindowTopOffset - WindowFrameHalfSize.Z);
+			WindowYOffset += WindowFrameSize.Y + DistBetweenWindows;
+		}
+
+		TArray<MeshSection> Sections;
+		Sections.Reserve(2 * NumWindows + 3);
+
+		for (const FVector& WindowCenter : WindowCenters)
+		{
+			Sections.Push(MeshSection());
+			GenerateWindow(Sections.Last(0), WindowCenter, WindowFrameSize, WindowFrameWidth, WindowRailWidth, WindowColor);
+		}
+
+		FVector LeftWallPartCenter(WindowCenters[0] - FVector(0.0f, WindowFrameHalfSize.Y + 0.5 * WindowLeftOffset, 0.0f));
+		FVector LeftWallPartSize(WallSize.X, WindowLeftOffset, WindowFrameSize.Z);
+		Sections.Push(MeshSection());
+		GenerateBox(Sections.Last(0), LeftWallPartCenter, LeftWallPartSize, WallColor);
+
+		for (int32 Index = 0; Index < NumWindows - 1; ++Index) 
+		{
+			FVector WallPartCenter(WindowCenters[Index] + FVector(0.0f, WindowFrameHalfSize.Y + 0.5f * DistBetweenWindows, 0.0f));
+			FVector WallPartSize(WallSize.X, DistBetweenWindows, WindowFrameSize.Z);
+
+			Sections.Push(MeshSection());
+			GenerateBox(Sections.Last(0), WallPartCenter, WallPartSize, WallColor);
+		}
+
+		FVector RightWallPartSize(WallSize.X, WallCenter.Y + WallHalfSize.Y - WindowCenters[NumWindows - 1].Y - WindowFrameHalfSize.Y, WindowFrameSize.Z);
+		FVector RightWallPartCenter(WindowCenters[NumWindows - 1] + FVector(0.0f, WindowFrameHalfSize.Y + 0.5f * RightWallPartSize.Y, 0.0f));
+		Sections.Push(MeshSection());
+		GenerateBox(Sections.Last(0), RightWallPartCenter, RightWallPartSize, WallColor);
+
+		FVector WallTopPartCenter(WallCenter.X, WallCenter.Y, WallCenter.Z + WallHalfSize.Z - 0.5f * WindowTopOffset);
+		FVector WallTopPartSize(WallSize.X, WallSize.Y, WindowTopOffset);
+
+		Sections.Push(MeshSection());
+		GenerateBox(Sections.Last(0), WallTopPartCenter, WallTopPartSize, WallColor);
+		
+		float WindowBottomOffset = WallSize.Z - WindowTopOffset - WindowFrameSize.Z;
+		FVector WallBottomPartCenter(WallCenter.X, WallCenter.Y, WallCenter.Z - WallHalfSize.Z + 0.5f * WindowBottomOffset);
+		FVector WallBottomPartSize(WallSize.X, WallSize.Y, WindowBottomOffset);
+
+		Sections.Push(MeshSection());
+		GenerateBox(Sections.Last(0), WallBottomPartCenter, WallBottomPartSize, WallColor);
+
+		MergeSections(Result, Sections);
+	}
+	else
+	{
+		GenerateBox(Result, WallCenter, WallSize, WallColor);
+	}
+}
+
+void AWallActor::MergeSections(MeshSection& Result, const TArray<MeshSection>& Sections)
 {
 	Result.Empty();
 
@@ -193,14 +292,14 @@ void AWallActor::MergeSections(MeshSection& Result, const TArray<MeshSection*>& 
 	int32 NumVertexColors = 0;
 	int32 NumTangents = 0;
 
-	for (const MeshSection* Section : SectionsToMerge)
+	for (const MeshSection& Section : Sections)
 	{
-		NumVertices += Section->Vertices.Num();
-		NumIndices += Section->Triangles.Num();
-		NumNormals += Section->Normals.Num();
-		NumUV0 += Section->UV0.Num();
-		NumVertexColors += Section->VertexColors.Num();
-		NumTangents += Section->Tangents.Num();
+		NumVertices += Section.Vertices.Num();
+		NumIndices += Section.Triangles.Num();
+		NumNormals += Section.Normals.Num();
+		NumUV0 += Section.UV0.Num();
+		NumVertexColors += Section.VertexColors.Num();
+		NumTangents += Section.Tangents.Num();
 	}
 
 	Result.Vertices.Reserve(NumVertices);
@@ -210,18 +309,18 @@ void AWallActor::MergeSections(MeshSection& Result, const TArray<MeshSection*>& 
 	Result.VertexColors.Reserve(NumVertexColors);
 	Result.Tangents.Reserve(NumTangents);
 
-	for (const MeshSection* Section : SectionsToMerge)
+	for (const MeshSection& Section : Sections)
 	{
 		const int32 VertexOffset = Result.Vertices.Num();
-		for (int32 Index : Section->Triangles)
+		for (int32 Index : Section.Triangles)
 			Result.Triangles.Push(Index + VertexOffset);
 
-		Result.Vertices.Append(Section->Vertices);
-		Result.Triangles.Append(Section->Triangles);
-		Result.Normals.Append(Section->Normals);
-		Result.UV0.Append(Section->UV0);
-		Result.VertexColors.Append(Section->VertexColors);
-		Result.Tangents.Append(Section->Tangents);
+		Result.Vertices.Append(Section.Vertices);
+		Result.Triangles.Append(Section.Triangles);
+		Result.Normals.Append(Section.Normals);
+		Result.UV0.Append(Section.UV0);
+		Result.VertexColors.Append(Section.VertexColors);
+		Result.Tangents.Append(Section.Tangents);
 	}
 };
 

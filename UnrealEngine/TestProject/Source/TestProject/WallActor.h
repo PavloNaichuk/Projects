@@ -38,8 +38,14 @@ private:
 	};
 
 	static void GenerateBox(MeshSection& Result, const FVector& Center, const FVector& Size, const FColor& Color);
+
 	static void GenerateWindow(MeshSection& Result, const FVector& FrameCenter, const FVector& FrameSize, float FrameWidth, float RailWidth, const FColor& Color);
-	static void MergeSections(MeshSection& Result, const TArray<MeshSection*>& SectionsToMerge);
+
+	static void GenerateWall(MeshSection& Result, const FVector& WallCenter, const FVector& WallSize, const FColor& WallColor,
+		int32 NumWindows, const FVector& WindowFrameSize, float WindowFrameWidth, float WindowRailWidth, 
+		float WindowLeftOffset, float WindowTopOffset, float DistBetweenWindows, const FColor& WindowColor);
+
+	static void MergeSections(MeshSection& Result, const TArray<MeshSection>& Sections);
 
 private:
 	UProceduralMeshComponent* ProceduralMeshComponent;
