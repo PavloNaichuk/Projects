@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/SphereComponent.h"
 #include "SnakeActor.generated.h"
 
 UCLASS()
@@ -22,5 +23,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void CreateSnakeBody();
 
+	int32 SnakeSize = 15;
+	float StepSnake = 50.0f;
+
+	TArray<UStaticMeshComponent*> SnakeBody;
+	USphereComponent* SphereComponent;
 };
