@@ -18,6 +18,11 @@ APawnCamera::APawnCamera()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("CameraModel");
 	Camera->AttachTo(CameraSpring, USpringArmComponent::SocketName);
+
+	CameraSpring->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
+	CameraSpring->TargetArmLength = 1700.0f;
+	CameraSpring->bDoCollisionTest = false;
+
 }
 
 // Called when the game starts or when spawned
