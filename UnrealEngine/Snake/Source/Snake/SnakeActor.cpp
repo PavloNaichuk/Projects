@@ -30,7 +30,13 @@ void ASnakeActor::BeginPlay()
 void ASnakeActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	SetVisibleChank();
+	BufferTime += DeltaTime;
+	if (BufferTime > StepDelay)
+	{
+		MoveSnake();
+		BufferTime = 0;
+	}
 }
 
 void ASnakeActor::CreateSnakeBody()
@@ -67,6 +73,49 @@ void ASnakeActor::CreateSnakeBody()
 		{
 			BodyChank->SetMaterial(0, WormHead);
 		}
+		else
+		{
+			BodyChank->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		}
+	}
+	SetVisibleChank();
+}
+
+void ASnakeActor::SetVisibleChank()
+{
+	for (int32 Index = 0; Index < SnakeBody.Num(); ++Index) 
+	{
+		if (Index < VisibleBodyChank)
+		{
+			SnakeBody[Index]->SetVisibility(true, true);
+		}
+		else
+		{
+			SnakeBody[Index]->SetVisibility(false, true);
+		}
+	}
+}
+
+void ASnakeActor::MoveSnake()
+{
+	if ((DirectionMoveSnake.X != 0) || (DirectionMoveSnake.Y != 0)) 
+	{
+		for (int Chank = SnakeBody.Num() - 1; Chank > 0; --Chank)
+		{
+			FVector V = SnakeBody[Chank - 1]->RelativeLocation;
+			SnakeBody[Chank]->SetRelativeLocation(V);
+		}
+		FVector StartPoint = SnakeBody[0]->RelativeLocation;
+		if (DirectionMoveSnake.X > 0)
+			StartPoint.X -= StepSnake;
+		if (DirectionMoveSnake.X < 0)
+			StartPoint.X += StepSnake;
+
+		if (DirectionMoveSnake.Y > 0)
+			StartPoint.X += StepSnake;
+		if (DirectionMoveSnake.Y < 0)
+			StartPoint.X -= StepSnake;
+		SnakeBody[0]->SetRelativeLocation(StartPoint);
 	}
 }
 
