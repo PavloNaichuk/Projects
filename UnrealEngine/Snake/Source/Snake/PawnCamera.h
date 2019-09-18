@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "Snake.h"
+#include "SnakeActor.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Components/BoxComponent.h"
@@ -31,6 +34,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void AddSnakeToMap();
+	void FMove(float Button);
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
@@ -40,4 +45,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera;
-};
+	ASnakeActor* SnakePlayer;
+}
+;

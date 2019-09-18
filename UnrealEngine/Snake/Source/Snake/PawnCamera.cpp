@@ -2,6 +2,7 @@
 
 
 #include "PawnCamera.h"
+#include "Components/InputComponent.h"
 
 // Sets default values
 APawnCamera::APawnCamera()
@@ -23,12 +24,14 @@ APawnCamera::APawnCamera()
 	CameraSpring->TargetArmLength = 1700.0f;
 	CameraSpring->bDoCollisionTest = false;
 
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
 // Called when the game starts or when spawned
 void APawnCamera::BeginPlay()
 {
 	Super::BeginPlay();
+	AddSnakeToMap();
 	
 }
 
@@ -44,5 +47,65 @@ void APawnCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	InputComponent->BindAxis("KeyMapMove", this, &APawnCamera::FMove);
 }
+
+void APawnCamera::AddSnakeToMap()
+{
+	FVector StartPoint = GetActorLocation();
+	FRotator StartPointRotation = GetActorRotation();
+
+	if (GetWorld()) 
+	{
+		SnakePlayer = GetWorld()->SpawnActor<ASnakeActor>(StartPoint, StartPointRotation);
+	}
+}
+
+void APawnCamera::FMove(float Button)
+{
+	int32 Key = Button;
+	FVector2D WSAD;
+	 switch(Key)
+	 {
+		case 1:
+			if (WSAD.X != 1) 
+			{
+				WSAD = FVector2D(0, 0);
+				WSAD.X = -1;
+			}
+			
+		break;
+
+		case 2:
+			if (WSAD.X != -1)
+			{
+				WSAD = FVector2D(0, 0);
+				WSAD.X = 1;
+			}
+		break;
+
+		case 3:
+			if (WSAD.Y != -1)
+			{
+				WSAD = FVector2D(0, 0);
+				WSAD.Y = 1;
+			}
+		break;
+
+		case 4:
+			if (WSAD.Y != -1)
+			{
+				WSAD = FVector2D(0, 0);
+				WSAD.Y = -1;
+			}
+		break;
+
+	 }
+	 if (SnakePlayer != NULL)
+	 { 
+		 SnakePlayer->DirectionMoveSnake = WSAD; 
+	 }
+		 
+}
+
 
