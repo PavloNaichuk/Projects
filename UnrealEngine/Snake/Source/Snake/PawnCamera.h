@@ -34,8 +34,14 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	UFUNCTION(BlueprintCallable, Category = "SnakePawn")
 	void AddSnakeToMap();
+
 	void FMove(float Button);
+
+	UFUNCTION(BlueprintCallable, Category = "SnakePawn")
+	int32 GetGameMode() const { return GameMode; }
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
@@ -48,5 +54,6 @@ public:
 	ASnakeActor* SnakePlayer;
 
 	FVector2D WSAD;
-}
-;
+
+	int32 GameMode = 0;
+};

@@ -31,8 +31,6 @@ APawnCamera::APawnCamera()
 void APawnCamera::BeginPlay()
 {
 	Super::BeginPlay();
-	AddSnakeToMap();
-	
 }
 
 // Called every frame
@@ -58,6 +56,7 @@ void APawnCamera::AddSnakeToMap()
 	if (GetWorld()) 
 	{
 		SnakePlayer = GetWorld()->SpawnActor<ASnakeActor>(StartPoint, StartPointRotation);
+		GameMode = 1;
 	}
 }
 
