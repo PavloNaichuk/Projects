@@ -46,5 +46,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera;
 	ASnakeActor* SnakePlayer;
+
+	FVector2D WSAD;
 }
 ;

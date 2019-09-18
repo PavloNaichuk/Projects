@@ -64,7 +64,6 @@ void APawnCamera::AddSnakeToMap()
 void APawnCamera::FMove(float Button)
 {
 	int32 Key = Button;
-	FVector2D WSAD;
 	 switch(Key)
 	 {
 		case 1:
@@ -101,11 +100,10 @@ void APawnCamera::FMove(float Button)
 		break;
 
 	 }
-	 if (SnakePlayer != NULL)
+	 if (SnakePlayer)
 	 { 
 		 SnakePlayer->DirectionMoveSnake = WSAD; 
-	 }
-		 
+	 } 
 }
 
 
