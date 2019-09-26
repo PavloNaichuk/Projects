@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/SphereComponent.h"
 #include "AppleActor.generated.h"
 
 UCLASS()
@@ -22,5 +23,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void CollecEat();
+
+	USphereComponent* AppleComponent;
+	UStaticMesh* SnakeEatMesh;
 
 };
