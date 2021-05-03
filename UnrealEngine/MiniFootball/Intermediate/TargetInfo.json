@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "MiniFootball",
+			"Path": "D:\\Git\\UnrealEngine\\MiniFootball\\Source\\MiniFootball.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "MiniFootballEditor",
+			"Path": "D:\\Git\\UnrealEngine\\MiniFootball\\Source\\MiniFootballEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
