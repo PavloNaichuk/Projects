@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\MiniFootball.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{D1912B87-AA79-42E4-B317-40BCA15D81FF}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\MiniFootball.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\MiniFootballEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{267E96AB-B74A-441D-8DD8-AE24FE5E8456}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\MiniFootball">
+      <UniqueIdentifier>{A2864911-4F35-4CCA-A1E7-10C244291ECB}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\MiniFootball\MiniFootball.Build.cs">
+      <Filter>Source\MiniFootball</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\MiniFootball\MiniFootball.cpp">
+      <Filter>Source\MiniFootball</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MiniFootball\MiniFootball.h">
+      <Filter>Source\MiniFootball</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\MiniFootball\MiniFootballCharacter.cpp">
+      <Filter>Source\MiniFootball</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MiniFootball\MiniFootballCharacter.h">
+      <Filter>Source\MiniFootball</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\MiniFootball\MiniFootballGameMode.cpp">
+      <Filter>Source\MiniFootball</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MiniFootball\MiniFootballGameMode.h">
+      <Filter>Source\MiniFootball</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

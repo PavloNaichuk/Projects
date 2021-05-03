@@ -77,3 +77,16 @@ UnrealEngine/Snake/.vs/
 UnrealEngine/Snake/Binaries/
 UnrealEngine/Snake/Intermediate/
 UnrealEngine/Snake/Saved/
+UnrealEngine/MiniFootball/Binaries/Win64/MiniFootballEditor.target
+UnrealEngine/MiniFootball/Binaries/Win64/UE4Editor.modules
+UnrealEngine/MiniFootball/Config/DefaultEditor.ini
+UnrealEngine/MiniFootball/Config/DefaultEditorPerProjectUserSettings.ini
+UnrealEngine/MiniFootball/Content/Mannequin/Character/Mesh/SK_Mannequin.uasset
+UnrealEngine/MiniFootball/Intermediate/Build/SourceFileCache.bin
+UnrealEngine/MiniFootball/Intermediate/Build/BuildRules/MiniFootballModuleRules.dll
+*.pdb
+UnrealEngine/MiniFootball/Intermediate/Build/BuildRules/MiniFootballModuleRulesManifest.json
+UnrealEngine/MiniFootball/Intermediate/Build/
+UnrealEngine/MiniFootball/Intermediate/Config/
+UnrealEngine/MiniFootball/Saved/Config/CrashReportClient/UE4CC-Windows-D15BB7604C78B7CC0AEE2EA4D3794716/CrashReportClient.ini
+UnrealEngine/MiniFootball/Saved/
