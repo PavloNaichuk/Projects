@@ -4,7 +4,7 @@
 #include "TestHUD.h"
 #include "TestCharacter.h"
 #include "UObject/ConstructorHelpers.h"
-#include "GameWidget.h"
+#include "TestWidget.h"
 
 ATestGameMode::ATestGameMode()
 	: Super()
@@ -22,7 +22,7 @@ void ATestGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	ChangeMenuWidget(StartingWidgetClass);
-	((UGameWidget*)CurrentWidget)->Load();
+	((UTestWidget*)CurrentWidget)->Load();
 }
 
 void ATestGameMode::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass)

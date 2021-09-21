@@ -21,7 +21,7 @@ public:
 
 protected:
 	int Score = 0;
-	int WaveCount = 0;
+	int WaveNumber = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
 	TSubclassOf<UUserWidget> StartingWidgetClass;

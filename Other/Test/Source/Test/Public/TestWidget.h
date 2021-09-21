@@ -9,26 +9,24 @@
 #include "Runtime/UMG/Public/Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "GameWidget.generated.h"
+#include "TestWidget.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
-class TEST_API UGameWidget : public UUserWidget
+class TEST_API UTestWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
 	void Load();
 	void SetScore(int Score);
-	void SetWaveCount(int WaveCount);
+	void SetWaveNumber(int WaveNumber);
 
 	UPROPERTY()
 	UTextBlock* ScoreText;
 
 	UPROPERTY()
-	UTextBlock* WaveCountText;
-
-	
+	UTextBlock* WaveNumberText;
 };
