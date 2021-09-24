@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "SphereController.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -146,14 +147,17 @@ void ATestCharacter::OnFire()
 		UWorld* const World = GetWorld();
 		if (World != nullptr)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Fire"));
 			if (bUsingMotionControllers)
 			{
 				const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();
 				const FVector SpawnLocation = VR_MuzzleLocation->GetComponentLocation();
 				World->SpawnActor<ATestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+				UE_LOG(LogTemp, Warning, TEXT("Fire1"));
 			}
 			else
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Fire2"));
 				const FRotator SpawnRotation = GetControlRotation();
 				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
 				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
