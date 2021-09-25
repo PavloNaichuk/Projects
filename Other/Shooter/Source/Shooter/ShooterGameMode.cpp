@@ -5,6 +5,7 @@
 #include "ShooterCharacter.h"
 #include "ShooterSphere.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Engine/GameEngine.h" // Pavlo
 
 AShooterGameMode::AShooterGameMode()
 	: Super()
@@ -32,4 +33,12 @@ void AShooterGameMode::BeginPlay()
 void AShooterGameMode::Tick(float DeltaSeconds) 
 {
 	Super::Tick(DeltaSeconds);
+}
+
+void AShooterGameMode::OnSphereHit(const AShooterSphere* Sphere)
+{
+	++Score;
+
+	// Pavlo
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "OnSphereHit");
 }

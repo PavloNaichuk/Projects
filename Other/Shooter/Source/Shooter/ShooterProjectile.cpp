@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ShooterProjectile.h"
+#include "ShooterSphere.h"
+#include "ShooterGameMode.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -33,11 +35,14 @@ AShooterProjectile::AShooterProjectile()
 
 void AShooterProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
+	if (OtherActor->IsA(AShooterSphere::StaticClass()))
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
 		Destroy();
+		
+		AShooterSphere* Sphere = (AShooterSphere*)OtherActor;
+		AShooterGameMode* GameMode = (AShooterGameMode*)GetWorld()->GetAuthGameMode();
+		GameMode->OnSphereHit(Sphere);
+
+		Sphere->OnHit();
 	}
 }

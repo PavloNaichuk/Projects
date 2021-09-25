@@ -22,6 +22,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 	TSubclassOf<AShooterSphere> SphereClass;
 
+	void OnSphereHit(const AShooterSphere* Sphere);
+
 private:
 	int Score = 0;
 	int WaveNumber = 0;

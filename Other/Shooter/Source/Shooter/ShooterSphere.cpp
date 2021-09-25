@@ -10,14 +10,13 @@ AShooterSphere::AShooterSphere()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	RootSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Root"));
+	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComp"));
 }
 
 // Called when the game starts or when spawned
 void AShooterSphere::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
 }
 
 // Called every frame
@@ -26,3 +25,7 @@ void AShooterSphere::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AShooterSphere::OnHit()
+{
+	Destroy();
+}
