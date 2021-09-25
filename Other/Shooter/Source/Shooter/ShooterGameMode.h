@@ -7,6 +7,7 @@
 #include "ShooterGameMode.generated.h"
 
 class AShooterSphere;
+class UShooterWidget;
 
 UCLASS(minimalapi)
 class AShooterGameMode : public AGameModeBase
@@ -19,15 +20,22 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 
+	void OnSphereHit(const AShooterSphere* Sphere);
+
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 	TSubclassOf<AShooterSphere> SphereClass;
 
-	void OnSphereHit(const AShooterSphere* Sphere);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
+	TSubclassOf<UShooterWidget> WidgetClass;
+
+	UPROPERTY()
+	UShooterWidget* Widget;
+
+private:
+	void LoadWidget();
+	void SpawnNextWave();
 
 private:
 	int Score = 0;
 	int WaveNumber = 0;
 };
-
-
-

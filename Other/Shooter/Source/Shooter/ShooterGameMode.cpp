@@ -4,8 +4,8 @@
 #include "ShooterHUD.h"
 #include "ShooterCharacter.h"
 #include "ShooterSphere.h"
+#include "ShooterWidget.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Engine/GameEngine.h" // Pavlo
 
 AShooterGameMode::AShooterGameMode()
 	: Super()
@@ -22,19 +22,8 @@ void AShooterGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UWorld* World = GetWorld();
-	if (World != nullptr)
-	{
-		const FVector Offset(-1180.0f, 800.0f, 250.0f);
-		for (int x = 0; x < 5; ++x)
-		{
-			for (int y = 0; y < 5; ++y)
-			{
-				FVector Location = Offset + FVector(x * 150.0f, y * 150.0f, 0.0f);
-				World->SpawnActor<AShooterSphere>(SphereClass, Location, FRotator::ZeroRotator);
-			}
-		}
-	}
+	LoadWidget();
+	SpawnNextWave();
 }
 
 void AShooterGameMode::Tick(float DeltaSeconds) 
@@ -45,7 +34,44 @@ void AShooterGameMode::Tick(float DeltaSeconds)
 void AShooterGameMode::OnSphereHit(const AShooterSphere* Sphere)
 {
 	++Score;
+	Widget->SetScore(Score);
 
-	// Pavlo
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "OnSphereHit");
+	if ((Score % 4) == 0)
+		SpawnNextWave();
+}
+
+void AShooterGameMode::LoadWidget()
+{
+	if (Widget != nullptr)
+	{
+		Widget->RemoveFromViewport();
+		Widget = nullptr;
+	}
+
+	if (WidgetClass != nullptr)
+	{
+		Widget = CreateWidget<UShooterWidget>(GetWorld(), WidgetClass);
+		if (Widget != nullptr)
+		{
+			Widget->AddToViewport();
+		}
+	}
+
+	Widget->Load();
+}
+
+void AShooterGameMode::SpawnNextWave()
+{
+	const FVector Offset(-1180.0f, 800.0f, 250.0f);
+	for (int x = 0; x < 2; ++x)
+	{
+		for (int y = 0; y < 2; ++y)
+		{
+			FVector Location = Offset + FVector(x * 200.0f, y * 200.0f, 0.0f);
+			GetWorld()->SpawnActor<AShooterSphere>(SphereClass, Location, FRotator::ZeroRotator);
+		}
+	}
+
+	++WaveNumber;
+	Widget->SetWaveNumber(WaveNumber);
 }
