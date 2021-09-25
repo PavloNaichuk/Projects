@@ -3,6 +3,7 @@
 #include "ShooterGameMode.h"
 #include "ShooterHUD.h"
 #include "ShooterCharacter.h"
+#include "ShooterSphere.h"
 #include "UObject/ConstructorHelpers.h"
 
 AShooterGameMode::AShooterGameMode()
@@ -19,6 +20,13 @@ AShooterGameMode::AShooterGameMode()
 void AShooterGameMode::BeginPlay() 
 {
 	Super::BeginPlay();
+
+	UWorld* World = GetWorld();
+	if (World != nullptr)
+	{
+		FVector Location(-1180.0f, 800.0f, 250.0f);
+		World->SpawnActor<AShooterSphere>(SphereClass, Location, FRotator::ZeroRotator);
+	}
 }
 
 void AShooterGameMode::Tick(float DeltaSeconds) 

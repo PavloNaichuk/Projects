@@ -24,6 +24,5 @@ void AShooterSphere::BeginPlay()
 void AShooterSphere::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
