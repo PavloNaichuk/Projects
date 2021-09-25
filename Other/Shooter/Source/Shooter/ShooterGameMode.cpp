@@ -25,8 +25,15 @@ void AShooterGameMode::BeginPlay()
 	UWorld* World = GetWorld();
 	if (World != nullptr)
 	{
-		FVector Location(-1180.0f, 800.0f, 250.0f);
-		World->SpawnActor<AShooterSphere>(SphereClass, Location, FRotator::ZeroRotator);
+		const FVector Offset(-1180.0f, 800.0f, 250.0f);
+		for (int x = 0; x < 5; ++x)
+		{
+			for (int y = 0; y < 5; ++y)
+			{
+				FVector Location = Offset + FVector(x * 150.0f, y * 150.0f, 0.0f);
+				World->SpawnActor<AShooterSphere>(SphereClass, Location, FRotator::ZeroRotator);
+			}
+		}
 	}
 }
 

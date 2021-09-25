@@ -3,6 +3,7 @@
 
 #include "ShooterSphere.h"
 #include "Components/SphereComponent.h"
+#include "ShooterGameMode.h"
 
 // Sets default values
 AShooterSphere::AShooterSphere()
@@ -27,5 +28,8 @@ void AShooterSphere::Tick(float DeltaTime)
 
 void AShooterSphere::OnHit()
 {
+	AShooterGameMode* GameMode = (AShooterGameMode*)GetWorld()->GetAuthGameMode();
+	GameMode->OnSphereHit(this);
+
 	Destroy();
 }

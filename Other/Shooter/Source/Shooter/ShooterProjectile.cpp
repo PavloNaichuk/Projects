@@ -2,7 +2,6 @@
 
 #include "ShooterProjectile.h"
 #include "ShooterSphere.h"
-#include "ShooterGameMode.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -40,9 +39,6 @@ void AShooterProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		Destroy();
 		
 		AShooterSphere* Sphere = (AShooterSphere*)OtherActor;
-		AShooterGameMode* GameMode = (AShooterGameMode*)GetWorld()->GetAuthGameMode();
-		GameMode->OnSphereHit(Sphere);
-
 		Sphere->OnHit();
 	}
 }
