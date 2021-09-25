@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "ShooterGameMode.generated.h"
 
+class AShooterSphere;
+
 UCLASS(minimalapi)
 class AShooterGameMode : public AGameModeBase
 {
@@ -13,6 +15,16 @@ class AShooterGameMode : public AGameModeBase
 
 public:
 	AShooterGameMode();
+
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	TSubclassOf<AShooterSphere> SphereClass;
+
+private:
+	int Score = 0;
+	int WaveNumber = 0;
 };
 
 

@@ -15,3 +15,13 @@ AShooterGameMode::AShooterGameMode()
 	// use our custom HUD class
 	HUDClass = AShooterHUD::StaticClass();
 }
+
+void AShooterGameMode::BeginPlay() 
+{
+	Super::BeginPlay();
+}
+
+void AShooterGameMode::Tick(float DeltaSeconds) 
+{
+	Super::Tick(DeltaSeconds);
+}
