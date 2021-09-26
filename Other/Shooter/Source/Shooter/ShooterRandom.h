@@ -5,5 +5,5 @@
 class ShooterRandom
 {
 public:
-	FVector2D PointInAnnulus(float InnerRadius, float OuterRadius);
+	static FVector2D PointInAnnulus(float InnerRadius, float OuterRadius);
 };

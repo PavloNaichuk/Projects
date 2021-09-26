@@ -25,6 +25,8 @@ public:
 	const float MAX_OUTER_SPAWN_RADIUS = 3000.0f;
 	const int MAX_NUM_INITIAL_SPHERES = 15;
 	const int MAX_NUM_SPAWN_SPHERES = 10;
+	const int NUM_HIT_SPHERES_BEFORE_NEXT_WAVE = 10;
+	const int NUM_ATTEMPTS_BEFORE_SPAWN_REJECTION = 7;
 
 	AShooterGameMode();
 
@@ -49,13 +51,19 @@ private:
 	void SpawnNextWave();
 
 	AActor* FindActor(FName Tag);
+	void FindSpawnGridCell(const FVector& Location, int& CellX, int& CellY) const;
+	bool IsSpawnGridCellFree(int CellX, int CellY) const;
 
 private:
+	enum class SpawnGridCellState { Free, Taken };
+
 	AActor* MainCharacter = nullptr;
 	AActor* MapFloor = nullptr;
 
-	TArray<TArray<int>> SpawnGrid;
+	TArray<TArray<SpawnGridCellState>> SpawnGrid;
 	FVector2D SpawnGridCellSize;
+	FVector SpawnRegionCenter;
+	int NumHitSpheres = 0;
 
 	int Score = 0;
 	int WaveNumber = 0;
