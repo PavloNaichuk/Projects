@@ -6,6 +6,12 @@
 #include "ShooterSphere.h"
 #include "ShooterWidget.h"
 #include "UObject/ConstructorHelpers.h"
+#include "EngineUtils.h"
+
+namespace
+{
+	const int INVALID_INDEX = -1;
+}
 
 AShooterGameMode::AShooterGameMode()
 	: Super()
@@ -22,7 +28,12 @@ void AShooterGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	MainCharacter = FindActor(FName(TEXT("MainCharacter")));
+	MapFloor = FindActor(FName(TEXT("MapFloor")));
+
 	LoadWidget();
+
+	InitSpawnGrid();
 	SpawnNextWave();
 }
 
@@ -38,6 +49,30 @@ void AShooterGameMode::OnSphereHit(const AShooterSphere* Sphere)
 
 	if ((Score % 4) == 0)
 		SpawnNextWave();
+}
+
+void AShooterGameMode::InitSpawnGrid()
+{
+	// Bulding spawn (acceleration) grid to compute spawn locations for the spheres.
+	// Each spawn grid cell contains index of the sphere at that location on the map.
+	// The index is set to INVALID_INDEX if there is no sphere in that cell.
+	// The spawn grid is used to speed up identifying locations on the map where sphere could be spawned
+	// so that we maintain the minumim required distance.
+	// Based on the algorithm "Fast Poisson Disk Sampling in Arbitrary Dimensions" by Robert Bridson
+	// https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
+
+	check(false);
+	/*
+	SpawnGridCellSize = FVector2D(MIN_DISTANCE_BETWEEN_SPHERES / FMath::Sqrt(2.0f));
+
+	const FVector FloorExtent = FloorBox.GetExtent();
+	const int numCellsY = FMath::CeilToInt(FloorExtent.Y / SpawnGridCellSize.Y);
+	const int numCellsX = FMath::CeilToInt(FloorExtent.X / SpawnGridCellSize.X);
+
+	SpawnGrid.SetNum(numCellsY);
+	for (int y = 0; y < numCellsY; ++y)
+		SpawnGrid[y].Init(INVALID_INDEX, numCellsX);
+	*/
 }
 
 void AShooterGameMode::LoadWidget()
@@ -62,6 +97,7 @@ void AShooterGameMode::LoadWidget()
 
 void AShooterGameMode::SpawnNextWave()
 {
+	/*
 	const FVector Offset(-1180.0f, 800.0f, 250.0f);
 	for (int x = 0; x < 2; ++x)
 	{
@@ -71,7 +107,22 @@ void AShooterGameMode::SpawnNextWave()
 			GetWorld()->SpawnActor<AShooterSphere>(SphereClass, Location, FRotator::ZeroRotator);
 		}
 	}
+	*/
 
 	++WaveNumber;
 	Widget->SetWaveNumber(WaveNumber);
+}
+
+AActor* AShooterGameMode::FindActor(FName Tag)
+{
+	for (FActorIterator Iter(GetWorld()); Iter; ++Iter)
+	{
+		AActor* Actor = *Iter;	
+		for (int i = 0; i < Actor->Tags.Num(); ++i)
+		{
+			if (Actor->Tags[i] == Tag)
+				return Actor;
+		}
+	}
+	return nullptr;
 }
