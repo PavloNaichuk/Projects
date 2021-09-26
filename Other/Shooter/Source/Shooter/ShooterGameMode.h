@@ -15,11 +15,10 @@ class AShooterGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-	const float MAP_FLOOR_WIDTH = 12000.0f;
-	const float MAP_FLOOR_HEIGHT = 12000.0f;
 	const float MIN_DISTANCE_BETWEEN_SPHERES = 80.0f;
-	const float MIN_SPHERE_RADIUS = 30.0f;
+	const float MIN_SPHERE_RADIUS = 25.0f;
 	const float MAX_SPHERE_RADIUS = 50.0f;
+	const float SPHERE_RADIUS_PERCENTAGE_DEC = 0.05f;
 	const float INNER_SPAWN_RADIUS = 1500.0f;
 	const float MIN_OUTER_SPAWN_RADIUS = 2000.0f;
 	const float MAX_OUTER_SPAWN_RADIUS = 3000.0f;

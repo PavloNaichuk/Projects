@@ -195,10 +195,19 @@ void AShooterGameMode::SpawnNextWave()
 			}
 		}
 	}
-
 	check(ActiveSpawnLocations.Num() == NumSpawnedSpheres);
+
+	float SphereScale = 1.0f;
 	for (int i = 0; i < ActiveSpawnLocations.Num(); ++i)
-		GetWorld()->SpawnActor<AShooterSphere>(SphereClass, ActiveSpawnLocations[i], FRotator::ZeroRotator);
+	{
+		AActor* Sphere = GetWorld()->SpawnActor<AShooterSphere>(SphereClass, ActiveSpawnLocations[i], FRotator::ZeroRotator);
+		Sphere->SetActorScale3D(FVector(SphereScale));
+
+		float NewSphereScale = SphereScale * (1.0f - SPHERE_RADIUS_PERCENTAGE_DEC);
+		float NewSphereRadius = NewSphereScale * MAX_SPHERE_RADIUS;
+
+		SphereScale = (NewSphereRadius > MIN_SPHERE_RADIUS) ? NewSphereScale : (MIN_SPHERE_RADIUS / MAX_SPHERE_RADIUS);
+	}
 
 	SpawnGrid[CharacterCellY][CharacterCellX] = CharacterCellState;
 }
