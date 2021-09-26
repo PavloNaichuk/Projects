@@ -23,9 +23,11 @@ public:
 	const float INNER_SPAWN_RADIUS = 1500.0f;
 	const float MIN_OUTER_SPAWN_RADIUS = 2000.0f;
 	const float MAX_OUTER_SPAWN_RADIUS = 3000.0f;
-	const int MAX_NUM_INITIAL_SPHERES = 15;
-	const int MAX_NUM_SPAWN_SPHERES = 10;
-	const int NUM_HIT_SPHERES_BEFORE_NEXT_WAVE = MAX_NUM_SPAWN_SPHERES;
+	const float OUTER_SPAWN_RADIUS_PERCENTAGE_INC_PER_WAVE = 0.05f;
+	const int NUM_INITIAL_SPHERES = 15;
+	const int NUM_SPHERES_WITHING_INNER_RADIUS = 10;
+	const float NUM_SPHERE_PERCENTAGE_INC_PER_WAVE = 0.1f;
+	const int NUM_HIT_SPHERES_BEFORE_NEXT_WAVE = NUM_SPHERES_WITHING_INNER_RADIUS;
 	const float MIN_SPAWN_DISTANCE_BETWEEN_SPHERES = MIN_DISTANCE_BETWEEN_SPHERES + 2.0f * MAX_SPHERE_RADIUS;
 
 	AShooterGameMode();
@@ -48,7 +50,7 @@ private:
 	void LoadWidget();
 
 	void InitSpawnGrid();
-	void SpawnNextWave(int NumSpawnSpheres, int NumSpheresWithinInnerSpawnRadius);
+	void SpawnNextWave();
 
 	AActor* FindActor(FName Tag);
 	void FindSpawnGridCell(const FVector& Location, int& CellX, int& CellY) const;
@@ -65,6 +67,8 @@ private:
 	FVector2D SpawnGridCellSize;
 	FVector SpawnRegionCenter;
 	int NumHitSpheres = 0;
+	int NumSpawnedSpheres = 0;
+	float OuterSpawnRadius = 0.0f;
 
 	int Score = 0;
 	int WaveNumber = 0;

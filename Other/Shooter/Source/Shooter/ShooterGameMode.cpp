@@ -32,7 +32,7 @@ void AShooterGameMode::BeginPlay()
 	LoadWidget();
 
 	InitSpawnGrid();
-	SpawnNextWave(MAX_NUM_INITIAL_SPHERES, MAX_NUM_SPAWN_SPHERES);
+	SpawnNextWave();
 }
 
 void AShooterGameMode::Tick(float DeltaSeconds) 
@@ -40,7 +40,7 @@ void AShooterGameMode::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	if (NumHitSpheres == NUM_HIT_SPHERES_BEFORE_NEXT_WAVE)
-		SpawnNextWave(MAX_NUM_SPAWN_SPHERES, MAX_NUM_SPAWN_SPHERES);
+		SpawnNextWave();
 }
 
 void AShooterGameMode::OnSphereHit(const AShooterSphere* Sphere)
@@ -105,11 +105,27 @@ void AShooterGameMode::LoadWidget()
 	Widget->Load();
 }
 
-void AShooterGameMode::SpawnNextWave(int NumSpawnSpheres, int NumSpheresWithinInnerSpawnRadius)
+void AShooterGameMode::SpawnNextWave()
 {
 	check(MapFloor != nullptr);
 	check(MainCharacter != nullptr);
-	check(NumSpheresWithinInnerSpawnRadius <= NumSpawnSpheres);
+
+	++WaveNumber;
+	Widget->SetWaveNumber(WaveNumber);
+	NumHitSpheres = 0;
+
+	if (WaveNumber > 1)
+	{
+		NumSpawnedSpheres = FMath::CeilToInt(NumSpawnedSpheres + NUM_SPHERE_PERCENTAGE_INC_PER_WAVE * NumSpawnedSpheres);
+		OuterSpawnRadius = FMath::Clamp(OuterSpawnRadius + OuterSpawnRadius * OUTER_SPAWN_RADIUS_PERCENTAGE_INC_PER_WAVE, MIN_OUTER_SPAWN_RADIUS, MAX_OUTER_SPAWN_RADIUS);
+	}
+	else
+	{
+		NumSpawnedSpheres = NUM_INITIAL_SPHERES;
+		OuterSpawnRadius = MIN_OUTER_SPAWN_RADIUS;
+	}
+
+	check(NUM_SPHERES_WITHING_INNER_RADIUS <= NumSpawnedSpheres);
 	
 	const FVector CharacterLocation = MainCharacter->GetActorLocation();
 	SpawnRegionCenter = CharacterLocation;
@@ -123,57 +139,68 @@ void AShooterGameMode::SpawnNextWave(int NumSpawnSpheres, int NumSpheresWithinIn
 	const SpawnGridCellState CharacterCellState = SpawnGrid[CharacterCellY][CharacterCellX];
 	SpawnGrid[CharacterCellY][CharacterCellX] = SpawnGridCellState::Taken;
 
+	FVector FloorOrigin;
+	FVector FloorBoxExtent;
+	MapFloor->GetActorBounds(false, FloorOrigin, FloorBoxExtent);
+
+	const FVector FloorMin = FloorOrigin - FloorBoxExtent;
+	const FVector FloorMax = FloorOrigin + FloorBoxExtent;
+
 	TArray<FVector> ActiveSpawnLocations;
-	ActiveSpawnLocations.Reserve(NumSpawnSpheres);
+	ActiveSpawnLocations.Reserve(NumSpawnedSpheres);
 
 	TArray<FIntPoint> ActiveSpawnCellXYs;
-	ActiveSpawnCellXYs.Reserve(NumSpawnSpheres);
+	ActiveSpawnCellXYs.Reserve(NumSpawnedSpheres);
 
+	const int NumSpheresWithinInnerSpawnRadius = FMath::RandRange(NUM_SPHERES_WITHING_INNER_RADIUS, NumSpawnedSpheres);
 	for (int i = 0; i < NumSpheresWithinInnerSpawnRadius; )
 	{
 		const FVector SpawnLocation = SpawnRegionCenter + FVector(FMath::RandPointInCircle(INNER_SPAWN_RADIUS), 0.0f);
-		check(IsLocationWithinSpawnRegion(SpawnLocation));
+		const bool IsWithinMap = FMath::IsWithin(FVector2D(SpawnLocation.X, SpawnLocation.Y), FVector2D(FloorMin.X, FloorMin.Y), FVector2D(FloorMax.X, FloorMax.Y));
 
-		int SpawnCellX, SpawnCellY;
-		FindSpawnGridCell(SpawnLocation, SpawnCellX, SpawnCellY);
-
-		if (IsSpawnGridCellFree(SpawnCellX, SpawnCellY))
+		if (IsWithinMap)
 		{
-			ActiveSpawnLocations.Emplace(SpawnLocation);
-			ActiveSpawnCellXYs.Emplace(SpawnCellX, SpawnCellY);
+			int SpawnCellX, SpawnCellY;
+			FindSpawnGridCell(SpawnLocation, SpawnCellX, SpawnCellY);
 
-			SpawnGrid[SpawnCellY][SpawnCellX] = SpawnGridCellState::Taken;
-			++i;
+			if (IsSpawnGridCellFree(SpawnCellX, SpawnCellY))
+			{
+				ActiveSpawnLocations.Emplace(SpawnLocation);
+				ActiveSpawnCellXYs.Emplace(SpawnCellX, SpawnCellY);
+
+				SpawnGrid[SpawnCellY][SpawnCellX] = SpawnGridCellState::Taken;
+				++i;
+			}
 		}
 	}
 
-	const int NumSpawnSpheresWithinOuterRadius = NumSpawnSpheres - NumSpheresWithinInnerSpawnRadius;
-	for (int i = 0; i < NumSpawnSpheresWithinOuterRadius; )
+	const int NumSpheresWithinOuterRadius = NumSpawnedSpheres - NumSpheresWithinInnerSpawnRadius;
+	for (int i = 0; i < NumSpheresWithinOuterRadius; )
 	{
-		const FVector SpawnLocation = SpawnRegionCenter + FVector(FMath::RandPointInCircle(MIN_OUTER_SPAWN_RADIUS), 0.0f);
+		const FVector SpawnLocation = SpawnRegionCenter + FVector(FMath::RandPointInCircle(OuterSpawnRadius), 0.0f);
+		const bool IsWithinMap = FMath::IsWithin(FVector2D(SpawnLocation.X, SpawnLocation.Y), FVector2D(FloorMin.X, FloorMin.Y), FVector2D(FloorMax.X, FloorMax.Y));
 
-		int SpawnCellX, SpawnCellY;
-		FindSpawnGridCell(SpawnLocation, SpawnCellX, SpawnCellY);
-
-		if (IsSpawnGridCellFree(SpawnCellX, SpawnCellY))
+		if (IsWithinMap)
 		{
-			ActiveSpawnLocations.Emplace(SpawnLocation);
-			ActiveSpawnCellXYs.Emplace(SpawnCellX, SpawnCellY);
+			int SpawnCellX, SpawnCellY;
+			FindSpawnGridCell(SpawnLocation, SpawnCellX, SpawnCellY);
 
-			SpawnGrid[SpawnCellY][SpawnCellX] = SpawnGridCellState::Taken;
-			++i;
+			if (IsSpawnGridCellFree(SpawnCellX, SpawnCellY))
+			{
+				ActiveSpawnLocations.Emplace(SpawnLocation);
+				ActiveSpawnCellXYs.Emplace(SpawnCellX, SpawnCellY);
+
+				SpawnGrid[SpawnCellY][SpawnCellX] = SpawnGridCellState::Taken;
+				++i;
+			}
 		}
 	}
 
-	check(ActiveSpawnLocations.Num() == NumSpawnSpheres);
+	check(ActiveSpawnLocations.Num() == NumSpawnedSpheres);
 	for (int i = 0; i < ActiveSpawnLocations.Num(); ++i)
 		GetWorld()->SpawnActor<AShooterSphere>(SphereClass, ActiveSpawnLocations[i], FRotator::ZeroRotator);
 
 	SpawnGrid[CharacterCellY][CharacterCellX] = CharacterCellState;
-		
-	++WaveNumber;
-	Widget->SetWaveNumber(WaveNumber);
-	NumHitSpheres = 0;
 }
 
 AActor* AShooterGameMode::FindActor(FName Tag)
@@ -207,11 +234,15 @@ void AShooterGameMode::FindSpawnGridCell(const FVector& Location, int& CellX, in
 
 bool AShooterGameMode::IsSpawnGridCellFree(int CellX, int CellY) const
 {
+	check(SpawnGrid.Num() > 0);
+	check(FMath::IsWithin(CellX, 0, SpawnGrid[0].Num()));
+	check(FMath::IsWithin(CellY, 0, SpawnGrid.Num()));
+
 	const int MinCellX = FMath::Max(CellX - 1, 0);
-	const int MaxCellX = SpawnGrid[0].Num() - 1;
+	const int MaxCellX = FMath::Min(CellX + 1, SpawnGrid[0].Num() - 1);
 
 	const int MinCellY = FMath::Max(CellY - 1, 0);
-	const int MaxCellY = SpawnGrid.Num() - 1;
+	const int MaxCellY = FMath::Min(CellY + 1, SpawnGrid.Num() - 1);
 
 	const FIntPoint NeighbourXYs[] =
 	{
