@@ -61,18 +61,21 @@ void AShooterGameMode::InitSpawnGrid()
 	// Based on the algorithm "Fast Poisson Disk Sampling in Arbitrary Dimensions" by Robert Bridson
 	// https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
 
-	check(false);
-	/*
+	check(MapFloor != nullptr);
+
+	FVector FloorOrigin;
+	FVector FloorBoxExtent;
+	MapFloor->GetActorBounds(false, FloorOrigin, FloorBoxExtent);
+
 	SpawnGridCellSize = FVector2D(MIN_DISTANCE_BETWEEN_SPHERES / FMath::Sqrt(2.0f));
 
-	const FVector FloorExtent = FloorBox.GetExtent();
-	const int numCellsY = FMath::CeilToInt(FloorExtent.Y / SpawnGridCellSize.Y);
-	const int numCellsX = FMath::CeilToInt(FloorExtent.X / SpawnGridCellSize.X);
+	FVector FloorBoxSize(2.0f * FloorBoxExtent);
+	const int numCellsX = FMath::CeilToInt(FloorBoxSize.X / SpawnGridCellSize.X);
+	const int numCellsY = FMath::CeilToInt(FloorBoxSize.Y / SpawnGridCellSize.Y);
 
 	SpawnGrid.SetNum(numCellsY);
 	for (int y = 0; y < numCellsY; ++y)
 		SpawnGrid[y].Init(INVALID_INDEX, numCellsX);
-	*/
 }
 
 void AShooterGameMode::LoadWidget()
@@ -117,12 +120,9 @@ AActor* AShooterGameMode::FindActor(FName Tag)
 {
 	for (FActorIterator Iter(GetWorld()); Iter; ++Iter)
 	{
-		AActor* Actor = *Iter;	
-		for (int i = 0; i < Actor->Tags.Num(); ++i)
-		{
-			if (Actor->Tags[i] == Tag)
-				return Actor;
-		}
+		AActor* Actor = *Iter;
+		if (Actor->ActorHasTag(Tag))
+			return Actor;
 	}
 	return nullptr;
 }
