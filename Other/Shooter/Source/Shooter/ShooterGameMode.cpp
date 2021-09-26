@@ -5,7 +5,6 @@
 #include "ShooterCharacter.h"
 #include "ShooterSphere.h"
 #include "ShooterWidget.h"
-#include "ShooterRandom.h"
 #include "UObject/ConstructorHelpers.h"
 #include "EngineUtils.h"
 #include "Math/IntPoint.h"
@@ -13,6 +12,8 @@
 AShooterGameMode::AShooterGameMode()
 	: Super()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
 	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/FirstPersonCPP/Blueprints/FirstPersonCharacter"));
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
@@ -31,7 +32,7 @@ void AShooterGameMode::BeginPlay()
 	LoadWidget();
 
 	InitSpawnGrid();
-	SpawnNextWave();
+	SpawnNextWave(MAX_NUM_INITIAL_SPHERES, MAX_NUM_SPAWN_SPHERES);
 }
 
 void AShooterGameMode::Tick(float DeltaSeconds) 
@@ -39,7 +40,7 @@ void AShooterGameMode::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	if (NumHitSpheres == NUM_HIT_SPHERES_BEFORE_NEXT_WAVE)
-		SpawnNextWave();
+		SpawnNextWave(MAX_NUM_SPAWN_SPHERES, MAX_NUM_SPAWN_SPHERES);
 }
 
 void AShooterGameMode::OnSphereHit(const AShooterSphere* Sphere)
@@ -51,9 +52,11 @@ void AShooterGameMode::OnSphereHit(const AShooterSphere* Sphere)
 
 	int SpawnGridCellX, SpawnGridCellY;
 	FindSpawnGridCell(SphereLocation, SpawnGridCellX, SpawnGridCellY);
+
+	check(SpawnGrid[SpawnGridCellY][SpawnGridCellX] == SpawnGridCellState::Taken);
 	SpawnGrid[SpawnGridCellY][SpawnGridCellX] = SpawnGridCellState::Free;
 
-	if (FVector::DistSquared(SphereLocation, SpawnRegionCenter) < INNER_SPAWN_RADIUS * INNER_SPAWN_RADIUS)
+	if (IsLocationWithinSpawnRegion(SphereLocation))
 		++NumHitSpheres;
 }
 
@@ -71,7 +74,7 @@ void AShooterGameMode::InitSpawnGrid()
 	FVector FloorBoxExtent;
 	MapFloor->GetActorBounds(false, FloorOrigin, FloorBoxExtent);
 
-	SpawnGridCellSize = FVector2D(MIN_DISTANCE_BETWEEN_SPHERES / FMath::Sqrt(2.0f));
+	SpawnGridCellSize = FVector2D(MIN_SPAWN_DISTANCE_BETWEEN_SPHERES);
 
 	FVector FloorBoxSize(2.0f * FloorBoxExtent);
 	const int NumCellsX = FMath::CeilToInt(FloorBoxSize.X / SpawnGridCellSize.X);
@@ -102,13 +105,15 @@ void AShooterGameMode::LoadWidget()
 	Widget->Load();
 }
 
-void AShooterGameMode::SpawnNextWave()
+void AShooterGameMode::SpawnNextWave(int NumSpawnSpheres, int NumSpheresWithinInnerSpawnRadius)
 {
 	check(MapFloor != nullptr);
 	check(MainCharacter != nullptr);
-
-	const FVector CharacterLocation = MainCharacter->GetActorLocation();
+	check(NumSpheresWithinInnerSpawnRadius <= NumSpawnSpheres);
 	
+	const FVector CharacterLocation = MainCharacter->GetActorLocation();
+	SpawnRegionCenter = CharacterLocation;
+
 	// To avoid possibility of collision between newly-spawned sphere and the main character,
 	// we mark the cell where character is currently located as already taken.
 	// Once we have generated the list of spawn locations, we restore the character cell to its original state.
@@ -119,67 +124,53 @@ void AShooterGameMode::SpawnNextWave()
 	SpawnGrid[CharacterCellY][CharacterCellX] = SpawnGridCellState::Taken;
 
 	TArray<FVector> ActiveSpawnLocations;
-	ActiveSpawnLocations.Reserve(MAX_NUM_SPAWN_SPHERES);
+	ActiveSpawnLocations.Reserve(NumSpawnSpheres);
 
 	TArray<FIntPoint> ActiveSpawnCellXYs;
-	ActiveSpawnCellXYs.Reserve(MAX_NUM_SPAWN_SPHERES);
+	ActiveSpawnCellXYs.Reserve(NumSpawnSpheres);
 
-	while (ActiveSpawnLocations.Num() < MAX_NUM_SPAWN_SPHERES)
+	for (int i = 0; i < NumSpheresWithinInnerSpawnRadius; )
 	{
-		while (ActiveSpawnLocations.Num() == 0)
+		const FVector SpawnLocation = SpawnRegionCenter + FVector(FMath::RandPointInCircle(INNER_SPAWN_RADIUS), 0.0f);
+		check(IsLocationWithinSpawnRegion(SpawnLocation));
+
+		int SpawnCellX, SpawnCellY;
+		FindSpawnGridCell(SpawnLocation, SpawnCellX, SpawnCellY);
+
+		if (IsSpawnGridCellFree(SpawnCellX, SpawnCellY))
 		{
-			const FVector SpawnLocation = CharacterLocation + FVector(FMath::RandPointInCircle(INNER_SPAWN_RADIUS), 0.0f);
+			ActiveSpawnLocations.Emplace(SpawnLocation);
+			ActiveSpawnCellXYs.Emplace(SpawnCellX, SpawnCellY);
 
-			int SpawnCellX, SpawnCellY;
-			FindSpawnGridCell(SpawnLocation, SpawnCellX, SpawnCellY);
-
-			if (IsSpawnGridCellFree(SpawnCellX, SpawnCellY))
-			{
-				ActiveSpawnLocations.Emplace(SpawnLocation);
-				ActiveSpawnCellXYs.Emplace(SpawnCellX, SpawnCellY);
-
-				SpawnGrid[SpawnCellY][SpawnCellX] = SpawnGridCellState::Taken;
-			}
-		}
-
-		const int SpawnParentIndex = FMath::RandRange(0, ActiveSpawnLocations.Num() - 1);
-		const FVector& SpawnParentLocation = ActiveSpawnLocations[SpawnParentIndex];
-
-		bool ManagedToSpawnChild = false;
-		for (int i = 0; i < NUM_ATTEMPTS_BEFORE_SPAWN_REJECTION; ++i)
-		{
-			const FVector2D PointInAnnulus = ShooterRandom::PointInAnnulus(MIN_DISTANCE_BETWEEN_SPHERES, 2.0f * MIN_DISTANCE_BETWEEN_SPHERES);
-			const FVector SpawnChildLocation = SpawnParentLocation + FVector(PointInAnnulus, 0.0f);
-
-			int SpawnChildCellX, SpawnChildCellY;
-			FindSpawnGridCell(SpawnChildLocation, SpawnChildCellX, SpawnChildCellY);
-
-			if (IsSpawnGridCellFree(SpawnChildCellX, SpawnChildCellY))
-			{
-				ActiveSpawnLocations.Emplace(SpawnChildLocation);
-				ActiveSpawnCellXYs.Emplace(SpawnChildCellX, SpawnChildCellY);
-
-				SpawnGrid[SpawnChildCellY][SpawnChildCellX] = SpawnGridCellState::Taken;
-				ManagedToSpawnChild = true;
-			}
-		}
-
-		if (!ManagedToSpawnChild)
-		{
-			const FIntPoint SpawnParentCellXY = ActiveSpawnCellXYs[SpawnParentIndex];
-			SpawnGrid[SpawnParentCellXY.Y][SpawnParentCellXY.X] = SpawnGridCellState::Free;
-
-			ActiveSpawnLocations.RemoveAt(SpawnParentIndex);
-			ActiveSpawnCellXYs.RemoveAt(SpawnParentIndex);
+			SpawnGrid[SpawnCellY][SpawnCellX] = SpawnGridCellState::Taken;
+			++i;
 		}
 	}
 
+	const int NumSpawnSpheresWithinOuterRadius = NumSpawnSpheres - NumSpheresWithinInnerSpawnRadius;
+	for (int i = 0; i < NumSpawnSpheresWithinOuterRadius; )
+	{
+		const FVector SpawnLocation = SpawnRegionCenter + FVector(FMath::RandPointInCircle(MIN_OUTER_SPAWN_RADIUS), 0.0f);
+
+		int SpawnCellX, SpawnCellY;
+		FindSpawnGridCell(SpawnLocation, SpawnCellX, SpawnCellY);
+
+		if (IsSpawnGridCellFree(SpawnCellX, SpawnCellY))
+		{
+			ActiveSpawnLocations.Emplace(SpawnLocation);
+			ActiveSpawnCellXYs.Emplace(SpawnCellX, SpawnCellY);
+
+			SpawnGrid[SpawnCellY][SpawnCellX] = SpawnGridCellState::Taken;
+			++i;
+		}
+	}
+
+	check(ActiveSpawnLocations.Num() == NumSpawnSpheres);
 	for (int i = 0; i < ActiveSpawnLocations.Num(); ++i)
 		GetWorld()->SpawnActor<AShooterSphere>(SphereClass, ActiveSpawnLocations[i], FRotator::ZeroRotator);
 
 	SpawnGrid[CharacterCellY][CharacterCellX] = CharacterCellState;
-	SpawnRegionCenter = CharacterLocation;
-	
+		
 	++WaveNumber;
 	Widget->SetWaveNumber(WaveNumber);
 	NumHitSpheres = 0;
@@ -216,20 +207,25 @@ void AShooterGameMode::FindSpawnGridCell(const FVector& Location, int& CellX, in
 
 bool AShooterGameMode::IsSpawnGridCellFree(int CellX, int CellY) const
 {
+	const int MinCellX = FMath::Max(CellX - 1, 0);
 	const int MaxCellX = SpawnGrid[0].Num() - 1;
+
+	const int MinCellY = FMath::Max(CellY - 1, 0);
 	const int MaxCellY = SpawnGrid.Num() - 1;
 
 	const FIntPoint NeighbourXYs[] =
 	{
+		FIntPoint(MinCellX, MinCellY),
+		FIntPoint(MinCellX, CellY),
+		FIntPoint(MinCellX, MaxCellY),
+
+		FIntPoint(CellX, MinCellY),
 		FIntPoint(CellX, CellY),
-		FIntPoint(FMath::Max(CellX - 1, 0), CellY),
-		FIntPoint(FMath::Min(CellX + 1, MaxCellX), CellY),
-		FIntPoint(CellX, FMath::Max(CellY - 1, 0)),
-		FIntPoint(CellX, FMath::Min(CellY + 1, MaxCellY)),
-		FIntPoint(FMath::Max(CellX - 1, 0), FMath::Max(CellY - 1, 0)),
-		FIntPoint(FMath::Min(CellX + 1, MaxCellX), FMath::Min(CellY + 1, MaxCellY)),
-		FIntPoint(FMath::Min(CellX + 1, MaxCellX), FMath::Max(CellY - 1, 0)),
-		FIntPoint(FMath::Max(CellX + 1, MaxCellX), FMath::Min(CellY + 1, MaxCellY))
+		FIntPoint(CellX, MaxCellY),
+
+		FIntPoint(MaxCellX, MinCellY),
+		FIntPoint(MaxCellX, CellY),
+		FIntPoint(MaxCellX, MaxCellY)
 	};
 
 	const int NumNeighbours = sizeof(NeighbourXYs) / sizeof(NeighbourXYs[0]);
@@ -240,4 +236,9 @@ bool AShooterGameMode::IsSpawnGridCellFree(int CellX, int CellY) const
 	}
 
 	return true;
+}
+
+bool AShooterGameMode::IsLocationWithinSpawnRegion(const FVector& Location) const
+{
+	return (FVector::DistSquared(Location, SpawnRegionCenter) < INNER_SPAWN_RADIUS * INNER_SPAWN_RADIUS);
 }
