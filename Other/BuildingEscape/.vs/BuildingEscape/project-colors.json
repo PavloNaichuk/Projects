@@ -10,7 +10,12 @@
       "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
       "DisplayName": "Miscellaneous Files",
       "ColorIndex": -1
+    },
+    "79c19b46-9b43-4bd0-aaf8-af8b1b30df40": {
+      "ProjectGuid": "79c19b46-9b43-4bd0-aaf8-af8b1b30df40",
+      "DisplayName": "UE4",
+      "ColorIndex": 1
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 2
 }
