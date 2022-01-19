@@ -8,12 +8,12 @@
 #include "Grabber.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BUILDINGESCAPE_API UGrabber : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UGrabber();
 
@@ -37,4 +37,10 @@ private:
 
 	// Return the first Actor within reach with physics body.
 	FHitResult GetFisrstPhysicsBodeInReach() const;
+
+	//Return the Line Trace End
+	FVector GetPlayersReach() const;
+
+	//Get Players Position In World.
+	FVector GetPlayerWorldPosition() const;
 };
