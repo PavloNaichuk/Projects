@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\BuildingEscape.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{87331FBE-4EFA-4625-8E89-EDE3AA14BA22}</UniqueIdentifier>
+      <UniqueIdentifier>{C62F9106-996C-434D-9E0B-81B3D82E0469}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\BuildingEscape.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{EA0E8334-3DE8-473C-B4E8-57C698EE2BF6}</UniqueIdentifier>
+      <UniqueIdentifier>{D3968ACB-F4BC-44BA-ABA4-98D5B1589307}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -24,7 +24,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\BuildingEscape">
-      <UniqueIdentifier>{FDC08EF5-637A-423A-9A6C-1C6130AAAF29}</UniqueIdentifier>
+      <UniqueIdentifier>{F909DEBD-82B3-4C82-BF54-9A91D04C4497}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\BuildingEscape\BuildingEscape.Build.cs">
       <Filter>Source\BuildingEscape</Filter>
@@ -39,6 +39,12 @@
       <Filter>Source\BuildingEscape</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\BuildingEscape\BuildingEscapeGameModeBase.h">
+      <Filter>Source\BuildingEscape</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\BuildingEscape\Grabber.cpp">
+      <Filter>Source\BuildingEscape</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BuildingEscape\Grabber.h">
       <Filter>Source\BuildingEscape</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\BuildingEscape\OpenDoor.cpp">
