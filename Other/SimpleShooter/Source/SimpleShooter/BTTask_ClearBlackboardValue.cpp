@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_BlackboardValue.h"
+#include "BTTask_ClearBlackboardValue.h"
 
-UBTTask_BlackboardValue::UBTTask_BlackboardValue() 
+UBTTask_ClearBlackboardValue::UBTTask_ClearBlackboardValue() 
 {
 	NodeName = TEXT("Clear Blackboard Value");
 }
+
