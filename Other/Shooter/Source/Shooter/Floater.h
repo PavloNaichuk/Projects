@@ -17,6 +17,24 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "ActorMeshComponents")
 	UStaticMeshComponent* StaticMesh;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Floater Vectors")
+	FVector InitialLocation;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Floater Vectors")
+	FVector PlacedLocation; 
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Floater Vectors")
+	FVector WordOrigin;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Floater Vectors")
+	FVector InitialDirection;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Floater Vectors")
+	bool bShouldFloat;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Floater Vectors")
+	bool bInitializeFloaterLocation;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
