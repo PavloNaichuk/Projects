@@ -27,6 +27,7 @@ void APickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 			UGameplayStatics::PlaySound2D(this, OverlapSound);
 		}
 		Protagonist->IncrementCoins(CointCount);
+		Protagonist->PickupLocations.Add(GetActorLocation());
 
 		Destroy();
 	}

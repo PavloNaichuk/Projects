@@ -7,6 +7,7 @@
 #include "Engine/World.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AProtagonist::AProtagonist()
@@ -69,7 +70,6 @@ AProtagonist::AProtagonist()
 void AProtagonist::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -259,7 +259,6 @@ void AProtagonist::Die()
 {
 }
 
-
 void AProtagonist::SetMovementStatus(EMovementStatus Status)
 {
 	MovementStatus = Status;
@@ -281,4 +280,12 @@ void AProtagonist::ShiftKeyDown()
 void AProtagonist::ShiftKeyUp()
 {
 	bShiftKeyDown = false;
+}
+
+void AProtagonist::ShowPickupLocations()
+{
+	for (FVector Location : PickupLocations)
+	{
+		UKismetSystemLibrary::DrawDebugSphere(this, Location, 25.0f, 8.0f, FLinearColor::Green, 10.0f, 0.5f);
+	}
 }
