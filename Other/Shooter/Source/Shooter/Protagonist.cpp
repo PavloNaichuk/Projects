@@ -42,6 +42,27 @@ AProtagonist::AProtagonist()
 	MaxStamina = 150.0f;
 	Stamina = 120.0f;
 	Coins = 0;
+
+	RunningSpeed = 650.0f;
+	SprintingSpeed = 950.0f;
+
+	bShiftKeyDown = false;
+
+	MovementStatus = EMovementStatus::EMS_Normal;
+	StaminaStatus = EStaminaStatus::ESS_Normal;
+
+	StaminaDrainRate = 25.0f;
+	MinSprintStamina = 50.0f;
+
+	//InterpSpeed = 15.0f;
+	//bInterpToEnemy = false;
+
+	//bHasCombatTarget = false;
+
+	//bMovingForward = false;
+//	bMovingRight = false;
+
+	//bESCDown = false;
 }
 
 // Called when the game starts or when spawned
@@ -55,7 +76,108 @@ void AProtagonist::BeginPlay()
 void AProtagonist::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	float DeltaStamina = StaminaDrainRate * DeltaTime;
 
+	switch (StaminaStatus)
+	{
+	case EStaminaStatus::ESS_Normal:
+		if (bShiftKeyDown)
+		{
+			if (Stamina - DeltaStamina <= MinSprintStamina)
+			{
+				SetStaminaStatus(EStaminaStatus::ESS_BelowMinimum);
+				Stamina -= DeltaStamina;
+			}
+			else
+			{
+				Stamina -= DeltaStamina;
+			}
+			//if (bMovingForward || bMovingRight)
+			//{
+				SetMovementStatus(EMovementStatus::EMS_Sprinting);
+			//}
+			//else
+			//{
+				//SetMovementStatus(EMovementStatus::EMS_Normal);
+			//}
+		}
+		else
+		{
+			if (Stamina + DeltaStamina >= MaxStamina)
+			{
+				Stamina = MaxStamina;
+			}
+			else
+			{
+				Stamina += DeltaStamina;
+			}
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+		}
+		break;
+	case EStaminaStatus::ESS_BelowMinimum:
+		if (bShiftKeyDown)
+		{
+			if (Stamina - DeltaStamina <= 0.0f)
+			{
+				SetStaminaStatus(EStaminaStatus::ESS_Exhausted);
+				Stamina = 0;
+				SetMovementStatus(EMovementStatus::EMS_Normal);
+			}
+			else
+			{
+				Stamina -= DeltaStamina;
+				//if (bMovingForward || bMovingRight)
+				//{
+					SetMovementStatus(EMovementStatus::EMS_Sprinting);
+				//}
+				//else
+				//{
+					//SetMovementStatus(EMovementStatus::EMS_Normal);
+				//}
+			}
+		}
+		else
+		{
+			if (Stamina + DeltaStamina >= MinSprintStamina)
+			{
+				SetStaminaStatus(EStaminaStatus::ESS_Normal);
+				Stamina += DeltaStamina;
+			}
+			else
+			{
+				Stamina += DeltaStamina;
+			}
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+		}
+		break;
+	case EStaminaStatus::ESS_Exhausted:
+		if (bShiftKeyDown)
+		{
+			Stamina = 0.0f;
+		}
+		else
+		{
+			SetStaminaStatus(EStaminaStatus::ESS_ExhaustedRecovering);
+			Stamina += DeltaStamina;
+		}
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		break;
+	case EStaminaStatus::ESS_ExhaustedRecovering:
+		if (Stamina + DeltaStamina >= MinSprintStamina)
+		{
+			SetStaminaStatus(EStaminaStatus::ESS_Normal);
+			Stamina += DeltaStamina;
+		}
+		else
+		{
+			Stamina += DeltaStamina;
+		}
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		break;
+	default:
+		;
+	}
 }
 
 // Called to bind functionality to input
@@ -67,6 +189,9 @@ void AProtagonist::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AProtagonist::ShiftKeyDown);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AProtagonist::ShiftKeyUp);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AProtagonist::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AProtagonist::MoveRight);
@@ -134,3 +259,26 @@ void AProtagonist::Die()
 {
 }
 
+
+void AProtagonist::SetMovementStatus(EMovementStatus Status)
+{
+	MovementStatus = Status;
+	if (MovementStatus == EMovementStatus::EMS_Sprinting)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = SprintingSpeed;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
+	}
+}
+
+void AProtagonist::ShiftKeyDown()
+{
+	bShiftKeyDown = true;
+}
+
+void AProtagonist::ShiftKeyUp()
+{
+	bShiftKeyDown = false;
+}
