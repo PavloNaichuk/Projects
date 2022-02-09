@@ -36,6 +36,12 @@ AProtagonist::AProtagonist()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 840.0f, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 650.0f;
 	GetCharacterMovement()->AirControl = 0.2f;
+
+	MaxHealth = 100.0f;
+	Health = 65.0f;
+	MaxStamina = 150.0f;
+	Stamina = 120.0f;
+	Coins = 0;
 }
 
 // Called when the game starts or when spawned
@@ -104,5 +110,27 @@ void AProtagonist::TurnAtRate(float Rate)
 void AProtagonist::LookUpAtRate(float Rate)
 {
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AProtagonist::DecrementHealth(float Amount)
+{
+	if (Health - Amount <= 0.0f)
+	{
+		Health -= Amount;
+		Die();
+	}
+	else
+	{
+		Health -= Amount;
+	}
+}
+
+void AProtagonist::IncrementCoins(int32 Amount)
+{
+	Coins += Amount;
+}
+
+void AProtagonist::Die()
+{
 }
 

@@ -13,5 +13,17 @@ UCLASS()
 class SHOOTER_API AProtagonistPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<class UUserWidget> HUDOverlayAsset;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	UUserWidget* HUDOverlay;
+
+protected:
+	virtual void BeginPlay() override;
+
+	//virtual void Tick(float DeltaTime) override;
 	
 };
