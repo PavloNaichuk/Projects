@@ -8,6 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Weapon.h"
 
 // Sets default values
 AProtagonist::AProtagonist()
@@ -48,6 +49,7 @@ AProtagonist::AProtagonist()
 	SprintingSpeed = 950.0f;
 
 	bShiftKeyDown = false;
+	bLMBDown = false;
 
 	MovementStatus = EMovementStatus::EMS_Normal;
 	StaminaStatus = EStaminaStatus::ESS_Normal;
@@ -193,6 +195,9 @@ void AProtagonist::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AProtagonist::ShiftKeyDown);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AProtagonist::ShiftKeyUp);
 
+	PlayerInputComponent->BindAction("LMB", IE_Pressed, this, &AProtagonist::LMBDown);
+	PlayerInputComponent->BindAction("LMB", IE_Released, this, &AProtagonist::LMBUp);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AProtagonist::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AProtagonist::MoveRight);
 
@@ -236,6 +241,27 @@ void AProtagonist::LookUpAtRate(float Rate)
 {
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
+
+void AProtagonist::LMBDown()
+{
+	bLMBDown = true;
+
+	if (ActiveOverlappingItem)
+	{
+		AWeapon* Weapon = Cast<AWeapon>(ActiveOverlappingItem);
+		if (Weapon)
+		{
+			Weapon->Equip(this);
+			SetActiveOverlappingItem(nullptr);
+		}
+	}
+}
+
+void AProtagonist::LMBUp()
+{
+	bLMBDown = false;
+}
+
 
 void AProtagonist::DecrementHealth(float Amount)
 {
@@ -289,3 +315,13 @@ void AProtagonist::ShowPickupLocations()
 		UKismetSystemLibrary::DrawDebugSphere(this, Location, 25.0f, 8.0f, FLinearColor::Green, 10.0f, 0.5f);
 	}
 }
+
+void AProtagonist::SetEquippedWeapon(AWeapon* WeaponToSet)
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->Destroy();
+	}
+	EquippedWeapon = WeaponToSet;
+}
+
