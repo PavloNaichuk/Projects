@@ -50,8 +50,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Combat")
 	float Damage;
 
-
-
 protected:
 
 	virtual void BeginPlay() override;
@@ -86,5 +84,4 @@ public:
 	AController* WeaponInstigator;
 
 	FORCEINLINE void SetInstigator(AController* Inst) { WeaponInstigator = Inst; }
-
 };

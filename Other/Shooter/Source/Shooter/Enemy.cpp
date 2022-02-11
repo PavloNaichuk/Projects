@@ -24,6 +24,9 @@ AEnemy::AEnemy()
 
 	bOverlappingCombatSphere = false;
 
+	Health = 75.0f;
+	MaxHealth = 100.0f;
+	Damage = 10.0f;
 }
 
 // Called when the game starts or when spawned
@@ -75,6 +78,15 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 		{
 			if (Protagonist)
 			{
+				//bHasValidTarget = false;
+				//if (Protagonist->CombatTarget == this)
+				//{
+					//Protagonist->SetCombatTarget(nullptr);
+				//}
+				//Protagonist->SetHasCombatTarget(false);
+
+				//Protagonist->UpdateCombatTarget();
+
 				SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Idle);
 				if (AIController)
 				{
@@ -96,6 +108,16 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 				CombatTarget = Protagonist;
 				bOverlappingCombatSphere = true;
 				SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Attacking);
+			//bHasValidTarget = true;
+
+				//Protagonist->SetCombatTarget(this);
+				//Protagonist->SetHasCombatTarget(true);
+
+				//Protagonist->UpdateCombatTarget();
+
+
+				//float AttackTime = FMath::FRandRange(AttackMinTime, AttackMaxTime);
+				//GetWorldTimerManager().SetTimer(AttackTimer, this, &AEnemy::Attack, AttackTime);
 			}
 		}
 	}
@@ -115,6 +137,20 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 					MoveToTarget(Protagonist);
 					CombatTarget = nullptr;
 				}
+
+				//if (Protagonist->CombatTarget == this)
+				//{
+				//	Protagonist->SetCombatTarget(nullptr);
+				//	Protagonist->bHasCombatTarget = false;
+				//	Protagonist->UpdateCombatTarget();
+				//}
+				//if (Protagonist->MainPlayerController)
+				//{
+					//USkeletalMeshComponent* MainMesh = Cast<USkeletalMeshComponent>(OtherComp);
+					//if (MainMesh) Protagonist->MainPlayerController->RemoveEnemyHealthBar();
+				//}
+
+				//GetWorldTimerManager().ClearTimer(AttackTimer);
 			}
 		}
 	}
