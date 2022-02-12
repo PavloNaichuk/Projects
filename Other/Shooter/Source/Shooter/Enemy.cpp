@@ -13,6 +13,7 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "Sound/SoundCue.h"
 #include "Animation/AnimInstance.h"
+#include "TimerManager.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -38,6 +39,9 @@ AEnemy::AEnemy()
 	Health = 75.0f;
 	MaxHealth = 100.0f;
 	Damage = 10.0f;
+
+	AttackMinTime = 0.5f;
+	AttackMaxTime = 3.5f;
 }
 
 // Called when the game starts or when spawned
@@ -129,7 +133,7 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 				Attack();
 			//bHasValidTarget = true;
 
-				//Protagonist->SetCombatTarget(this);
+					Protagonist->SetCombatTarget(this);
 				//Protagonist->SetHasCombatTarget(true);
 
 				//Protagonist->UpdateCombatTarget();
@@ -159,17 +163,17 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 
 				//if (Protagonist->CombatTarget == this)
 				//{
-				//	Protagonist->SetCombatTarget(nullptr);
+					Protagonist->SetCombatTarget(nullptr);
 				//	Protagonist->bHasCombatTarget = false;
 				//	Protagonist->UpdateCombatTarget();
 				//}
-				//if (Protagonist->MainPlayerController)
+				//if (Protagonist->ProtagonistPlayerController)
 				//{
 					//USkeletalMeshComponent* MainMesh = Cast<USkeletalMeshComponent>(OtherComp);
 					//if (MainMesh) Protagonist->MainPlayerController->RemoveEnemyHealthBar();
 				//}
 
-				//GetWorldTimerManager().ClearTimer(AttackTimer);
+				GetWorldTimerManager().ClearTimer(AttackTimer);
 			}
 		}
 	}
@@ -272,6 +276,7 @@ void AEnemy::AttackEnd()
 	bAttacking = false;
 	if (bOverlappingCombatSphere)
 	{
-		Attack();
+		float AttackTime = FMath::FRandRange(AttackMinTime, AttackMaxTime);
+		GetWorldTimerManager().SetTimer(AttackTimer, this, &AEnemy::Attack, AttackTime);
 	}
 }

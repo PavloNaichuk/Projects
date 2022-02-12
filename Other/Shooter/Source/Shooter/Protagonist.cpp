@@ -13,6 +13,9 @@
 #include "Animation/AnimInstance.h"
 #include "Sound/SoundCue.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Enemy.h"
+#include "ProtagonistPlayerController.h"
 
 // Sets default values
 AProtagonist::AProtagonist()
@@ -61,8 +64,8 @@ AProtagonist::AProtagonist()
 	StaminaDrainRate = 25.0f;
 	MinSprintStamina = 50.0f;
 
-	//InterpSpeed = 15.0f;
-	//bInterpToEnemy = false;
+	InterpSpeed = 15.0f;
+	bInterpToEnemy = false;
 
 	//bHasCombatTarget = false;
 
@@ -184,6 +187,30 @@ void AProtagonist::Tick(float DeltaTime)
 	default:
 		;
 	}
+
+	if (bInterpToEnemy && CombatTarget)
+	{
+		FRotator LookAtYaw = GetLookAtRotationYaw(CombatTarget->GetActorLocation());
+		FRotator InterpRotation = FMath::RInterpTo(GetActorRotation(), LookAtYaw, DeltaTime, InterpSpeed);
+
+		SetActorRotation(InterpRotation);
+	}
+
+	//if (CombatTarget)
+	//{
+		//CombatTargetLocation = CombatTarget->GetActorLocation();
+		//if (ProtagonistPlayerController)
+		//{
+			//ProtagonistPlayerController->EnemyLocation = CombatTargetLocation;
+		//}
+	//}
+}
+
+FRotator AProtagonist::GetLookAtRotationYaw(FVector Target)
+{
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target);
+	FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
+	return LookAtRotationYaw;
 }
 
 // Called to bind functionality to input
@@ -339,7 +366,7 @@ void AProtagonist::Attack()
 	if (!bAttacking) // && MovementStatus != EMovementStatus::EMS_Dead)
 	{
 		bAttacking = true;
-		//SetInterpToEnemy(true);
+		SetInterpToEnemy(true);
 
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 		if (AnimInstance && CombatMontage)
@@ -366,7 +393,7 @@ void AProtagonist::Attack()
 void AProtagonist::AttackEnd()
 {
 	bAttacking = false;
-	//SetInterpToEnemy(false);
+	SetInterpToEnemy(false);
 	if (bLMBDown)
 	{
 		Attack();
@@ -379,5 +406,10 @@ void AProtagonist::PlaySwingSound()
 	{
 		UGameplayStatics::PlaySound2D(this, EquippedWeapon->SwingSound);
 	}
+}
+
+void AProtagonist::SetInterpToEnemy(bool Interp)
+{
+	bInterpToEnemy = Interp;
 }
 
