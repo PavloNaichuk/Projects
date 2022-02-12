@@ -6,12 +6,13 @@
 #include "GameFramework/Character.h"
 #include "Protagonist.generated.h"
 
+
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
 {
 	EMS_Normal UMETA(DisplayName = "Normal"),
 	EMS_Sprinting UMETA(DisplayName = "Sprinting"),
-	//EMS_Dead UMETA(DisplayName = "Dead"),
+	EMS_Dead UMETA(DisplayName = "Dead"),
 
 	EMS_MAX UMETA(DisplayName = "DefaultMAX")
 };
@@ -27,7 +28,6 @@ enum class EStaminaStatus :uint8
 	ESS_MAX UMETA(DisplayName = "DefaultMax")
 
 };
-
 UCLASS()
 class SHOOTER_API AProtagonist : public ACharacter
 {
@@ -36,6 +36,17 @@ class SHOOTER_API AProtagonist : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AProtagonist();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	bool bHasCombatTarget;
+
+	FORCEINLINE void SetHasCombatTarget(bool HasTarget) { bHasCombatTarget = HasTarget; }
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Combat")
+	FVector CombatTargetLocation;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Controller")
+	class AProtagonistPlayerController* ProtagonistPlayerController;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	class UParticleSystem* HitParticles;
@@ -66,7 +77,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bInterpToEnemy;
-	
 	void SetInterpToEnemy(bool Interp);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
@@ -76,12 +86,7 @@ public:
 
 	FRotator GetLookAtRotationYaw(FVector Target);
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Combat")
-	FVector CombatTargetLocation;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Controller")
-	class AProtagonistPlayerController* ProtagonistPlayerController;
-
+	/** Set movement status and running speed */
 	void SetMovementStatus(EMovementStatus Status);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Running")
@@ -92,25 +97,30 @@ public:
 
 	bool bShiftKeyDown;
 
+	/** Pressed down to enable sprinting */
 	void ShiftKeyDown();
 
-	
+	/** Released to stop sprinting */
 	void ShiftKeyUp();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"));
+	/** Camera boom positioning the camera behind the player */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"));
+	/** Follow Camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera);
+	/** Base turn rates to scale turning functions for the camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera);
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
-	
-	/* 
-		Player Stats
+
+	/**
+	/*
+	/* Player Stats
+	/*
 	*/
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Stats")
@@ -134,31 +144,59 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void IncrementCoins(int32 Amount);
-	
+
+	UFUNCTION(BlueprintCallable)
+	void IncrementHealth(float Amount);
+
 	void Die();
+
+	virtual void Jump() override;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	/** Called for forwards/backwards input */
 	void MoveForward(float Value);
+
+	/** Called for side to side input */
 	void MoveRight(float Value);
 
+	bool bMovingForward;
+	bool bMovingRight;
+
+	/** Called via input to turn at a given rate
+	* @param Rate This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
+	*/
 	void TurnAtRate(float Rate);
 
+	/** Called via input to look up/down at a given rate
+	* @param Rate This is a normalized rate, i.e. 1.0 means 100% of desired look up/down rate
+	*/
 	void LookUpAtRate(float Rate);
-	
+
+	/** Called for mouse input add yaw rotation */
+	void Turn(float Value);
+
+	/** Called for mouse input add pitch rotation */
+	void LookUp(float Value);
+
 	bool bLMBDown;
 	void LMBDown();
 	void LMBUp();
 
+	bool bESCDown;
+	void ESCDown();
+	void ESCUp();
+
+	bool AllowInput(float Value);
 
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
@@ -170,7 +208,10 @@ public:
 	class AItem* ActiveOverlappingItem;
 
 	void SetEquippedWeapon(AWeapon* WeaponToSet);
-	FORCEINLINE AWeapon* GetEquippedWeapon() { return EquippedWeapon; }
+
+	UFUNCTION(BlueprintCallable)
+	AWeapon* GetEquippedWeapon() { return EquippedWeapon; }
+
 	FORCEINLINE void SetActiveOverlappingItem(AItem* Item) { ActiveOverlappingItem = Item; }
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Anims")
@@ -186,4 +227,29 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void PlaySwingSound();
+
+	UFUNCTION(BlueprintCallable)
+	void DeathEnd();
+
+	void UpdateCombatTarget();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	TSubclassOf<AEnemy> EnemyFilter;
+
+	void SwitchLevel(FName LevelName);
+
+	UFUNCTION(BlueprintCallable)
+	void SaveGame();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadGame(bool LoadPosition);
+
+	UFUNCTION(BlueprintCallable)
+	void LoadGameNoSwitch();
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	//TSubclassOf<UWeaponContainer> WeaponContainer;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	//TSubclassOf<class AWeaponContainerActor> WeaponContainer;
 };
