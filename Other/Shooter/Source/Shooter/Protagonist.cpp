@@ -319,6 +319,14 @@ void AProtagonist::IncrementCoins(int32 Amount)
 
 void AProtagonist::Die()
 {
+	//if (MovementStatus == EMovementStatus::EMS_Dead) return;
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && CombatMontage)
+	{
+		AnimInstance->Montage_Play(CombatMontage, 1.0f);
+		AnimInstance->Montage_JumpToSection(FName("Death"));
+	}
+	//SetMovementStatus(EMovementStatus::EMS_Dead);
 }
 
 void AProtagonist::SetMovementStatus(EMovementStatus Status)
@@ -413,3 +421,9 @@ void AProtagonist::SetInterpToEnemy(bool Interp)
 	bInterpToEnemy = Interp;
 }
 
+float AProtagonist::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	DecrementHealth(DamageAmount);
+
+	return DamageAmount;
+}
