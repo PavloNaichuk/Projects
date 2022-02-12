@@ -29,11 +29,11 @@ AProtagonist::AProtagonist()
 	// Create Camera Boom (pulls towards the player if there's a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(GetRootComponent());
-	CameraBoom->TargetArmLength = 600.f; // Camera follows at this distance
+	CameraBoom->TargetArmLength = 600.0f; // Camera follows at this distance
 	CameraBoom->bUsePawnControlRotation = true; // Rotate arm based on controller
 
 	// Set size for collision capsule
-	GetCapsuleComponent()->SetCapsuleSize(48.f, 105.f);
+	GetCapsuleComponent()->SetCapsuleSize(48.0f, 105.0f);
 
 	// Create Follow Camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -54,17 +54,17 @@ AProtagonist::AProtagonist()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->JumpZVelocity = 650.f;
+	GetCharacterMovement()->JumpZVelocity = 650.0f;
 	GetCharacterMovement()->AirControl = 0.2f;
 
-	MaxHealth = 100.f;
-	Health = 65.f;
-	MaxStamina = 150.f;
-	Stamina = 120.f;
+	MaxHealth = 100.0f;
+	Health = 65.0f;
+	MaxStamina = 150.0f;
+	Stamina = 120.0f;
 	Coins = 0;
 
-	RunningSpeed = 650.f;
-	SprintingSpeed = 950.f;
+	RunningSpeed = 650.0f;
+	SprintingSpeed = 950.0f;
 
 	bShiftKeyDown = false;
 	bLMBDown = false;
@@ -73,10 +73,10 @@ AProtagonist::AProtagonist()
 	MovementStatus = EMovementStatus::EMS_Normal;
 	StaminaStatus = EStaminaStatus::ESS_Normal;
 
-	StaminaDrainRate = 25.f;
-	MinSprintStamina = 50.f;
+	StaminaDrainRate = 25.0f;
+	MinSprintStamina = 50.0f;
 
-	InterpSpeed = 15.f;
+	InterpSpeed = 15.0f;
 	bInterpToEnemy = false;
 
 	bHasCombatTarget = false;
@@ -295,7 +295,7 @@ void AProtagonist::MoveForward(float Value)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+		const FRotator YawRotation(0.f, Rotation.Yaw, 0.0f);
 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
@@ -427,7 +427,7 @@ void AProtagonist::Jump()
 {
 	if (MovementStatus != EMovementStatus::EMS_Dead)
 	{
-		//Super::Jump();
+		Super::Jump();
 	}
 }
 
@@ -544,7 +544,7 @@ float AProtagonist::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 			AEnemy* Enemy = Cast<AEnemy>(DamageCauser);
 			if (Enemy)
 			{
-				//Enemy->bHasValidTarget = false;
+				Enemy->bHasValidTarget = false;
 			}
 		}
 	}
