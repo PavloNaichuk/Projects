@@ -26,27 +26,27 @@ AEnemy::AEnemy()
 	AgroSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AgroSphere"));
 	AgroSphere->SetupAttachment(GetRootComponent());
 	AgroSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Ignore);
-	AgroSphere->InitSphereRadius(600.f);
+	AgroSphere->InitSphereRadius(600.0f);
 
 	CombatCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("CombatCollision"));
 	CombatCollision->SetupAttachment(GetMesh(), FName("EnemySocket"));
 
 	CombatSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CombatSphere"));
 	CombatSphere->SetupAttachment(GetRootComponent());
-	CombatSphere->InitSphereRadius(75.f);
+	CombatSphere->InitSphereRadius(75.0f);
 
 	bOverlappingCombatSphere = false;
 
-	Health = 75.f;
-	MaxHealth = 100.f;
-	Damage = 10.f;
+	Health = 75.0f;
+	MaxHealth = 100.0f;
+	Damage = 10.0f;
 
 	AttackMinTime = 0.5f;
 	AttackMaxTime = 3.5f;
 
 	EnemyMovementStatus = EEnemyMovementStatus::EMS_Idle;
 
-	DeathDelay = 3.f;
+	DeathDelay = 3.0f;
 
 	bHasValidTarget = false;
 
