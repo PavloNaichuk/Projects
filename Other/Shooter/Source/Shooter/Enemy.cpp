@@ -292,7 +292,7 @@ void AEnemy::AttackEnd()
 
 float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	if (Health - DamageAmount <= 0.f)
+	if (Health - DamageAmount <= 0.0f)
 	{
 		Health = 0.f;
 		Die(DamageCauser);
