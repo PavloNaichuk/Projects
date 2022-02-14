@@ -18,6 +18,7 @@
 #include "ProtagonistPlayerController.h"
 #include "ShooterSaveGame.h"
 #include "Critter.h"
+#include "ItemStorage.h"
 //#include "WeaponContainerActor.h"
 
 // Sets default values
@@ -666,6 +667,17 @@ void AProtagonist::LoadGame(bool LoadPosition)
 
 		Coins = LoadObject->CharacterStats.Coins;
 
+		if (WeaponStorage)
+		{
+			AItemStorage* Weapons = GetWorld()->SpawnActor<AItemStorage>(WeaponStorage);
+			if (Weapons)
+			{
+				FString WeaponName = LoadObject->CharacterStats.WeaponName;
+				AWeapon* WeaponTOEquip = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
+				WeaponTOEquip->Equip(this);
+			}
+		}
+		
 		/*if (WeaponContainer)
 		{
 			AWeaponContainerActor* Container = GetWorld()->SpawnActor<AWeaponContainerActor>(WeaponContainer);

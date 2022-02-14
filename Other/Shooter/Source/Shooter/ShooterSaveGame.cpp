@@ -8,7 +8,7 @@ UShooterSaveGame::UShooterSaveGame()
 	SaveSlotName = TEXT("TestSaveSlot");
 	UserIndex = 0;
 
-	//CharacterStats.WeaponName = "";
-	//CharacterStats.LevelName = "";
+	CharacterStats.WeaponName = "";
+	CharacterStats.LevelName = "";
 }
 
