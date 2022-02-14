@@ -16,7 +16,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Enemy.h"
 #include "ProtagonistPlayerController.h"
-//#include "FirstSaveGame.h"
+#include "ShooterSaveGame.h"
 #include "Critter.h"
 //#include "WeaponContainerActor.h"
 
@@ -55,7 +55,7 @@ AProtagonist::AProtagonist()
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); // ...at this rotation rate
 	GetCharacterMovement()->JumpZVelocity = 650.0f;
-	GetCharacterMovement()->AirControl = 0.2f;
+	GetCharacterMovement()->AirControl = 0.20f;
 
 	MaxHealth = 100.0f;
 	Health = 65.0f;
@@ -619,7 +619,7 @@ void AProtagonist::SwitchLevel(FName LevelName)
 
 void AProtagonist::SaveGame()
 {
-	/*UFirstSaveGame* SaveObject = Cast<UFirstSaveGame>(UGameplayStatics::CreateSaveGameObject(UFirstSaveGame::StaticClass()));
+	UShooterSaveGame* SaveObject = Cast<UShooterSaveGame>(UGameplayStatics::CreateSaveGameObject(UShooterSaveGame::StaticClass()));
 
 	SaveObject->CharacterStats.Health = Health;
 	SaveObject->CharacterStats.MaxHealth = MaxHealth;
@@ -631,32 +631,32 @@ void AProtagonist::SaveGame()
 
 	FString MapName = GetWorld()->GetMapName();
 	UE_LOG(LogTemp, Warning, TEXT("MapName: %s"), *MapName)
-		MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 	UE_LOG(LogTemp, Warning, TEXT("MapName: %s"), *MapName)
-		SaveObject->CharacterStats.LevelName = MapName;
+	SaveObject->CharacterStats.LevelName = MapName;
 	UE_LOG(LogTemp, Warning, TEXT("SaveObject->CharacterStats.LevelName: %s"), *SaveObject->CharacterStats.LevelName)
-		if (EquippedWeapon)
-		{
-			SaveObject->CharacterStats.WeaponName = EquippedWeapon->Name;
-			SaveObject->CharacterStats.bWeaponParticles = EquippedWeapon->bWeaponParticles;
-		}
+	if (EquippedWeapon)
+	{
+		SaveObject->CharacterStats.WeaponName = EquippedWeapon->Name;
+		SaveObject->CharacterStats.bWeaponParticles = EquippedWeapon->bWeaponParticles;
+	}
 
-	UGameplayStatics::SaveGameToSlot(SaveObject, SaveObject->SaveSlotName, SaveObject->UserIndex); */
+	UGameplayStatics::SaveGameToSlot(SaveObject, SaveObject->SaveSlotName, SaveObject->UserIndex);
 }
 
 void AProtagonist::LoadGame(bool LoadPosition)
 {
-	/* UFirstSaveGame* Load = Cast<UFirstSaveGame>(UGameplayStatics::CreateSaveGameObject(UFirstSaveGame::StaticClass()));
-	UFirstSaveGame* LoadObject = Cast<UFirstSaveGame>(UGameplayStatics::LoadGameFromSlot(Load->SaveSlotName, Load->UserIndex));
+	UShooterSaveGame* Load = Cast<UShooterSaveGame>(UGameplayStatics::CreateSaveGameObject(UShooterSaveGame::StaticClass()));
+	UShooterSaveGame* LoadObject = Cast<UShooterSaveGame>(UGameplayStatics::LoadGameFromSlot(Load->SaveSlotName, Load->UserIndex));
 
 	if (LoadObject)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Level: %s"), *LoadObject->CharacterStats.LevelName)
-			if (LoadObject->CharacterStats.LevelName != "")
-			{
-				FName Map(*LoadObject->CharacterStats.LevelName);
-				SwitchLevel(Map);
-			}
+		if (LoadObject->CharacterStats.LevelName != "")
+		{
+			FName Map(*LoadObject->CharacterStats.LevelName);
+			SwitchLevel(Map);
+		}
 
 		Health = LoadObject->CharacterStats.Health;
 		MaxHealth = LoadObject->CharacterStats.MaxHealth;
@@ -666,8 +666,7 @@ void AProtagonist::LoadGame(bool LoadPosition)
 
 		Coins = LoadObject->CharacterStats.Coins;
 
-
-		if (WeaponContainer)
+		/*if (WeaponContainer)
 		{
 			AWeaponContainerActor* Container = GetWorld()->SpawnActor<AWeaponContainerActor>(WeaponContainer);
 			if (Container)
@@ -688,13 +687,13 @@ void AProtagonist::LoadGame(bool LoadPosition)
 				}
 
 			}
-		}
+		}*/
 		if (LoadPosition)
 		{
 			SetActorLocation(LoadObject->CharacterStats.Location);
 			SetActorRotation(LoadObject->CharacterStats.Rotation);
 		}
-	}*/
+	}
 }
 
 void AProtagonist::LoadGameNoSwitch()

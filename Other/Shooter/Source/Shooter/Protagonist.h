@@ -7,6 +7,42 @@
 #include "Protagonist.generated.h"
 
 
+USTRUCT(BlueprintType)
+struct FCharacterStats
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	float Health;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	float MaxHealth;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	float Stamina;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	float MaxStamina;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	FVector Location;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	FRotator Rotation;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	int32 Coins;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	FString WeaponName;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	bool bWeaponParticles;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "SavedData")
+	FString LevelName;
+};
+
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
 {
