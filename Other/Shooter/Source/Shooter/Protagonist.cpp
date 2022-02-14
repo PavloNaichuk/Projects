@@ -611,8 +611,8 @@ void AProtagonist::SwitchLevel(FName LevelName)
 		{
 			FString Level = LevelName.ToString();
 			UE_LOG(LogTemp, Warning, TEXT("CurrentLevel: %s"), *CurrentLevel)
-				UE_LOG(LogTemp, Warning, TEXT("LevelName: %s"), *Level)
-				UGameplayStatics::OpenLevel(World, LevelName);
+			UE_LOG(LogTemp, Warning, TEXT("LevelName: %s"), *Level)
+			UGameplayStatics::OpenLevel(World, LevelName);
 		}
 	}
 }
