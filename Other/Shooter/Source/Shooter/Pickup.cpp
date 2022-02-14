@@ -9,7 +9,6 @@
 
 APickup::APickup()
 {
-	CointCount = 1;
 }
 
 void APickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -20,11 +19,11 @@ void APickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 		AProtagonist* Protagonist = Cast<AProtagonist>(OtherActor);
 		if (Protagonist)
 		{
-			Protagonist->IncrementCoins(CointCount);
+			OnPickupBP(Protagonist);
 			Protagonist->PickupLocations.Add(GetActorLocation());
 			if (OverlapParticles)
 			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticles, GetActorLocation(), FRotator(0.f), true);
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticles, GetActorLocation(), FRotator(0.0f), true);
 			}
 			if (OverlapSound)
 			{
@@ -32,7 +31,6 @@ void APickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 			}
 			Destroy();
 		}
-		
 	}
 }
 

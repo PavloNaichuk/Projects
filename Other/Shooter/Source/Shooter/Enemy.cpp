@@ -142,7 +142,6 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 
 				Protagonist->SetCombatTarget(this);
 				Protagonist->SetHasCombatTarget(true);
-
 				Protagonist->UpdateCombatTarget();
 
 				CombatTarget = Protagonist;
