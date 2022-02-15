@@ -29,7 +29,7 @@ void AProtagonistPlayerController::BeginPlay()
 			EnemyHealthBar->AddToViewport();
 			EnemyHealthBar->SetVisibility(ESlateVisibility::Hidden);
 		}
-		FVector2D Alignment(0.f, 0.f);
+		FVector2D Alignment(0.0f, 0.0f);
 		EnemyHealthBar->SetAlignmentInViewport(Alignment);
 	}
 
@@ -81,20 +81,20 @@ void AProtagonistPlayerController::Tick(float DeltaTime)
 
 void AProtagonistPlayerController::DisplayPauseMenu_Implementation()
 {
-	//bPauseMenuOpen = true;
-	//bShowMouseCursor = true;
+	bPauseMenuOpen = true;
+	bShowMouseCursor = true;
+	PauseMenu->SetVisibility(ESlateVisibility::Visible);
 
-	//FInputModeGameAndUI InputModeGameAndUI;
-	//SetInputMode(InputModeGameAndUI);
+	FInputModeGameAndUI InputModeGameAndUI;
+	SetInputMode(InputModeGameAndUI);
 }
 
 
 void AProtagonistPlayerController::RemovePauseMenu_Implementation()
 {
-	//bPauseMenuOpen = false;
-	//bShowMouseCursor = false;
-
-	//GameModeOnly();
+	bPauseMenuOpen = false;
+	bShowMouseCursor = false;
+	GameModeOnly();
 }
 
 void AProtagonistPlayerController::TogglePauseMenu()

@@ -426,6 +426,8 @@ void AProtagonist::Die()
 
 void AProtagonist::Jump()
 {
+	if (ProtagonistPlayerController) if (ProtagonistPlayerController->bPauseMenuOpen) return;
+
 	if (MovementStatus != EMovementStatus::EMS_Dead)
 	{
 		Super::Jump();
@@ -705,13 +707,16 @@ void AProtagonist::LoadGame(bool LoadPosition)
 			SetActorLocation(LoadObject->CharacterStats.Location);
 			SetActorRotation(LoadObject->CharacterStats.Rotation);
 		}
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		GetMesh()->bPauseAnims = false;
+		GetMesh()->bNoSkeletonUpdate = false;
 	}
 }
 
 void AProtagonist::LoadGameNoSwitch()
 {
-	/* UFirstSaveGame* Load = Cast<UFirstSaveGame>(UGameplayStatics::CreateSaveGameObject(UFirstSaveGame::StaticClass()));
-	UFirstSaveGame* LoadObject = Cast<UFirstSaveGame>(UGameplayStatics::LoadGameFromSlot(Load->SaveSlotName, Load->UserIndex));
+	UShooterSaveGame* Load = Cast<UShooterSaveGame>(UGameplayStatics::CreateSaveGameObject(UShooterSaveGame::StaticClass()));
+	UShooterSaveGame* LoadObject = Cast<UShooterSaveGame>(UGameplayStatics::LoadGameFromSlot(Load->SaveSlotName, Load->UserIndex));
 
 	if (LoadObject)
 	{
@@ -724,7 +729,7 @@ void AProtagonist::LoadGameNoSwitch()
 		Coins = LoadObject->CharacterStats.Coins;
 
 
-		if (WeaponContainer)
+		/*if (WeaponContainer)
 		{
 			AWeaponContainerActor* Container = GetWorld()->SpawnActor<AWeaponContainerActor>(WeaponContainer);
 			if (Container)
@@ -745,6 +750,6 @@ void AProtagonist::LoadGameNoSwitch()
 				}
 
 			}
-		}
-	}*/
+		}*/
+	}
 }
