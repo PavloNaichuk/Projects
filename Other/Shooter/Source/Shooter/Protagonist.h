@@ -285,9 +285,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadGameNoSwitch();
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	//TSubclassOf<UWeaponContainer> WeaponContainer;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	//TSubclassOf<class AWeaponContainerActor> WeaponContainer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class AItemStorage> WeaponContainer;
 };

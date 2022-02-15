@@ -19,7 +19,6 @@
 #include "ShooterSaveGame.h"
 #include "Critter.h"
 #include "ItemStorage.h"
-//#include "WeaponContainerActor.h"
 
 AProtagonist::AProtagonist()
 {
@@ -425,10 +424,14 @@ void AProtagonist::Die()
 
 void AProtagonist::Jump()
 {
+	if (ProtagonistPlayerController) if (ProtagonistPlayerController->bPauseMenuOpen) return;
 	if (MovementStatus != EMovementStatus::EMS_Dead)
 	{
 		Super::Jump();
 	}
+	SetMovementStatus(EMovementStatus::EMS_Normal);
+	GetMesh()->bPauseAnims = false;
+	GetMesh()->bNoSkeletonUpdate = false;
 }
 
 void AProtagonist::DeathEnd()
@@ -631,15 +634,15 @@ void AProtagonist::SaveGame()
 
 	FString MapName = GetWorld()->GetMapName();
 	UE_LOG(LogTemp, Warning, TEXT("MapName: %s"), *MapName)
-		MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 	UE_LOG(LogTemp, Warning, TEXT("MapName: %s"), *MapName)
-		SaveObject->CharacterStats.LevelName = MapName;
+	SaveObject->CharacterStats.LevelName = MapName;
 	UE_LOG(LogTemp, Warning, TEXT("SaveObject->CharacterStats.LevelName: %s"), *SaveObject->CharacterStats.LevelName)
-		if (EquippedWeapon)
-		{
-			SaveObject->CharacterStats.WeaponName = EquippedWeapon->Name;
-			SaveObject->CharacterStats.bWeaponParticles = EquippedWeapon->bWeaponParticles;
-		}
+	if (EquippedWeapon)
+	{
+		SaveObject->CharacterStats.WeaponName = EquippedWeapon->Name;
+		SaveObject->CharacterStats.bWeaponParticles = EquippedWeapon->bWeaponParticles;
+	}
 
 	UGameplayStatics::SaveGameToSlot(SaveObject, SaveObject->SaveSlotName, SaveObject->UserIndex);
 }
@@ -652,11 +655,11 @@ void AProtagonist::LoadGame(bool LoadPosition)
 	if (LoadObject)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Level: %s"), *LoadObject->CharacterStats.LevelName)
-		if (LoadObject->CharacterStats.LevelName != "")
-		{
-			FName Map(*LoadObject->CharacterStats.LevelName);
-			SwitchLevel(Map);
-		}
+			if (LoadObject->CharacterStats.LevelName != "")
+			{
+				FName Map(*LoadObject->CharacterStats.LevelName);
+				SwitchLevel(Map);
+			}
 
 		Health = LoadObject->CharacterStats.Health;
 		MaxHealth = LoadObject->CharacterStats.MaxHealth;
@@ -666,9 +669,10 @@ void AProtagonist::LoadGame(bool LoadPosition)
 
 		Coins = LoadObject->CharacterStats.Coins;
 
-		/*if (WeaponContainer)
+
+		if (WeaponContainer)
 		{
-			AWeaponContainerActor* Container = GetWorld()->SpawnActor<AWeaponContainerActor>(WeaponContainer);
+			AItemStorage* Container = GetWorld()->SpawnActor<AItemStorage>(WeaponContainer);
 			if (Container)
 			{
 				FString WeaponName = LoadObject->CharacterStats.WeaponName;
@@ -687,7 +691,7 @@ void AProtagonist::LoadGame(bool LoadPosition)
 				}
 
 			}
-		}*/
+		}
 		if (LoadPosition)
 		{
 			SetActorLocation(LoadObject->CharacterStats.Location);
@@ -712,9 +716,9 @@ void AProtagonist::LoadGameNoSwitch()
 		Coins = LoadObject->CharacterStats.Coins;
 
 
-		/*if (WeaponContainer)
+		if (WeaponContainer)
 		{
-			AWeaponContainerActor* Container = GetWorld()->SpawnActor<AWeaponContainerActor>(WeaponContainer);
+			AItemStorage* Container = GetWorld()->SpawnActor<AItemStorage>(WeaponContainer);
 			if (Container)
 			{
 				FString WeaponName = LoadObject->CharacterStats.WeaponName;
@@ -733,7 +737,6 @@ void AProtagonist::LoadGameNoSwitch()
 				}
 
 			}
-		}*/
+		}
 	}
 }
-

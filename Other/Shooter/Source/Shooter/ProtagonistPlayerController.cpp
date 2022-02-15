@@ -83,6 +83,8 @@ void AProtagonistPlayerController::DisplayPauseMenu_Implementation()
 	bPauseMenuOpen = true;
 	bShowMouseCursor = true;
 
+	PauseMenu->SetVisibility(ESlateVisibility::Visible);
+
 	FInputModeGameAndUI InputModeGameAndUI;
 	SetInputMode(InputModeGameAndUI);
 }
