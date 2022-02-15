@@ -4,7 +4,6 @@
 #include "ProtagonistPlayerController.h"
 #include "Blueprint/UserWidget.h"
 
-
 AProtagonistPlayerController::AProtagonistPlayerController()
 {
 	bPauseMenuOpen = false;
@@ -29,7 +28,7 @@ void AProtagonistPlayerController::BeginPlay()
 			EnemyHealthBar->AddToViewport();
 			EnemyHealthBar->SetVisibility(ESlateVisibility::Hidden);
 		}
-		FVector2D Alignment(0.0f, 0.0f);
+		FVector2D Alignment(0.f, 0.f);
 		EnemyHealthBar->SetAlignmentInViewport(Alignment);
 	}
 
@@ -70,9 +69,9 @@ void AProtagonistPlayerController::Tick(float DeltaTime)
 	{
 		FVector2D PositionInViewport;
 		ProjectWorldLocationToScreen(EnemyLocation, PositionInViewport);
-		PositionInViewport.Y -= 85.0f;
+		PositionInViewport.Y -= 85.f;
 
-		FVector2D SizeInViewport(300.0f, 25.0f);
+		FVector2D SizeInViewport(300.f, 25.f);
 
 		EnemyHealthBar->SetPositionInViewport(PositionInViewport);
 		EnemyHealthBar->SetDesiredSizeInViewport(SizeInViewport);
@@ -83,7 +82,6 @@ void AProtagonistPlayerController::DisplayPauseMenu_Implementation()
 {
 	bPauseMenuOpen = true;
 	bShowMouseCursor = true;
-	PauseMenu->SetVisibility(ESlateVisibility::Visible);
 
 	FInputModeGameAndUI InputModeGameAndUI;
 	SetInputMode(InputModeGameAndUI);
@@ -94,6 +92,7 @@ void AProtagonistPlayerController::RemovePauseMenu_Implementation()
 {
 	bPauseMenuOpen = false;
 	bShowMouseCursor = false;
+
 	GameModeOnly();
 }
 

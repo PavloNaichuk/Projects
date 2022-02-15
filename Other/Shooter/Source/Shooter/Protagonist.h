@@ -6,7 +6,6 @@
 #include "GameFramework/Character.h"
 #include "Protagonist.generated.h"
 
-
 USTRUCT(BlueprintType)
 struct FCharacterStats
 {
@@ -64,6 +63,7 @@ enum class EStaminaStatus :uint8
 	ESS_MAX UMETA(DisplayName = "DefaultMax")
 
 };
+
 UCLASS()
 class SHOOTER_API AProtagonist : public ACharacter
 {
@@ -73,8 +73,7 @@ public:
 	// Sets default values for this character's properties
 	AProtagonist();
 
-	UPROPERTY(EditDefaultsOnly, Category = "SaveData")
-	TSubclassOf<class AItemStorage> WeaponStorage;
+	FCharacterStats CharacterStats;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	bool bHasCombatTarget;

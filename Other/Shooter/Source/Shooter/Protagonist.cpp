@@ -21,7 +21,6 @@
 #include "ItemStorage.h"
 //#include "WeaponContainerActor.h"
 
-// Sets default values
 AProtagonist::AProtagonist()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -43,8 +42,8 @@ AProtagonist::AProtagonist()
 	// the controller orientation
 	FollowCamera->bUsePawnControlRotation = false;
 	// Set our turn rates for input
-	BaseTurnRate = 65.f;
-	BaseLookUpRate = 65.f;
+	BaseTurnRate = 65.0f;
+	BaseLookUpRate = 65.0f;
 
 	// Don't rotate when the controller rotates.
 	// Let that just affect the camera.
@@ -54,9 +53,9 @@ AProtagonist::AProtagonist()
 
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); // ...at this rotation rate
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
 	GetCharacterMovement()->JumpZVelocity = 650.0f;
-	GetCharacterMovement()->AirControl = 0.20f;
+	GetCharacterMovement()->AirControl = 0.2f;
 
 	MaxHealth = 100.0f;
 	Health = 65.0f;
@@ -150,7 +149,7 @@ void AProtagonist::Tick(float DeltaTime)
 	case EStaminaStatus::ESS_BelowMinimum:
 		if (bShiftKeyDown)
 		{
-			if (Stamina - DeltaStamina <= 0.f)
+			if (Stamina - DeltaStamina <= 0.0f)
 			{
 				SetStaminaStatus(EStaminaStatus::ESS_Exhausted);
 				Stamina = 0;
@@ -186,7 +185,7 @@ void AProtagonist::Tick(float DeltaTime)
 	case EStaminaStatus::ESS_Exhausted:
 		if (bShiftKeyDown)
 		{
-			Stamina = 0.f;
+			Stamina = 0.0f;
 		}
 		else // Shift key up
 		{
@@ -296,7 +295,7 @@ void AProtagonist::MoveForward(float Value)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0.f, Rotation.Yaw, 0.0f);
+		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
@@ -313,7 +312,7 @@ void AProtagonist::MoveRight(float Value)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+		const FRotator YawRotation(0.f, Rotation.Yaw, 0.0f);
 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Value);
@@ -384,7 +383,7 @@ void AProtagonist::ESCUp()
 
 void AProtagonist::DecrementHealth(float Amount)
 {
-	if (Health - Amount <= 0.f)
+	if (Health - Amount <= 0.0f)
 	{
 		Health -= Amount;
 		Die();
@@ -426,8 +425,6 @@ void AProtagonist::Die()
 
 void AProtagonist::Jump()
 {
-	if (ProtagonistPlayerController) if (ProtagonistPlayerController->bPauseMenuOpen) return;
-
 	if (MovementStatus != EMovementStatus::EMS_Dead)
 	{
 		Super::Jump();
@@ -614,8 +611,8 @@ void AProtagonist::SwitchLevel(FName LevelName)
 		{
 			FString Level = LevelName.ToString();
 			UE_LOG(LogTemp, Warning, TEXT("CurrentLevel: %s"), *CurrentLevel)
-			UE_LOG(LogTemp, Warning, TEXT("LevelName: %s"), *Level)
-			UGameplayStatics::OpenLevel(World, LevelName);
+				UE_LOG(LogTemp, Warning, TEXT("LevelName: %s"), *Level)
+				UGameplayStatics::OpenLevel(World, LevelName);
 		}
 	}
 }
@@ -634,15 +631,15 @@ void AProtagonist::SaveGame()
 
 	FString MapName = GetWorld()->GetMapName();
 	UE_LOG(LogTemp, Warning, TEXT("MapName: %s"), *MapName)
-	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+		MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 	UE_LOG(LogTemp, Warning, TEXT("MapName: %s"), *MapName)
-	SaveObject->CharacterStats.LevelName = MapName;
+		SaveObject->CharacterStats.LevelName = MapName;
 	UE_LOG(LogTemp, Warning, TEXT("SaveObject->CharacterStats.LevelName: %s"), *SaveObject->CharacterStats.LevelName)
-	if (EquippedWeapon)
-	{
-		SaveObject->CharacterStats.WeaponName = EquippedWeapon->Name;
-		SaveObject->CharacterStats.bWeaponParticles = EquippedWeapon->bWeaponParticles;
-	}
+		if (EquippedWeapon)
+		{
+			SaveObject->CharacterStats.WeaponName = EquippedWeapon->Name;
+			SaveObject->CharacterStats.bWeaponParticles = EquippedWeapon->bWeaponParticles;
+		}
 
 	UGameplayStatics::SaveGameToSlot(SaveObject, SaveObject->SaveSlotName, SaveObject->UserIndex);
 }
@@ -669,17 +666,6 @@ void AProtagonist::LoadGame(bool LoadPosition)
 
 		Coins = LoadObject->CharacterStats.Coins;
 
-		if (WeaponStorage)
-		{
-			AItemStorage* Weapons = GetWorld()->SpawnActor<AItemStorage>(WeaponStorage);
-			if (Weapons)
-			{
-				FString WeaponName = LoadObject->CharacterStats.WeaponName;
-				AWeapon* WeaponTOEquip = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
-				WeaponTOEquip->Equip(this);
-			}
-		}
-		
 		/*if (WeaponContainer)
 		{
 			AWeaponContainerActor* Container = GetWorld()->SpawnActor<AWeaponContainerActor>(WeaponContainer);
@@ -707,9 +693,6 @@ void AProtagonist::LoadGame(bool LoadPosition)
 			SetActorLocation(LoadObject->CharacterStats.Location);
 			SetActorRotation(LoadObject->CharacterStats.Rotation);
 		}
-		SetMovementStatus(EMovementStatus::EMS_Normal);
-		GetMesh()->bPauseAnims = false;
-		GetMesh()->bNoSkeletonUpdate = false;
 	}
 }
 
@@ -753,3 +736,4 @@ void AProtagonist::LoadGameNoSwitch()
 		}*/
 	}
 }
+
