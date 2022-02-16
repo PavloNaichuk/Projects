@@ -24,7 +24,7 @@ public:
 	FCharacterStats CharacterStats;
 
 	UPROPERTY(VisibleAnywhere, Category = Basic)
-	FString SaveSlotName;
+	FString PlayerName;
 
 	UPROPERTY(VisibleAnywhere, Category = Basic)
 	uint32 UserIndex;

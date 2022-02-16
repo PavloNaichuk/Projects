@@ -287,5 +287,5 @@ public:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AItemStorage> WeaponContainer;
+	TSubclassOf<class AItemStorage> WeaponStorage;
 };

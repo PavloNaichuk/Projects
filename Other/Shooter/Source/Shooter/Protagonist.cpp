@@ -644,99 +644,118 @@ void AProtagonist::SaveGame()
 		SaveObject->CharacterStats.bWeaponParticles = EquippedWeapon->bWeaponParticles;
 	}
 
-	UGameplayStatics::SaveGameToSlot(SaveObject, SaveObject->SaveSlotName, SaveObject->UserIndex);
+	UGameplayStatics::SaveGameToSlot(SaveObject, SaveObject->PlayerName, SaveObject->UserIndex);
 }
 
 void AProtagonist::LoadGame(bool LoadPosition)
 {
-	UShooterSaveGame* Load = Cast<UShooterSaveGame>(UGameplayStatics::CreateSaveGameObject(UShooterSaveGame::StaticClass()));
-	UShooterSaveGame* LoadObject = Cast<UShooterSaveGame>(UGameplayStatics::LoadGameFromSlot(Load->SaveSlotName, Load->UserIndex));
+	UShooterSaveGame* LoadGameInstance = Cast<UShooterSaveGame>(UGameplayStatics::CreateSaveGameObject(UShooterSaveGame::StaticClass()));
+	LoadGameInstance = Cast<UShooterSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->PlayerName, LoadGameInstance->UserIndex));
 
-	if (LoadObject)
+	if (LoadGameInstance)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Level: %s"), *LoadObject->CharacterStats.LevelName)
-			if (LoadObject->CharacterStats.LevelName != "")
+		Health = LoadGameInstance->CharacterStats.Health;
+		MaxHealth = LoadGameInstance->CharacterStats.MaxHealth;
+		Stamina = LoadGameInstance->CharacterStats.Stamina;
+		MaxStamina = LoadGameInstance->CharacterStats.MaxStamina;
+		Coins = LoadGameInstance->CharacterStats.Coins;
+
+		if (WeaponStorage)
+		{
+			AItemStorage* Weapons = GetWorld()->SpawnActor<AItemStorage>(WeaponStorage);
+			if (Weapons)
 			{
-				FName Map(*LoadObject->CharacterStats.LevelName);
-				SwitchLevel(Map);
+				FString WeaponName = LoadGameInstance->CharacterStats.WeaponName;
+
+				if (Weapons->WeaponMap.Contains(WeaponName))
+				{
+					AWeapon* WeaponToEquip = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
+					WeaponToEquip->Equip(this);
+				}
 			}
 
-		Health = LoadObject->CharacterStats.Health;
-		MaxHealth = LoadObject->CharacterStats.MaxHealth;
-
-		Stamina = LoadObject->CharacterStats.Stamina;
-		MaxStamina = LoadObject->CharacterStats.MaxStamina;
-
-		Coins = LoadObject->CharacterStats.Coins;
-
-
-		if (WeaponContainer)
-		{
-			AItemStorage* Container = GetWorld()->SpawnActor<AItemStorage>(WeaponContainer);
-			if (Container)
+			if (Weapons)
 			{
-				FString WeaponName = LoadObject->CharacterStats.WeaponName;
-				if (Container->WeaponMap.Num() > 0)
+				FString WeaponName = LoadGameInstance->CharacterStats.WeaponName;
+				if (Weapons->WeaponMap.Num() > 0)
 				{
-					if (Container->WeaponMap.Contains(WeaponName))
+					if (Weapons->WeaponMap.Contains(WeaponName))
 					{
-						AWeapon* Weapon = GetWorld()->SpawnActor<AWeapon>(Container->WeaponMap[WeaponName]);
+						AWeapon* Weapon = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
 						if (Weapon)
 						{
-							Weapon->bWeaponParticles = LoadObject->CharacterStats.bWeaponParticles;
+							Weapon->bWeaponParticles = LoadGameInstance->CharacterStats.bWeaponParticles;
 							Weapon->Equip(this);
-
 						}
 					}
 				}
 
 			}
 		}
+
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		GetMesh()->bPauseAnims = false;
+		GetMesh()->bNoSkeletonUpdate = false;
+
 		if (LoadPosition)
 		{
-			SetActorLocation(LoadObject->CharacterStats.Location);
-			SetActorRotation(LoadObject->CharacterStats.Rotation);
+			SetActorLocation(LoadGameInstance->CharacterStats.Location);
+			SetActorRotation(LoadGameInstance->CharacterStats.Rotation);
 		}
+
+		if (LoadGameInstance->CharacterStats.LevelName != "")
+		{
+			FName Map(*LoadGameInstance->CharacterStats.LevelName);
+			SwitchLevel(Map);
+		}
+	}
+	else
+	{
+		return;
 	}
 }
 
 void AProtagonist::LoadGameNoSwitch()
 {
-	UShooterSaveGame* Load = Cast<UShooterSaveGame>(UGameplayStatics::CreateSaveGameObject(UShooterSaveGame::StaticClass()));
-	UShooterSaveGame* LoadObject = Cast<UShooterSaveGame>(UGameplayStatics::LoadGameFromSlot(Load->SaveSlotName, Load->UserIndex));
+	UShooterSaveGame* LoadGameInstance = Cast<UShooterSaveGame>(UGameplayStatics::CreateSaveGameObject(UShooterSaveGame::StaticClass()));
+	LoadGameInstance = Cast<UShooterSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->PlayerName, LoadGameInstance->UserIndex));
 
-	if (LoadObject)
+	if (LoadGameInstance)
 	{
-		Health = LoadObject->CharacterStats.Health;
-		MaxHealth = LoadObject->CharacterStats.MaxHealth;
+		Health = LoadGameInstance->CharacterStats.Health;
+		MaxHealth = LoadGameInstance->CharacterStats.MaxHealth;
+		Stamina = LoadGameInstance->CharacterStats.Stamina;
+		MaxStamina = LoadGameInstance->CharacterStats.MaxStamina;
+		Coins = LoadGameInstance->CharacterStats.Coins;
 
-		Stamina = LoadObject->CharacterStats.Stamina;
-		MaxStamina = LoadObject->CharacterStats.MaxStamina;
-
-		Coins = LoadObject->CharacterStats.Coins;
-
-
-		if (WeaponContainer)
+		if (WeaponStorage)
 		{
-			AItemStorage* Container = GetWorld()->SpawnActor<AItemStorage>(WeaponContainer);
-			if (Container)
+			AItemStorage* Weapons = GetWorld()->SpawnActor<AItemStorage>(WeaponStorage);
+			if (Weapons)
 			{
-				FString WeaponName = LoadObject->CharacterStats.WeaponName;
-				if (Container->WeaponMap.Num() > 0)
+				FString WeaponName = LoadGameInstance->CharacterStats.WeaponName;
+				if (Weapons->WeaponMap.Num() > 0)
 				{
-					if (Container->WeaponMap.Contains(WeaponName))
+					if (Weapons->WeaponMap.Contains(WeaponName))
 					{
-						AWeapon* Weapon = GetWorld()->SpawnActor<AWeapon>(Container->WeaponMap[WeaponName]);
+						AWeapon* Weapon = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
 						if (Weapon)
 						{
-							Weapon->bWeaponParticles = LoadObject->CharacterStats.bWeaponParticles;
+							Weapon->bWeaponParticles = LoadGameInstance->CharacterStats.bWeaponParticles;
 							Weapon->Equip(this);
 
 						}
 					}
 				}
-
 			}
 		}
+
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		GetMesh()->bPauseAnims = false;
+		GetMesh()->bNoSkeletonUpdate = false;
 	}
+	else
+	{
+		return;
+	}	
 }

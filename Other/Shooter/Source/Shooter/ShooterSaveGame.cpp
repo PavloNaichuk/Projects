@@ -5,7 +5,7 @@
 
 UShooterSaveGame::UShooterSaveGame()
 {
-	SaveSlotName = TEXT("TestSaveSlot");
+	PlayerName = TEXT("TestSaveSlot");
 	UserIndex = 0;
 
 	CharacterStats.WeaponName = "";
