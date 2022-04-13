@@ -18,8 +18,6 @@ public:
 	AFPSObjectiveActor();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* MeshComp;
@@ -30,8 +28,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	UParticleSystem* PickupFX;
 
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	void PlayEffects();
 
 public:	
+
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	
 };
