@@ -8,6 +8,8 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "CoopGame.h"
+#include "TimerManager.h"
+#include "Net/UnrealNetwork.h"
 
 static int32 DebugWeaponDrawing = 0;
 FAutoConsoleVariableRef CVARDebugWeaponDrawing(
@@ -208,4 +210,12 @@ void ASWeapon::PlayImpactEffects(EPhysicalSurface SurfaceType, FVector ImpactPoi
 
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedEffect, ImpactPoint, ShotDirection.Rotation());
 	}
+}
+
+
+void ASWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION(ASWeapon, HitScanTrace, COND_SkipOwner);
 }

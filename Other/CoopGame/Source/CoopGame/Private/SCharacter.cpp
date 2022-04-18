@@ -6,7 +6,11 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "CoopGame.h"
+#include "SHealthComponent.h"
 #include "SWeapon.h"
+#include "Net/UnrealNetwork.h"
+
+
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -21,6 +25,8 @@ ASCharacter::ASCharacter()
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(COLLISION_WEAPON, ECR_Ignore);
+
+	HealthComp = CreateDefaultSubobject<USHealthComponent>(TEXT("HealthComp"));
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp);
@@ -37,6 +43,7 @@ void ASCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	DefaultFOV = CameraComp->FieldOfView;
+	HealthComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
 
 	if (HasAuthority())
 	{
@@ -170,4 +177,13 @@ FVector ASCharacter::GetPawnViewLocation() const
 	}
 
 	return Super::GetPawnViewLocation();
+}
+
+
+void ASCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASCharacter, CurrentWeapon);
+	DOREPLIFETIME(ASCharacter, bDied);
 }
