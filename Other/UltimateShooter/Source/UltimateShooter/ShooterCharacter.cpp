@@ -98,6 +98,49 @@ void AShooterCharacter::FireWeapon()
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SocketTransform);
 		}
 
+		FVector2D ViewportSize;
+		if (GEngine&& GEngine->GameViewport)
+		{
+			GEngine->GameViewport->GetViewportSize(ViewportSize);
+		}
+
+		FVector2D CrosshairLocation(ViewportSize.X / 2.0f, ViewportSize.Y / 2.0f);
+		CrosshairLocation.Y = 50.0f;
+		FVector CrosshairWorldPosition;
+		FVector CrosshairWorldDirection;
+
+		bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(UGameplayStatics::GetPlayerController(this, 0),
+			CrosshairLocation, CrosshairWorldPosition, CrosshairWorldDirection);
+
+		if (bScreenToWorld)
+		{
+			FHitResult ScreenTraceHit;
+			const FVector Start{ CrosshairWorldPosition };
+			const FVector End{ CrosshairWorldPosition + CrosshairWorldDirection * 50'000.0f };
+
+			FVector BeamEndPoint{ End };
+			GetWorld()->LineTraceSingleByChannel(ScreenTraceHit, Start, End, ECollisionChannel::ECC_Visibility);
+
+			if (ScreenTraceHit.bBlockingHit)
+			{
+				BeamEndPoint = ScreenTraceHit.Location;
+				if (ImpactParticles)
+				{
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, ScreenTraceHit.Location);
+				}
+				
+			}
+			if (BeamParticles)
+			{
+				UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BeamParticles, SocketTransform);
+				if (Beam)
+				{
+					Beam->SetVectorParameter(FName("Target"), BeamEndPoint);
+				}
+			}
+		}
+
+		/*
 		FHitResult FireHit;
 		const FVector Start{ SocketTransform.GetLocation() };
 		const FQuat Rotation{ SocketTransform.GetRotation() };
@@ -123,6 +166,7 @@ void AShooterCharacter::FireWeapon()
 				 Beam->SetVectorParameter(FName("Target"), BeamEndPoint);
 			 }
 		 }
+		 */
 	}
 
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
