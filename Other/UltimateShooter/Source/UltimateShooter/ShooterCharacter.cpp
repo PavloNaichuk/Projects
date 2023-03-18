@@ -29,6 +29,11 @@ AShooterCharacter::AShooterCharacter()
 	, CameraZoomedFOV(35.0f)
 	, CameraCurrentFOV(0.0f)
 	, ZoomInterpSpeed(20.0f)
+	, CrosshairSpreadMultiplier(0.0f)
+	, CrosshairVelocityFactor(0.0f)
+	, CrosshairInAirFactor(0.0f)
+	, CrosshairAimFactor(0.0f)
+	, CrosshairShootingFactor(0.0f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
