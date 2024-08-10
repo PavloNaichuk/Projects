@@ -30,6 +30,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* CollisionBox;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	class UWidgetComponent* PickupWidget;
+
 public:
 
 };
