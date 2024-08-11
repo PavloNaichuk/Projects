@@ -130,7 +130,6 @@ void AItem::SetItemProperties(EItemState State)
 			CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 			break;
 		case EItemState::EIS_Equipped:
-			
 			ItemMesh->SetSimulatePhysics(false);
 			ItemMesh->SetEnableGravity(false);
 			ItemMesh->SetVisibility(true);
@@ -144,7 +143,6 @@ void AItem::SetItemProperties(EItemState State)
 			CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			break;
 		case EItemState::EIS_Falling:
-			
 			ItemMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 			ItemMesh->SetSimulatePhysics(true);
 			ItemMesh->SetEnableGravity(true);
