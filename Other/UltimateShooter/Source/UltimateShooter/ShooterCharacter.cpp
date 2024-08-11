@@ -13,6 +13,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Item.h"
 #include "Components/WidgetComponent.h"
+#include "Weapon.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter() 
@@ -76,6 +77,7 @@ void AShooterCharacter::BeginPlay()
 		CameraDefaultFOV = GetFollowCamera()->FieldOfView;
 		CameraCurrentFOV = CameraDefaultFOV;
 	}
+	SpawnDefaultWeapon();
 }
 
 void AShooterCharacter::MoveForward(float Value)
@@ -387,6 +389,22 @@ void AShooterCharacter::TraceForItems()
 	{
 		TraceHitItemLastFrame->GetPickupWidget()->SetVisibility(false);
 	}
+}
+
+void AShooterCharacter::SpawnDefaultWeapon()
+{
+	if (DefaultWeaponClass)
+	{
+		AWeapon* DeafaultWeapon = GetWorld()->SpawnActor<AWeapon>(DefaultWeaponClass);
+		const USkeletalMeshSocket* HandSocket = GetMesh()->GetSocketByName(FName("RightHandSocket"));
+		if (HandSocket) 
+		{
+			HandSocket->AttachActor(DeafaultWeapon, GetMesh());
+		}
+
+		EquippedWeapon = DeafaultWeapon;
+	}
+
 }
 
 // Called every frame
