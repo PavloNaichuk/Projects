@@ -45,6 +45,9 @@ AShooterCharacter::AShooterCharacter()
 	, bShouldFire(true)
 	, bFireButtonPressed(false)
 	, bShouldTraceForItems(false)
+	, OverlappedItemCount(0)
+	, CameraInterpDistance(250.0f)
+	, CameraInterpElevation(65.0f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -523,5 +526,39 @@ void AShooterCharacter::IncrementOverlappedItemCount(int8 Amount)
 		OverlappedItemCount += Amount;
 		bShouldTraceForItems = true;
 	}
+}
+
+FVector AShooterCharacter::GetCameraInterpLocation()
+{
+	const FVector CameraWorldLocation{ FollowCamera->GetComponentLocation() };
+	const FVector CameraForward{ FollowCamera->GetForwardVector() };
+	
+	return CameraWorldLocation + CameraForward * CameraInterpDistance + FVector(0.0f, 0.0f, CameraInterpElevation);
+}
+
+void AShooterCharacter::GetPickupItem(AItem* Item)
+{
+	//Item->PlayEquipSound();
+
+	auto Weapon = Cast<AWeapon>(Item);
+	if (Weapon)
+	{
+		//if (Inventory.Num() < INVENTORY_CAPACITY)
+		//{
+		//	Weapon->SetSlotIndex(Inventory.Num());
+			//Inventory.Add(Weapon);
+			//Weapon->SetItemState(EItemState::EIS_PickedUp);
+		//}
+		//else // Inventory is full! Swap with EquippedWeapon
+		//{
+			SwapWeapon(Weapon);
+		//}
+	}
+
+	//auto Ammo = Cast<AAmmo>(Item);
+	//if (Ammo)
+	//{
+		//PickupAmmo(Ammo);
+	//}
 }
 
