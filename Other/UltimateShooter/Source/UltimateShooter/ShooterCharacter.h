@@ -186,7 +186,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Items, meta = (AllowPrivateAccess = "true"))
 	float CameraInterpElevation;
 
-	void GetPickupItem(AItem* Item);
 
 public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -203,4 +202,6 @@ public:
 	void IncrementOverlappedItemCount(int8 Amount);
 
 	FVector GetCameraInterpLocation();
+
+	void GetPickupItem(AItem* Item);
 };

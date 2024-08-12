@@ -13,6 +13,10 @@ AItem::AItem()
 	, ItemCount(0)
 	, ItemRarity(EItemRarity::EIR_Common)
 	, ItemState(EItemState::EIS_Pickup)
+	, ZCurveTime(0.7f)
+	, ItemInterpStartLocation(FVector(0.0f))
+	, CameraTargetLocation(FVector(0.0f))
+	, bInterping(false)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -191,6 +195,25 @@ void AItem::SetItemProperties(EItemState State)
 	}
 }
 
+void AItem::FinishInterping()
+{
+	bInterping = false;
+	if (Character)
+	{
+		// Subtract 1 from the Item Count of the interp location struct
+		//Character->IncrementInterpLocItemCount(InterpLocIndex, -1);
+		Character->GetPickupItem(this);
+
+		//Character->UnHighlightInventorySlot();
+	}
+	// Set scale back to normal
+	SetActorScale3D(FVector(1.0f));
+
+//	DisableGlowMaterial();
+	//bCanChangeCustomDepth = true;
+	//DisableCustomDepth();
+}
+
 
 // Called every frame
 void AItem::Tick(float DeltaTime)
@@ -203,5 +226,33 @@ void AItem::SetItemState(EItemState State)
 {
 	ItemState = State;
 	SetItemProperties(State);
+}
+
+void AItem::StartItemCurve(AShooterCharacter* Char, bool bForcePlaySound)
+{
+	Character = Char;
+
+	//InterpLocIndex = Character->GetInterpLocationIndex();
+
+	//Character->IncrementInterpLocItemCount(InterpLocIndex, 1);
+
+	//PlayPickupSound(bForcePlaySound);
+
+	
+	ItemInterpStartLocation = GetActorLocation();
+	bInterping = true;
+	SetItemState(EItemState::EIS_EquipInterping);
+	//GetWorldTimerManager().ClearTimer(PulseTimer);
+
+	GetWorldTimerManager().SetTimer(ItemInterpTimer, this, &AItem::FinishInterping, ZCurveTime);
+
+	// Get initial Yaw of the Camera
+	//const float CameraRotationYaw{ Character->GetFollowCamera()->GetComponentRotation().Yaw };
+	// Get initial Yaw of the Item
+	//const float ItemRotationYaw{ GetActorRotation().Yaw };
+	// Initial Yaw offset between Camera and Item
+	//InterpInitialYawOffset = ItemRotationYaw - CameraRotationYaw;
+
+	//bCanChangeCustomDepth = false;
 }
 
