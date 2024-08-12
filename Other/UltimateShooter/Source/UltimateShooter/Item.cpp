@@ -6,6 +6,7 @@
 #include "Components/WidgetComponent.h"
 #include "Components/SphereComponent.h"
 #include "ShooterCharacter.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 AItem::AItem() 
@@ -17,6 +18,9 @@ AItem::AItem()
 	, ItemInterpStartLocation(FVector(0.0f))
 	, CameraTargetLocation(FVector(0.0f))
 	, bInterping(false)
+	, ItemInterpX(0.0f)
+	, ItemInterpY(0.0f)
+	, InterpInitialYawOffset(0.0f)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -177,7 +181,7 @@ void AItem::SetItemProperties(EItemState State)
 			CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			break;
-		case EItemState::EIS_PickedUp:
+		/*case EItemState::EIS_PickedUp:
 			PickupWidget->SetVisibility(false);
 			
 			ItemMesh->SetSimulatePhysics(false);
@@ -191,7 +195,7 @@ void AItem::SetItemProperties(EItemState State)
 			
 			CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			break;
+			break;*/
 	}
 }
 
@@ -200,18 +204,65 @@ void AItem::FinishInterping()
 	bInterping = false;
 	if (Character)
 	{
-		// Subtract 1 from the Item Count of the interp location struct
 		//Character->IncrementInterpLocItemCount(InterpLocIndex, -1);
 		Character->GetPickupItem(this);
 
 		//Character->UnHighlightInventorySlot();
 	}
-	// Set scale back to normal
+
 	SetActorScale3D(FVector(1.0f));
 
 //	DisableGlowMaterial();
 	//bCanChangeCustomDepth = true;
 	//DisableCustomDepth();
+}
+
+void AItem::ItemInterp(float DeltaTime)
+{
+	if (!bInterping) return;
+
+	if (Character && ItemZCurve)
+	{
+		const float ElapsedTime = GetWorldTimerManager().GetTimerElapsed(ItemInterpTimer);
+
+		const float CurveValue = ItemZCurve->GetFloatValue(ElapsedTime);
+		UE_LOG(LogTemp, Warning, TEXT("CurveValue: %f"), CurveValue);
+		
+		FVector ItemLocation = ItemInterpStartLocation;
+		
+		const FVector CameraInterpLocation{ Character->GetCameraInterpLocation() };
+
+
+		const FVector ItemToCamera{ FVector(0.0f, 0.0f, (CameraInterpLocation - ItemLocation).Z) };
+		
+		const float DeltaZ = ItemToCamera.Size();
+
+		const FVector CurrentLocation{ GetActorLocation() };
+		
+		const float InterpXValue = FMath::FInterpTo(CurrentLocation.X, CameraInterpLocation.X, DeltaTime, 30.0f);
+		const float InterpYValue = FMath::FInterpTo(CurrentLocation.Y, CameraInterpLocation.Y, DeltaTime, 30.0f);
+
+	
+		ItemLocation.X = InterpXValue;
+		ItemLocation.Y = InterpYValue;
+
+	
+		ItemLocation.Z += CurveValue * DeltaZ;
+		SetActorLocation(ItemLocation, true, nullptr, ETeleportType::TeleportPhysics);
+
+		
+		const FRotator CameraRotation{ Character->GetFollowCamera()->GetComponentRotation() };
+		
+		FRotator ItemRotation{ 0.0f, CameraRotation.Yaw + InterpInitialYawOffset, 0.0f };
+		SetActorRotation(ItemRotation, ETeleportType::TeleportPhysics);
+
+		if (ItemScaleCurve)
+		{
+			const float ScaleCurveValue = ItemScaleCurve->GetFloatValue(ElapsedTime);
+			SetActorScale3D(FVector(ScaleCurveValue, ScaleCurveValue, ScaleCurveValue));
+		}
+	}
+
 }
 
 
@@ -220,6 +271,7 @@ void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	ItemInterp(DeltaTime);
 }
 
 void AItem::SetItemState(EItemState State)
@@ -246,12 +298,12 @@ void AItem::StartItemCurve(AShooterCharacter* Char, bool bForcePlaySound)
 
 	GetWorldTimerManager().SetTimer(ItemInterpTimer, this, &AItem::FinishInterping, ZCurveTime);
 
-	// Get initial Yaw of the Camera
-	//const float CameraRotationYaw{ Character->GetFollowCamera()->GetComponentRotation().Yaw };
-	// Get initial Yaw of the Item
-	//const float ItemRotationYaw{ GetActorRotation().Yaw };
-	// Initial Yaw offset between Camera and Item
-	//InterpInitialYawOffset = ItemRotationYaw - CameraRotationYaw;
+	
+	const float CameraRotationYaw{ Character->GetFollowCamera()->GetComponentRotation().Yaw };
+	
+	const float ItemRotationYaw{ GetActorRotation().Yaw };
+	
+	InterpInitialYawOffset = ItemRotationYaw - CameraRotationYaw;
 
 	//bCanChangeCustomDepth = false;
 }

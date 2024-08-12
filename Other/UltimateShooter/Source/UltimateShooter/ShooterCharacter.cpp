@@ -448,8 +448,7 @@ void AShooterCharacter::SelectButtonPressed()
 {
 	if (TraceHitItem) 
 	{
-		auto TraceHiWeapon = Cast<AWeapon>(TraceHitItem);
-		SwapWeapon(TraceHiWeapon);
+		TraceHitItem->StartItemCurve(this);
 	}
 }
 
