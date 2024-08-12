@@ -3,3 +3,50 @@
 
 #include "Weapon.h"
 
+AWeapon::AWeapon() :
+	ThrowWeaponTime(0.7f),
+	bFalling(false)
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
+
+void AWeapon::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GetItemState() == EItemState::EIS_Falling && bFalling)
+	{
+		const FRotator MeshRotation{ 0.0f, GetItemMesh()->GetComponentRotation().Yaw, 0.0f };
+		GetItemMesh()->SetWorldRotation(MeshRotation, false, nullptr, ETeleportType::TeleportPhysics);
+	}
+	ThrowWeapon();
+	//UpdateSlideDisplacement();
+}
+
+void AWeapon::ThrowWeapon()
+{
+	FRotator MeshRotation{ 0.0f, GetItemMesh()->GetComponentRotation().Yaw, 0.0f };
+	GetItemMesh()->SetWorldRotation(MeshRotation, false, nullptr, ETeleportType::TeleportPhysics);
+
+	const FVector MeshForward{ GetItemMesh()->GetForwardVector() };
+	const FVector MeshRight{ GetItemMesh()->GetRightVector() };
+
+	FVector ImpulseDirection = MeshRight.RotateAngleAxis(-20.0f, MeshForward);
+
+	float RandomRotation{ 30.f };
+	ImpulseDirection = ImpulseDirection.RotateAngleAxis(RandomRotation, FVector(0.0f, 0.0f, 1.0f));
+	ImpulseDirection *= 20'000.f;
+	GetItemMesh()->AddImpulse(ImpulseDirection);
+
+	bFalling = true;
+	GetWorldTimerManager().SetTimer(ThrowWeaponTimer, this, &AWeapon::StopFalling, ThrowWeaponTime);
+
+	//EnableGlowMaterial();
+}
+
+void AWeapon::StopFalling()
+{
+	bFalling = false;
+	SetItemState(EItemState::EIS_Pickup);
+	//StartPulseTimer();
+}
