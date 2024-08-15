@@ -15,6 +15,18 @@ enum class EAmmoType : uint8
 	EAT_NAX UMETA(DisplayName = "DefaultMAX")
 };
 
+UENUM(BlueprintType)
+enum class ECombatState : uint8
+{
+	ECS_Unoccupied UMETA(DisplayName = "Unoccupied"),
+	ECS_FireTimerInProgress UMETA(DisplayName = "FireTimerInProgress"),
+	ECS_Reloading UMETA(DisplayName = "Reloading"),
+	ECS_Equipping UMETA(DisplayName = "Equipping"),
+	ECS_Stunned UMETA(DisplayName = "Stunned"),
+
+	ECS_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
 UCLASS()
 class ULTIMATESHOOTER_API AShooterCharacter : public ACharacter
 {
@@ -82,6 +94,10 @@ protected:
 	void InitializeAmmoMap();
 
 	bool WeaponHasAmmo();
+
+	void PlayFireSound();
+	void SendBullet();
+	void PlayGunfireMontage();
 
 public:	
 	// Called every frame
@@ -207,6 +223,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Items, meta = (AllowPrivateAccess = "true"))
 	int32 StartingARAmmo;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	ECombatState CombatState;
 
 public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
