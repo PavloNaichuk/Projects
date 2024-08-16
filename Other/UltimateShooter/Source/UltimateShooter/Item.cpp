@@ -204,17 +204,10 @@ void AItem::FinishInterping()
 	bInterping = false;
 	if (Character)
 	{
-		//Character->IncrementInterpLocItemCount(InterpLocIndex, -1);
 		Character->GetPickupItem(this);
-
-		//Character->UnHighlightInventorySlot();
 	}
 
 	SetActorScale3D(FVector(1.0f));
-
-//	DisableGlowMaterial();
-	//bCanChangeCustomDepth = true;
-	//DisableCustomDepth();
 }
 
 void AItem::ItemInterp(float DeltaTime)

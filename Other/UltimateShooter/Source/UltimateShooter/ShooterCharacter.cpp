@@ -688,27 +688,15 @@ FVector AShooterCharacter::GetCameraInterpLocation()
 
 void AShooterCharacter::GetPickupItem(AItem* Item)
 {
-	//Item->PlayEquipSound();
-
+	if (Item->GetEquipSound())
+	{
+		UGameplayStatics::PlaySound2D(this, Item->GetEquipSound());
+	}
 	auto Weapon = Cast<AWeapon>(Item);
 	if (Weapon)
 	{
-		//if (Inventory.Num() < INVENTORY_CAPACITY)
-		//{
-		//	Weapon->SetSlotIndex(Inventory.Num());
-			//Inventory.Add(Weapon);
-			//Weapon->SetItemState(EItemState::EIS_PickedUp);
-		//}
-		//else // Inventory is full! Swap with EquippedWeapon
-		//{
-			SwapWeapon(Weapon);
-		//}
-	}
 
-	//auto Ammo = Cast<AAmmo>(Item);
-	//if (Ammo)
-	//{
-		//PickupAmmo(Ammo);
-	//}
+		SwapWeapon(Weapon);
+	}
 }
 
