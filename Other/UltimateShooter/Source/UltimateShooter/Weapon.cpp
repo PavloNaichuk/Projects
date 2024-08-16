@@ -11,6 +11,7 @@ AWeapon::AWeapon()
 	, WeaponType(EWeaponType::EWT_SubmachineGun)
 	, AmmoType(EAmmoType::EAT_9mm)
 	, ReloadMontageSection(FName(TEXT("Reload SMG")))
+	, ClipBoneName(TEXT("smg_clip"))
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
