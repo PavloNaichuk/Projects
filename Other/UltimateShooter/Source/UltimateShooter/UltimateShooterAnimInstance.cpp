@@ -6,6 +6,20 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
+UUltimateShooterAnimInstance::UUltimateShooterAnimInstance() 
+	: Speed(0.0f)
+	, bIsInAir(false)
+	, bIsAccelerating(false)
+	, MovementOffsetYaw(0.0f)
+	, LastMovementOffsetYaw(0.0f)
+	, bAiming(false)
+	, TIPCharacterYaw(0.0f)
+	, TIPCharacterYawLastFrame(0.0f)
+	, RootYawOffset(0.0f)
+{
+
+}
+
 void UUltimateShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 {
 	if (ShooterCharacter == nullptr)
@@ -33,9 +47,94 @@ void UUltimateShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		}
 		bAiming = ShooterCharacter->GetAiming();
 	}
+	TurnInPlace();
 }
 
 void UUltimateShooterAnimInstance::NativeInitializeAnimation()
 {
 	ShooterCharacter = Cast<AShooterCharacter>(TryGetPawnOwner());
+}
+
+void UUltimateShooterAnimInstance::TurnInPlace()
+{
+	if (ShooterCharacter == nullptr) return;
+
+	//Pitch = ShooterCharacter->GetBaseAimRotation().Pitch;
+
+	if (Speed > 0 || bIsInAir)
+	{
+		RootYawOffset = 0.0f;
+		TIPCharacterYaw = ShooterCharacter->GetActorRotation().Yaw;
+		TIPCharacterYawLastFrame = TIPCharacterYaw;
+		//RotationCurveLastFrame = 0.f;
+		//RotationCurve = 0.f;
+	}
+	else
+	{
+		TIPCharacterYawLastFrame = TIPCharacterYaw;
+		TIPCharacterYaw = ShooterCharacter->GetActorRotation().Yaw;
+		const float TIPYawDelta{ TIPCharacterYaw - TIPCharacterYawLastFrame };
+
+		RootYawOffset = UKismetMathLibrary::NormalizeAxis(RootYawOffset - TIPYawDelta);
+
+		const float Turning{ GetCurveValue(TEXT("Turning")) };
+		if (Turning > 0)
+		{
+			//bTurningInPlace = true;
+			//RotationCurveLastFrame = RotationCurve;
+			//RotationCurve = GetCurveValue(TEXT("Rotation"));
+			//const float DeltaRotation{ RotationCurve - RotationCurveLastFrame };
+
+			//RootYawOffset > 0 ? RootYawOffset -= DeltaRotation : RootYawOffset += DeltaRotation;
+
+			const float ABSRootYawOffset{ FMath::Abs(RootYawOffset) };
+			if (ABSRootYawOffset > 90.f)
+			{
+				const float YawExcess{ ABSRootYawOffset - 90.f };
+				RootYawOffset > 0 ? RootYawOffset -= YawExcess : RootYawOffset += YawExcess;
+			}
+		}
+		else
+		{
+			//bTurningInPlace = false;
+		}
+	}
+
+	// Set the Recoil Weight
+	/*if (bTurningInPlace)
+	{
+		if (bReloading || bEquipping)
+		{
+			RecoilWeight = 1.f;
+		}
+		else
+		{
+			RecoilWeight = 0.f;
+		}
+	}
+	else // not turning in place
+	{
+		if (bCrouching)
+		{
+			if (bReloading || bEquipping)
+			{
+				RecoilWeight = 1.f;
+			}
+			else
+			{
+				RecoilWeight = 0.1f;
+			}
+		}
+		else
+		{
+			if (bAiming || bReloading || bEquipping)
+			{
+				RecoilWeight = 1.f;
+			}
+			else
+			{
+				RecoilWeight = 0.5f;
+			}
+		}
+	}*/
 }
