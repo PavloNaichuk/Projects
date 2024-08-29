@@ -16,6 +16,8 @@ UUltimateShooterAnimInstance::UUltimateShooterAnimInstance()
 	, TIPCharacterYaw(0.0f)
 	, TIPCharacterYawLastFrame(0.0f)
 	, RootYawOffset(0.0f)
+	, Pitch(0.0f)
+	, bReloading(false)
 {
 
 }
@@ -26,6 +28,8 @@ void UUltimateShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		ShooterCharacter = Cast<AShooterCharacter>(TryGetPawnOwner());
 	if (ShooterCharacter)
 	{
+		bReloading = ShooterCharacter->GetCombatState() == ECombatState::ECS_Reloading;
+
 		FVector Velocity{ ShooterCharacter->GetVelocity() };
 		Velocity.Z = 0;
 		Speed = Velocity.Size();
@@ -59,7 +63,7 @@ void UUltimateShooterAnimInstance::TurnInPlace()
 {
 	if (ShooterCharacter == nullptr) return;
 
-	//Pitch = ShooterCharacter->GetBaseAimRotation().Pitch;
+	Pitch = ShooterCharacter->GetBaseAimRotation().Pitch;
 
 	if (Speed > 0 || bIsInAir)
 	{
@@ -100,7 +104,6 @@ void UUltimateShooterAnimInstance::TurnInPlace()
 		}
 	}
 
-	// Set the Recoil Weight
 	/*if (bTurningInPlace)
 	{
 		if (bReloading || bEquipping)
