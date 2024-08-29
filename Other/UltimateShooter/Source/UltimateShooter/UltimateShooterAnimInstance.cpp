@@ -66,8 +66,8 @@ void UUltimateShooterAnimInstance::TurnInPlace()
 		RootYawOffset = 0.0f;
 		TIPCharacterYaw = ShooterCharacter->GetActorRotation().Yaw;
 		TIPCharacterYawLastFrame = TIPCharacterYaw;
-		//RotationCurveLastFrame = 0.f;
-		//RotationCurve = 0.f;
+		RotationCurveLastFrame = 0.0f;
+		RotationCurve = 0.0f;
 	}
 	else
 	{
@@ -81,16 +81,16 @@ void UUltimateShooterAnimInstance::TurnInPlace()
 		if (Turning > 0)
 		{
 			//bTurningInPlace = true;
-			//RotationCurveLastFrame = RotationCurve;
-			//RotationCurve = GetCurveValue(TEXT("Rotation"));
-			//const float DeltaRotation{ RotationCurve - RotationCurveLastFrame };
+			RotationCurveLastFrame = RotationCurve;
+			RotationCurve = GetCurveValue(TEXT("Rotation"));
+			const float DeltaRotation{ RotationCurve - RotationCurveLastFrame };
 
-			//RootYawOffset > 0 ? RootYawOffset -= DeltaRotation : RootYawOffset += DeltaRotation;
+			RootYawOffset > 0 ? RootYawOffset -= DeltaRotation : RootYawOffset += DeltaRotation;
 
 			const float ABSRootYawOffset{ FMath::Abs(RootYawOffset) };
-			if (ABSRootYawOffset > 90.f)
+			if (ABSRootYawOffset > 90.0f)
 			{
-				const float YawExcess{ ABSRootYawOffset - 90.f };
+				const float YawExcess{ ABSRootYawOffset - 90.0f };
 				RootYawOffset > 0 ? RootYawOffset -= YawExcess : RootYawOffset += YawExcess;
 			}
 		}
