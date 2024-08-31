@@ -164,3 +164,17 @@ void UUltimateShooterAnimInstance::TurnInPlace()
 		}
 	}*/
 }
+
+void UUltimateShooterAnimInstance::Lean(float DeltaTime)
+{
+	if (ShooterCharacter == nullptr) return;
+	CharacterYawLastFrame = CharacterYaw;
+	CharacterYaw = ShooterCharacter->GetActorRotation().Yaw;
+
+	//const FRotator Delta{ UKismetMathLibrary::NormalizedDeltaRotator(CharacterRotation, CharacterRotationLastFrame) };
+
+	const float Target{ (CharacterYaw - CharacterYawLastFrame) / DeltaTime };
+	const float Interp{ FMath::FInterpTo(YawDelta, Target, DeltaTime, 6.0f) };
+	YawDelta = FMath::Clamp(Interp, -90.0f, 90.0f);
+
+}
