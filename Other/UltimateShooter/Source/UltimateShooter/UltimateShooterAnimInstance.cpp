@@ -13,14 +13,14 @@ UUltimateShooterAnimInstance::UUltimateShooterAnimInstance()
 	, MovementOffsetYaw(0.0f)
 	, LastMovementOffsetYaw(0.0f)
 	, bAiming(false)
+	, CharacterRotation(FRotator(0.0f))
+	, CharacterRotationLastFrame(FRotator(0.0f))
 	, TIPCharacterYaw(0.0f)
 	, TIPCharacterYawLastFrame(0.0f)
 	, RootYawOffset(0.0f)
 	, Pitch(0.0f)
 	, bReloading(false)
 	, OffsetState(EOffsetState::EOS_Hip)
-	, CharacterRotation(FRotator(0.f))
-	, CharacterRotationLastFrame(FRotator(0.f))
 {
 
 }
