@@ -32,6 +32,7 @@ void UUltimateShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		ShooterCharacter = Cast<AShooterCharacter>(TryGetPawnOwner());
 	if (ShooterCharacter)
 	{
+		bCrouching = ShooterCharacter->GetCrouching();
 		bReloading = ShooterCharacter->GetCombatState() == ECombatState::ECS_Reloading;
 
 		FVector Velocity{ ShooterCharacter->GetVelocity() };
