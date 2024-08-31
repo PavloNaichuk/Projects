@@ -75,6 +75,7 @@ void UUltimateShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		//}
 	}
 	TurnInPlace();
+	Lean(DeltaTime);
 }
 
 void UUltimateShooterAnimInstance::NativeInitializeAnimation()
