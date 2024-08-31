@@ -18,6 +18,7 @@ UUltimateShooterAnimInstance::UUltimateShooterAnimInstance()
 	, RootYawOffset(0.0f)
 	, Pitch(0.0f)
 	, bReloading(false)
+	, OffsetState(EOffsetState::EOS_Hip)
 {
 
 }
@@ -45,11 +46,33 @@ void UUltimateShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 		FRotator MovementRotation = UKismetMathLibrary::MakeRotFromX(ShooterCharacter->GetVelocity()); 
 		MovementOffsetYaw = UKismetMathLibrary::NormalizedDeltaRotator(MovementRotation,AimRotation).Yaw;
 
-		if (ShooterCharacter->GetVelocity().Size() > 0.f)
+		if (ShooterCharacter->GetVelocity().Size() > 0.0f)
 		{
 			LastMovementOffsetYaw = MovementOffsetYaw;
 		}
 		bAiming = ShooterCharacter->GetAiming();
+
+		if (bReloading)
+		{
+			OffsetState = EOffsetState::EOS_Reloading;
+		}
+		else if (bIsInAir)
+		{
+			OffsetState = EOffsetState::EOS_InAir;
+		}
+		else if (ShooterCharacter->GetAiming())
+		{
+			OffsetState = EOffsetState::EOS_Aiming;
+		}
+		else
+		{
+			OffsetState = EOffsetState::EOS_Hip;
+		}
+		
+		//if (ShooterCharacter->GetEquippedWeapon())
+		//{
+			//EquippedWeaponType = ShooterCharacter->GetEquippedWeapon()->GetWeaponType();
+		//}
 	}
 	TurnInPlace();
 }
