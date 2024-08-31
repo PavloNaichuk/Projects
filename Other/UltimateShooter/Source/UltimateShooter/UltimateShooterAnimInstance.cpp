@@ -19,6 +19,8 @@ UUltimateShooterAnimInstance::UUltimateShooterAnimInstance()
 	, Pitch(0.0f)
 	, bReloading(false)
 	, OffsetState(EOffsetState::EOS_Hip)
+	, CharacterRotation(FRotator(0.f))
+	, CharacterRotationLastFrame(FRotator(0.f))
 {
 
 }
