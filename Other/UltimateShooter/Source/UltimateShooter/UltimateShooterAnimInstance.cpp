@@ -22,6 +22,8 @@ UUltimateShooterAnimInstance::UUltimateShooterAnimInstance()
 	, Pitch(0.0f)
 	, bReloading(false)
 	, OffsetState(EOffsetState::EOS_Hip)
+	, RecoilWeight(1.0f)
+	, bTurningInPlace(false)
 {
 
 }
@@ -34,6 +36,7 @@ void UUltimateShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 	{
 		bCrouching = ShooterCharacter->GetCrouching();
 		bReloading = ShooterCharacter->GetCombatState() == ECombatState::ECS_Reloading;
+		bEquipping = ShooterCharacter->GetCombatState() == ECombatState::ECS_Equipping;
 
 		FVector Velocity{ ShooterCharacter->GetVelocity() };
 		Velocity.Z = 0;
@@ -112,7 +115,7 @@ void UUltimateShooterAnimInstance::TurnInPlace()
 		const float Turning{ GetCurveValue(TEXT("Turning")) };
 		if (Turning > 0)
 		{
-			//bTurningInPlace = true;
+			bTurningInPlace = true;
 			RotationCurveLastFrame = RotationCurve;
 			RotationCurve = GetCurveValue(TEXT("Rotation"));
 			const float DeltaRotation{ RotationCurve - RotationCurveLastFrame };
@@ -128,28 +131,28 @@ void UUltimateShooterAnimInstance::TurnInPlace()
 		}
 		else
 		{
-			//bTurningInPlace = false;
+			bTurningInPlace = false;
 		}
 	}
 
-	/*if (bTurningInPlace)
+	if (bTurningInPlace)
 	{
 		if (bReloading || bEquipping)
 		{
-			RecoilWeight = 1.f;
+			RecoilWeight = 1.0f;
 		}
 		else
 		{
-			RecoilWeight = 0.f;
+			RecoilWeight = 0.0f;
 		}
 	}
-	else // not turning in place
+	else 
 	{
 		if (bCrouching)
 		{
 			if (bReloading || bEquipping)
 			{
-				RecoilWeight = 1.f;
+				RecoilWeight = 1.0f;
 			}
 			else
 			{
@@ -160,14 +163,14 @@ void UUltimateShooterAnimInstance::TurnInPlace()
 		{
 			if (bAiming || bReloading || bEquipping)
 			{
-				RecoilWeight = 1.f;
+				RecoilWeight = 1.0f;
 			}
 			else
 			{
 				RecoilWeight = 0.5f;
 			}
 		}
-	}*/
+	}
 }
 
 void UUltimateShooterAnimInstance::Lean(float DeltaTime)
