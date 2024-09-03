@@ -50,7 +50,7 @@ protected:
 	void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 bFromSweep);
 
 	void SetActiveStars();
-	void SetItemProperties(EItemState State);
+	virtual void SetItemProperties(EItemState State);
 
 	void FinishInterping();
 
@@ -134,6 +134,9 @@ public:
 	FORCEINLINE void SetPickupSound(USoundCue* Sound) { PickupSound = Sound; }
 	FORCEINLINE USoundCue* GetEquipSound() const { return EquipSound; }
 	FORCEINLINE void SetEquipSound(USoundCue* Sound) { EquipSound = Sound; }
+
+	FORCEINLINE int32 GetItemCount() const { return ItemCount; }
+
 
 	void StartItemCurve(AShooterCharacter* Char, bool bForcePlaySound = false);
 
