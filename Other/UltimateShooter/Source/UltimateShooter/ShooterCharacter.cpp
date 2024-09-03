@@ -61,6 +61,10 @@ AShooterCharacter::AShooterCharacter()
 	, BaseGroundFriction(2.0f)
 	, CrouchingGroundFriction(100.0f)
 	, bAimingButtonPressed(false)
+	, bShouldPlayPickupSound(true)
+	, bShouldPlayEquipSound(true)
+	, PickupSoundResetTime(0.2f)
+	, EquipSoundResetTime(0.2f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -813,6 +817,16 @@ void AShooterCharacter::FinishReloading()
 	}
 }
 
+void AShooterCharacter::ResetPickupSoundTimer()
+{
+	bShouldPlayPickupSound = true;
+}
+
+void AShooterCharacter::ResetEquipSoundTimer()
+{
+	bShouldPlayEquipSound = true;
+}
+
 float AShooterCharacter::GetCrosshairSpreadMultiplier() const
 {
 	return CrosshairSpreadMultiplier;
@@ -834,6 +848,7 @@ void AShooterCharacter::IncrementOverlappedItemCount(int8 Amount)
 
 void AShooterCharacter::GetPickupItem(AItem* Item)
 {
+	Item->PlayEquipSound();
 	if (Item->GetEquipSound())
 	{
 		UGameplayStatics::PlaySound2D(this, Item->GetEquipSound());
@@ -886,5 +901,17 @@ void AShooterCharacter::IncrementInterpLocItemCount(int32 Index, int32 Amount)
 	{
 		InterpLocations[Index].ItemCount += Amount;
 	}
+}
+
+void AShooterCharacter::StartPickupSoundTimer()
+{
+	bShouldPlayPickupSound = false;
+	GetWorldTimerManager().SetTimer(PickupSoundTimer, this, &AShooterCharacter::ResetPickupSoundTimer, PickupSoundResetTime);
+}
+
+void AShooterCharacter::StartEquipSoundTimer()
+{
+	bShouldPlayEquipSound = false;
+	GetWorldTimerManager().SetTimer(PickupSoundTimer, this, &AShooterCharacter::ResetEquipSoundTimer, EquipSoundResetTime);
 }
 

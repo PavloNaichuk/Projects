@@ -67,9 +67,13 @@ protected:
 
 	FVector GetInterpLocation();
 
+	void PlayPickupSound(bool bForcePlaySound = false);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void PlayEquipSound(bool bForcePlaySound = false);
 private:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
