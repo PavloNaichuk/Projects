@@ -23,6 +23,7 @@ AItem::AItem()
 	, ItemInterpX(0.0f)
 	, ItemInterpY(0.0f)
 	, InterpInitialYawOffset(0.0f)
+	, ItemType(EItemType::EIT_MAX)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
