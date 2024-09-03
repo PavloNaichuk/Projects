@@ -35,8 +35,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ammo, meta = (AllowPrivateAccess = "true"))
 	EAmmoType AmmoType;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ammo, meta = (AllowPrivateAccess = "true"))
-	//UTexture2D* AmmoIconTexture;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ammo, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* AmmoIconTexture;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ammo, meta = (AllowPrivateAccess = "true"))
 	//class USphereComponent* AmmoCollisionSphere;
