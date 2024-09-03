@@ -107,6 +107,8 @@ protected:
 
 	virtual void Jump() override;
 
+	void InterpCapsuleHalfHeight(float DeltaTime);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -258,6 +260,21 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	float CrouchMovementSpeed;
+
+	float CurrentCapsuleHalfHeight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	float StandingCapsuleHalfHeight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	float CrouchingCapsuleHalfHeight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	float BaseGroundFriction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	float CrouchingGroundFriction;
+
 
 public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

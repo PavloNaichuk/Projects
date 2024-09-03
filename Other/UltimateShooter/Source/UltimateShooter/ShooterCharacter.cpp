@@ -16,6 +16,7 @@
 #include "Weapon.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter() 
@@ -54,6 +55,10 @@ AShooterCharacter::AShooterCharacter()
 	, bCrouching(false)
 	, BaseMovementSpeed(650.0f)
 	, CrouchMovementSpeed(300.0f)
+	, StandingCapsuleHalfHeight(88.0f)
+	, CrouchingCapsuleHalfHeight(44.0f)
+	, BaseGroundFriction(2.0f)
+	, CrouchingGroundFriction(100.0f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -62,7 +67,7 @@ AShooterCharacter::AShooterCharacter()
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 180.0f;
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->SocketOffset = FVector(0.0f, 50.0f, 70.0f);
+	CameraBoom->SocketOffset = FVector(0.0f, 50.0f, 45.0f);
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
@@ -596,12 +601,12 @@ void AShooterCharacter::CrouchButtonPressed()
 	if (bCrouching)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = CrouchMovementSpeed;
-		//GetCharacterMovement()->GroundFriction = CrouchingGroundFriction;
+		GetCharacterMovement()->GroundFriction = CrouchingGroundFriction;
 	}
 	else
 	{
 		GetCharacterMovement()->MaxWalkSpeed = BaseMovementSpeed;
-		//GetCharacterMovement()->GroundFriction = BaseGroundFriction;
+		GetCharacterMovement()->GroundFriction = BaseGroundFriction;
 	}
 }
 
@@ -618,6 +623,26 @@ void AShooterCharacter::Jump()
 	}
 }
 
+void AShooterCharacter::InterpCapsuleHalfHeight(float DeltaTime)
+{
+	float TargetCapsuleHalfHeight{};
+	if (bCrouching)
+	{
+		TargetCapsuleHalfHeight = CrouchingCapsuleHalfHeight;
+	}
+	else
+	{
+		TargetCapsuleHalfHeight = StandingCapsuleHalfHeight;
+	}
+	const float InterpHalfHeight{ FMath::FInterpTo(GetCapsuleComponent()->GetScaledCapsuleHalfHeight(), TargetCapsuleHalfHeight, DeltaTime, 20.0f) };
+
+	const float DeltaCapsuleHalfHeight{ InterpHalfHeight - GetCapsuleComponent()->GetScaledCapsuleHalfHeight() };
+	const FVector MeshOffset{ 0.0f, 0.0f, -DeltaCapsuleHalfHeight };
+	GetMesh()->AddLocalOffset(MeshOffset);
+
+	GetCapsuleComponent()->SetCapsuleHalfHeight(InterpHalfHeight);
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -626,6 +651,7 @@ void AShooterCharacter::Tick(float DeltaTime)
 	SetLookRates();
 	CalculateCrosshairSpread(DeltaTime);
 	TraceForItems();
+	InterpCapsuleHalfHeight(DeltaTime);
 }
 
 // Called to bind functionality to input
