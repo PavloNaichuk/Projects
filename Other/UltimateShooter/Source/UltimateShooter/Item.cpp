@@ -185,7 +185,7 @@ void AItem::SetItemProperties(EItemState State)
 			CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			break;
-		/*case EItemState::EIS_PickedUp:
+		case EItemState::EIS_PickedUp:
 			PickupWidget->SetVisibility(false);
 			
 			ItemMesh->SetSimulatePhysics(false);
@@ -199,7 +199,7 @@ void AItem::SetItemProperties(EItemState State)
 			
 			CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 			CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			break;*/
+			break;
 	}
 }
 
@@ -352,7 +352,6 @@ void AItem::StartItemCurve(AShooterCharacter* Char, bool bForcePlaySound)
 	ItemInterpStartLocation = GetActorLocation();
 	bInterping = true;
 	SetItemState(EItemState::EIS_EquipInterping);
-	//GetWorldTimerManager().ClearTimer(PulseTimer);
 
 	GetWorldTimerManager().SetTimer(ItemInterpTimer, this, &AItem::FinishInterping, ZCurveTime);
 
@@ -362,7 +361,5 @@ void AItem::StartItemCurve(AShooterCharacter* Char, bool bForcePlaySound)
 	const float ItemRotationYaw{ GetActorRotation().Yaw };
 	
 	InterpInitialYawOffset = ItemRotationYaw - CameraRotationYaw;
-
-	//bCanChangeCustomDepth = false;
 }
 

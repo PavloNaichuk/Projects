@@ -160,8 +160,4 @@ public:
 
 
 	void StartItemCurve(AShooterCharacter* Char, bool bForcePlaySound = false);
-
-	//virtual void EnableCustomDepth();
-	//virtual void DisableCustomDepth();
-	//void DisableGlowMaterial();
 };

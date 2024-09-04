@@ -449,15 +449,6 @@ void AShooterCharacter::EquipWeapon(AWeapon* WeaponToEquip)
 			HandSocket->AttachActor(WeaponToEquip, GetMesh());
 		}
 
-		/*if (EquippedWeapon == nullptr)
-		{
-			EquipItemDelegate.Broadcast(-1, WeaponToEquip->GetSlotIndex());
-		}
-		else if (!bSwapping)
-		{
-			EquipItemDelegate.Broadcast(EquippedWeapon->GetSlotIndex(), WeaponToEquip->GetSlotIndex());
-		}*/
-
 		EquippedWeapon = WeaponToEquip;
 
 		EquippedWeapon->SetItemState(EItemState::EIS_Equipped);
