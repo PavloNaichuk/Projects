@@ -1440,3 +1440,72 @@ LogConfig: Setting CVar [[r.setres:1280x720]]
 [2024.10.13-08.38.55:919][877]LogFileHelpers: Saving map 'Level1' took 0.029
 [2024.10.13-08.38.55:926][877]AssetCheck: New page: Asset Save: Level1
 [2024.10.13-08.38.55:926][877]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
+[2024.10.13-09.02.29:583][991]LogAudioMixer: Warning: Changing default audio render device to new device: {0.0.0.00000000}.{748a502b-ea9f-4ba0-8f27-031acd763b7b}.
+[2024.10.13-09.02.29:583][991]LogAudioMixer: Resetting audio stream to device id 
+[2024.10.13-09.02.29:587][991]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.13-09.02.29:587][991]LogAudioMixer: Display: 1: FrontRight
+[2024.10.13-09.02.37:624][ 15]LogAudioMixer: Warning: Changing default audio render device to new device: {0.0.0.00000000}.{1797d197-e51b-4a66-8c87-dd4d05161454}.
+[2024.10.13-09.02.37:624][ 15]LogAudioMixer: Resetting audio stream to device id 
+[2024.10.13-09.02.37:633][ 15]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.13-09.02.37:633][ 15]LogAudioMixer: Display: 1: FrontRight
+[2024.10.13-09.06.12:776][658]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.10.13-09.06.12:776][658]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.10.13-09.11.12:184][334]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.10.13-09.11.12:184][334]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.10.13-09.11.39:249][681]LogFactory: FactoryCreateFile: FontFace with FontFileImportFactory (0 0 ../../../../../../Users/pasha/Downloads/alexandria/AlexandriaFLF-Italic.ttf)
+[2024.10.13-09.11.41:774][681]LogSlate: Window 'Font Face Import Options' being destroyed
+[2024.10.13-09.11.41:777][681]Message dialog closed, result: Yes, title: Font Face Import Options, text: Would you like to create a new Font asset using the imported Font Face as its default font?
+[2024.10.13-09.11.41:778][681]LogSlate: FontCache flush requested. Reason: UFontFace::PostEditChangeProperty
+[2024.10.13-09.11.41:778][681]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.13-09.11.41:780][681]LogFactory: FactoryCreateFile: FontFace with FontFileImportFactory (0 0 ../../../../../../Users/pasha/Downloads/alexandria/AlexandriaFLF-BoldItalic.ttf)
+[2024.10.13-09.11.41:815][681]LogSlate: Took 0.000084 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' (155K)
+[2024.10.13-09.11.43:182][681]LogSlate: Window 'Font Face Import Options' being destroyed
+[2024.10.13-09.11.43:185][681]Message dialog closed, result: YesAll, title: Font Face Import Options, text: Would you like to create a new Font asset using the imported Font Face as its default font?
+[2024.10.13-09.11.43:186][681]LogSlate: FontCache flush requested. Reason: UFontFace::PostEditChangeProperty
+[2024.10.13-09.11.43:186][681]LogSlate: Took 0.000097 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
+[2024.10.13-09.11.43:187][681]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.13-09.11.43:189][681]LogFactory: FactoryCreateFile: FontFace with FontFileImportFactory (0 0 ../../../../../../Users/pasha/Downloads/alexandria/AlexandriaFLF-Bold.ttf)
+[2024.10.13-09.11.43:189][681]LogSlate: FontCache flush requested. Reason: UFontFace::PostEditChangeProperty
+[2024.10.13-09.11.43:190][681]LogFactory: FactoryCreateFile: FontFace with FontFileImportFactory (0 0 ../../../../../../Users/pasha/Downloads/alexandria/AlexandriaFLF.ttf)
+[2024.10.13-09.11.43:206][681]LogSlate: Took 0.000071 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
+[2024.10.13-09.11.43:207][681]LogSlate: Took 0.000074 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' (155K)
+[2024.10.13-09.11.43:207][681]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.13-09.11.43:212][681]LogSlate: Took 0.000070 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
+[2024.10.13-09.11.43:212][681]LogSlate: Took 0.000115 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' (155K)
+[2024.10.13-09.11.43:220][681]LogSlate: Took 0.000090 seconds to synchronously load lazily loaded font '../../../Engine/Content/Editor/Slate/Fonts/FontAwesome.ttf' (139K)
+[2024.10.13-09.11.43:221][681]LogSlate: Took 0.000083 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Bold.ttf' (160K)
+[2024.10.13-09.11.46:272][ 29]LogUObjectHash: Compacting FUObjectHashTables data took   2.50ms
+[2024.10.13-09.11.46:274][ 29]LogFileHelpers: Editor autosave (incl. external actors) for '/Game/Maps/Level1' took 0.029
+[2024.10.13-09.11.46:274][ 29]OBJ SavePackage: Generating thumbnails for [0] asset(s) in package [/Game/Blueprints/Pickup/AlexandriaFLF-Italic] ([1] browsable assets)...
+[2024.10.13-09.11.46:274][ 29]OBJ SavePackage: Finished generating thumbnails for package [/Game/Blueprints/Pickup/AlexandriaFLF-Italic]
+[2024.10.13-09.11.46:275][ 29]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/AlexandriaFLF-Italic_Auto2F8E14ADC42AAA9F7E78970AA359A87A1.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Autosaves/Game/Blueprints/Pickup/AlexandriaFLF-Italic_Auto2.uasset'
+[2024.10.13-09.11.46:275][ 29]OBJ SavePackage: Generating thumbnails for [0] asset(s) in package [/Game/Blueprints/Pickup/AlexandriaFLF-BoldItalic] ([1] browsable assets)...
+[2024.10.13-09.11.46:275][ 29]OBJ SavePackage: Finished generating thumbnails for package [/Game/Blueprints/Pickup/AlexandriaFLF-BoldItalic]
+[2024.10.13-09.11.46:276][ 29]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/AlexandriaFLF-BoldItalic_Auto29667AC684D5F47EC4F9E00BEC6BCC2C7.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Autosaves/Game/Blueprints/Pickup/AlexandriaFLF-BoldItalic_Auto2.uasset'
+[2024.10.13-09.11.46:276][ 29]OBJ SavePackage: Generating thumbnails for [0] asset(s) in package [/Game/Blueprints/Pickup/AlexandriaFLF-Bold] ([1] browsable assets)...
+[2024.10.13-09.11.46:276][ 29]OBJ SavePackage: Finished generating thumbnails for package [/Game/Blueprints/Pickup/AlexandriaFLF-Bold]
+[2024.10.13-09.11.46:276][ 29]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/AlexandriaFLF-Bold_Auto2A15ACF6F42AC6DD9C42B3AB0269D23CA.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Autosaves/Game/Blueprints/Pickup/AlexandriaFLF-Bold_Auto2.uasset'
+[2024.10.13-09.11.46:277][ 29]OBJ SavePackage: Generating thumbnails for [0] asset(s) in package [/Game/Blueprints/Pickup/AlexandriaFLF] ([1] browsable assets)...
+[2024.10.13-09.11.46:277][ 29]OBJ SavePackage: Finished generating thumbnails for package [/Game/Blueprints/Pickup/AlexandriaFLF]
+[2024.10.13-09.11.46:277][ 29]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/AlexandriaFLF_Auto258378F8D4A857B7C0738C3BC7178D0A1.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Autosaves/Game/Blueprints/Pickup/AlexandriaFLF_Auto2.uasset'
+[2024.10.13-09.11.46:286][ 29]LogFileHelpers: Auto-saving content packages took 0.012
+[2024.10.13-09.12.25:138][920]LogUObjectHash: Compacting FUObjectHashTables data took   0.39ms
+[2024.10.13-09.12.27:248][920]LogSlate: Window 'Delete Assets' being destroyed
+[2024.10.13-09.12.27:309][920]LogUObjectHash: Compacting FUObjectHashTables data took   1.38ms
+[2024.10.13-09.12.44:112][428]LogFactory: FactoryCreateFile: FontFace with FontFileImportFactory (0 0 ../../../../../../Users/pasha/Downloads/alexandria/AlexandriaFLF.ttf)
+[2024.10.13-09.12.48:082][428]LogSlate: Window 'Font Face Import Options' being destroyed
+[2024.10.13-09.12.48:084][428]Message dialog closed, result: YesAll, title: Font Face Import Options, text: Would you like to create a new Font asset using the imported Font Face as its default font?
+[2024.10.13-09.12.48:086][428]LogSlate: FontCache flush requested. Reason: UFontFace::PostEditChangeProperty
+[2024.10.13-09.12.48:087][428]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.13-09.12.48:093][428]LogSlate: Took 0.000116 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
+[2024.10.13-09.12.48:101][428]LogSlate: Took 0.000080 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' (155K)
+[2024.10.13-09.12.48:111][428]LogSlate: Took 0.000081 seconds to synchronously load lazily loaded font '../../../Engine/Content/Editor/Slate/Fonts/FontAwesome.ttf' (139K)
+[2024.10.13-09.12.48:112][428]LogSlate: Took 0.000076 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Bold.ttf' (160K)
+[2024.10.13-09.12.59:757][817]LogSlate: Took 0.000124 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-BoldCondensed.ttf' (158K)
+[2024.10.13-09.12.59:760][817]LogSlate: Took 0.000094 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/DroidSansMono.ttf' (77K)
+[2024.10.13-09.13.25:878][944]BlueprintLog: New page: Compile PickupText
+[2024.10.13-09.13.25:903][944]LogUObjectHash: Compacting FUObjectHashTables data took   1.67ms
+[2024.10.13-09.13.26:685][ 28]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Pickup/PickupText" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Blueprints/Pickup/PickupText.uasset" SILENT=true
+[2024.10.13-09.13.26:687][ 28]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/PickupText9B5CD9594AF5FF512936259C132F85D6.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Blueprints/Pickup/PickupText.uasset'
+[2024.10.13-09.13.26:696][ 28]AssetCheck: New page: Asset Save: PickupText
+[2024.10.13-09.13.26:696][ 28]LogContentValidation: Display: Validating WidgetBlueprint /Game/Blueprints/Pickup/PickupText.PickupText
