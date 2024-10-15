@@ -4202,3 +4202,11 @@ LogConfig: Setting CVar [[r.setres:1280x720]]
 [2024.10.15-15.50.30:557][122]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
 [2024.10.15-15.50.30:559][122]LogUObjectHash: Compacting FUObjectHashTables data took   1.63ms
 [2024.10.15-15.50.30:600][124]LogPlayLevel: Display: Destroying online subsystem :Context_74
+[2024.10.15-15.51.05:897][300]LogUObjectHash: Compacting FUObjectHashTables data took   1.64ms
+[2024.10.15-15.51.07:174][300]LogSlate: Window 'Save Content' being destroyed
+[2024.10.15-15.51.07:201][300]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level3" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.15-15.51.07:216][300]LogUObjectHash: Compacting FUObjectHashTables data took   0.42ms
+[2024.10.15-15.51.07:221][300]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Level33C072F0A4DB558BC7A09D0BEB3CEC1F3.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap'
+[2024.10.15-15.51.07:225][300]LogFileHelpers: Saving map 'Level3' took 0.023
+[2024.10.15-15.51.07:233][300]AssetCheck: New page: Asset Save: Level3
+[2024.10.15-15.51.07:234][300]LogContentValidation: Display: Validating World /Game/Maps/Level3.Level3
