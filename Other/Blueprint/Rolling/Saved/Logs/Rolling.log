@@ -1574,3 +1574,592 @@ LogConfig: Setting CVar [[r.setres:1280x720]]
 [2024.10.17-12.37.54:885][191]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/BallPawn4F73B3E54D2C1F48BB36F4A9EBFF5FB4.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Blueprints/BallPawn.uasset'
 [2024.10.17-12.37.54:893][191]AssetCheck: New page: Asset Save: BallPawn
 [2024.10.17-12.37.54:893][191]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/BallPawn.BallPawn
+[2024.10.17-12.42.35:668][197]LogUObjectHash: Compacting FUObjectHashTables data took   2.97ms
+[2024.10.17-12.42.35:671][197]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Autosaves/Game/Maps/Level1_Auto4.umap" SILENT=true AUTOSAVING=true KEEPDIRTY=false
+[2024.10.17-12.42.35:682][197]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Level1_Auto4D127B2AF444A211B41A69DAE149FE2C4.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Autosaves/Game/Maps/Level1_Auto4.umap'
+[2024.10.17-12.42.35:682][197]LogFileHelpers: Editor autosave (incl. external actors) for '/Game/Maps/Level1' took 0.031
+[2024.10.17-12.42.35:682][197]LogFileHelpers: Editor autosave (incl. sublevels & external actors) for all levels took 0.031
+[2024.10.17-12.48.42:969][293]LogAudioMixer: Warning: Changing default audio render device to new device: {0.0.0.00000000}.{748a502b-ea9f-4ba0-8f27-031acd763b7b}.
+[2024.10.17-12.48.42:969][293]LogAudioMixer: Resetting audio stream to device id 
+[2024.10.17-12.48.42:971][293]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.17-12.48.42:971][293]LogAudioMixer: Display: 1: FrontRight
+[2024.10.17-12.48.56:068][332]LogAudioMixer: Warning: Changing default audio render device to new device: {0.0.0.00000000}.{1797d197-e51b-4a66-8c87-dd4d05161454}.
+[2024.10.17-12.48.56:068][332]LogAudioMixer: Resetting audio stream to device id 
+[2024.10.17-12.48.56:074][332]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.17-12.48.56:074][332]LogAudioMixer: Display: 1: FrontRight
+[2024.10.17-13.30.24:139][153]LogSlate: Took 0.000099 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
+[2024.10.17-13.30.26:808][472]LogSlate: Window 'Open Level' being destroyed
+[2024.10.17-13.30.31:494][870]LogSlate: Window 'New Level' being destroyed
+[2024.10.17-13.30.34:250][870]LogSlate: Window 'Save Content' being destroyed
+[2024.10.17-13.30.34:263][870]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level1.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.17-13.30.34:278][870]LogUObjectHash: Compacting FUObjectHashTables data took   2.03ms
+[2024.10.17-13.30.34:294][870]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Level1DF04C84F408135386ACA9B87D7FF1AE7.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level1.umap'
+[2024.10.17-13.30.34:297][870]LogFileHelpers: Saving map 'Level1' took 0.035
+[2024.10.17-13.30.34:301][870]Cmd: MAP LOAD FILE="../../../Engine/Content/Maps/Templates/Template_Default.umap" TEMPLATE=1 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.10.17-13.30.34:326][870]LightingResults: New page: Lighting Build
+[2024.10.17-13.30.34:326][870]LoadErrors: New page: Loading map: Template_Default.umap
+[2024.10.17-13.30.34:355][870]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.30.34:355][870]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.30.34:355][870]MapCheck: New page: Map Check
+[2024.10.17-13.30.34:355][870]LightingResults: New page: Lighting Build
+[2024.10.17-13.30.34:367][870]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.30.34:371][870]LogUObjectHash: Compacting FUObjectHashTables data took   2.18ms
+[2024.10.17-13.30.34:375][870]LogTexture: Display: Building textures: DeprecatedTextureEB9CBE3C423008B5E8E130901E171C89 (BGRA8, 128X128)
+[2024.10.17-13.30.34:377][870]LogAudio: Display: Audio Device (ID: 1) registered with world 'Untitled_1'.
+[2024.10.17-13.30.34:377][870]LogAIModule: Creating AISystem for world Untitled_1
+[2024.10.17-13.30.34:427][870]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.10.17-13.30.34:441][870]LogUObjectHash: Compacting FUObjectHashTables data took   1.68ms
+[2024.10.17-13.30.34:445][870]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.10.17-13.30.34:445][870]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.055ms to complete.
+[2024.10.17-13.30.34:445][870]LogFileHelpers: Loading map 'Template_Default' took 0.144
+[2024.10.17-13.30.34:450][870]AssetCheck: New page: Asset Save: Level1
+[2024.10.17-13.30.34:450][870]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
+[2024.10.17-13.30.51:150][356]LogSlate: Window 'Save Level As' being destroyed
+[2024.10.17-13.30.51:171][356]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/FinalLevel" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.17-13.30.51:223][356]LogUObjectHash: Compacting FUObjectHashTables data took   3.04ms
+[2024.10.17-13.30.51:229][356]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/FinalLevel747417504C6F698B5556E6BF6F3E6D82.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel.umap'
+[2024.10.17-13.30.51:233][356]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/FinalLevel_BuiltData" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel_BuiltData.uasset" SILENT=true
+[2024.10.17-13.30.51:251][356]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/FinalLevel_BuiltData86C8AD9840F0C65260B0678A63B66C9B.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel_BuiltData.uasset'
+[2024.10.17-13.30.51:256][356]LogFileHelpers: Saving map 'FinalLevel' took 0.103
+[2024.10.17-13.30.51:261][356]AssetCheck: New page: Asset Save: multiple assets
+[2024.10.17-13.30.51:261][356]LogContentValidation: Display: Validating World /Game/Maps/FinalLevel.FinalLevel
+[2024.10.17-13.30.51:261][356]LogContentValidation: Display: Validating MapBuildDataRegistry /Game/Maps/FinalLevel_BuiltData.FinalLevel_BuiltData
+[2024.10.17-13.30.57:117][ 22]LogUObjectHash: Compacting FUObjectHashTables data took   3.15ms
+[2024.10.17-13.30.57:118][ 22]Cmd: MAP LOAD FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.10.17-13.30.57:140][ 22]LightingResults: New page: Lighting Build
+[2024.10.17-13.30.57:140][ 22]LoadErrors: New page: Loading map: Level3.umap
+[2024.10.17-13.30.57:140][ 22]LogWorld: UWorld::CleanupWorld for FinalLevel, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.30.57:141][ 22]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.30.57:141][ 22]MapCheck: New page: Map Check
+[2024.10.17-13.30.57:141][ 22]LightingResults: New page: Lighting Build
+[2024.10.17-13.30.57:152][ 22]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.30.57:157][ 22]LogUObjectHash: Compacting FUObjectHashTables data took   1.87ms
+[2024.10.17-13.30.57:169][ 22]LogUObjectHash: Compacting FUObjectHashTables data took   1.39ms
+[2024.10.17-13.30.57:176][ 22]LogUObjectHash: Compacting FUObjectHashTables data took   0.33ms
+[2024.10.17-13.30.57:189][ 22]LogAudio: Display: Audio Device (ID: 1) registered with world 'Level3'.
+[2024.10.17-13.30.57:189][ 22]LogAIModule: Creating AISystem for world Level3
+[2024.10.17-13.30.57:233][ 22]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.10.17-13.30.57:244][ 22]LogUObjectHash: Compacting FUObjectHashTables data took   1.66ms
+[2024.10.17-13.30.57:250][ 22]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.10.17-13.30.57:251][ 22]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.045ms to complete.
+[2024.10.17-13.30.57:251][ 22]LogFileHelpers: Loading map 'Level3' took 0.133
+[2024.10.17-13.30.57:251][ 22]LogSlate: Window 'Open Level' being destroyed
+[2024.10.17-13.31.00:980][462]LogAssetEditorSubsystem: Opening Asset editor for LevelScriptBlueprint /Game/Maps/Level3.Level3:PersistentLevel.Level3
+[2024.10.17-13.31.30:945][511]LogSlate: Window 'Level3' being destroyed
+[2024.10.17-13.31.30:948][511]LogSlate: Window 'Level3' being destroyed
+[2024.10.17-13.31.30:977][511]LogWorld: UWorld::CleanupWorld for World_9, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.31.30:977][511]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.31.37:106][236]LogUObjectHash: Compacting FUObjectHashTables data took   1.98ms
+[2024.10.17-13.31.38:542][236]LogSlate: Window 'Save Content' being destroyed
+[2024.10.17-13.31.38:557][236]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level3" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.17-13.31.38:571][236]LogUObjectHash: Compacting FUObjectHashTables data took   1.34ms
+[2024.10.17-13.31.38:579][236]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Level3B6921BD04A0C5648AD167887ECB8E98A.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap'
+[2024.10.17-13.31.38:582][236]LogFileHelpers: Saving map 'Level3' took 0.025
+[2024.10.17-13.31.38:584][236]Cmd: MAP LOAD FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.10.17-13.31.38:599][236]LightingResults: New page: Lighting Build
+[2024.10.17-13.31.38:599][236]LoadErrors: New page: Loading map: FinalLevel.umap
+[2024.10.17-13.31.38:601][236]LogWorld: UWorld::CleanupWorld for Level3, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.31.38:601][236]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.31.38:601][236]MapCheck: New page: Map Check
+[2024.10.17-13.31.38:601][236]LightingResults: New page: Lighting Build
+[2024.10.17-13.31.38:611][236]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.31.38:614][236]LogUObjectHash: Compacting FUObjectHashTables data took   1.93ms
+[2024.10.17-13.31.38:626][236]LogUObjectHash: Compacting FUObjectHashTables data took   1.62ms
+[2024.10.17-13.31.38:635][236]LogUObjectHash: Compacting FUObjectHashTables data took   0.41ms
+[2024.10.17-13.31.38:638][236]LogAudio: Display: Audio Device (ID: 1) registered with world 'FinalLevel'.
+[2024.10.17-13.31.38:638][236]LogAIModule: Creating AISystem for world FinalLevel
+[2024.10.17-13.31.38:680][236]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.10.17-13.31.38:693][236]LogUObjectHash: Compacting FUObjectHashTables data took   1.69ms
+[2024.10.17-13.31.38:699][236]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.10.17-13.31.38:699][236]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.04ms to complete.
+[2024.10.17-13.31.38:699][236]LogFileHelpers: Loading map 'FinalLevel' took 0.114
+[2024.10.17-13.31.38:699][236]LogSlate: Window 'Open Level' being destroyed
+[2024.10.17-13.31.38:705][236]AssetCheck: New page: Asset Save: Level3
+[2024.10.17-13.31.38:705][236]LogContentValidation: Display: Validating World /Game/Maps/Level3.Level3
+[2024.10.17-13.31.42:095][635]LogAssetEditorSubsystem: Opening Asset editor for LevelScriptBlueprint /Game/Maps/FinalLevel.FinalLevel:PersistentLevel.FinalLevel
+[2024.10.17-13.31.49:420][479]LogSlate: Window 'FinalLevel' being destroyed
+[2024.10.17-13.32.31:395][194]BlueprintLog: New page: Compile FinalLevel
+[2024.10.17-13.32.31:416][194]LogUObjectHash: Compacting FUObjectHashTables data took   2.44ms
+[2024.10.17-13.32.41:084][330]LogContentBrowser: Deferred new asset file creation: NewWidgetBlueprint
+[2024.10.17-13.32.41:093][330]LogContentBrowser: Creating deferred item: NewWidgetBlueprint
+[2024.10.17-13.32.48:679][241]LogContentBrowser: Attempting asset rename: NewWidgetBlueprint -> WinHUD
+[2024.10.17-13.32.48:681][241]LogContentBrowser: End creating deferred item NewWidgetBlueprint
+[2024.10.17-13.32.50:248][427]LogAssetEditorSubsystem: Opening Asset editor for WidgetBlueprint /Game/Blueprints/WinHUD.WinHUD
+[2024.10.17-13.33.25:847][550]LogSlate: Took 0.011254 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/DroidSansFallback.ttf' (3848K)
+[2024.10.17-13.37.04:153][728]LogSlate: Window 'Color Picker' being destroyed
+[2024.10.17-13.37.13:450][838]LogSlate: Window 'Color Picker' being destroyed
+[2024.10.17-13.43.46:513][852]BlueprintLog: New page: Compile WinHUD
+[2024.10.17-13.43.46:563][852]LogUObjectHash: Compacting FUObjectHashTables data took   4.18ms
+[2024.10.17-13.43.47:129][916]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/WinHUD" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Blueprints/WinHUD.uasset" SILENT=true
+[2024.10.17-13.43.47:136][916]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/WinHUD0B495A8241D44BB159CF43AC6E247233.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Blueprints/WinHUD.uasset'
+[2024.10.17-13.43.47:151][916]AssetCheck: New page: Asset Save: WinHUD
+[2024.10.17-13.43.47:151][916]LogContentValidation: Display: Validating WidgetBlueprint /Game/Blueprints/WinHUD.WinHUD
+[2024.10.17-13.43.53:636][688]LogTemp: Repeating last play command: Selected Viewport
+[2024.10.17-13.43.53:644][688]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.10.17-13.43.53:644][688]PIE: New page: PIE session: FinalLevel (Oct 17, 2024, 7:43:53 PM)
+[2024.10.17-13.43.53:676][688]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_FinalLevel
+[2024.10.17-13.43.53:677][688]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001680s)
+[2024.10.17-13.43.53:678][688]LogAIModule: Creating AISystem for world FinalLevel
+[2024.10.17-13.43.53:678][688]LogPlayLevel: PIE: World Init took: (0.000639s)
+[2024.10.17-13.43.53:678][688]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/FinalLevel.FinalLevel to /Game/Maps/UEDPIE_0_FinalLevel.FinalLevel (0.002407s)
+[2024.10.17-13.43.53:705][688]LogUObjectHash: Compacting FUObjectHashTables data took   3.48ms
+[2024.10.17-13.43.53:706][688]LogAudio: Display: Creating Audio Device:                 Id: 12, Scope: Unique, Realtime: True
+[2024.10.17-13.43.53:706][688]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.10.17-13.43.53:706][688]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.10.17-13.43.53:706][688]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.10.17-13.43.53:706][688]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.10.17-13.43.53:706][688]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.10.17-13.43.53:706][688]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.10.17-13.43.53:706][688]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.10.17-13.43.53:706][688]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.10.17-13.43.53:706][688]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.10.17-13.43.53:706][688]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.10.17-13.43.53:706][688]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.10.17-13.43.53:706][688]LogAudioMixer: Display: Initializing audio mixer.
+[2024.10.17-13.43.53:709][688]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.17-13.43.53:709][688]LogAudioMixer: Display: 1: FrontRight
+[2024.10.17-13.43.53:718][688]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.10.17-13.43.53:718][688]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.10.17-13.43.53:718][688]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.10.17-13.43.53:718][688]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.10.17-13.43.53:718][688]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.10.17-13.43.53:718][688]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.10.17-13.43.53:718][688]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.10.17-13.43.53:719][688]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.10.17-13.43.53:719][688]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.10.17-13.43.53:719][688]LogInit: FAudioDevice initialized.
+[2024.10.17-13.43.53:719][688]LogAudio: Display: Audio Device (ID: 12) registered with world 'FinalLevel'.
+[2024.10.17-13.43.53:726][688]LogLoad: Game class is 'RollingGameMode_C'
+[2024.10.17-13.43.53:727][688]LogWorld: Bringing World /Game/Maps/UEDPIE_0_FinalLevel.FinalLevel up for play (max tick rate 0) at 2024.10.17-16.43.53
+[2024.10.17-13.43.53:727][688]LogWorld: Bringing up level for play took: 0.000369
+[2024.10.17-13.43.53:727][688]LogOnline: OSS: Creating online subsystem instance for: :Context_24
+[2024.10.17-13.43.53:729][688]PIE: Server logged in
+[2024.10.17-13.43.53:730][688]PIE: Play in editor total start time 0.091 seconds.
+[2024.10.17-13.44.00:980][553]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.17-13.44.00:980][553]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_FinalLevel
+[2024.10.17-13.44.00:980][553]LogWorld: UWorld::CleanupWorld for FinalLevel, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.44.00:980][553]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.44.00:989][553]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.10.17-13.44.00:994][553]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.44.01:013][553]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.17-13.44.01:013][553]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.17-13.44.01:015][553]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.17-13.44.01:019][553]LogUObjectHash: Compacting FUObjectHashTables data took   2.26ms
+[2024.10.17-13.44.01:048][556]LogPlayLevel: Display: Destroying online subsystem :Context_24
+[2024.10.17-13.44.11:679][663]LogAssetEditorSubsystem: Opening Asset editor for Blueprint /Game/Blueprints/RollingHUD.RollingHUD
+[2024.10.17-13.44.22:702][896]LogWorld: UWorld::CleanupWorld for World_14, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.44.22:702][896]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.45.05:436][957]LogEditorClassViewer: Warning: Class /Engine/Tutorial/InWorldBlueprintEditing/TutorialAssets/IWBE_Blutility.IWBE_Blutility_C has parent /Script/Blutility.PlacedEditorUtilityBase, but this parent is not found. The Class will not be shown in ClassViewer.
+[2024.10.17-13.45.22:659][  3]BlueprintLog: New page: Compile FinalLevel
+[2024.10.17-13.45.22:687][  3]LogUObjectHash: Compacting FUObjectHashTables data took   2.96ms
+[2024.10.17-13.45.23:333][ 78]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/FinalLevel" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.17-13.45.23:355][ 78]LogUObjectHash: Compacting FUObjectHashTables data took   2.35ms
+[2024.10.17-13.45.23:363][ 78]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/FinalLevelA6B6199448B456B41AB0D29F60BDF8B8.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel.umap'
+[2024.10.17-13.45.23:366][ 78]LogFileHelpers: Saving map 'FinalLevel' took 0.034
+[2024.10.17-13.45.23:380][ 78]AssetCheck: New page: Asset Save: FinalLevel
+[2024.10.17-13.45.23:380][ 78]LogContentValidation: Display: Validating World /Game/Maps/FinalLevel.FinalLevel
+[2024.10.17-13.45.25:519][331]LogTemp: Repeating last play command: Selected Viewport
+[2024.10.17-13.45.25:526][331]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.10.17-13.45.25:526][331]PIE: New page: PIE session: FinalLevel (Oct 17, 2024, 7:45:25 PM)
+[2024.10.17-13.45.25:526][331]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_FinalLevel
+[2024.10.17-13.45.25:528][331]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001576s)
+[2024.10.17-13.45.25:529][331]LogAIModule: Creating AISystem for world FinalLevel
+[2024.10.17-13.45.25:529][331]LogPlayLevel: PIE: World Init took: (0.000778s)
+[2024.10.17-13.45.25:529][331]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/FinalLevel.FinalLevel to /Game/Maps/UEDPIE_0_FinalLevel.FinalLevel (0.002437s)
+[2024.10.17-13.45.25:553][331]LogUObjectHash: Compacting FUObjectHashTables data took   2.44ms
+[2024.10.17-13.45.25:554][331]LogAudio: Display: Creating Audio Device:                 Id: 13, Scope: Unique, Realtime: True
+[2024.10.17-13.45.25:554][331]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.10.17-13.45.25:554][331]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.10.17-13.45.25:554][331]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.10.17-13.45.25:554][331]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.10.17-13.45.25:554][331]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.10.17-13.45.25:554][331]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.10.17-13.45.25:554][331]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.10.17-13.45.25:554][331]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.10.17-13.45.25:554][331]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.10.17-13.45.25:554][331]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.10.17-13.45.25:554][331]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.10.17-13.45.25:554][331]LogAudioMixer: Display: Initializing audio mixer.
+[2024.10.17-13.45.25:556][331]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.17-13.45.25:556][331]LogAudioMixer: Display: 1: FrontRight
+[2024.10.17-13.45.25:564][331]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.10.17-13.45.25:564][331]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.10.17-13.45.25:564][331]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.10.17-13.45.25:564][331]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.10.17-13.45.25:564][331]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.10.17-13.45.25:564][331]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.10.17-13.45.25:564][331]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.10.17-13.45.25:565][331]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.10.17-13.45.25:565][331]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.10.17-13.45.25:565][331]LogInit: FAudioDevice initialized.
+[2024.10.17-13.45.25:566][331]LogAudio: Display: Audio Device (ID: 13) registered with world 'FinalLevel'.
+[2024.10.17-13.45.25:571][331]LogLoad: Game class is 'RollingGameMode_C'
+[2024.10.17-13.45.25:572][331]LogWorld: Bringing World /Game/Maps/UEDPIE_0_FinalLevel.FinalLevel up for play (max tick rate 0) at 2024.10.17-16.45.25
+[2024.10.17-13.45.25:572][331]LogWorld: Bringing up level for play took: 0.000344
+[2024.10.17-13.45.25:572][331]LogOnline: OSS: Creating online subsystem instance for: :Context_26
+[2024.10.17-13.45.25:574][331]PIE: Server logged in
+[2024.10.17-13.45.25:574][331]PIE: Play in editor total start time 0.053 seconds.
+[2024.10.17-13.45.29:213][763]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.17-13.45.29:213][763]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_FinalLevel
+[2024.10.17-13.45.29:213][763]LogWorld: UWorld::CleanupWorld for FinalLevel, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.45.29:213][763]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.45.29:217][763]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.10.17-13.45.29:221][763]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.45.29:241][763]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.45.29:241][763]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.17-13.45.29:242][763]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.17-13.45.29:244][763]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.17-13.45.29:247][763]LogUObjectHash: Compacting FUObjectHashTables data took   2.41ms
+[2024.10.17-13.45.29:284][767]LogPlayLevel: Display: Destroying online subsystem :Context_26
+[2024.10.17-13.48.25:709][441]LogSlate: Window 'Color Picker' being destroyed
+[2024.10.17-13.49.09:519][683]LogTemp: Repeating last play command: Selected Viewport
+[2024.10.17-13.49.09:527][683]BlueprintLog: New page: Pre-Play auto-recompile
+[2024.10.17-13.49.09:528][683]LogPlayLevel: [PlayLevel] Compiling WinHUD before play...
+[2024.10.17-13.49.09:595][683]LogUObjectHash: Compacting FUObjectHashTables data took   3.85ms
+[2024.10.17-13.49.09:599][683]LogPlayLevel: PlayLevel: Blueprint regeneration took 72 ms (1 blueprints)
+[2024.10.17-13.49.09:599][683]PIE: New page: PIE session: FinalLevel (Oct 17, 2024, 7:49:09 PM)
+[2024.10.17-13.49.09:599][683]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_FinalLevel
+[2024.10.17-13.49.09:601][683]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001600s)
+[2024.10.17-13.49.09:601][683]LogAIModule: Creating AISystem for world FinalLevel
+[2024.10.17-13.49.09:601][683]LogPlayLevel: PIE: World Init took: (0.000718s)
+[2024.10.17-13.49.09:601][683]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/FinalLevel.FinalLevel to /Game/Maps/UEDPIE_0_FinalLevel.FinalLevel (0.002396s)
+[2024.10.17-13.49.09:619][683]LogUObjectHash: Compacting FUObjectHashTables data took   2.23ms
+[2024.10.17-13.49.09:619][683]LogAudio: Display: Creating Audio Device:                 Id: 14, Scope: Unique, Realtime: True
+[2024.10.17-13.49.09:619][683]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.10.17-13.49.09:619][683]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.10.17-13.49.09:619][683]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.10.17-13.49.09:619][683]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.10.17-13.49.09:619][683]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.10.17-13.49.09:619][683]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.10.17-13.49.09:619][683]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.10.17-13.49.09:619][683]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.10.17-13.49.09:620][683]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.10.17-13.49.09:620][683]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.10.17-13.49.09:620][683]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.10.17-13.49.09:620][683]LogAudioMixer: Display: Initializing audio mixer.
+[2024.10.17-13.49.09:623][683]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.17-13.49.09:623][683]LogAudioMixer: Display: 1: FrontRight
+[2024.10.17-13.49.09:630][683]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.10.17-13.49.09:630][683]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.10.17-13.49.09:630][683]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.10.17-13.49.09:630][683]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.10.17-13.49.09:631][683]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.10.17-13.49.09:631][683]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.10.17-13.49.09:631][683]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.10.17-13.49.09:632][683]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.10.17-13.49.09:632][683]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.10.17-13.49.09:632][683]LogInit: FAudioDevice initialized.
+[2024.10.17-13.49.09:632][683]LogAudio: Display: Audio Device (ID: 14) registered with world 'FinalLevel'.
+[2024.10.17-13.49.09:660][683]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.17-13.49.09:661][683]LogLoad: Game class is 'RollingGameMode_C'
+[2024.10.17-13.49.09:661][683]LogWorld: Bringing World /Game/Maps/UEDPIE_0_FinalLevel.FinalLevel up for play (max tick rate 0) at 2024.10.17-16.49.09
+[2024.10.17-13.49.09:662][683]LogWorld: Bringing up level for play took: 0.000426
+[2024.10.17-13.49.09:662][683]LogOnline: OSS: Creating online subsystem instance for: :Context_27
+[2024.10.17-13.49.09:665][683]PIE: Server logged in
+[2024.10.17-13.49.09:665][683]PIE: Play in editor total start time 0.144 seconds.
+[2024.10.17-13.49.14:598][270]LogSlate: Window 'Rolling Preview [NetMode: Standalone]  (64-bit/Windows) ' being destroyed
+[2024.10.17-13.49.14:611][270]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_FinalLevel
+[2024.10.17-13.49.14:643][270]LogWorld: UWorld::CleanupWorld for FinalLevel, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.49.14:644][270]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.49.14:649][270]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.10.17-13.49.14:654][270]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.49.14:675][270]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.17-13.49.14:676][270]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.17-13.49.14:680][270]LogUObjectHash: Compacting FUObjectHashTables data took   2.21ms
+[2024.10.17-13.49.14:699][272]LogPlayLevel: Display: Destroying online subsystem :Context_27
+[2024.10.17-13.49.29:024][987]BlueprintLog: New page: Compile WinHUD
+[2024.10.17-13.49.29:054][987]LogUObjectHash: Compacting FUObjectHashTables data took   2.35ms
+[2024.10.17-13.49.29:593][ 45]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/WinHUD" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Blueprints/WinHUD.uasset" SILENT=true
+[2024.10.17-13.49.29:601][ 45]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/WinHUD06BFE789415436E803C7B28F0BB1177A.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Blueprints/WinHUD.uasset'
+[2024.10.17-13.49.29:615][ 45]AssetCheck: New page: Asset Save: WinHUD
+[2024.10.17-13.49.29:615][ 45]LogContentValidation: Display: Validating WidgetBlueprint /Game/Blueprints/WinHUD.WinHUD
+[2024.10.17-13.49.30:712][173]LogWorld: UWorld::CleanupWorld for World_12, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.49.30:712][173]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.49.30:718][173]LogWorld: UWorld::CleanupWorld for World_11, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.49.30:718][173]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.49.32:007][321]LogWorld: UWorld::CleanupWorld for World_10, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.49.32:007][321]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.49.37:577][972]LogUObjectHash: Compacting FUObjectHashTables data took   3.50ms
+[2024.10.17-13.49.37:579][972]Cmd: MAP LOAD FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.10.17-13.49.37:591][972]LightingResults: New page: Lighting Build
+[2024.10.17-13.49.37:591][972]LoadErrors: New page: Loading map: Level3.umap
+[2024.10.17-13.49.37:615][972]LogWorld: UWorld::CleanupWorld for FinalLevel, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.49.37:615][972]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.49.37:615][972]MapCheck: New page: Map Check
+[2024.10.17-13.49.37:615][972]LightingResults: New page: Lighting Build
+[2024.10.17-13.49.37:631][972]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.49.37:655][972]LogUObjectHash: Compacting FUObjectHashTables data took   3.02ms
+[2024.10.17-13.49.37:667][972]LogUObjectHash: Compacting FUObjectHashTables data took   1.63ms
+[2024.10.17-13.49.37:677][972]LogUObjectHash: Compacting FUObjectHashTables data took   0.50ms
+[2024.10.17-13.49.37:677][972]LogAudio: Display: Audio Device (ID: 1) registered with world 'Level3'.
+[2024.10.17-13.49.37:724][972]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.10.17-13.49.37:724][972]LogAIModule: Creating AISystem for world Level3
+[2024.10.17-13.49.37:737][972]LogUObjectHash: Compacting FUObjectHashTables data took   1.68ms
+[2024.10.17-13.49.37:743][972]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.10.17-13.49.37:743][972]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.042ms to complete.
+[2024.10.17-13.49.37:743][972]LogFileHelpers: Loading map 'Level3' took 0.164
+[2024.10.17-13.49.37:743][972]LogSlate: Window 'Open Level' being destroyed
+[2024.10.17-13.51.26:624][600]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level3" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.17-13.51.26:639][600]LogUObjectHash: Compacting FUObjectHashTables data took   1.73ms
+[2024.10.17-13.51.26:661][600]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Level36EB36A7642448D26EA6CF2ABAE2794E9.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap'
+[2024.10.17-13.51.26:665][600]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level3_BuiltData" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3_BuiltData.uasset" SILENT=true
+[2024.10.17-13.51.26:675][600]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Level3_BuiltDataA4F4939D49FE383D253F5F9E2B9BEC72.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3_BuiltData.uasset'
+[2024.10.17-13.51.26:684][600]AssetCheck: New page: Asset Save: multiple assets
+[2024.10.17-13.51.26:684][600]LogContentValidation: Display: Validating MapBuildDataRegistry /Game/Maps/Level3_BuiltData.Level3_BuiltData
+[2024.10.17-13.51.26:684][600]LogContentValidation: Display: Validating World /Game/Maps/Level3.Level3
+[2024.10.17-13.51.54:664][937]LogAssetEditorSubsystem: Opening Asset editor for LevelScriptBlueprint /Game/Maps/Level3.Level3:PersistentLevel.Level3
+[2024.10.17-13.52.59:831][733]LogSlate: Window 'Level3' being destroyed
+[2024.10.17-13.53.35:817][491]BlueprintLog: New page: Compile Level3
+[2024.10.17-13.53.35:844][491]LogUObjectHash: Compacting FUObjectHashTables data took   2.03ms
+[2024.10.17-13.53.36:399][554]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level3" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.17-13.53.36:414][554]LogUObjectHash: Compacting FUObjectHashTables data took   0.43ms
+[2024.10.17-13.53.36:424][554]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Level31C86E30C473F1B313278AA8D523576B9.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap'
+[2024.10.17-13.53.36:426][554]LogFileHelpers: Saving map 'Level3' took 0.029
+[2024.10.17-13.53.36:440][554]AssetCheck: New page: Asset Save: Level3
+[2024.10.17-13.53.36:440][554]LogContentValidation: Display: Validating World /Game/Maps/Level3.Level3
+[2024.10.17-13.53.41:202][120]LogUObjectHash: Compacting FUObjectHashTables data took   0.44ms
+[2024.10.17-13.53.46:667][763]LogUObjectHash: Compacting FUObjectHashTables data took   0.49ms
+[2024.10.17-13.53.46:669][763]Cmd: MAP LOAD FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.10.17-13.53.46:683][763]LightingResults: New page: Lighting Build
+[2024.10.17-13.53.46:683][763]LoadErrors: New page: Loading map: Level3.umap
+[2024.10.17-13.53.46:731][763]LogWorld: UWorld::CleanupWorld for World_16, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.53.46:731][763]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.53.46:762][763]LogWorld: UWorld::CleanupWorld for Level3, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.53.46:762][763]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.53.46:763][763]MapCheck: New page: Map Check
+[2024.10.17-13.53.46:763][763]LightingResults: New page: Lighting Build
+[2024.10.17-13.53.46:773][763]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.53.46:777][763]LogUObjectHash: Compacting FUObjectHashTables data took   2.09ms
+[2024.10.17-13.53.46:788][763]LogUObjectHash: Compacting FUObjectHashTables data took   1.74ms
+[2024.10.17-13.53.46:798][763]LogUObjectHash: Compacting FUObjectHashTables data took   0.38ms
+[2024.10.17-13.53.46:806][763]LogAudio: Display: Audio Device (ID: 1) registered with world 'Level3'.
+[2024.10.17-13.53.46:807][763]LogAIModule: Creating AISystem for world Level3
+[2024.10.17-13.53.46:852][763]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.10.17-13.53.46:864][763]LogUObjectHash: Compacting FUObjectHashTables data took   1.89ms
+[2024.10.17-13.53.46:870][763]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.10.17-13.53.46:870][763]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.039ms to complete.
+[2024.10.17-13.53.46:871][763]LogFileHelpers: Loading map 'Level3' took 0.202
+[2024.10.17-13.53.46:871][763]LogSlate: Window 'Open Level' being destroyed
+[2024.10.17-13.53.52:095][380]LogAssetEditorSubsystem: Opening Asset editor for LevelScriptBlueprint /Game/Maps/Level3.Level3:PersistentLevel.Level3
+[2024.10.17-13.53.59:604][246]LogSlate: Window 'Level3' being destroyed
+[2024.10.17-13.53.59:608][246]LogWorld: UWorld::CleanupWorld for World_17, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.53.59:608][246]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.54.03:178][658]LogUObjectHash: Compacting FUObjectHashTables data took   1.79ms
+[2024.10.17-13.54.03:182][658]Cmd: MAP LOAD FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level2.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.10.17-13.54.03:196][658]LightingResults: New page: Lighting Build
+[2024.10.17-13.54.03:196][658]LoadErrors: New page: Loading map: Level2.umap
+[2024.10.17-13.54.03:222][658]LogWorld: UWorld::CleanupWorld for Level3, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.54.03:222][658]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.54.03:222][658]MapCheck: New page: Map Check
+[2024.10.17-13.54.03:222][658]LightingResults: New page: Lighting Build
+[2024.10.17-13.54.03:233][658]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.54.03:237][658]LogUObjectHash: Compacting FUObjectHashTables data took   1.87ms
+[2024.10.17-13.54.03:247][658]LogUObjectHash: Compacting FUObjectHashTables data took   0.81ms
+[2024.10.17-13.54.03:257][658]LogUObjectHash: Compacting FUObjectHashTables data took   0.38ms
+[2024.10.17-13.54.03:264][658]LogAudio: Display: Audio Device (ID: 1) registered with world 'Level2'.
+[2024.10.17-13.54.03:264][658]LogAIModule: Creating AISystem for world Level2
+[2024.10.17-13.54.03:311][658]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.10.17-13.54.03:324][658]LogUObjectHash: Compacting FUObjectHashTables data took   2.05ms
+[2024.10.17-13.54.03:330][658]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.10.17-13.54.03:330][658]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.04ms to complete.
+[2024.10.17-13.54.03:330][658]LogFileHelpers: Loading map 'Level2' took 0.149
+[2024.10.17-13.54.03:330][658]LogSlate: Window 'Open Level' being destroyed
+[2024.10.17-13.54.06:760][ 63]LogAssetEditorSubsystem: Opening Asset editor for LevelScriptBlueprint /Game/Maps/Level2.Level2:PersistentLevel.Level2
+[2024.10.17-13.54.21:206][759]LogUObjectHash: Compacting FUObjectHashTables data took   1.65ms
+[2024.10.17-13.54.21:208][759]Cmd: MAP LOAD FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.10.17-13.54.21:225][759]LightingResults: New page: Lighting Build
+[2024.10.17-13.54.21:225][759]LoadErrors: New page: Loading map: Level3.umap
+[2024.10.17-13.54.21:247][759]LogWorld: UWorld::CleanupWorld for World_18, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.54.21:247][759]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.54.21:279][759]LogWorld: UWorld::CleanupWorld for Level2, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.54.21:279][759]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.54.21:279][759]MapCheck: New page: Map Check
+[2024.10.17-13.54.21:279][759]LightingResults: New page: Lighting Build
+[2024.10.17-13.54.21:291][759]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.54.21:294][759]LogUObjectHash: Compacting FUObjectHashTables data took   1.69ms
+[2024.10.17-13.54.21:306][759]LogUObjectHash: Compacting FUObjectHashTables data took   1.65ms
+[2024.10.17-13.54.21:316][759]LogUObjectHash: Compacting FUObjectHashTables data took   0.39ms
+[2024.10.17-13.54.21:323][759]LogAudio: Display: Audio Device (ID: 1) registered with world 'Level3'.
+[2024.10.17-13.54.21:324][759]LogAIModule: Creating AISystem for world Level3
+[2024.10.17-13.54.21:367][759]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.10.17-13.54.21:381][759]LogUObjectHash: Compacting FUObjectHashTables data took   1.84ms
+[2024.10.17-13.54.21:387][759]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.10.17-13.54.21:387][759]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.038ms to complete.
+[2024.10.17-13.54.21:387][759]LogFileHelpers: Loading map 'Level3' took 0.179
+[2024.10.17-13.54.21:387][759]LogSlate: Window 'Open Level' being destroyed
+[2024.10.17-13.54.24:045][ 71]LogAssetEditorSubsystem: Opening Asset editor for LevelScriptBlueprint /Game/Maps/Level3.Level3:PersistentLevel.Level3
+[2024.10.17-13.54.34:510][289]LogSlate: Window 'Level3' being destroyed
+[2024.10.17-13.54.35:257][376]BlueprintLog: New page: Compile Level3
+[2024.10.17-13.54.35:285][376]LogUObjectHash: Compacting FUObjectHashTables data took   1.96ms
+[2024.10.17-13.54.35:664][418]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level3" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.17-13.54.35:680][418]LogUObjectHash: Compacting FUObjectHashTables data took   0.43ms
+[2024.10.17-13.54.35:689][418]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Level377B1B2094E33CA3ACB0947889FA731CF.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap'
+[2024.10.17-13.54.35:691][418]LogFileHelpers: Saving map 'Level3' took 0.028
+[2024.10.17-13.54.35:699][418]AssetCheck: New page: Asset Save: Level3
+[2024.10.17-13.54.35:699][418]LogContentValidation: Display: Validating World /Game/Maps/Level3.Level3
+[2024.10.17-13.55.17:401][668]BlueprintLog: New page: Compile Level3
+[2024.10.17-13.55.17:431][668]LogUObjectHash: Compacting FUObjectHashTables data took   1.95ms
+[2024.10.17-13.55.18:141][751]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level3" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.17-13.55.18:157][751]LogUObjectHash: Compacting FUObjectHashTables data took   0.45ms
+[2024.10.17-13.55.18:166][751]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/Level375E9447046863A61BA6B069DD2677B3E.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/Level3.umap'
+[2024.10.17-13.55.18:168][751]LogFileHelpers: Saving map 'Level3' took 0.028
+[2024.10.17-13.55.18:174][751]AssetCheck: New page: Asset Save: Level3
+[2024.10.17-13.55.18:174][751]LogContentValidation: Display: Validating World /Game/Maps/Level3.Level3
+[2024.10.17-13.55.21:522][150]LogTemp: Repeating last play command: Selected Viewport
+[2024.10.17-13.55.21:529][150]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.10.17-13.55.21:529][150]PIE: New page: PIE session: Level3 (Oct 17, 2024, 7:55:21 PM)
+[2024.10.17-13.55.21:530][150]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level3
+[2024.10.17-13.55.21:531][150]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002253s)
+[2024.10.17-13.55.21:533][150]LogAIModule: Creating AISystem for world Level3
+[2024.10.17-13.55.21:533][150]LogPlayLevel: PIE: World Init took: (0.000635s)
+[2024.10.17-13.55.21:533][150]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level3.Level3 to /Game/Maps/UEDPIE_0_Level3.Level3 (0.002959s)
+[2024.10.17-13.55.21:549][150]LogUObjectHash: Compacting FUObjectHashTables data took   1.66ms
+[2024.10.17-13.55.21:550][150]LogAudio: Display: Creating Audio Device:                 Id: 15, Scope: Unique, Realtime: True
+[2024.10.17-13.55.21:550][150]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.10.17-13.55.21:550][150]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.10.17-13.55.21:550][150]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.10.17-13.55.21:550][150]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.10.17-13.55.21:550][150]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.10.17-13.55.21:550][150]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.10.17-13.55.21:550][150]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.10.17-13.55.21:550][150]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.10.17-13.55.21:550][150]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.10.17-13.55.21:550][150]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.10.17-13.55.21:550][150]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.10.17-13.55.21:550][150]LogAudioMixer: Display: Initializing audio mixer.
+[2024.10.17-13.55.21:553][150]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.17-13.55.21:553][150]LogAudioMixer: Display: 1: FrontRight
+[2024.10.17-13.55.21:561][150]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.10.17-13.55.21:561][150]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.10.17-13.55.21:561][150]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.10.17-13.55.21:561][150]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.10.17-13.55.21:561][150]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.10.17-13.55.21:561][150]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.10.17-13.55.21:561][150]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.10.17-13.55.21:562][150]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.10.17-13.55.21:562][150]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.10.17-13.55.21:562][150]LogInit: FAudioDevice initialized.
+[2024.10.17-13.55.21:562][150]LogAudio: Display: Audio Device (ID: 15) registered with world 'Level3'.
+[2024.10.17-13.55.21:569][150]LogLoad: Game class is 'RollingGameMode_C'
+[2024.10.17-13.55.21:570][150]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level3.Level3 up for play (max tick rate 0) at 2024.10.17-16.55.21
+[2024.10.17-13.55.21:570][150]LogWorld: Bringing up level for play took: 0.000444
+[2024.10.17-13.55.21:570][150]LogOnline: OSS: Creating online subsystem instance for: :Context_32
+[2024.10.17-13.55.21:573][150]PIE: Server logged in
+[2024.10.17-13.55.21:573][150]PIE: Play in editor total start time 0.049 seconds.
+[2024.10.17-13.55.31:287][315]LogNet: Browse: /Game/Maps/FinalLevel
+[2024.10.17-13.55.31:287][315]LogLoad: LoadMap: /Game/Maps/FinalLevel
+[2024.10.17-13.55.31:287][315]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level3
+[2024.10.17-13.55.31:287][315]LogWorld: UWorld::CleanupWorld for Level3, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.55.31:287][315]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.55.31:348][315]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.55.31:351][315]LogUObjectHash: Compacting FUObjectHashTables data took   1.86ms
+[2024.10.17-13.55.31:359][315]LogAudio: Display: Audio Device (ID: 15) registered with world 'FinalLevel'.
+[2024.10.17-13.55.31:360][315]LogAIModule: Creating AISystem for world FinalLevel
+[2024.10.17-13.55.31:360][315]LogLoad: Game class is 'RollingGameMode_C'
+[2024.10.17-13.55.31:361][315]LogWorld: Bringing World /Game/Maps/UEDPIE_0_FinalLevel.FinalLevel up for play (max tick rate 0) at 2024.10.17-16.55.31
+[2024.10.17-13.55.31:361][315]LogWorld: Bringing up level for play took: 0.000557
+[2024.10.17-13.55.31:362][315]LogLoad: Took 0.075423 seconds to LoadMap(/Game/Maps/FinalLevel)
+[2024.10.17-13.55.45:348][988]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.17-13.55.45:348][988]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_FinalLevel
+[2024.10.17-13.55.45:348][988]LogWorld: UWorld::CleanupWorld for FinalLevel, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.55.45:348][988]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.55.45:355][988]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.10.17-13.55.45:359][988]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.55.45:373][988]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.55.45:373][988]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.17-13.55.45:374][988]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.17-13.55.45:375][988]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.17-13.55.45:378][988]LogUObjectHash: Compacting FUObjectHashTables data took   1.96ms
+[2024.10.17-13.55.45:418][990]LogPlayLevel: Display: Destroying online subsystem :Context_32
+[2024.10.17-13.55.53:014][889]LogUObjectHash: Compacting FUObjectHashTables data took   1.61ms
+[2024.10.17-13.55.53:016][889]Cmd: MAP LOAD FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.10.17-13.55.53:029][889]LightingResults: New page: Lighting Build
+[2024.10.17-13.55.53:029][889]LoadErrors: New page: Loading map: FinalLevel.umap
+[2024.10.17-13.55.53:051][889]LogWorld: UWorld::CleanupWorld for World_19, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.55.53:051][889]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.55.53:085][889]LogWorld: UWorld::CleanupWorld for Level3, bSessionEnded=true, bCleanupResources=true
+[2024.10.17-13.55.53:086][889]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.17-13.55.53:086][889]MapCheck: New page: Map Check
+[2024.10.17-13.55.53:086][889]LightingResults: New page: Lighting Build
+[2024.10.17-13.55.53:097][889]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.17-13.55.53:101][889]LogUObjectHash: Compacting FUObjectHashTables data took   1.83ms
+[2024.10.17-13.55.53:112][889]LogUObjectHash: Compacting FUObjectHashTables data took   1.60ms
+[2024.10.17-13.55.53:122][889]LogUObjectHash: Compacting FUObjectHashTables data took   0.38ms
+[2024.10.17-13.55.53:127][889]LogAudio: Display: Audio Device (ID: 1) registered with world 'FinalLevel'.
+[2024.10.17-13.55.53:127][889]LogAIModule: Creating AISystem for world FinalLevel
+[2024.10.17-13.55.53:173][889]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.10.17-13.55.53:186][889]LogUObjectHash: Compacting FUObjectHashTables data took   1.97ms
+[2024.10.17-13.55.53:192][889]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.10.17-13.55.53:192][889]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.044ms to complete.
+[2024.10.17-13.55.53:192][889]LogFileHelpers: Loading map 'FinalLevel' took 0.176
+[2024.10.17-13.55.53:192][889]LogSlate: Window 'Open Level' being destroyed
+[2024.10.17-13.55.55:111][116]LogEditorViewport: Clicking on Actor (LMB): StaticMeshActor (Floor)
+[2024.10.17-13.55.59:926][689]LogSlate: Prevented a slow task dialog from being summoned while a context menu was open
+[2024.10.17-13.55.59:941][689]LogEditorClassViewer: Warning: Class /Engine/Tutorial/InWorldBlueprintEditing/TutorialAssets/IWBE_Blutility.IWBE_Blutility_C has parent /Script/Blutility.PlacedEditorUtilityBase, but this parent is not found. The Class will not be shown in ClassViewer.
+[2024.10.17-13.56.21:376][524]LogTexture: Display: Building textures: T_BlueSky_D (OODLE_AutoDXT, 2048X2048)
+[2024.10.17-13.56.21:376][524]LogTextureFormatOodle: Display: non-RDO encode 1024 x 1024 x 1 to format OODLE_AutoDXT (Oodle OodleTex_BC1_WithTransparency) lambda=0 effort=20 
+[2024.10.17-13.56.21:376][524]LogTextureFormatOodle: Display: non-RDO encode 2048 x 2048 x 1 to format OODLE_AutoDXT (Oodle OodleTex_BC1_WithTransparency) lambda=0 effort=20 
+[2024.10.17-13.56.21:376][524]LogMaterial: Display: Missing cached shadermap for M_BlueSky in PCD3D_SM5, Default, SM5 (DDC key hash: 7247B38BB911434D2718C722970B0E72148625A3), compiling. 
+[2024.10.17-13.56.21:386][524]LogShaderCompilers: Display: Submitted 6 shader compile jobs with 'Low' priority
+[2024.10.17-13.56.21:397][525]LogShaderCompilers: Display: Worker (1/13): shaders left to compile 2
+[2024.10.17-13.56.21:397][525]LogShaderCompilers: Display: Worker (2/13): shaders left to compile 1
+[2024.10.17-13.56.21:397][525]LogShaderCompilers: Display: Worker (3/13): shaders left to compile 4
+[2024.10.17-13.56.21:397][525]LogShaderCompilers: Display: Worker (4/13): shaders left to compile 3
+[2024.10.17-13.56.21:397][525]LogShaderCompilers: Display: Worker (5/13): shaders left to compile 2
+[2024.10.17-13.56.21:397][525]LogShaderCompilers: Display: Worker (6/13): shaders left to compile 1
+[2024.10.17-13.56.21:397][525]LogShaderCompilers: Display: Started 4 'Local' shader compile jobs with 'Normal' priority
+[2024.10.17-13.56.21:398][525]LogShaderCompilers: Display: Started 2 'Local' shader compile jobs with 'ForceLocal' priority
+[2024.10.17-13.56.21:657][556]LogShaderCompilers: Display: === FShaderJobCache stats ===
+[2024.10.17-13.56.21:657][556]LogShaderCompilers: Display: Total job queries 6, among them cache hits 0 (0.00%)
+[2024.10.17-13.56.21:657][556]LogShaderCompilers: Display: Tracking 1 distinct input hashes that result in 1 distinct outputs (100.00%)
+[2024.10.17-13.56.21:657][556]LogShaderCompilers: Display: RAM used: 0.00 MB (0.00 GB) of 3276.80 MB (3.20 GB) budget. Usage: 0.00%
+[2024.10.17-13.56.21:657][556]LogShaderCompilers: Display: ================================================
+[2024.10.17-13.56.25:296][985]LogMaterial: Display: Missing cached shadermap for M_Trans_StaticMesh_Lit_Master in PCD3D_SM5, Default, SM5 (DDC key hash: 4ACE451E636355C16484017A04A70AA72F11551D), compiling. 
+[2024.10.17-13.56.25:352][985]LogShaderCompilers: Display: Submitted 44 shader compile jobs with 'Low' priority
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (1/13): shaders left to compile 2
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (2/13): shaders left to compile 1
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (3/13): shaders left to compile 42
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (4/13): shaders left to compile 38
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (5/13): shaders left to compile 34
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (6/13): shaders left to compile 30
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (7/13): shaders left to compile 26
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (8/13): shaders left to compile 22
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (9/13): shaders left to compile 18
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (10/13): shaders left to compile 14
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (11/13): shaders left to compile 10
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Worker (12/13): shaders left to compile 6
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Started 40 'Local' shader compile jobs with 'Normal' priority
+[2024.10.17-13.56.25:362][986]LogShaderCompilers: Display: Started 2 'Local' shader compile jobs with 'ForceLocal' priority
+[2024.10.17-13.56.25:708][ 23]LogShaderCompilers: Display: Worker (1/13): shaders left to compile 2
+[2024.10.17-13.56.25:708][ 23]LogShaderCompilers: Display: Started 1 'Local' shader compile jobs with 'Normal' priority
+[2024.10.17-13.56.25:852][ 39]LogShaderCompilers: Display: Worker (2/13): shaders left to compile 1
+[2024.10.17-13.56.25:852][ 39]LogShaderCompilers: Display: Started 1 'Local' shader compile jobs with 'Normal' priority
+[2024.10.17-13.56.29:145][423]LogMaterial: Display: Missing cached shadermap for M_Breakables_Fort_Wall_Destroyed_Trim in PCD3D_SM5, Default, SM5 (DDC key hash: 6ACFB58B9D894D73AC5F2A8B7F029A97EBEDFB1D), compiling. 
+[2024.10.17-13.56.29:162][423]LogShaderCompilers: Display: Submitted 32 shader compile jobs with 'Low' priority
+[2024.10.17-13.56.29:163][423]LogMaterial: Display: Material /Game/InfinityBladeEffects/Environments/Breakables/Materials/M_Breakables_Fort_Wall_Destroyed_Trim.M_Breakables_Fort_Wall_Destroyed_Trim needed to have new flag set bUsedWithStaticLighting !
+[2024.10.17-13.56.29:164][423]LogMaterial: Display: Missing cached shadermap for M_Breakables_Fort_Wall_Destroyed_Trim in PCD3D_SM5, Default, SM5 (DDC key hash: 28ECBEA04129B695EE384FCE0F1D1A66B17A7BBD), compiling. 
+[2024.10.17-13.56.29:180][423]LogShaderCompilers: Display: Submitted 41 shader compile jobs with 'Low' priority
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (1/13): shaders left to compile 2
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (2/13): shaders left to compile 1
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (3/13): shaders left to compile 39
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (4/13): shaders left to compile 35
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (5/13): shaders left to compile 31
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (6/13): shaders left to compile 27
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (7/13): shaders left to compile 23
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (8/13): shaders left to compile 19
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (9/13): shaders left to compile 15
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (10/13): shaders left to compile 11
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (11/13): shaders left to compile 7
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Worker (12/13): shaders left to compile 3
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Started 39 'Local' shader compile jobs with 'Normal' priority
+[2024.10.17-13.56.29:189][424]LogShaderCompilers: Display: Started 2 'Local' shader compile jobs with 'ForceLocal' priority
+[2024.10.17-13.56.51:072][342]LogUObjectHash: Compacting FUObjectHashTables data took   0.46ms
+[2024.10.17-13.56.54:824][342]LogSlate: Window 'Save Content' being destroyed
+[2024.10.17-13.56.54:850][342]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/FinalLevel" FILE="D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.17-13.56.54:863][342]LogUObjectHash: Compacting FUObjectHashTables data took   0.44ms
+[2024.10.17-13.56.54:871][342]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/FinalLevel387718294AEEE3BE8FB9A79FD69E7BC9.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/Maps/FinalLevel.umap'
+[2024.10.17-13.56.54:874][342]LogFileHelpers: Saving map 'FinalLevel' took 0.024
+[2024.10.17-13.56.54:887][342]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/Rolling/Saved/M_Breakables_Fort_Wall_Destroyed17A89D994108AE45D24458969C168722.tmp' to 'D:/GitHub/Projects/Other/Blueprint/Rolling/Content/InfinityBladeEffects/Environments/Breakables/Materials/M_Breakables_Fort_Wall_Destroyed_Trim.uasset'
+[2024.10.17-13.56.54:900][342]AssetCheck: New page: Asset Save: multiple assets
+[2024.10.17-13.56.54:900][342]LogContentValidation: Display: Validating Material /Game/InfinityBladeEffects/Environments/Breakables/Materials/M_Breakables_Fort_Wall_Destroyed_Trim.M_Breakables_Fort_Wall_Destroyed_Trim
+[2024.10.17-13.56.54:900][342]LogContentValidation: Display: Validating World /Game/Maps/FinalLevel.FinalLevel
