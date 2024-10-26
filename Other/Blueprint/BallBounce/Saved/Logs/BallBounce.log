@@ -1216,3 +1216,207 @@ LogConfig: Setting CVar [[r.setres:1280x720]]
 [2024.10.26-09.46.35:215][ 51]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/Ball9E17DC8C440C0A353B4571809434776A.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Ball.uasset'
 [2024.10.26-09.46.35:228][ 51]AssetCheck: New page: Asset Save: Ball
 [2024.10.26-09.46.35:228][ 51]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Ball.Ball
+[2024.10.26-09.47.59:500][557]LogUObjectHash: Compacting FUObjectHashTables data took   2.57ms
+[2024.10.26-09.48.01:246][557]LogSlate: Window 'Save Content' being destroyed
+[2024.10.26-09.48.01:265][557]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Maps/Level1.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.26-09.48.01:281][557]LogUObjectHash: Compacting FUObjectHashTables data took   0.46ms
+[2024.10.26-09.48.01:288][557]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/Level1367EA57842F7708FA99A7C9C2C340718.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Maps/Level1.umap'
+[2024.10.26-09.48.01:290][557]LogFileHelpers: Saving map 'Level1' took 0.025
+[2024.10.26-09.48.01:301][557]AssetCheck: New page: Asset Save: Level1
+[2024.10.26-09.48.01:301][557]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
+[2024.10.26-09.56.29:802][917]LogAudioMixer: Warning: Changing default audio render device to new device: {0.0.0.00000000}.{0da0c085-98bf-4ff6-89c5-e40efbc73edd}.
+[2024.10.26-09.56.29:802][917]LogAudioMixer: Resetting audio stream to device id 
+[2024.10.26-09.56.29:810][917]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.26-09.56.29:810][917]LogAudioMixer: Display: 1: FrontRight
+[2024.10.26-10.13.16:875][916]LogAudioMixer: Warning: Changing default audio render device to new device: {0.0.0.00000000}.{1797d197-e51b-4a66-8c87-dd4d05161454}.
+[2024.10.26-10.13.16:875][916]LogAudioMixer: Resetting audio stream to device id 
+[2024.10.26-10.13.16:881][916]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.26-10.13.16:881][916]LogAudioMixer: Display: 1: FrontRight
+[2024.10.26-10.20.19:899][178]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.10.26-10.20.19:899][178]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.10.26-10.20.56:906][501]LogEditorClassViewer: Warning: Class /Engine/Tutorial/InWorldBlueprintEditing/TutorialAssets/IWBE_Blutility.IWBE_Blutility_C has parent /Script/Blutility.PlacedEditorUtilityBase, but this parent is not found. The Class will not be shown in ClassViewer.
+[2024.10.26-10.20.57:821][501]LogSlate: Window 'Pick Parent Class' being destroyed
+[2024.10.26-10.20.57:828][501]LogContentBrowser: Deferred new asset file creation: NewBlueprint
+[2024.10.26-10.20.57:839][501]LogContentBrowser: Creating deferred item: NewBlueprint
+[2024.10.26-10.21.04:008][242]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.10.26-10.21.04:008][242]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.10.26-10.21.06:524][544]LogContentBrowser: Attempting asset rename: NewBlueprint -> Brick
+[2024.10.26-10.21.06:527][544]LogContentBrowser: End creating deferred item NewBlueprint
+[2024.10.26-10.21.08:477][775]LogAssetEditorSubsystem: Opening Asset editor for Blueprint /Game/Blueprints/Brick.Brick
+[2024.10.26-10.21.08:740][776]LogRenderer: Reallocating scene render targets to support 1452x976 Format 10 NumSamples 1 (Frame:1).
+[2024.10.26-10.21.59:397][727]BlueprintLog: New page: Compile Brick
+[2024.10.26-10.21.59:444][727]LogUObjectHash: Compacting FUObjectHashTables data took   3.61ms
+[2024.10.26-10.21.59:889][775]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Brick" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset" SILENT=true
+[2024.10.26-10.21.59:893][775]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/Brick250DD8734F2B351CB9984381E0E7BB07.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset'
+[2024.10.26-10.21.59:903][775]AssetCheck: New page: Asset Save: Brick
+[2024.10.26-10.21.59:903][775]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Brick.Brick
+[2024.10.26-10.22.38:632][979]BlueprintLog: New page: Compile Brick
+[2024.10.26-10.22.38:671][979]LogUObjectHash: Compacting FUObjectHashTables data took   3.21ms
+[2024.10.26-10.22.40:887][237]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Brick" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset" SILENT=true
+[2024.10.26-10.22.40:892][237]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/BrickCDFC25A0421D50039CCC37A662138B30.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset'
+[2024.10.26-10.22.40:900][237]AssetCheck: New page: Asset Save: Brick
+[2024.10.26-10.22.40:901][237]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Brick.Brick
+[2024.10.26-10.22.59:126][546]LogTemp: Repeating last play command: Selected Viewport
+[2024.10.26-10.22.59:134][546]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.10.26-10.22.59:134][546]PIE: New page: PIE session: Level1 (Oct 26, 2024, 4:22:59 PM)
+[2024.10.26-10.22.59:171][546]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.10.26-10.22.59:174][546]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001915s)
+[2024.10.26-10.22.59:174][546]LogAIModule: Creating AISystem for world Level1
+[2024.10.26-10.22.59:174][546]LogPlayLevel: PIE: World Init took: (0.000670s)
+[2024.10.26-10.22.59:174][546]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.002681s)
+[2024.10.26-10.22.59:195][546]LogUObjectHash: Compacting FUObjectHashTables data took   2.73ms
+[2024.10.26-10.22.59:197][546]LogAudio: Display: Creating Audio Device:                 Id: 7, Scope: Unique, Realtime: True
+[2024.10.26-10.22.59:197][546]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.10.26-10.22.59:197][546]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.10.26-10.22.59:197][546]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.10.26-10.22.59:197][546]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.10.26-10.22.59:197][546]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.10.26-10.22.59:197][546]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.10.26-10.22.59:197][546]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.10.26-10.22.59:197][546]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.10.26-10.22.59:197][546]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.10.26-10.22.59:197][546]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.10.26-10.22.59:197][546]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.10.26-10.22.59:197][546]LogAudioMixer: Display: Initializing audio mixer.
+[2024.10.26-10.22.59:200][546]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.26-10.22.59:200][546]LogAudioMixer: Display: 1: FrontRight
+[2024.10.26-10.22.59:207][546]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.10.26-10.22.59:207][546]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.10.26-10.22.59:207][546]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.10.26-10.22.59:207][546]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.10.26-10.22.59:207][546]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.10.26-10.22.59:207][546]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.10.26-10.22.59:207][546]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.10.26-10.22.59:208][546]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.10.26-10.22.59:208][546]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.10.26-10.22.59:208][546]LogInit: FAudioDevice initialized.
+[2024.10.26-10.22.59:208][546]LogAudio: Display: Audio Device (ID: 7) registered with world 'Level1'.
+[2024.10.26-10.22.59:214][546]LogLoad: Game class is 'BallGameMode_C'
+[2024.10.26-10.22.59:215][546]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.10.26-13.22.59
+[2024.10.26-10.22.59:215][546]LogWorld: Bringing up level for play took: 0.000523
+[2024.10.26-10.22.59:215][546]LogOnline: OSS: Creating online subsystem instance for: :Context_14
+[2024.10.26-10.22.59:217][546]PIE: Server logged in
+[2024.10.26-10.22.59:217][546]PIE: Play in editor total start time 0.088 seconds.
+[2024.10.26-10.23.06:227][377]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.26-10.23.06:227][377]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.10.26-10.23.06:227][377]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.10.26-10.23.06:227][377]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.26-10.23.06:234][377]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.10.26-10.23.06:242][377]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.26-10.23.06:258][377]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.26-10.23.06:258][377]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.26-10.23.06:259][377]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.26-10.23.06:261][377]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.26-10.23.06:264][377]LogUObjectHash: Compacting FUObjectHashTables data took   2.12ms
+[2024.10.26-10.23.06:289][379]LogPlayLevel: Display: Destroying online subsystem :Context_14
+[2024.10.26-10.23.31:408][366]LogContentBrowser: Deferred new asset file creation: NewInterface
+[2024.10.26-10.23.31:418][366]LogContentBrowser: Creating deferred item: NewInterface
+[2024.10.26-10.23.46:453][171]LogContentBrowser: Attempting asset rename: NewInterface -> BallHitInterface
+[2024.10.26-10.23.46:456][171]LogContentBrowser: End creating deferred item NewInterface
+[2024.10.26-10.23.52:060][839]LogUObjectHash: Compacting FUObjectHashTables data took   2.29ms
+[2024.10.26-10.23.53:291][839]LogSlate: Window 'Save Content' being destroyed
+[2024.10.26-10.23.53:310][839]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/BallHitInterface" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/BallHitInterface.uasset" SILENT=true
+[2024.10.26-10.23.53:311][839]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/BallHitInterfaceC8F5FBB74DEF6395022E6CBB65896D6E.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/BallHitInterface.uasset'
+[2024.10.26-10.23.53:311][839]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Maps/Level1.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.26-10.23.53:332][839]LogUObjectHash: Compacting FUObjectHashTables data took   0.54ms
+[2024.10.26-10.23.53:339][839]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/Level1DE048A754BF0FE817D6B5E9CE0EBD47B.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Maps/Level1.umap'
+[2024.10.26-10.23.53:341][839]LogFileHelpers: Saving map 'Level1' took 0.030
+[2024.10.26-10.23.53:349][839]AssetCheck: New page: Asset Save: multiple assets
+[2024.10.26-10.23.53:350][839]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
+[2024.10.26-10.23.53:350][839]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/BallHitInterface.BallHitInterface
+[2024.10.26-10.23.54:828][ 12]LogAssetEditorSubsystem: Opening Asset editor for Blueprint /Game/Blueprints/BallHitInterface.BallHitInterface
+[2024.10.26-10.24.22:927][169]LogSlate: Prevented a slow task dialog from being summoned while a context menu was open
+[2024.10.26-10.24.22:942][169]LogEditorClassViewer: Warning: Class /Engine/Tutorial/InWorldBlueprintEditing/TutorialAssets/IWBE_Blutility.IWBE_Blutility_C has parent /Script/Blutility.PlacedEditorUtilityBase, but this parent is not found. The Class will not be shown in ClassViewer.
+[2024.10.26-10.24.36:133][474]BlueprintLog: New page: Compile Brick
+[2024.10.26-10.24.36:167][474]LogUObjectHash: Compacting FUObjectHashTables data took   3.06ms
+[2024.10.26-10.24.36:839][548]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Brick" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset" SILENT=true
+[2024.10.26-10.24.36:843][548]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/BrickE2B6620C4F9CB918BA5022B12A67FE4E.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset'
+[2024.10.26-10.24.36:852][548]AssetCheck: New page: Asset Save: Brick
+[2024.10.26-10.24.36:852][548]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Brick.Brick
+[2024.10.26-10.25.00:626][388]BlueprintLog: New page: Compile BallHitInterface
+[2024.10.26-10.25.00:648][388]LogUObjectHash: Compacting FUObjectHashTables data took   2.93ms
+[2024.10.26-10.25.01:628][500]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/BallHitInterface" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/BallHitInterface.uasset" SILENT=true
+[2024.10.26-10.25.01:629][500]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/BallHitInterface4753CBB4430C1B9156CF38952E5F11A0.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/BallHitInterface.uasset'
+[2024.10.26-10.25.01:638][500]AssetCheck: New page: Asset Save: BallHitInterface
+[2024.10.26-10.25.01:638][500]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/BallHitInterface.BallHitInterface
+[2024.10.26-10.26.18:596][190]LogSlate: Prevented a slow task dialog from being summoned while a context menu was open
+[2024.10.26-10.26.18:610][190]LogEditorClassViewer: Warning: Class /Engine/Tutorial/InWorldBlueprintEditing/TutorialAssets/IWBE_Blutility.IWBE_Blutility_C has parent /Script/Blutility.PlacedEditorUtilityBase, but this parent is not found. The Class will not be shown in ClassViewer.
+[2024.10.26-10.27.45:774][578]BlueprintLog: New page: Compile Ball
+[2024.10.26-10.27.45:804][578]LogUObjectHash: Compacting FUObjectHashTables data took   3.81ms
+[2024.10.26-10.27.46:477][653]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Ball" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Ball.uasset" SILENT=true
+[2024.10.26-10.27.46:488][653]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/Ball32D5056B40BC92095F2FA68DEE45FA16.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Ball.uasset'
+[2024.10.26-10.27.46:503][653]AssetCheck: New page: Asset Save: Ball
+[2024.10.26-10.27.46:503][653]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Ball.Ball
+[2024.10.26-10.28.57:948][680]BlueprintLog: New page: Compile Brick
+[2024.10.26-10.28.57:983][680]LogUObjectHash: Compacting FUObjectHashTables data took   3.28ms
+[2024.10.26-10.28.58:572][747]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Brick" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset" SILENT=true
+[2024.10.26-10.28.58:577][747]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/Brick654F5FE946768125126DBCA9B088E0C2.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset'
+[2024.10.26-10.28.58:591][747]AssetCheck: New page: Asset Save: Brick
+[2024.10.26-10.28.58:591][747]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Brick.Brick
+[2024.10.26-10.29.00:327][954]LogTemp: Repeating last play command: Selected Viewport
+[2024.10.26-10.29.00:336][954]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.10.26-10.29.00:336][954]PIE: New page: PIE session: Level1 (Oct 26, 2024, 4:29:00 PM)
+[2024.10.26-10.29.00:336][954]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.10.26-10.29.00:338][954]LogPlayLevel: PIE: StaticDuplicateObject took: (0.001988s)
+[2024.10.26-10.29.00:338][954]LogAIModule: Creating AISystem for world Level1
+[2024.10.26-10.29.00:339][954]LogPlayLevel: PIE: World Init took: (0.000742s)
+[2024.10.26-10.29.00:339][954]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.002814s)
+[2024.10.26-10.29.00:363][954]LogUObjectHash: Compacting FUObjectHashTables data took   3.21ms
+[2024.10.26-10.29.00:364][954]LogAudio: Display: Creating Audio Device:                 Id: 8, Scope: Unique, Realtime: True
+[2024.10.26-10.29.00:364][954]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.10.26-10.29.00:364][954]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.10.26-10.29.00:364][954]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.10.26-10.29.00:364][954]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.10.26-10.29.00:364][954]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.10.26-10.29.00:364][954]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.10.26-10.29.00:364][954]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.10.26-10.29.00:364][954]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.10.26-10.29.00:365][954]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.10.26-10.29.00:365][954]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.10.26-10.29.00:365][954]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.10.26-10.29.00:365][954]LogAudioMixer: Display: Initializing audio mixer.
+[2024.10.26-10.29.00:368][954]LogAudioMixer: Display: 0: FrontLeft
+[2024.10.26-10.29.00:368][954]LogAudioMixer: Display: 1: FrontRight
+[2024.10.26-10.29.00:375][954]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.10.26-10.29.00:375][954]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.10.26-10.29.00:375][954]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.10.26-10.29.00:375][954]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.10.26-10.29.00:376][954]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.10.26-10.29.00:376][954]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.10.26-10.29.00:376][954]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.10.26-10.29.00:377][954]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.10.26-10.29.00:377][954]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.10.26-10.29.00:377][954]LogInit: FAudioDevice initialized.
+[2024.10.26-10.29.00:377][954]LogAudio: Display: Audio Device (ID: 8) registered with world 'Level1'.
+[2024.10.26-10.29.00:382][954]LogLoad: Game class is 'BallGameMode_C'
+[2024.10.26-10.29.00:383][954]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.10.26-13.29.00
+[2024.10.26-10.29.00:383][954]LogWorld: Bringing up level for play took: 0.000626
+[2024.10.26-10.29.00:383][954]LogOnline: OSS: Creating online subsystem instance for: :Context_16
+[2024.10.26-10.29.00:384][954]PIE: Server logged in
+[2024.10.26-10.29.00:385][954]PIE: Play in editor total start time 0.056 seconds.
+[2024.10.26-10.29.02:225][173]LogBlueprintUserMessages: [Brick_2] Hello
+[2024.10.26-10.29.04:688][467]LogBlueprintUserMessages: [Brick_2] Hello
+[2024.10.26-10.29.05:230][532]LogBlueprintUserMessages: [Brick_2] Hello
+[2024.10.26-10.29.05:355][541]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.26-10.29.05:355][541]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.10.26-10.29.05:355][541]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.10.26-10.29.05:355][541]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.26-10.29.05:367][541]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.10.26-10.29.05:374][541]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.10.26-10.29.05:393][541]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.10.26-10.29.05:393][541]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.26-10.29.05:394][541]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.10.26-10.29.05:396][541]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.10.26-10.29.05:399][541]LogUObjectHash: Compacting FUObjectHashTables data took   2.37ms
+[2024.10.26-10.29.05:417][542]LogPlayLevel: Display: Destroying online subsystem :Context_16
+[2024.10.26-10.29.20:909][984]LogUObjectHash: Compacting FUObjectHashTables data took   2.28ms
+[2024.10.26-10.29.22:478][984]LogSlate: Window 'Save Content' being destroyed
+[2024.10.26-10.29.22:504][984]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Brick" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset" SILENT=true
+[2024.10.26-10.29.22:509][984]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/BrickF527888B4A0D42495C9DA281C065DB3E.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Blueprints/Brick.uasset'
+[2024.10.26-10.29.22:509][984]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Maps/Level1.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.10.26-10.29.22:529][984]LogUObjectHash: Compacting FUObjectHashTables data took   0.49ms
+[2024.10.26-10.29.22:537][984]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Saved/Level1D86296F84277C3B823FF6F8178A8E487.tmp' to 'D:/GitHub/Projects/Other/Blueprint/BallBounce/Content/Maps/Level1.umap'
+[2024.10.26-10.29.22:539][984]LogFileHelpers: Saving map 'Level1' took 0.031
+[2024.10.26-10.29.22:548][984]AssetCheck: New page: Asset Save: multiple assets
+[2024.10.26-10.29.22:548][984]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
+[2024.10.26-10.29.22:548][984]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Brick.Brick
