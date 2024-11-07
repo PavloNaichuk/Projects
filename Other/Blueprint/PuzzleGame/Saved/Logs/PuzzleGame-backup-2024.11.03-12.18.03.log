@@ -1,0 +1,1310 @@
+﻿Log file open, 11/03/24 12:29:54
+LogWindows: Failed to load 'aqProf.dll' (GetLastError=126)
+LogWindows: File 'aqProf.dll' does not exist
+LogWindows: Failed to load 'VtuneApi.dll' (GetLastError=126)
+LogWindows: File 'VtuneApi.dll' does not exist
+LogWindows: Failed to load 'VtuneApi32e.dll' (GetLastError=126)
+LogWindows: File 'VtuneApi32e.dll' does not exist
+LogConsoleResponse: Display: Failed to find resolution value strings in scalability ini. Falling back to default.
+LogConsoleResponse: Display: Failed to find resolution value strings in scalability ini. Falling back to default.
+LogInit: Display: Running engine for game: PuzzleGame
+LogPlatformFile: Not using cached read wrapper
+LogTaskGraph: Started task graph with 5 named threads and 47 total threads with 3 sets of task threads.
+LogStats: Stats thread started at 0.166851
+LogICUInternationalization: ICU TimeZone Detection - Raw Offset: +2:00, Platform Override: ''
+LogInit: Display: Loading text-based GConfig....
+LogPluginManager: Mounting plugin MeshPainting
+LogPluginManager: Mounting plugin XGEController
+LogPluginManager: Mounting plugin Paper2D
+LogPluginManager: Mounting plugin LiveLink
+LogPluginManager: Mounting plugin AISupport
+LogPluginManager: Mounting plugin EnvironmentQueryEditor
+LogPluginManager: Mounting plugin LightPropagationVolume
+LogPluginManager: Mounting plugin CameraShakePreviewer
+LogPluginManager: Mounting plugin GameplayCameras
+LogPluginManager: Mounting plugin CryptoKeys
+LogPluginManager: Mounting plugin AssetManagerEditor
+LogPluginManager: Mounting plugin CurveEditorTools
+LogPluginManager: Mounting plugin GameplayTagsEditor
+LogPluginManager: Mounting plugin GeometryMode
+LogPluginManager: Mounting plugin FacialAnimation
+LogPluginManager: Mounting plugin MaterialAnalyzer
+LogPluginManager: Mounting plugin MobileLauncherProfileWizard
+LogPluginManager: Mounting plugin SpeedTreeImporter
+LogPluginManager: Mounting plugin MacGraphicsSwitching
+LogPluginManager: Mounting plugin DataValidation
+LogPluginManager: Mounting plugin PluginBrowser
+LogPluginManager: Mounting plugin OodleNetwork
+LogPluginManager: Mounting plugin Niagara
+LogPluginManager: Mounting plugin DatasmithContent
+LogPluginManager: Mounting plugin LuminPlatformFeatures
+LogPluginManager: Mounting plugin MagicLeap
+LogPluginManager: Mounting plugin OodleData
+LogPluginManager: Mounting plugin MagicLeapLightEstimation
+LogPluginManager: Mounting plugin MagicLeapMedia
+LogPluginManager: Mounting plugin MagicLeapPassableWorld
+LogPluginManager: Mounting plugin VariantManagerContent
+LogPluginManager: Mounting plugin MLSDK
+LogPluginManager: Mounting plugin AlembicImporter
+LogPluginManager: Mounting plugin BackChannel
+LogPluginManager: Mounting plugin AutomationUtils
+LogPluginManager: Mounting plugin ChaosClothEditor
+LogPluginManager: Mounting plugin ChaosCloth
+LogPluginManager: Mounting plugin ChaosNiagara
+LogPluginManager: Mounting plugin ChaosSolverPlugin
+LogPluginManager: Mounting plugin CharacterAI
+LogPluginManager: Mounting plugin ChaosEditor
+LogPluginManager: Mounting plugin GeometryCache
+LogPluginManager: Mounting plugin TcpMessaging
+LogPluginManager: Mounting plugin UdpMessaging
+LogPluginManager: Mounting plugin GeometryProcessing
+LogPluginManager: Mounting plugin GeometryCollectionPlugin
+LogPluginManager: Mounting plugin OpenImageDenoise
+LogPluginManager: Mounting plugin MotoSynth
+LogPluginManager: Mounting plugin PlanarCut
+LogPluginManager: Mounting plugin PlatformCrypto
+LogPluginManager: Mounting plugin PythonScriptPlugin
+LogPluginManager: Mounting plugin ProxyLODPlugin
+LogPluginManager: Mounting plugin SkeletalReduction
+LogPluginManager: Mounting plugin LevelSequenceEditor
+LogPluginManager: Mounting plugin ActorSequence
+LogPluginManager: Mounting plugin MatineeToLevelSequence
+LogPluginManager: Mounting plugin TemplateSequence
+LogPluginManager: Mounting plugin AndroidMedia
+LogPluginManager: Mounting plugin AvfMedia
+LogPluginManager: Mounting plugin ImgMedia
+LogPluginManager: Mounting plugin MediaCompositing
+LogPluginManager: Mounting plugin OnlineSubsystem
+LogPluginManager: Mounting plugin MediaPlayerEditor
+LogPluginManager: Mounting plugin OnlineSubsystemNull
+LogPluginManager: Mounting plugin WmfMedia
+LogPluginManager: Mounting plugin WebMMedia
+LogPluginManager: Mounting plugin OnlineSubsystemUtils
+LogPluginManager: Mounting plugin LauncherChunkInstaller
+LogPluginManager: Mounting plugin ScreenshotTools
+LogPluginManager: Mounting plugin AndroidMoviePlayer
+LogPluginManager: Mounting plugin ActorLayerUtilities
+LogPluginManager: Mounting plugin AndroidPermission
+LogPluginManager: Mounting plugin AppleImageUtils
+LogPluginManager: Mounting plugin AndroidDeviceProfileSelector
+LogPluginManager: Mounting plugin AudioCapture
+LogPluginManager: Mounting plugin AppleMoviePlayer
+LogPluginManager: Mounting plugin ArchVisCharacter
+LogPluginManager: Mounting plugin AssetTags
+LogPluginManager: Mounting plugin AudioSynesthesia
+LogPluginManager: Mounting plugin CableComponent
+LogPluginManager: Mounting plugin ChunkDownloader
+LogPluginManager: Mounting plugin CustomMeshComponent
+LogPluginManager: Mounting plugin EditableMesh
+LogPluginManager: Mounting plugin ExampleDeviceProfileSelector
+LogPluginManager: Mounting plugin GoogleCloudMessaging
+LogPluginManager: Mounting plugin GooglePAD
+LogPluginManager: Mounting plugin IOSDeviceProfileSelector
+LogPluginManager: Mounting plugin Takes
+LogPluginManager: Mounting plugin LinuxDeviceProfileSelector
+LogPluginManager: Mounting plugin LocationServicesBPLibrary
+LogPluginManager: Mounting plugin OpenXR
+LogPluginManager: Mounting plugin OpenXREyeTracker
+LogPluginManager: Mounting plugin OpenXRHandTracking
+LogPluginManager: Mounting plugin MobilePatchingUtils
+LogPluginManager: Mounting plugin PhysXVehicles
+LogPluginManager: Mounting plugin PropertyAccessEditor
+LogPluginManager: Mounting plugin ProceduralMeshComponent
+LogPluginManager: Mounting plugin PostSplashScreen
+LogPluginManager: Mounting plugin SignificanceManager
+LogPluginManager: Mounting plugin RuntimePhysXCooking
+LogPluginManager: Mounting plugin SoundFields
+LogPluginManager: Mounting plugin Synthesis
+LogPluginManager: Mounting plugin WebMMoviePlayer
+LogPluginManager: Mounting plugin WindowsMoviePlayer
+LogPluginManager: Mounting plugin AnimationSharing
+LogPluginManager: Mounting plugin CLionSourceCodeAccess
+LogPluginManager: Mounting plugin CodeLiteSourceCodeAccess
+LogPluginManager: Mounting plugin GitSourceControl
+LogPluginManager: Mounting plugin KDevelopSourceCodeAccess
+LogPluginManager: Mounting plugin NullSourceCodeAccess
+LogPluginManager: Mounting plugin PerforceSourceControl
+LogPluginManager: Mounting plugin PixWinPlugin
+LogPluginManager: Mounting plugin PropertyAccessNode
+LogPluginManager: Mounting plugin PluginUtils
+LogPluginManager: Mounting plugin TextureFormatOodle
+LogPluginManager: Mounting plugin PlasticSourceControl
+LogPluginManager: Mounting plugin RiderSourceCodeAccess
+LogPluginManager: Mounting plugin SubversionSourceControl
+LogPluginManager: Mounting plugin UObjectPlugin
+LogPluginManager: Mounting plugin VisualStudioCodeSourceCodeAccess
+LogPluginManager: Mounting plugin VisualStudioSourceCodeAccess
+LogPluginManager: Mounting plugin XCodeSourceCodeAccess
+LogPluginManager: Mounting plugin ContentBrowserAssetDataSource
+LogPluginManager: Mounting plugin ContentBrowserClassDataSource
+LogPluginManager: Mounting plugin ContentBrowserFileDataSource
+LogPluginManager: Mounting plugin OnlineSubsystemGooglePlay
+LogPluginManager: Mounting plugin OnlineSubsystemIOS
+LogPluginManager: Mounting plugin OculusVR
+LogPluginManager: Mounting plugin SteamVR
+LogLuminAPIImpl: Warning: MLSDK not found.  This likely means the MLSDK environment variable is not set.
+LogInit: Using libcurl 7.55.1-DEV
+LogInit:  - built for x86_64-pc-win32
+LogInit:  - supports SSL with OpenSSL/1.1.1
+LogInit:  - supports HTTP deflate (compression) using libz 1.2.8
+LogInit:  - other features:
+LogInit:      CURL_VERSION_SSL
+LogInit:      CURL_VERSION_LIBZ
+LogInit:      CURL_VERSION_IPV6
+LogInit:      CURL_VERSION_ASYNCHDNS
+LogInit:      CURL_VERSION_LARGEFILE
+LogInit:      CURL_VERSION_IDN
+LogInit:  CurlRequestOptions (configurable via config and command line):
+LogInit:  - bVerifyPeer = true  - Libcurl will verify peer certificate
+LogInit:  - bUseHttpProxy = false  - Libcurl will NOT use HTTP proxy
+LogInit:  - bDontReuseConnections = false  - Libcurl will reuse connections
+LogInit:  - MaxHostConnections = 16  - Libcurl will limit the number of connections to a host
+LogInit:  - LocalHostAddr = Default
+LogInit:  - BufferSize = 65536
+LogOnline: OSS: Creating online subsystem instance for: NULL
+LogInit: WinSock: version 1.1 (2.2), MaxSocks=32767, MaxUdp=65467
+LogOnline: OSS: TryLoadSubsystemAndSetDefault: Loaded subsystem for module [NULL]
+PixWinPlugin: PIX capture plugin failed to initialize! Check that the process is launched from PIX.
+LogOculusPluginWrapper: OculusPlugin initialized successfully
+LogHMD: Failed initializing OVRPlugin 1.59.0
+LogInit: Build: ++UE4+Release-4.27-CL-18319896
+LogInit: Engine Version: 4.27.2-18319896+++UE4+Release-4.27
+LogInit: Compatible Engine Version: 4.27.0-17155196+++UE4+Release-4.27
+LogInit: Net CL: 17155196
+LogInit: OS: Windows 10 (Release 2009) (), CPU: AMD Ryzen 7 7800X3D 8-Core Processor           , GPU: AMD Radeon(TM) Graphics
+LogInit: Compiled (64-bit): Nov 30 2021 07:12:08
+LogInit: Compiled with Visual C++: 19.24.28315.00
+LogInit: Build Configuration: Development
+LogInit: Branch Name: ++UE4+Release-4.27
+LogInit: Command Line: 
+LogInit: Base Directory: C:/Program Files/Epic Games/UE_4.27/Engine/Binaries/Win64/
+LogInit: Allocator: TBB
+LogInit: Installed Engine Build: 1
+LogDevObjectVersion: Number of dev versions registered: 29
+LogDevObjectVersion:   Dev-Blueprints (B0D832E4-1F89-4F0D-ACCF-7EB736FD4AA2): 10
+LogDevObjectVersion:   Dev-Build (E1C64328-A22C-4D53-A36C-8E866417BD8C): 0
+LogDevObjectVersion:   Dev-Core (375EC13C-06E4-48FB-B500-84F0262A717E): 4
+LogDevObjectVersion:   Dev-Editor (E4B068ED-F494-42E9-A231-DA0B2E46BB41): 40
+LogDevObjectVersion:   Dev-Framework (CFFC743F-43B0-4480-9391-14DF171D2073): 37
+LogDevObjectVersion:   Dev-Mobile (B02B49B5-BB20-44E9-A304-32B752E40360): 3
+LogDevObjectVersion:   Dev-Networking (A4E4105C-59A1-49B5-A7C5-40C4547EDFEE): 0
+LogDevObjectVersion:   Dev-Online (39C831C9-5AE6-47DC-9A44-9C173E1C8E7C): 0
+LogDevObjectVersion:   Dev-Physics (78F01B33-EBEA-4F98-B9B4-84EACCB95AA2): 14
+LogDevObjectVersion:   Dev-Platform (6631380F-2D4D-43E0-8009-CF276956A95A): 0
+LogDevObjectVersion:   Dev-Rendering (12F88B9F-8875-4AFC-A67C-D90C383ABD29): 45
+LogDevObjectVersion:   Dev-Sequencer (7B5AE74C-D270-4C10-A958-57980B212A5A): 13
+LogDevObjectVersion:   Dev-VR (D7296918-1DD6-4BDD-9DE2-64A83CC13884): 3
+LogDevObjectVersion:   Dev-LoadTimes (C2A15278-BFE7-4AFE-6C17-90FF531DF755): 1
+LogDevObjectVersion:   Private-Geometry (6EACA3D4-40EC-4CC1-B786-8BED09428FC5): 3
+LogDevObjectVersion:   Dev-AnimPhys (29E575DD-E0A3-4627-9D10-D276232CDCEA): 17
+LogDevObjectVersion:   Dev-Anim (AF43A65D-7FD3-4947-9873-3E8ED9C1BB05): 15
+LogDevObjectVersion:   Dev-ReflectionCapture (6B266CEC-1EC7-4B8F-A30B-E4D90942FC07): 1
+LogDevObjectVersion:   Dev-Automation (0DF73D61-A23F-47EA-B727-89E90C41499A): 1
+LogDevObjectVersion:   FortniteMain (601D1886-AC64-4F84-AA16-D3DE0DEAC7D6): 47
+LogDevObjectVersion:   FortniteRelease (E7086368-6B23-4C58-8439-1B7016265E91): 1
+LogDevObjectVersion:   Dev-Enterprise (9DFFBCD6-494F-0158-E221-12823C92A888): 10
+LogDevObjectVersion:   Dev-Niagara (F2AED0AC-9AFE-416F-8664-AA7FFA26D6FC): 1
+LogDevObjectVersion:   Dev-Destruction (174F1F0B-B4C6-45A5-B13F-2EE8D0FB917D): 10
+LogDevObjectVersion:   Dev-Physics-Ext (35F94A83-E258-406C-A318-09F59610247C): 41
+LogDevObjectVersion:   Dev-PhysicsMaterial-Chaos (B68FC16E-8B1B-42E2-B453-215C058844FE): 1
+LogDevObjectVersion:   Dev-CineCamera (B2E18506-4273-CFC2-A54E-F4BB758BBA07): 1
+LogDevObjectVersion:   Dev-VirtualProduction (64F58936-FD1B-42BA-BA96-7289D5D0FA4E): 1
+LogDevObjectVersion:   Dev-MediaFramework (6F0ED827-A609-4895-9C91-998D90180EA4): 2
+LogInit: Presizing for max 25165824 objects, including 0 objects not considered by GC, pre-allocating 0 bytes for permanent pool.
+LogConfig: Applying CVar settings from Section [/Script/Engine.StreamingSettings] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Engine.ini]
+LogConfig: Setting CVar [[s.MinBulkDataSizeForAsyncLoading:131072]]
+LogConfig: Setting CVar [[s.AsyncLoadingThreadEnabled:0]]
+LogConfig: Setting CVar [[s.EventDrivenLoaderEnabled:1]]
+LogConfig: Setting CVar [[s.WarnIfTimeLimitExceeded:0]]
+LogConfig: Setting CVar [[s.TimeLimitExceededMultiplier:1.5]]
+LogConfig: Setting CVar [[s.TimeLimitExceededMinTime:0.005]]
+LogConfig: Setting CVar [[s.UseBackgroundLevelStreaming:1]]
+LogConfig: Setting CVar [[s.PriorityAsyncLoadingExtraTime:15.0]]
+LogConfig: Setting CVar [[s.LevelStreamingActorsUpdateTimeLimit:5.0]]
+LogConfig: Setting CVar [[s.PriorityLevelStreamingActorsUpdateExtraTime:5.0]]
+LogConfig: Setting CVar [[s.LevelStreamingComponentsRegistrationGranularity:10]]
+LogConfig: Setting CVar [[s.UnregisterComponentsTimeLimit:1.0]]
+LogConfig: Setting CVar [[s.LevelStreamingComponentsUnregistrationGranularity:5]]
+LogConfig: Setting CVar [[s.FlushStreamingOnExit:1]]
+LogInit: Object subsystem initialized
+LogConfig: Setting CVar [[con.DebugEarlyDefault:1]]
+LogConfig: Setting CVar [[r.setres:1280x720]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[r.VSync:0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[r.RHICmdBypass:0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.RendererSettings] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Engine.ini]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[r.GPUCrashDebugging:0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.RendererOverrideSettings] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Engine.ini]
+[2024.11.03-10.29.54:620][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.StreamingSettings] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Engine.ini]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.MinBulkDataSizeForAsyncLoading:131072]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.AsyncLoadingThreadEnabled:0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.EventDrivenLoaderEnabled:1]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.WarnIfTimeLimitExceeded:0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.TimeLimitExceededMultiplier:1.5]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.TimeLimitExceededMinTime:0.005]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.UseBackgroundLevelStreaming:1]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.PriorityAsyncLoadingExtraTime:15.0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.LevelStreamingActorsUpdateTimeLimit:5.0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.PriorityLevelStreamingActorsUpdateExtraTime:5.0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.LevelStreamingComponentsRegistrationGranularity:10]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.UnregisterComponentsTimeLimit:1.0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.LevelStreamingComponentsUnregistrationGranularity:5]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[s.FlushStreamingOnExit:1]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.GarbageCollectionSettings] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Engine.ini]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[gc.MaxObjectsNotConsideredByGC:1]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[gc.SizeOfPermanentObjectPool:0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[gc.FlushStreamingOnGC:0]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[gc.NumRetriesBeforeForcingGC:10]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[gc.AllowParallelGC:1]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[gc.TimeBetweenPurgingPendingKillObjects:61.1]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[gc.MaxObjectsInEditor:25165824]]
+[2024.11.03-10.29.54:620][  0]LogConfig: Setting CVar [[gc.IncrementalBeginDestroyEnabled:1]]
+[2024.11.03-10.29.54:621][  0]LogConfig: Setting CVar [[gc.CreateGCClusters:1]]
+[2024.11.03-10.29.54:621][  0]LogConfig: Setting CVar [[gc.MinGCClusterSize:5]]
+[2024.11.03-10.29.54:621][  0]LogConfig: Setting CVar [[gc.ActorClusteringEnabled:0]]
+[2024.11.03-10.29.54:621][  0]LogConfig: Setting CVar [[gc.BlueprintClusteringEnabled:0]]
+[2024.11.03-10.29.54:621][  0]LogConfig: Setting CVar [[gc.UseDisregardForGCOnDedicatedServers:0]]
+[2024.11.03-10.29.54:621][  0]LogConfig: Setting CVar [[gc.MultithreadedDestructionEnabled:1]]
+[2024.11.03-10.29.54:621][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.NetworkSettings] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Engine.ini]
+[2024.11.03-10.29.54:621][  0]LogConfig: Applying CVar settings from Section [/Script/UnrealEd.CookerSettings] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Engine.ini]
+[2024.11.03-10.29.54:632][  0]LogConfig: Applying CVar settings from Section [ViewDistanceQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.SkeletalMeshLODBias:0]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.ViewDistanceScale:1.0]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Applying CVar settings from Section [AntiAliasingQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.PostProcessAAQuality:4]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Applying CVar settings from Section [ShadowQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.LightFunctionQuality:1]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.ShadowQuality:5]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.Shadow.CSM.MaxCascades:10]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.Shadow.MaxResolution:2048]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.Shadow.MaxCSMResolution:2048]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.Shadow.RadiusThreshold:0.01]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.Shadow.DistanceScale:1.0]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.Shadow.CSM.TransitionScale:1.0]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.Shadow.PreShadowResolutionFactor:1.0]]
+[2024.11.03-10.29.54:632][  0]LogConfig: Setting CVar [[r.DistanceFieldShadowing:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DistanceFieldAO:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.AOQuality:2]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.VolumetricFog:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.VolumetricFog.GridPixelSize:8]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.VolumetricFog.GridSizeZ:128]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.VolumetricFog.HistoryMissSupersampleCount:4]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.LightMaxDrawDistanceScale:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.CapsuleShadows:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Applying CVar settings from Section [PostProcessQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.MotionBlurQuality:4]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.AmbientOcclusionMipLevelFactor:0.4]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.AmbientOcclusionMaxQuality:100]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.AmbientOcclusionLevels:-1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.AmbientOcclusionRadiusScale:1.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DepthOfFieldQuality:2]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.RenderTargetPoolMin:400]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.LensFlareQuality:2]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SceneColorFringeQuality:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.EyeAdaptationQuality:2]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.BloomQuality:5]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.FastBlurThreshold:100]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Upscale.Quality:3]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Tonemapper.GrainQuantization:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.LightShaftQuality:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Filter.SizeScale:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Tonemapper.Quality:5]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Gather.AccumulatorQuality:1        ; higher gathering accumulator quality]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Gather.PostfilterMethod:1          ; Median3x3 postfilering method]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Gather.EnableBokehSettings:0       ; no bokeh simulation when gathering]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Gather.RingCount:4                 ; medium number of samples when gathering]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Scatter.ForegroundCompositing:1    ; additive foreground scattering]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Scatter.BackgroundCompositing:2    ; additive background scattering]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Scatter.EnableBokehSettings:1      ; bokeh simulation when scattering]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Scatter.MaxSpriteRatio:0.1         ; only a maximum of 10% of scattered bokeh]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Recombine.Quality:1                ; cheap slight out of focus]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Recombine.EnableBokehSettings:0    ; no bokeh simulation on slight out of focus]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.TemporalAAQuality:1                ; more stable temporal accumulation]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Kernel.MaxForegroundRadius:0.025]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DOF.Kernel.MaxBackgroundRadius:0.025]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Applying CVar settings from Section [TextureQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Streaming.MipBias:0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Streaming.AmortizeCPUToGPUCopy:0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Streaming.MaxNumTexturesToStreamPerFrame:0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Streaming.Boost:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.MaxAnisotropy:8]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.VT.MaxAnisotropy:8]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Streaming.LimitPoolSizeToVRAM:0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Streaming.PoolSize:1000]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.Streaming.MaxEffectiveScreenSize:0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Applying CVar settings from Section [EffectsQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.TranslucencyLightingVolumeDim:64]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.RefractionQuality:2]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SSR.Quality:3]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SSR.HalfResSceneColor:0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SceneColorFormat:4]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.DetailMode:2]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.TranslucencyVolumeBlur:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.MaterialQualityLevel:1 ; High quality]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.AnisotropicMaterials:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SSS.Scale:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SSS.SampleSet:2]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SSS.Quality:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SSS.HalfRes:0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SSGI.Quality:3]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.EmitterSpawnRateScale:1.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.ParticleLightQuality:2]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.AerialPerspectiveLUT.FastApplyOnOpaque:1 ; Always have FastSkyLUT 1 in this case to avoid wrong sky]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.AerialPerspectiveLUT.SampleCountMaxPerSlice:4]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.AerialPerspectiveLUT.DepthResolution:16.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.FastSkyLUT:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.FastSkyLUT.SampleCountMin:4.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.FastSkyLUT.SampleCountMax:128.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.SampleCountMin:4.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.SampleCountMax:128.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.TransmittanceLUT.UseSmallFormat:0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.TransmittanceLUT.SampleCount:10.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.MultiScatteringLUT.SampleCount:15.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkyLight.RealTimeReflectionCapture:1]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Applying CVar settings from Section [FoliageQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[foliage.DensityScale:1.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[grass.DensityScale:1.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Applying CVar settings from Section [ShadingQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.HairStrands.SkyLighting.IntegrationType:2]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.HairStrands.SkyAO.SampleCount:4]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.HairStrands.Visibility.MSAA.SamplePerPixel:4]]
+[2024.11.03-10.29.54:634][  0]LogInit: Selected Device Profile: [Windows]
+[2024.11.03-10.29.54:634][  0]LogInit: Applying CVar settings loaded from the selected device profile: [Windows]
+[2024.11.03-10.29.54:634][  0]LogHAL: Display: Platform has ~ 64 GB [67794067456 / 68719476736 / 64], which maps to Largest [LargestMinGB=32, LargerMinGB=12, DefaultMinGB=8, SmallerMinGB=6, SmallestMinGB=0)
+[2024.11.03-10.29.54:634][  0]LogInit: Going up to parent DeviceProfile []
+[2024.11.03-10.29.54:634][  0]LogConfig: Applying CVar settings from Section [ViewDistanceQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.SkeletalMeshLODBias:0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.ViewDistanceScale:1.0]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Applying CVar settings from Section [AntiAliasingQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:634][  0]LogConfig: Setting CVar [[r.PostProcessAAQuality:4]]
+[2024.11.03-10.29.54:634][  0]LogConfig: Applying CVar settings from Section [ShadowQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.LightFunctionQuality:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.ShadowQuality:5]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Shadow.CSM.MaxCascades:10]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Shadow.MaxResolution:2048]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Shadow.MaxCSMResolution:2048]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Shadow.RadiusThreshold:0.01]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Shadow.DistanceScale:1.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Shadow.CSM.TransitionScale:1.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Shadow.PreShadowResolutionFactor:1.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DistanceFieldShadowing:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DistanceFieldAO:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.AOQuality:2]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.VolumetricFog:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.VolumetricFog.GridPixelSize:8]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.VolumetricFog.GridSizeZ:128]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.VolumetricFog.HistoryMissSupersampleCount:4]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.LightMaxDrawDistanceScale:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.CapsuleShadows:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Applying CVar settings from Section [PostProcessQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.MotionBlurQuality:4]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.AmbientOcclusionMipLevelFactor:0.4]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.AmbientOcclusionMaxQuality:100]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.AmbientOcclusionLevels:-1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.AmbientOcclusionRadiusScale:1.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DepthOfFieldQuality:2]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.RenderTargetPoolMin:400]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.LensFlareQuality:2]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SceneColorFringeQuality:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.EyeAdaptationQuality:2]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.BloomQuality:5]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.FastBlurThreshold:100]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Upscale.Quality:3]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Tonemapper.GrainQuantization:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.LightShaftQuality:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Filter.SizeScale:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Tonemapper.Quality:5]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Gather.AccumulatorQuality:1        ; higher gathering accumulator quality]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Gather.PostfilterMethod:1          ; Median3x3 postfilering method]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Gather.EnableBokehSettings:0       ; no bokeh simulation when gathering]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Gather.RingCount:4                 ; medium number of samples when gathering]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Scatter.ForegroundCompositing:1    ; additive foreground scattering]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Scatter.BackgroundCompositing:2    ; additive background scattering]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Scatter.EnableBokehSettings:1      ; bokeh simulation when scattering]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Scatter.MaxSpriteRatio:0.1         ; only a maximum of 10% of scattered bokeh]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Recombine.Quality:1                ; cheap slight out of focus]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Recombine.EnableBokehSettings:0    ; no bokeh simulation on slight out of focus]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.TemporalAAQuality:1                ; more stable temporal accumulation]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Kernel.MaxForegroundRadius:0.025]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DOF.Kernel.MaxBackgroundRadius:0.025]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Applying CVar settings from Section [TextureQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Streaming.MipBias:0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Streaming.AmortizeCPUToGPUCopy:0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Streaming.MaxNumTexturesToStreamPerFrame:0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Streaming.Boost:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.MaxAnisotropy:8]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.VT.MaxAnisotropy:8]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Streaming.LimitPoolSizeToVRAM:0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Streaming.PoolSize:1000]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.Streaming.MaxEffectiveScreenSize:0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Applying CVar settings from Section [EffectsQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.TranslucencyLightingVolumeDim:64]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.RefractionQuality:2]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SSR.Quality:3]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SSR.HalfResSceneColor:0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SceneColorFormat:4]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.DetailMode:2]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.TranslucencyVolumeBlur:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.MaterialQualityLevel:1 ; High quality]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.AnisotropicMaterials:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SSS.Scale:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SSS.SampleSet:2]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SSS.Quality:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SSS.HalfRes:0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SSGI.Quality:3]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.EmitterSpawnRateScale:1.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.ParticleLightQuality:2]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.AerialPerspectiveLUT.FastApplyOnOpaque:1 ; Always have FastSkyLUT 1 in this case to avoid wrong sky]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.AerialPerspectiveLUT.SampleCountMaxPerSlice:4]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.AerialPerspectiveLUT.DepthResolution:16.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.FastSkyLUT:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.FastSkyLUT.SampleCountMin:4.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.FastSkyLUT.SampleCountMax:128.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.SampleCountMin:4.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.SampleCountMax:128.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.TransmittanceLUT.UseSmallFormat:0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.TransmittanceLUT.SampleCount:10.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyAtmosphere.MultiScatteringLUT.SampleCount:15.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.SkyLight.RealTimeReflectionCapture:1]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Applying CVar settings from Section [FoliageQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[foliage.DensityScale:1.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[grass.DensityScale:1.0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Applying CVar settings from Section [ShadingQuality@3] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Scalability.ini]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.HairStrands.SkyLighting.IntegrationType:2]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.HairStrands.SkyAO.SampleCount:4]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[r.HairStrands.Visibility.MSAA.SamplePerPixel:4]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Applying CVar settings from Section [Startup] File [../../../Engine/Config/ConsoleVariables.ini]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[net.UseAdaptiveNetUpdateFrequency:0]]
+[2024.11.03-10.29.54:635][  0]LogConfig: Setting CVar [[p.chaos.AllowCreatePhysxBodies:1]]
+[2024.11.03-10.29.54:636][  0]LogConfig: Setting CVar [[fx.SkipVectorVMBackendOptimizations:1]]
+[2024.11.03-10.29.54:636][  0]LogConfig: Applying CVar settings from Section [ConsoleVariables] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Engine.ini]
+[2024.11.03-10.29.54:636][  0]LogConfig: Applying CVar settings from Section [ConsoleVariables] File [D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Config/Windows/Editor.ini]
+[2024.11.03-10.29.54:636][  0]LogInit: Computer: PASHA
+[2024.11.03-10.29.54:636][  0]LogInit: User: pasha
+[2024.11.03-10.29.54:636][  0]LogInit: CPU Page size=4096, Cores=8
+[2024.11.03-10.29.54:636][  0]LogInit: High frequency timer resolution =10.000000 MHz
+[2024.11.03-10.29.54:636][  0]LogMemory: Memory total: Physical=63.1GB (64GB approx)
+[2024.11.03-10.29.54:636][  0]LogMemory: Platform Memory Stats for Windows
+[2024.11.03-10.29.54:636][  0]LogMemory: Process Physical Memory: 149.13 MB used, 149.13 MB peak
+[2024.11.03-10.29.54:636][  0]LogMemory: Process Virtual Memory: 133.71 MB used, 133.71 MB peak
+[2024.11.03-10.29.54:636][  0]LogMemory: Physical Memory: 14252.42 MB used,  50401.04 MB free, 64653.46 MB total
+[2024.11.03-10.29.54:636][  0]LogMemory: Virtual Memory: 134170904.00 MB used,  46827.20 MB free, 134217728.00 MB total
+[2024.11.03-10.29.54:639][  0]LogWindows: WindowsPlatformFeatures enabled
+[2024.11.03-10.29.54:652][  0]LogInit: Physics initialised using underlying interface: PhysX
+[2024.11.03-10.29.54:652][  0]LogInit: Using OS detected language (en-US).
+[2024.11.03-10.29.54:652][  0]LogInit: Using OS detected locale (en-US).
+[2024.11.03-10.29.54:656][  0]LogTextLocalizationManager: No specific localization for 'en-US' exists, so the 'en' localization will be used.
+[2024.11.03-10.29.54:766][  0]LogInit: Setting process to per monitor DPI aware
+[2024.11.03-10.29.54:776][  0]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.11.03-10.29.54:783][  0]LogSlate: New Slate User Created.  User Index 0, Is Virtual User: 0
+[2024.11.03-10.29.54:783][  0]LogSlate: Slate User Registered.  User Index 0, Is Virtual User: 0
+[2024.11.03-10.29.54:860][  0]LogD3D11RHI: Loaded GFSDK_Aftermath_Lib.x64.dll
+[2024.11.03-10.29.54:864][  0]LogHMD: Failed to initialize OpenVR with code 110
+[2024.11.03-10.29.54:864][  0]LogD3D11RHI: D3D11 min allowed feature level: 11_0
+[2024.11.03-10.29.54:864][  0]LogD3D11RHI: D3D11 max allowed feature level: 11_0
+[2024.11.03-10.29.54:864][  0]LogD3D11RHI: D3D11 adapters:
+[2024.11.03-10.29.54:979][  0]LogD3D11RHI:    0. 'NVIDIA GeForce RTX 4070 Ti SUPER' (Feature Level 11_0)
+[2024.11.03-10.29.54:980][  0]LogD3D11RHI:       16063/0/32326 MB DedicatedVideo/DedicatedSystem/SharedSystem, Outputs:1, VendorId:0x10de
+[2024.11.03-10.29.55:044][  0]LogD3D11RHI:    1. 'AMD Radeon(TM) Graphics' (Feature Level 11_0)
+[2024.11.03-10.29.55:044][  0]LogD3D11RHI:       485/0/32326 MB DedicatedVideo/DedicatedSystem/SharedSystem, Outputs:0, VendorId:0x1002
+[2024.11.03-10.29.55:045][  0]LogD3D11RHI:    2. 'Microsoft Basic Render Driver' (Feature Level 11_0)
+[2024.11.03-10.29.55:045][  0]LogD3D11RHI:       0/0/32326 MB DedicatedVideo/DedicatedSystem/SharedSystem, Outputs:0, VendorId:0x1414
+[2024.11.03-10.29.55:045][  0]LogD3D11RHI: Chosen D3D11 Adapter:
+[2024.11.03-10.29.55:045][  0]LogD3D11RHI:     Description : NVIDIA GeForce RTX 4070 Ti SUPER
+[2024.11.03-10.29.55:045][  0]LogD3D11RHI:     VendorId    : 10de
+[2024.11.03-10.29.55:045][  0]LogD3D11RHI:     DeviceId    : 2705
+[2024.11.03-10.29.55:045][  0]LogD3D11RHI:     SubSysId    : 89571043
+[2024.11.03-10.29.55:045][  0]LogD3D11RHI:     Revision    : 00a1
+[2024.11.03-10.29.55:046][  0]LogD3D11RHI:     DedicatedVideoMemory : 16843276288 bytes
+[2024.11.03-10.29.55:046][  0]LogD3D11RHI:     DedicatedSystemMemory : 0 bytes
+[2024.11.03-10.29.55:046][  0]LogD3D11RHI:     SharedSystemMemory : 33897033728 bytes
+[2024.11.03-10.29.55:046][  0]LogD3D11RHI:     AdapterLuid : 0 83499
+[2024.11.03-10.29.55:055][  0]LogD3D11RHI: Creating new Direct3DDevice
+[2024.11.03-10.29.55:055][  0]LogD3D11RHI:     GPU DeviceId: 0x2705 (for the marketing name, search the web for "GPU Device Id")
+[2024.11.03-10.29.55:055][  0]LogWindows: EnumDisplayDevices:
+[2024.11.03-10.29.55:055][  0]LogWindows:    0. 'AMD Radeon(TM) Graphics' (P:1 D:1)
+[2024.11.03-10.29.55:056][  0]LogWindows:    1. 'AMD Radeon(TM) Graphics' (P:0 D:0)
+[2024.11.03-10.29.55:056][  0]LogWindows:    2. 'AMD Radeon(TM) Graphics' (P:0 D:0)
+[2024.11.03-10.29.55:056][  0]LogWindows:    3. 'AMD Radeon(TM) Graphics' (P:0 D:0)
+[2024.11.03-10.29.55:056][  0]LogWindows:    4. 'AMD Radeon(TM) Graphics' (P:0 D:0)
+[2024.11.03-10.29.55:056][  0]LogWindows:    5. 'NVIDIA GeForce RTX 4070 Ti SUPER' (P:0 D:0)
+[2024.11.03-10.29.55:057][  0]LogWindows:    6. 'NVIDIA GeForce RTX 4070 Ti SUPER' (P:0 D:0)
+[2024.11.03-10.29.55:057][  0]LogWindows:    7. 'NVIDIA GeForce RTX 4070 Ti SUPER' (P:0 D:0)
+[2024.11.03-10.29.55:057][  0]LogWindows:    8. 'NVIDIA GeForce RTX 4070 Ti SUPER' (P:0 D:0)
+[2024.11.03-10.29.55:057][  0]LogWindows: DebugString: PrimaryIsNotTheChoosenAdapter PrimaryIsNotTheChoosenAdapter PrimaryIsNotTheChoosenAdapter PrimaryIsNotTheChoosenAdapter PrimaryIsNotTheChoosenAdapter FoundDriverCount:4 
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     Adapter Name: NVIDIA GeForce RTX 4070 Ti SUPER
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:   Driver Version: 560.94 (internal:32.0.15.6094, unified:560.94)
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:      Driver Date: 8-14-2024
+[2024.11.03-10.29.55:057][  0]LogRHI: Texture pool is 11244 MB (70% of 16063 MB)
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI: Creating D3DDevice using adapter:
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     Description : NVIDIA GeForce RTX 4070 Ti SUPER
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     VendorId    : 10de
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     DeviceId    : 2705
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     SubSysId    : 89571043
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     Revision    : 00a1
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     DedicatedVideoMemory : 16843276288 bytes
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     DedicatedSystemMemory : 0 bytes
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     SharedSystemMemory : 33897033728 bytes
+[2024.11.03-10.29.55:057][  0]LogD3D11RHI:     AdapterLuid : 0 83499
+[2024.11.03-10.29.55:106][  0]LogD3D11RHI: RHI has support for 64 bit atomics
+[2024.11.03-10.29.55:107][  0]LogD3D11RHI: Async texture creation enabled
+[2024.11.03-10.29.55:107][  0]LogD3D11RHI: Array index from any shader is supported
+[2024.11.03-10.29.55:118][  0]LogD3D11RHI: GPU Timing Frequency: 1000.000000 (Debug: 2 1)
+[2024.11.03-10.29.55:142][  0]LogRHI: GeForceNow SDK initialized: 1
+[2024.11.03-10.29.55:328][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'AllDesktop'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Android'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Android_ASTC'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Android_DXT'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Android_ETC2'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'AndroidClient'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Android_ASTCClient'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Android_DXTClient'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Android_ETC2Client'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Android_Multi'
+[2024.11.03-10.29.55:341][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Android_MultiClient'
+[2024.11.03-10.29.55:352][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'IOSClient'
+[2024.11.03-10.29.55:352][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'IOS'
+[2024.11.03-10.29.55:358][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Linux'
+[2024.11.03-10.29.55:361][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'LinuxNoEditor'
+[2024.11.03-10.29.55:363][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'LinuxClient'
+[2024.11.03-10.29.55:366][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'LinuxServer'
+[2024.11.03-10.29.55:371][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'LinuxAArch64NoEditor'
+[2024.11.03-10.29.55:375][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'LinuxAArch64Client'
+[2024.11.03-10.29.55:378][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'LinuxAArch64Server'
+[2024.11.03-10.29.55:390][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Lumin'
+[2024.11.03-10.29.55:390][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'LuminClient'
+[2024.11.03-10.29.55:394][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'MacNoEditor'
+[2024.11.03-10.29.55:397][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Mac'
+[2024.11.03-10.29.55:400][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'MacClient'
+[2024.11.03-10.29.55:403][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'MacServer'
+[2024.11.03-10.29.55:408][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'TVOSClient'
+[2024.11.03-10.29.55:408][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'TVOS'
+[2024.11.03-10.29.55:413][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'WindowsNoEditor'
+[2024.11.03-10.29.55:416][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'Windows'
+[2024.11.03-10.29.55:419][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'WindowsClient'
+[2024.11.03-10.29.55:422][  0]LogTargetPlatformManager: Display: Loaded TargetPlatform 'WindowsServer'
+[2024.11.03-10.29.55:422][  0]LogTargetPlatformManager: Display: Building Assets For Windows
+[2024.11.03-10.29.55:427][  0]LogAudioDebug: Display: Lib vorbis DLL was dynamically loaded.
+[2024.11.03-10.29.55:446][  0]LogTextureFormatOodle: Display: Oodle Texture 2.9.0 init RDO Off
+[2024.11.03-10.29.55:467][  0]LogRendererCore: Ray tracing is disabled. Reason: r.RayTracing=0.
+[2024.11.03-10.29.55:467][  0]LogShaderCompilers: Guid format shader working directory is 0 characters bigger than the processId version (D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Intermediate/Shaders/WorkingDirectory/95140/).
+[2024.11.03-10.29.55:467][  0]LogShaderCompilers: Cleaned the shader compiler working directory 'C:/Users/pasha/AppData/Local/Temp/UnrealShaderWorkingDir/EFA2B90F4C7CA4C33FD1A3B452E83F36/'.
+[2024.11.03-10.29.55:467][  0]LogShaderCompilers: Display: Using XGE Controller for Shader Compilation.
+[2024.11.03-10.29.55:937][  0]LogDerivedDataCache: Display: Max Cache Size: 512 MB
+[2024.11.03-10.29.55:967][  0]LogDerivedDataCache: Loaded boot cache 0.03s 94MB C:/Users/pasha/AppData/Local/UnrealEngine/4.27/DerivedDataCache/Boot.ddc.
+[2024.11.03-10.29.55:967][  0]LogDerivedDataCache: Display: Loaded Boot cache: C:/Users/pasha/AppData/Local/UnrealEngine/4.27/DerivedDataCache/Boot.ddc
+[2024.11.03-10.29.55:967][  0]LogDerivedDataCache: FDerivedDataBackendGraph:  Pak pak cache file D:/GitHub/Projects/Other/Blueprint/PuzzleGame/DerivedDataCache/DDC.ddp not found, will not use a pak cache.
+[2024.11.03-10.29.55:967][  0]LogDerivedDataCache: Unable to find inner node Pak for hierarchical cache Hierarchy.
+[2024.11.03-10.29.55:967][  0]LogDerivedDataCache: FDerivedDataBackendGraph:  CompressedPak pak cache file D:/GitHub/Projects/Other/Blueprint/PuzzleGame/DerivedDataCache/Compressed.ddp not found, will not use a pak cache.
+[2024.11.03-10.29.55:967][  0]LogDerivedDataCache: Unable to find inner node CompressedPak for hierarchical cache Hierarchy.
+[2024.11.03-10.29.55:980][  0]LogDerivedDataCache: Display: Pak cache opened for reading ../../../Engine/DerivedDataCache/Compressed.ddp.
+[2024.11.03-10.29.55:980][  0]LogDerivedDataCache: FDerivedDataBackendGraph:  EnterprisePak pak cache file ../../../Enterprise/DerivedDataCache/Compressed.ddp not found, will not use a pak cache.
+[2024.11.03-10.29.55:980][  0]LogDerivedDataCache: Unable to find inner node EnterprisePak for hierarchical cache Hierarchy.
+[2024.11.03-10.29.55:983][  0]LogDerivedDataCache: Speed tests for C:/Users/pasha/AppData/Local/UnrealEngine/Common/DerivedDataCache took 0.00 seconds
+[2024.11.03-10.29.55:983][  0]LogDerivedDataCache: Display: Performance to C:/Users/pasha/AppData/Local/UnrealEngine/Common/DerivedDataCache: Latency=0.01ms. RandomReadSpeed=2196.80MBs, RandomWriteSpeed=326.15MBs. Assigned SpeedClass 'Local'
+[2024.11.03-10.29.55:985][  0]LogDerivedDataCache: Using Local data cache path C:/Users/pasha/AppData/Local/UnrealEngine/Common/DerivedDataCache: Writable
+[2024.11.03-10.29.55:985][  0]LogDerivedDataCache: Shared data cache path not found in *engine.ini, will not use an Shared cache.
+[2024.11.03-10.29.55:985][  0]LogDerivedDataCache: Unable to find inner node Shared for hierarchical cache Hierarchy.
+[2024.11.03-10.29.56:013][  0]LogSlate: Using FreeType 2.10.0
+[2024.11.03-10.29.56:013][  0]LogSlate: SlateFontServices - WITH_FREETYPE: 1, WITH_HARFBUZZ: 1
+[2024.11.03-10.29.56:027][  0]LogAssetRegistry: FAssetRegistry took 0.0017 seconds to start up
+[2024.11.03-10.29.56:165][  0]LogInit: Selected Device Profile: [Windows]
+[2024.11.03-10.29.56:165][  0]LogInit: Active device profile: [0000022D992E8B00][0000022D9883B500 49] Windows
+[2024.11.03-10.29.56:166][  0]LogInit: Profiles: [0000022D992E8B00][0000022D9883B500 49] Windows, [0000022D992A2100][0000022D99A3D680 49] WindowsNoEditor, [0000022D992E9900][0000022D99A41800 49] WindowsServer, [0000022D992A2E00][0000022D99A45980 49] WindowsClient, [0000022D992EBC00][0000022D99A49B00 49] IOS, [0000022D992A0F00][0000022D99A4C100 49] iPadAir, [0000022D992EBE00][0000022D99A50280 49] iPadAir2, [0000022D99258C00][0000022D99A58540 49] IPadPro, [0000022D99258D00][0000022D99A54580 49] iPadAir3, [0000022D992A3B00][0000022D99A386C0 49] iPadAir4, [0000022D9925B600][0000022D99A5C800 49] iPadMini2, [0000022D992A3200][0000022D99A60940 49] iPadMini3, [0000022D9925B800][0000022D99A68AC0 49] iPadMini4, [0000022D992A3800][0000022D99A6CC40 49] iPadMini5, [0000022D99280600][0000022D99A74F00 49] iPhone6, [0000022D99280700][0000022D99A70F40 49] iPodTouch6, [0000022D992EA900][0000022D99A7D200 49] iPhone7, [0000022D992EA800][0000022D99A79240 49] iPodTouch7, [0000022D99280100][0000022D99A813C0 49] iPhone5S, [0000022D99258700][0000022D99A85540 49] iPhone6Plus, [0000022D99282500][0000022D99A896C0 49] iPhone6S, [0000022D99259300][0000022D99A8D840 49] iPhone6SPlus, [0000022D99283B00][0000022D99A919C0 49] iPhone7Plus, [0000022D9925B500][0000022D99A95B40 49] iPhoneSE, [0000022D992EA600][0000022D99A98140 49] iPhone8, [0000022D99258600][0000022D99A9C2C0 49] iPhone8Plus, [0000022D992EA200][0000022D99AB6440 49] iPhoneX, [0000022D9925B300][0000022D99AD45C0 49] iPhoneXS, [0000022D992EB400][0000022D99B28740 49] iPhoneXSMax, [0000022D9925AD00][0000022D99A64880 49] iPhoneXR, [0000022D992E8200][0000022D99B3C9C0 49] iPhone11, [0000022D99259E00][0000022D99B40B00 49] iPhone11Pro, [0000022D992EAA00][0000022D99B48C80 49] iPhone11ProMax, [0000022D9925B700][0000022D99B4CE00 49] iPhoneSE2, [0000022D992E8D00][0000022D99B50F80 49] iPhone12Mini, [0000022D99259F00][0000022D99B55100 49] iPhone12, [0000022D992E8700][0000022D99B59280 49] iPhone12Pro, [0000022D99259400][0000022D99B5D400 49] iPhone12ProMax, [0000022D992E8C00][0000022D99B61580 49] iPadPro105, [0000022D99259700][0000022D99B65700 49] iPadPro129, [0000022D992E8100][0000022D99B69880 49] iPadPro97, [0000022D9925BC00][0000022D99B81A00 49] iPadPro2_129, [0000022D992E8800][0000022D99BA3B80 49] iPad5, [0000022D9925B100][0000022D99BA6180 49] iPad6, [0000022D992E8500][0000022D99BAA300 49] iPad7, [0000022D9925A800][0000022D99BAE480 49] iPad8, [0000022D992E9500][0000022D99BB2600 49] iPadPro11, [0000022D99259500][0000022D99BB6780 49] iPadPro2_11, [0000022D992E8F00][0000022D99BBA900 49] iPadPro3_129, [0000022D9925AC00][0000022D99B44A40 49] iPadPro4_129, [0000022D992EA500][0000022D99BBEB80 49] AppleTV, [0000022D99259100][0000022D99BC2CC0 49] AppleTV4K, [0000022D992E8400][0000022D99BCAE40 49] TVOS, [0000022D9925A600][0000022D99BD6FC0 49] Mac, [0000022D992EBD00][0000022D99BDB140 49] MacClient, [0000022D99259800][0000022D99BDF2C0 49] MacNoEditor, [0000022D992EB100][0000022D99BE3440 49] MacServer, [0000022D9925B900][0000022D99BE75C0 49] Linux, [0000022D992E8900][0000022D99C2B740 49] LinuxAArch64, [0000022D9925BF00][0000022D99C2F8C0 49] LinuxNoEditor, [0000022D992E9B00][0000022D99C33A40 49] LinuxAArch64NoEditor, [0000022D9925B400][0000022D99C37BC0 49] LinuxClient, [0000022D992E9C00][0000022D99C3A1C0 49] LinuxAArch64Client, [0000022D99259D00][0000022D99C3E340 49] LinuxServer, [0000022D992EAF00][0000022D99C424C0 49] LinuxAArch64Server, [0000022D99258500][0000022D99C46640 49] Android, [0000022D992E9E00][0000022D99C4A7C0 49] Android_Low, [0000022D9925B000][0000022D99C60940 49] Android_Mid, [0000022D992EA400][0000022D99C64AC0 49] Android_High, [0000022D99258800][0000022D99BC6C00 49] Android_Default, [0000022D992EB200][0000022D99C68D40 49] Android_Adreno4xx, [0000022D992A2400][0000022D99CA8E80 49] Android_Adreno5xx_Low, [0000022D99281C00][0000022D99CACFC0 49] Android_Adreno5xx, [0000022D992A3D00][0000022D99CB5140 49] Android_Adreno6xx, [0000022D99282B00][0000022D99CB92C0 49] Android_Adreno6xx_Vulkan, [0000022D992A3E00][0000022D99CBD440 49] Android_Mali_T6xx, [0000022D99280F00][0000022D99CC15C0 49] Android_Mali_T7xx, [0000022D992A1300][0000022D99CC5740 49] Android_Mali_T8xx, [0000022D99281F00][0000022D99CC98C0 49] Android_Mali_G71, [0000022D992A1C00][0000022D99CCDA40 49] Android_Mali_G72, [0000022D99282400][0000022D99CD1BC0 49] Android_Mali_G72_Vulkan, [0000022D992A3600][0000022D99CD41C0 49] Android_Mali_G76, [0000022D99282100][0000022D99CD8340 49] Android_Mali_G76_Vulkan, [0000022D992A1B00][0000022D99CDC4C0 49] Android_Mali_G77, [0000022D99280A00][0000022D99CE0640 49] Android_Mali_G77_Vulkan, [0000022D992A3400][0000022D99CE47C0 49] Android_Mali_G78, [0000022D99281300][0000022D99CE8940 49] Android_Mali_G78_Vulkan, [0000022D992A2900][0000022D99CECAC0 49] Android_Mali_G710, [0000022D99283D00][0000022D99CF0C40 49] Android_Mali_G710_Vulkan, [0000022D992A1E00][0000022D99CB0D80 49] Android_Vulkan_SM5, [0000022D99280900][0000022D99CF4EC0 49] Android_PowerVR_G6xxx, [0000022D992A1F00][0000022D99CF9000 49] Android_PowerVR_GT7xxx, [0000022D99282700][0000022D99CFD140 49] Android_PowerVR_GE8xxx, [0000022D992A2300][0000022D99D052C0 49] Android_PowerVR_GM9xxx, [0000022D99283200][0000022D99D09440 49] Android_PowerVR_GM9xxx_Vulkan, [0000022D992A3000][0000022D99D0D5C0 49] Android_TegraK1, [0000022D99281700][0000022D99D11740 49] Android_Unknown_Vulkan, [0000022D992A3700][0000022D99D158C0 49] Lumin, [0000022D99280200][0000022D99D19A40 49] Lumin_Desktop, [0000022D992A2200][0000022D99D1DBC0 49] HoloLens, 
+[2024.11.03-10.29.56:257][  0]LogMeshReduction: Using QuadricMeshReduction for automatic static mesh reduction
+[2024.11.03-10.29.56:257][  0]LogMeshReduction: Using SimplygonMeshReduction for automatic skeletal mesh reduction
+[2024.11.03-10.29.56:257][  0]LogMeshReduction: Using ProxyLODMeshReduction for automatic mesh merging
+[2024.11.03-10.29.56:257][  0]LogMeshReduction: No distributed automatic mesh merging module available
+[2024.11.03-10.29.56:257][  0]LogMeshMerging: No distributed automatic mesh merging module available
+[2024.11.03-10.29.56:266][  0]LogNetVersion: PuzzleGame 1.0.0, NetCL: 17155196, EngineNetVer: 17, GameNetVer: 0 (Checksum: 3728887530)
+[2024.11.03-10.29.56:492][  0]LogTexture: Default maximum texture size for cubemaps generated from long-lat sources has been changed from 512 to unlimited. In order to preserve old behaiour for '/Engine/MapTemplates/Sky/DaylightAmbientCubemap.DaylightAmbientCubemap', its maximum texture size has been explicitly set to 512.
+[2024.11.03-10.29.56:524][  0]LogHMD: PokeAHoleMaterial loaded successfully
+[2024.11.03-10.29.56:528][  0]LogUObjectArray: 17178 objects as part of root set at end of initial load.
+[2024.11.03-10.29.56:528][  0]LogUObjectAllocator: 4302048 out of 0 bytes used by permanent object pool.
+[2024.11.03-10.29.56:528][  0]LogUObjectArray: CloseDisregardForGC: 0/0 objects in disregard for GC pool
+[2024.11.03-10.29.56:688][  0]LogNiagaraDebuggerClient: Niagara Debugger Client Initialized | Session: E4A7A95E4EEAEFD820FC829686AC46B3 | Instance: 0D06DE9E40DB82A9A28239912516D92F (PASHA-95140).
+[2024.11.03-10.29.56:755][  0]LogTcpMessaging: Initializing TcpMessaging bridge
+[2024.11.03-10.29.56:763][  0]LogUdpMessaging: Initializing bridge on interface 0.0.0.0:0 to multicast group 230.0.0.1:6666.
+[2024.11.03-10.29.56:770][  0]LogPython: Using Python 3.7.7
+[2024.11.03-10.29.57:282][  0]LogOpenImageDenoise: OIDN starting up
+[2024.11.03-10.29.57:307][  0]LogAndroidPermission: UAndroidPermissionCallbackProxy::GetInstance
+[2024.11.03-10.29.57:315][  0]LogAudioCaptureCore: Display: No Audio Capture implementations found. Audio input will be silent.
+[2024.11.03-10.29.57:315][  0]LogAudioCaptureCore: Display: No Audio Capture implementations found. Audio input will be silent.
+[2024.11.03-10.29.57:399][  0]SourceControl: Source control is disabled
+[2024.11.03-10.29.57:399][  0]SourceControl: Source control is disabled
+[2024.11.03-10.29.57:401][  0]SourceControl: Source control is disabled
+[2024.11.03-10.29.57:403][  0]SourceControl: Source control is disabled
+[2024.11.03-10.29.57:408][  0]SourceControl: Source control is disabled
+[2024.11.03-10.29.57:412][  0]LogUProjectInfo: Found projects:
+[2024.11.03-10.29.57:423][  0]LogCollectionManager: Loaded 0 collections in 0.001000 seconds
+[2024.11.03-10.29.57:447][  0]LogFileCache: Scanning file cache for directory 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Collections/' took 0.00s
+[2024.11.03-10.29.57:447][  0]LogFileCache: Scanning file cache for directory 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Developers/pasha/Collections/' took 0.00s
+[2024.11.03-10.29.57:447][  0]LogFileCache: Scanning file cache for directory 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Collections/' took 0.00s
+[2024.11.03-10.29.57:447][  0]LogOcInput: OculusInput pre-init called
+[2024.11.03-10.29.57:582][  0]LogEngine: Initializing Engine...
+[2024.11.03-10.29.57:592][  0]LogHMD: Failed to enumerate extensions. Please check that you have a valid OpenXR runtime installed.
+[2024.11.03-10.29.57:593][  0]LogHMD: Failed to initialize OpenVR with code 110
+[2024.11.03-10.29.57:593][  0]LogMagicLeap: Warning: VR disabled because ZI is not enabled.  To enable, in the editor, Edit -> Project Settings -> Plugins -> Magic Leap Plugin -> Enable Zero Iteration
+[2024.11.03-10.29.57:593][  0]LogStats: UGameplayTagsManager::InitializeManager -  0.000 s
+[2024.11.03-10.29.57:656][  0]LogInit: Initializing FReadOnlyCVARCache
+[2024.11.03-10.29.57:662][  0]LogAIModule: Creating AISystem for world Untitled
+[2024.11.03-10.29.57:665][  0]LogAudio: Display: Initializing Audio Device Manager...
+[2024.11.03-10.29.57:668][  0]LogAudio: Display: Loading Default Audio Settings Objects...
+[2024.11.03-10.29.57:668][  0]LogAudio: Display: No default SoundConcurrencyObject specified (or failed to load).
+[2024.11.03-10.29.57:669][  0]LogAudio: Display: Audio Device Manager Initialized
+[2024.11.03-10.29.57:669][  0]LogAudio: Display: Creating Audio Device:                 Id: 1, Scope: Shared, Realtime: True
+[2024.11.03-10.29.57:669][  0]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.03-10.29.57:669][  0]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.03-10.29.57:669][  0]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.03-10.29.57:669][  0]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.03-10.29.57:669][  0]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.03-10.29.57:669][  0]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.03-10.29.57:669][  0]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.03-10.29.57:669][  0]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.03-10.29.57:669][  0]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.03-10.29.57:669][  0]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.03-10.29.57:669][  0]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.03-10.29.57:669][  0]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.03-10.29.57:678][  0]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.03-10.29.57:679][  0]LogAudioMixer: Display: 1: FrontRight
+[2024.11.03-10.29.57:692][  0]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.03-10.29.57:693][  0]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.03-10.29.57:693][  0]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.03-10.29.57:693][  0]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.03-10.29.57:694][  0]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.03-10.29.57:694][  0]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.03-10.29.57:694][  0]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.03-10.29.57:695][  0]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.03-10.29.57:695][  0]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.03-10.29.57:695][  0]LogInit: FAudioDevice initialized.
+[2024.11.03-10.29.57:695][  0]LogAudio: Display: Audio Device (ID: 1) registered with world 'Untitled'.
+[2024.11.03-10.29.57:695][  0]LogNetVersion: Set ProjectVersion to 1.0.0.0. Version Checksum will be recalculated on next use.
+[2024.11.03-10.29.57:730][  0]LogDerivedDataCache: Saved boot cache 0.04s 94MB C:/Users/pasha/AppData/Local/UnrealEngine/4.27/DerivedDataCache/Boot.ddc.
+[2024.11.03-10.29.57:731][  0]LogInit: Texture streaming: Enabled
+[2024.11.03-10.29.57:740][  0]LogAnalytics: Display: [UEEditor.Rocket.Release] APIServer = https://datarouter.ol.epicgames.com/. AppVersion = 4.27.2-18319896+++UE4+Release-4.27
+[2024.11.03-10.29.57:744][  0]LogEngineSessionManager: EngineSessionManager initialized
+[2024.11.03-10.29.57:744][  0]LogEditorSessionSummary: Verbose: Initializing EditorSessionSummaryWriter for editor session tracking
+[2024.11.03-10.29.57:752][  0]LogEditorSessionSummary: EditorSessionSummaryWriter initialized
+[2024.11.03-10.29.57:772][  0]LogInit: Transaction tracking system initialized
+[2024.11.03-10.29.57:787][  0]BlueprintLog: New page: Editor Load
+[2024.11.03-10.29.57:849][  0]LocalizationService: Localization service is disabled
+[2024.11.03-10.29.57:865][  0]TimingProfiler: Initialize
+[2024.11.03-10.29.57:865][  0]TimingProfiler: OnSessionChanged
+[2024.11.03-10.29.57:865][  0]LoadingProfiler: Initialize
+[2024.11.03-10.29.57:865][  0]LoadingProfiler: OnSessionChanged
+[2024.11.03-10.29.57:865][  0]NetworkingProfiler: Initialize
+[2024.11.03-10.29.57:865][  0]NetworkingProfiler: OnSessionChanged
+[2024.11.03-10.29.57:865][  0]MemoryProfiler: Initialize
+[2024.11.03-10.29.57:865][  0]MemoryProfiler: OnSessionChanged
+[2024.11.03-10.29.57:959][  0]LogCook: Display: CookSettings for Memory: MemoryMaxUsedVirtual 0MiB, MemoryMaxUsedPhysical 16384MiB, MemoryMinFreeVirtual 0MiB, MemoryMinFreePhysical 1024MiB
+[2024.11.03-10.29.57:959][  0]LogCook: Display: Mobile HDR setting 1
+[2024.11.03-10.29.58:070][  0]LogFileCache: Scanning file cache for directory 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/' took 0.00s
+[2024.11.03-10.29.58:171][  0]LogInit: Display: Engine is initialized. Leaving FEngineLoop::Init()
+[2024.11.03-10.29.58:178][  0]SourceControl: Source control is disabled
+[2024.11.03-10.29.58:178][  0]LogUnrealEdMisc: Loading editor; pre map load, took 4.147
+[2024.11.03-10.29.58:189][  0]LogFactory: FactoryCreateFile: PackFactory with PackFactory (0 0 C:/Program Files/Epic Games/UE_4.27/FeaturePacks/MobileStarterContent.upack)
+[2024.11.03-10.29.58:189][  0]LogPakFile: PakFile PrimaryIndexSize=191
+[2024.11.03-10.29.58:189][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:189][  0]LogPakFile: PakFile FullDirectoryIndexSize=160
+[2024.11.03-10.29.58:195][  0]LogPackFactory: Finished extracting 8 files (including 0 errors).
+[2024.11.03-10.29.58:195][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Floor_400x400.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Floor_400x400.uasset"
+[2024.11.03-10.29.58:196][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Pillar_50x500.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Pillar_50x500.uasset"
+[2024.11.03-10.29.58:196][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Wall_400x200.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Wall_400x200.uasset"
+[2024.11.03-10.29.58:196][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Wall_400x300.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Wall_400x300.uasset"
+[2024.11.03-10.29.58:197][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Wall_400x400.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Wall_400x400.uasset"
+[2024.11.03-10.29.58:197][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Wall_500x500.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Wall_500x500.uasset"
+[2024.11.03-10.29.58:198][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Wall_Door_400x300.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Wall_Door_400x300.uasset"
+[2024.11.03-10.29.58:198][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Wall_Door_400x400.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Wall_Door_400x400.uasset"
+[2024.11.03-10.29.58:198][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Wall_Window_400x300.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Wall_Window_400x300.uasset"
+[2024.11.03-10.29.58:199][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Architecture/Wall_Window_400x400.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Wall_Window_400x400.uasset"
+[2024.11.03-10.29.58:199][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Collapse01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Collapse01.uasset"
+[2024.11.03-10.29.58:200][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Collapse02.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Collapse02.uasset"
+[2024.11.03-10.29.58:200][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Collapse_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Collapse_Cue.uasset"
+[2024.11.03-10.29.58:201][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Explosion01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Explosion01.uasset"
+[2024.11.03-10.29.58:201][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Explosion02.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Explosion02.uasset"
+[2024.11.03-10.29.58:201][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Explosion_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Explosion_Cue.uasset"
+[2024.11.03-10.29.58:202][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Fire01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Fire01.uasset"
+[2024.11.03-10.29.58:203][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Fire01_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Fire01_Cue.uasset"
+[2024.11.03-10.29.58:204][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Fire_Sparks01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Fire_Sparks01.uasset"
+[2024.11.03-10.29.58:204][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Fire_Sparks01_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Fire_Sparks01_Cue.uasset"
+[2024.11.03-10.29.58:204][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Light01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Light01.uasset"
+[2024.11.03-10.29.58:206][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Light01_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Light01_Cue.uasset"
+[2024.11.03-10.29.58:206][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Light02.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Light02.uasset"
+[2024.11.03-10.29.58:207][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Light02_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Light02_Cue.uasset"
+[2024.11.03-10.29.58:207][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Smoke01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Smoke01.uasset"
+[2024.11.03-10.29.58:207][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Smoke01_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Smoke01_Cue.uasset"
+[2024.11.03-10.29.58:208][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Starter_Background_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Starter_Background_Cue.uasset"
+[2024.11.03-10.29.58:210][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Starter_Birds01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Starter_Birds01.uasset"
+[2024.11.03-10.29.58:213][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Starter_Music01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Starter_Music01.uasset"
+[2024.11.03-10.29.58:213][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Starter_Music_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Starter_Music_Cue.uasset"
+[2024.11.03-10.29.58:214][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Starter_Wind05.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Starter_Wind05.uasset"
+[2024.11.03-10.29.58:216][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Starter_Wind06.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Starter_Wind06.uasset"
+[2024.11.03-10.29.58:216][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Steam01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Steam01.uasset"
+[2024.11.03-10.29.58:217][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Audio/Steam01_Cue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Audio/Steam01_Cue.uasset"
+[2024.11.03-10.29.58:218][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Blueprints/Blueprint_CeilingLight.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Blueprints/Blueprint_CeilingLight.uasset"
+[2024.11.03-10.29.58:218][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Blueprints/Blueprint_Effect_Explosion.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Blueprints/Blueprint_Effect_Explosion.uasset"
+[2024.11.03-10.29.58:219][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Blueprints/Blueprint_Effect_Fire.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Blueprints/Blueprint_Effect_Fire.uasset"
+[2024.11.03-10.29.58:219][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Blueprints/Blueprint_Effect_Smoke.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Blueprints/Blueprint_Effect_Smoke.uasset"
+[2024.11.03-10.29.58:219][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Blueprints/Blueprint_Effect_Sparks.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Blueprints/Blueprint_Effect_Sparks.uasset"
+[2024.11.03-10.29.58:220][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Blueprints/Blueprint_WallSconce.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Blueprints/Blueprint_WallSconce.uasset"
+[2024.11.03-10.29.58:220][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Maps/Minimal_Default.umap" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Maps/Minimal_Default.umap"
+[2024.11.03-10.29.58:222][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Maps/Minimal_Default_BuiltData.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Maps/Minimal_Default_BuiltData.uasset"
+[2024.11.03-10.29.58:222][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Maps/StarterMap.umap" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Maps/StarterMap.umap"
+[2024.11.03-10.29.58:229][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Maps/StarterMap_BuiltData.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Maps/StarterMap_BuiltData.uasset"
+[2024.11.03-10.29.58:229][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Basic_Floor.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Basic_Floor.uasset"
+[2024.11.03-10.29.58:230][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Basic_Wall.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Basic_Wall.uasset"
+[2024.11.03-10.29.58:230][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Brick_Clay_Beveled.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Brick_Clay_Beveled.uasset"
+[2024.11.03-10.29.58:231][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Brick_Clay_New.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Brick_Clay_New.uasset"
+[2024.11.03-10.29.58:231][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Brick_Clay_Old.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Brick_Clay_Old.uasset"
+[2024.11.03-10.29.58:231][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Brick_Cut_Stone.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Brick_Cut_Stone.uasset"
+[2024.11.03-10.29.58:232][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Brick_Hewn_Stone.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Brick_Hewn_Stone.uasset"
+[2024.11.03-10.29.58:232][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Ceramic_Tile_Checker.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Ceramic_Tile_Checker.uasset"
+[2024.11.03-10.29.58:233][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_CobbleStone_Pebble.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_CobbleStone_Pebble.uasset"
+[2024.11.03-10.29.58:233][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_CobbleStone_Rough.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_CobbleStone_Rough.uasset"
+[2024.11.03-10.29.58:234][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_CobbleStone_Smooth.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_CobbleStone_Smooth.uasset"
+[2024.11.03-10.29.58:234][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Concrete_Grime.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Concrete_Grime.uasset"
+[2024.11.03-10.29.58:235][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Concrete_Panels.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Concrete_Panels.uasset"
+[2024.11.03-10.29.58:235][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Concrete_Poured.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Concrete_Poured.uasset"
+[2024.11.03-10.29.58:235][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Concrete_Tiles.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Concrete_Tiles.uasset"
+[2024.11.03-10.29.58:237][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Glass.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Glass.uasset"
+[2024.11.03-10.29.58:237][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Ground_Grass.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Ground_Grass.uasset"
+[2024.11.03-10.29.58:237][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Ground_Gravel.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Ground_Gravel.uasset"
+[2024.11.03-10.29.58:237][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Ground_Moss.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Ground_Moss.uasset"
+[2024.11.03-10.29.58:238][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Metal_Brushed_Nickel.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Metal_Brushed_Nickel.uasset"
+[2024.11.03-10.29.58:238][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Metal_Burnished_Steel.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Metal_Burnished_Steel.uasset"
+[2024.11.03-10.29.58:238][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Metal_Chrome.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Metal_Chrome.uasset"
+[2024.11.03-10.29.58:239][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Metal_Copper.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Metal_Copper.uasset"
+[2024.11.03-10.29.58:239][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Metal_Gold.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Metal_Gold.uasset"
+[2024.11.03-10.29.58:240][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Metal_Rust.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Metal_Rust.uasset"
+[2024.11.03-10.29.58:240][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Metal_Steel.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Metal_Steel.uasset"
+[2024.11.03-10.29.58:241][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Rock_Basalt.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Rock_Basalt.uasset"
+[2024.11.03-10.29.58:241][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Rock_Marble_Polished.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Rock_Marble_Polished.uasset"
+[2024.11.03-10.29.58:241][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Rock_Sandstone.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Rock_Sandstone.uasset"
+[2024.11.03-10.29.58:242][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Rock_Slate.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Rock_Slate.uasset"
+[2024.11.03-10.29.58:242][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Tech_Checker_Dot.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Tech_Checker_Dot.uasset"
+[2024.11.03-10.29.58:243][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Tech_Hex_Tile.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Tech_Hex_Tile.uasset"
+[2024.11.03-10.29.58:243][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Tech_Hex_Tile_Pulse.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Tech_Hex_Tile_Pulse.uasset"
+[2024.11.03-10.29.58:244][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Tech_Panel.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Tech_Panel.uasset"
+[2024.11.03-10.29.58:244][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Water_Lake.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Water_Lake.uasset"
+[2024.11.03-10.29.58:244][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Water_Ocean.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Water_Ocean.uasset"
+[2024.11.03-10.29.58:246][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Wood_Floor_Walnut_Polished.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Wood_Floor_Walnut_Polished.uasset"
+[2024.11.03-10.29.58:246][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Wood_Floor_Walnut_Worn.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Wood_Floor_Walnut_Worn.uasset"
+[2024.11.03-10.29.58:246][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Wood_Oak.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Wood_Oak.uasset"
+[2024.11.03-10.29.58:247][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Wood_Pine.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Wood_Pine.uasset"
+[2024.11.03-10.29.58:247][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Materials/M_Wood_Walnut.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Materials/M_Wood_Walnut.uasset"
+[2024.11.03-10.29.58:248][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/P_Ambient_Dust.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/P_Ambient_Dust.uasset"
+[2024.11.03-10.29.58:248][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/P_Explosion.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/P_Explosion.uasset"
+[2024.11.03-10.29.58:249][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/P_Fire.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/P_Fire.uasset"
+[2024.11.03-10.29.58:249][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/P_Smoke.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/P_Smoke.uasset"
+[2024.11.03-10.29.58:250][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/P_Sparks.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/P_Sparks.uasset"
+[2024.11.03-10.29.58:250][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/Materials/M_Burst.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/Materials/M_Burst.uasset"
+[2024.11.03-10.29.58:251][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/Materials/M_Dust_Particle.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/Materials/M_Dust_Particle.uasset"
+[2024.11.03-10.29.58:251][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/Materials/M_explosion_subUV.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/Materials/M_explosion_subUV.uasset"
+[2024.11.03-10.29.58:251][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/Materials/M_Fire_SubUV.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/Materials/M_Fire_SubUV.uasset"
+[2024.11.03-10.29.58:252][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/Materials/m_flare_01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/Materials/m_flare_01.uasset"
+[2024.11.03-10.29.58:252][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/Materials/M_Radial_Gradient.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/Materials/M_Radial_Gradient.uasset"
+[2024.11.03-10.29.58:253][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/Materials/M_radial_ramp.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/Materials/M_radial_ramp.uasset"
+[2024.11.03-10.29.58:253][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/Materials/M_smoke_subUV.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/Materials/M_smoke_subUV.uasset"
+[2024.11.03-10.29.58:253][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Particles/Materials/M_Spark.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Particles/Materials/M_Spark.uasset"
+[2024.11.03-10.29.58:254][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/MaterialSphere.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/MaterialSphere.uasset"
+[2024.11.03-10.29.58:254][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Bush.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Bush.uasset"
+[2024.11.03-10.29.58:255][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Chair.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Chair.uasset"
+[2024.11.03-10.29.58:255][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_CornerFrame.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_CornerFrame.uasset"
+[2024.11.03-10.29.58:256][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Couch.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Couch.uasset"
+[2024.11.03-10.29.58:256][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Door.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Door.uasset"
+[2024.11.03-10.29.58:257][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_DoorFrame.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_DoorFrame.uasset"
+[2024.11.03-10.29.58:257][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_GlassWindow.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_GlassWindow.uasset"
+[2024.11.03-10.29.58:258][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Lamp_Ceiling.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Lamp_Ceiling.uasset"
+[2024.11.03-10.29.58:258][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Lamp_Wall.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Lamp_Wall.uasset"
+[2024.11.03-10.29.58:259][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_MatPreviewMesh_02.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_MatPreviewMesh_02.uasset"
+[2024.11.03-10.29.58:260][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_PillarFrame.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_PillarFrame.uasset"
+[2024.11.03-10.29.58:260][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_PillarFrame300.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_PillarFrame300.uasset"
+[2024.11.03-10.29.58:261][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Rock.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Rock.uasset"
+[2024.11.03-10.29.58:261][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Shelf.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Shelf.uasset"
+[2024.11.03-10.29.58:262][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Stairs.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Stairs.uasset"
+[2024.11.03-10.29.58:262][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_Statue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_Statue.uasset"
+[2024.11.03-10.29.58:263][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_TableRound.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_TableRound.uasset"
+[2024.11.03-10.29.58:263][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/SM_WindowFrame.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/SM_WindowFrame.uasset"
+[2024.11.03-10.29.58:264][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_Bush.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_Bush.uasset"
+[2024.11.03-10.29.58:264][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_Chair.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_Chair.uasset"
+[2024.11.03-10.29.58:264][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_Door.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_Door.uasset"
+[2024.11.03-10.29.58:265][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_Frame.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_Frame.uasset"
+[2024.11.03-10.29.58:265][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_Lamp.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_Lamp.uasset"
+[2024.11.03-10.29.58:266][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_MaterialSphere.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_MaterialSphere.uasset"
+[2024.11.03-10.29.58:266][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_MaterialSphere_Plain.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_MaterialSphere_Plain.uasset"
+[2024.11.03-10.29.58:267][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_Rock.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_Rock.uasset"
+[2024.11.03-10.29.58:267][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_Shelf.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_Shelf.uasset"
+[2024.11.03-10.29.58:267][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_Statue.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_Statue.uasset"
+[2024.11.03-10.29.58:268][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_StatueGlass.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_StatueGlass.uasset"
+[2024.11.03-10.29.58:268][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Props/Materials/M_TableRound.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Props/Materials/M_TableRound.uasset"
+[2024.11.03-10.29.58:269][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Cone.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Cone.uasset"
+[2024.11.03-10.29.58:269][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Cube.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Cube.uasset"
+[2024.11.03-10.29.58:269][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Cylinder.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Cylinder.uasset"
+[2024.11.03-10.29.58:270][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_NarrowCapsule.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_NarrowCapsule.uasset"
+[2024.11.03-10.29.58:270][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Pipe.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Pipe.uasset"
+[2024.11.03-10.29.58:271][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Pipe_180.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Pipe_180.uasset"
+[2024.11.03-10.29.58:271][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Pipe_90.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Pipe_90.uasset"
+[2024.11.03-10.29.58:272][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Plane.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Plane.uasset"
+[2024.11.03-10.29.58:272][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_QuadPyramid.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_QuadPyramid.uasset"
+[2024.11.03-10.29.58:273][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Sphere.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Sphere.uasset"
+[2024.11.03-10.29.58:273][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Torus.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Torus.uasset"
+[2024.11.03-10.29.58:274][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Trim.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Trim.uasset"
+[2024.11.03-10.29.58:274][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Trim_90_In.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Trim_90_In.uasset"
+[2024.11.03-10.29.58:274][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Trim_90_Out.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Trim_90_Out.uasset"
+[2024.11.03-10.29.58:274][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_TriPyramid.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_TriPyramid.uasset"
+[2024.11.03-10.29.58:275][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Tube.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Tube.uasset"
+[2024.11.03-10.29.58:275][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Wedge_A.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Wedge_A.uasset"
+[2024.11.03-10.29.58:276][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_Wedge_B.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_Wedge_B.uasset"
+[2024.11.03-10.29.58:276][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Shapes/Shape_WideCapsule.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Shapes/Shape_WideCapsule.uasset"
+[2024.11.03-10.29.58:278][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Clay_Beveled_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Clay_Beveled_D.uasset"
+[2024.11.03-10.29.58:279][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Clay_Beveled_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Clay_Beveled_M.uasset"
+[2024.11.03-10.29.58:280][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Clay_Beveled_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Clay_Beveled_N.uasset"
+[2024.11.03-10.29.58:282][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Clay_New_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Clay_New_D.uasset"
+[2024.11.03-10.29.58:283][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Clay_New_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Clay_New_M.uasset"
+[2024.11.03-10.29.58:284][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Clay_New_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Clay_New_N.uasset"
+[2024.11.03-10.29.58:286][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Clay_Old_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Clay_Old_D.uasset"
+[2024.11.03-10.29.58:287][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Clay_Old_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Clay_Old_N.uasset"
+[2024.11.03-10.29.58:289][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Cut_Stone_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Cut_Stone_D.uasset"
+[2024.11.03-10.29.58:290][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Cut_Stone_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Cut_Stone_N.uasset"
+[2024.11.03-10.29.58:291][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Hewn_Stone_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Hewn_Stone_D.uasset"
+[2024.11.03-10.29.58:293][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Hewn_Stone_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Hewn_Stone_M.uasset"
+[2024.11.03-10.29.58:294][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Brick_Hewn_Stone_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Brick_Hewn_Stone_N.uasset"
+[2024.11.03-10.29.58:295][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Burst_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Burst_M.uasset"
+[2024.11.03-10.29.58:295][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Bush_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Bush_D.uasset"
+[2024.11.03-10.29.58:296][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Bush_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Bush_N.uasset"
+[2024.11.03-10.29.58:296][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Ceramic_Tile_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Ceramic_Tile_M.uasset"
+[2024.11.03-10.29.58:297][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Ceramic_Tile_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Ceramic_Tile_N.uasset"
+[2024.11.03-10.29.58:297][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Chair_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Chair_M.uasset"
+[2024.11.03-10.29.58:298][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Chair_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Chair_N.uasset"
+[2024.11.03-10.29.58:298][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Checker_Noise_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Checker_Noise_M.uasset"
+[2024.11.03-10.29.58:300][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_CobbleStone_Pebble_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_CobbleStone_Pebble_D.uasset"
+[2024.11.03-10.29.58:300][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_CobbleStone_Pebble_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_CobbleStone_Pebble_M.uasset"
+[2024.11.03-10.29.58:301][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_CobbleStone_Pebble_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_CobbleStone_Pebble_N.uasset"
+[2024.11.03-10.29.58:302][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_CobbleStone_Rough_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_CobbleStone_Rough_D.uasset"
+[2024.11.03-10.29.58:303][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_CobbleStone_Rough_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_CobbleStone_Rough_N.uasset"
+[2024.11.03-10.29.58:304][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_CobbleStone_Smooth_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_CobbleStone_Smooth_D.uasset"
+[2024.11.03-10.29.58:306][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_CobbleStone_Smooth_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_CobbleStone_Smooth_M.uasset"
+[2024.11.03-10.29.58:308][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_CobbleStone_Smooth_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_CobbleStone_Smooth_N.uasset"
+[2024.11.03-10.29.58:309][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Concrete_Grime_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Concrete_Grime_D.uasset"
+[2024.11.03-10.29.58:311][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Concrete_Panels_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Concrete_Panels_D.uasset"
+[2024.11.03-10.29.58:312][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Concrete_Panels_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Concrete_Panels_N.uasset"
+[2024.11.03-10.29.58:313][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Concrete_Poured_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Concrete_Poured_D.uasset"
+[2024.11.03-10.29.58:314][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Concrete_Poured_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Concrete_Poured_N.uasset"
+[2024.11.03-10.29.58:315][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Concrete_Tiles_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Concrete_Tiles_D.uasset"
+[2024.11.03-10.29.58:316][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Concrete_Tiles_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Concrete_Tiles_M.uasset"
+[2024.11.03-10.29.58:317][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Concrete_Tiles_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Concrete_Tiles_N.uasset"
+[2024.11.03-10.29.58:317][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Concrete_Tiles_Variation_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Concrete_Tiles_Variation_M.uasset"
+[2024.11.03-10.29.58:318][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Detail_Rocky_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Detail_Rocky_N.uasset"
+[2024.11.03-10.29.58:319][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Door_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Door_M.uasset"
+[2024.11.03-10.29.58:319][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Door_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Door_N.uasset"
+[2024.11.03-10.29.58:319][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Dust_Particle_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Dust_Particle_D.uasset"
+[2024.11.03-10.29.58:320][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Explosion_SubUV.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Explosion_SubUV.uasset"
+[2024.11.03-10.29.58:321][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Fire_SubUV.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Fire_SubUV.uasset"
+[2024.11.03-10.29.58:321][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Fire_Tiled_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Fire_Tiled_D.uasset"
+[2024.11.03-10.29.58:322][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Frame_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Frame_M.uasset"
+[2024.11.03-10.29.58:322][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Frame_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Frame_N.uasset"
+[2024.11.03-10.29.58:323][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Gradinet_01.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Gradinet_01.uasset"
+[2024.11.03-10.29.58:324][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Ground_Grass_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Ground_Grass_D.uasset"
+[2024.11.03-10.29.58:326][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Ground_Grass_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Ground_Grass_N.uasset"
+[2024.11.03-10.29.58:327][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Ground_Gravel_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Ground_Gravel_D.uasset"
+[2024.11.03-10.29.58:329][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Ground_Gravel_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Ground_Gravel_N.uasset"
+[2024.11.03-10.29.58:330][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_ground_Moss_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_ground_Moss_D.uasset"
+[2024.11.03-10.29.58:332][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Ground_Moss_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Ground_Moss_N.uasset"
+[2024.11.03-10.29.58:332][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Lamp_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Lamp_M.uasset"
+[2024.11.03-10.29.58:333][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Lamp_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Lamp_N.uasset"
+[2024.11.03-10.29.58:334][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_MacroVariation.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_MacroVariation.uasset"
+[2024.11.03-10.29.58:335][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Metal_Aluminum_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Metal_Aluminum_D.uasset"
+[2024.11.03-10.29.58:337][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Metal_Copper_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Metal_Copper_D.uasset"
+[2024.11.03-10.29.58:338][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Metal_Gold_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Metal_Gold_D.uasset"
+[2024.11.03-10.29.58:339][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Metal_Gold_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Metal_Gold_N.uasset"
+[2024.11.03-10.29.58:341][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Metal_Rust_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Metal_Rust_D.uasset"
+[2024.11.03-10.29.58:342][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Metal_Rust_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Metal_Rust_N.uasset"
+[2024.11.03-10.29.58:343][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Metal_Steel_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Metal_Steel_D.uasset"
+[2024.11.03-10.29.58:344][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Metal_Steel_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Metal_Steel_N.uasset"
+[2024.11.03-10.29.58:345][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Perlin_Noise_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Perlin_Noise_M.uasset"
+[2024.11.03-10.29.58:346][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_RockMesh_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_RockMesh_M.uasset"
+[2024.11.03-10.29.58:347][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_RockMesh_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_RockMesh_N.uasset"
+[2024.11.03-10.29.58:349][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Rock_Basalt_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Rock_Basalt_D.uasset"
+[2024.11.03-10.29.58:350][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Rock_Basalt_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Rock_Basalt_N.uasset"
+[2024.11.03-10.29.58:351][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Rock_Marble_Polished_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Rock_Marble_Polished_D.uasset"
+[2024.11.03-10.29.58:352][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Rock_Sandstone_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Rock_Sandstone_D.uasset"
+[2024.11.03-10.29.58:354][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Rock_Sandstone_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Rock_Sandstone_N.uasset"
+[2024.11.03-10.29.58:356][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Rock_Slate_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Rock_Slate_D.uasset"
+[2024.11.03-10.29.58:357][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Rock_Slate_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Rock_Slate_N.uasset"
+[2024.11.03-10.29.58:359][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Rock_Smooth_Granite_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Rock_Smooth_Granite_D.uasset"
+[2024.11.03-10.29.58:359][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Shelf_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Shelf_M.uasset"
+[2024.11.03-10.29.58:360][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Shelf_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Shelf_N.uasset"
+[2024.11.03-10.29.58:360][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Single_Tile_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Single_Tile_N.uasset"
+[2024.11.03-10.29.58:361][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Smoke_SubUV.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Smoke_SubUV.uasset"
+[2024.11.03-10.29.58:361][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Smoke_Tiled_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Smoke_Tiled_D.uasset"
+[2024.11.03-10.29.58:362][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Spark_Core.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Spark_Core.uasset"
+[2024.11.03-10.29.58:362][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Statue_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Statue_M.uasset"
+[2024.11.03-10.29.58:363][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Statue_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Statue_N.uasset"
+[2024.11.03-10.29.58:363][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_TableRound_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_TableRound_M.uasset"
+[2024.11.03-10.29.58:363][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_TableRound_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_TableRound_N.uasset"
+[2024.11.03-10.29.58:364][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Tech_Dot_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Tech_Dot_M.uasset"
+[2024.11.03-10.29.58:364][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Tech_Dot_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Tech_Dot_N.uasset"
+[2024.11.03-10.29.58:365][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Tech_Hex_Tile_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Tech_Hex_Tile_M.uasset"
+[2024.11.03-10.29.58:365][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Tech_Hex_Tile_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Tech_Hex_Tile_N.uasset"
+[2024.11.03-10.29.58:366][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Tech_Panel_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Tech_Panel_M.uasset"
+[2024.11.03-10.29.58:366][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Tech_Panel_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Tech_Panel_N.uasset"
+[2024.11.03-10.29.58:367][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Water_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Water_M.uasset"
+[2024.11.03-10.29.58:368][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Water_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Water_N.uasset"
+[2024.11.03-10.29.58:369][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Wood_Floor_Walnut_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Wood_Floor_Walnut_D.uasset"
+[2024.11.03-10.29.58:370][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Wood_Floor_Walnut_M.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Wood_Floor_Walnut_M.uasset"
+[2024.11.03-10.29.58:370][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Wood_Floor_Walnut_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Wood_Floor_Walnut_N.uasset"
+[2024.11.03-10.29.58:372][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Wood_Oak_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Wood_Oak_D.uasset"
+[2024.11.03-10.29.58:373][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Wood_Oak_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Wood_Oak_N.uasset"
+[2024.11.03-10.29.58:373][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Wood_Pine_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Wood_Pine_D.uasset"
+[2024.11.03-10.29.58:374][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Wood_Pine_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Wood_Pine_N.uasset"
+[2024.11.03-10.29.58:375][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Wood_Walnut_D.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Wood_Walnut_D.uasset"
+[2024.11.03-10.29.58:376][  0]LogPackFactory: Copied "../../../Samples/MobileStarterContent/Content/MobileStarterContent/Textures/T_Wood_Walnut_N.uasset" to "D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Textures/T_Wood_Walnut_N.uasset"
+[2024.11.03-10.29.58:406][  0]LogRenderer: Reallocating scene render targets to support 256x256 Format 10 NumSamples 1 (Frame:1).
+[2024.11.03-10.29.58:450][  0]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Floor_400x40003A5000A42D3573AC9E9C8BAA4DD5762.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/MobileStarterContent/Architecture/Floor_400x400.uasset'
+[2024.11.03-10.29.58:450][  0]LogFeaturePack: Warning: Inserted 1 feature packs
+[2024.11.03-10.29.58:450][  0]Cmd: MAP LOAD FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/TopDownBP/Maps/TopDownExampleMap.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.11.03-10.29.58:451][  0]LightingResults: New page: Lighting Build
+[2024.11.03-10.29.58:451][  0]LogWorld: UWorld::CleanupWorld for Untitled, bSessionEnded=true, bCleanupResources=true
+[2024.11.03-10.29.58:451][  0]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.03-10.29.58:452][  0]MapCheck: New page: Map Check
+[2024.11.03-10.29.58:452][  0]LightingResults: New page: Lighting Build
+[2024.11.03-10.29.58:458][  0]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.03-10.29.58:459][  0]LogUObjectHash: Compacting FUObjectHashTables data took   0.53ms
+[2024.11.03-10.29.58:542][  0]LogTexture: Display: Building textures: UE4Man_Logo_N (OODLE_BC5, 512X512)
+[2024.11.03-10.29.58:542][  0]LogTexture: Display: Building textures: T_ML_Aluminum01_N (OODLE_BC5, 512X512)
+[2024.11.03-10.29.58:542][  0]LogTexture: Display: Building textures: T_ML_Rubber_Blue_01_D (OODLE_AutoDXT, 512X512)
+[2024.11.03-10.29.58:542][  0]LogTexture: Display: Building textures: T_ML_Aluminum01 (OODLE_AutoDXT, 512X512)
+[2024.11.03-10.29.58:542][  0]LogTexture: Display: Building textures: T_ML_Rubber_Blue_01_N (OODLE_BC5, 512X512)
+[2024.11.03-10.29.58:542][  0]LogTexture: Display: Building textures: T_UE4_Mannequin_Mobile_M (OODLE_AutoDXT, 1024X1024)
+[2024.11.03-10.29.58:542][  0]LogMaterial: Display: Missing cached shadermap for CubeMaterial in PCD3D_SM5, Default, SM5 (DDC key hash: A7A92BDE0C66DDDB08CB2B0387A3BD2990A57AB3), compiling. 
+[2024.11.03-10.29.58:586][  0]LogTextureFormatOodle: Display: non-RDO encode 1024 x 1024 x 1 to format OODLE_AutoDXT (Oodle OodleTex_BC1_WithTransparency) lambda=0 effort=20 
+[2024.11.03-10.29.58:586][  0]LogTexture: Display: Building textures: T_UE4_Mannequin_Mobile_N (OODLE_BC5, 1024X1024)
+[2024.11.03-10.29.58:586][  0]LogTextureFormatOodle: Display: non-RDO encode 1024 x 1024 x 1 to format OODLE_BC5 (Oodle OodleTex_BC5U) lambda=0 effort=20 
+[2024.11.03-10.29.58:586][  0]LogShaderCompilers: Display: Submitted 25 shader compile jobs with 'Low' priority
+[2024.11.03-10.29.58:589][  0]LogTexture: Display: Building textures: DeprecatedTextureFA79271141B0C16E0AB806B8FE9AB1E1 (BGRA8, 128X128)
+[2024.11.03-10.29.58:594][  0]LogMaterial: Display: Missing cached shadermap for M_UE4Man_Body in PCD3D_SM5, Default, SM5 (DDC key hash: 894CC8AA5AA2C04286560527EED32B45B4AB5C54), compiling. 
+[2024.11.03-10.29.58:645][  0]LogShaderCompilers: Display: Started 25 'XGE' shader compile jobs with 'Low' priority
+[2024.11.03-10.29.58:645][  0]LogShaderCompilers: Display: Submitted 88 shader compile jobs with 'Low' priority
+[2024.11.03-10.29.58:646][  0]LogShaderCompilers: Display: Started 88 'XGE' shader compile jobs with 'Low' priority
+[2024.11.03-10.29.58:646][  0]LogMaterial: Display: Missing cached shadermap for M_UE4Man_ChestLogo in PCD3D_SM5, Default, SM5 (DDC key hash: 68C28919CD5D485A73D7BDF9C7AD8D13C0089D46), compiling. 
+[2024.11.03-10.29.58:677][  0]LogShaderCompilers: Display: Submitted 88 shader compile jobs with 'Low' priority
+[2024.11.03-10.29.58:681][  0]LogShaderCompilers: Display: Started 88 'XGE' shader compile jobs with 'Low' priority
+[2024.11.03-10.29.58:681][  0]LogSkeletalMesh: Building Skeletal Mesh SK_Mannequin...
+[2024.11.03-10.29.58:686][  0]LogSkeletalMesh: Built Skeletal Mesh [0.01s] /Game/Mannequin/Character/Mesh/SK_Mannequin.SK_Mannequin
+[2024.11.03-10.29.58:692][  0]LogAnimationCompression: Building Anim DDC data for AnimSequence /Game/Mannequin/Animations/ThirdPersonIdle.ThirdPersonIdle
+[2024.11.03-10.29.58:692][  0]LogAnimationCompression: Building Anim DDC data for AnimSequence /Game/Mannequin/Animations/ThirdPersonWalk.ThirdPersonWalk
+[2024.11.03-10.29.58:696][  0]LogAudio: Display: Audio Device (ID: 1) registered with world 'TopDownExampleMap'.
+[2024.11.03-10.29.58:697][  0]LogAIModule: Creating AISystem for world TopDownExampleMap
+[2024.11.03-10.29.58:705][  0]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.11.03-10.29.58:706][  0]LogNavigationDataBuild: Display:    Building NavData:  Name Default class /Script/NavigationSystem.RecastNavMesh agent radius 35.0.
+[2024.11.03-10.29.58:710][  0]LogShaderCompilers: Display: Worker (1/13): shaders left to compile 2
+[2024.11.03-10.29.58:710][  0]LogShaderCompilers: Display: Worker (2/13): shaders left to compile 1
+[2024.11.03-10.29.58:710][  0]LogShaderCompilers: Display: Started 2 'Local' shader compile jobs with 'ForceLocal' priority
+[2024.11.03-10.29.58:711][  0]LogUObjectHash: Compacting FUObjectHashTables data took   0.73ms
+[2024.11.03-10.29.58:712][  0]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.11.03-10.29.58:712][  0]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.047ms to complete.
+[2024.11.03-10.29.58:712][  0]LogFileHelpers: Loading map 'TopDownExampleMap' took 0.262
+[2024.11.03-10.29.58:713][  0]LogUnrealEdMisc: Total Editor Startup Time, took 4.682
+[2024.11.03-10.29.58:828][  0]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.03-10.29.58:832][  0]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.03-10.29.58:836][  0]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.03-10.29.58:840][  0]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.03-10.29.58:871][  0]LogNativeClassHierarchy: Verbose: Native class hierarchy populated in 0.0123 seconds. Added 3822 classes and 928 folders.
+[2024.11.03-10.29.58:874][  0]LogNativeClassHierarchy: Verbose: Native class hierarchy updated for 'WidgetCarousel' in 0.0003 seconds. Added 0 classes and 0 folders.
+[2024.11.03-10.29.58:875][  0]LogPakFile: PakFile PrimaryIndexSize=187
+[2024.11.03-10.29.58:875][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:875][  0]LogPakFile: PakFile FullDirectoryIndexSize=148
+[2024.11.03-10.29.58:875][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/FP_FirstPerson.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:875][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/FP_FirstPerson.upack)
+[2024.11.03-10.29.58:875][  0]LogPakFile: OnPakFileMounted2Time == 0.000063
+[2024.11.03-10.29.58:876][  0]LogPakFile: PakFile PrimaryIndexSize=189
+[2024.11.03-10.29.58:876][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:876][  0]LogPakFile: PakFile FullDirectoryIndexSize=152
+[2024.11.03-10.29.58:876][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/FP_FirstPersonBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:876][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/FP_FirstPersonBP.upack)
+[2024.11.03-10.29.58:876][  0]LogPakFile: OnPakFileMounted2Time == 0.000038
+[2024.11.03-10.29.58:876][  0]LogPakFile: PakFile PrimaryIndexSize=191
+[2024.11.03-10.29.58:876][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:876][  0]LogPakFile: PakFile FullDirectoryIndexSize=160
+[2024.11.03-10.29.58:877][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/MobileStarterContent.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:877][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/MobileStarterContent.upack)
+[2024.11.03-10.29.58:877][  0]LogPakFile: OnPakFileMounted2Time == 0.000034
+[2024.11.03-10.29.58:877][  0]LogPakFile: PakFile PrimaryIndexSize=185
+[2024.11.03-10.29.58:877][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:877][  0]LogPakFile: PakFile FullDirectoryIndexSize=148
+[2024.11.03-10.29.58:877][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/StarterContent.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:877][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/StarterContent.upack)
+[2024.11.03-10.29.58:877][  0]LogPakFile: OnPakFileMounted2Time == 0.000035
+[2024.11.03-10.29.58:877][  0]LogPakFile: PakFile PrimaryIndexSize=190
+[2024.11.03-10.29.58:877][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:877][  0]LogPakFile: PakFile FullDirectoryIndexSize=154
+[2024.11.03-10.29.58:877][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_2DSideScroller.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:877][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_2DSideScroller.upack)
+[2024.11.03-10.29.58:877][  0]LogPakFile: OnPakFileMounted2Time == 0.000033
+[2024.11.03-10.29.58:878][  0]LogPakFile: PakFile PrimaryIndexSize=192
+[2024.11.03-10.29.58:878][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:878][  0]LogPakFile: PakFile FullDirectoryIndexSize=158
+[2024.11.03-10.29.58:878][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_2DSideScrollerBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:878][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_2DSideScrollerBP.upack)
+[2024.11.03-10.29.58:878][  0]LogPakFile: OnPakFileMounted2Time == 0.000033
+[2024.11.03-10.29.58:878][  0]LogPakFile: PakFile PrimaryIndexSize=182
+[2024.11.03-10.29.58:878][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:878][  0]LogPakFile: PakFile FullDirectoryIndexSize=138
+[2024.11.03-10.29.58:878][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_Flying.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:878][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_Flying.upack)
+[2024.11.03-10.29.58:878][  0]LogPakFile: OnPakFileMounted2Time == 0.000037
+[2024.11.03-10.29.58:879][  0]LogPakFile: PakFile PrimaryIndexSize=184
+[2024.11.03-10.29.58:879][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:879][  0]LogPakFile: PakFile FullDirectoryIndexSize=142
+[2024.11.03-10.29.58:879][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_FlyingBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:879][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_FlyingBP.upack)
+[2024.11.03-10.29.58:879][  0]LogPakFile: OnPakFileMounted2Time == 0.000049
+[2024.11.03-10.29.58:880][  0]LogPakFile: PakFile PrimaryIndexSize=188
+[2024.11.03-10.29.58:880][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:880][  0]LogPakFile: PakFile FullDirectoryIndexSize=150
+[2024.11.03-10.29.58:880][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_HandheldARBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:880][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_HandheldARBP.upack)
+[2024.11.03-10.29.58:880][  0]LogPakFile: OnPakFileMounted2Time == 0.000046
+[2024.11.03-10.29.58:880][  0]LogPakFile: PakFile PrimaryIndexSize=182
+[2024.11.03-10.29.58:880][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:880][  0]LogPakFile: PakFile FullDirectoryIndexSize=138
+[2024.11.03-10.29.58:880][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_Puzzle.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:880][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_Puzzle.upack)
+[2024.11.03-10.29.58:880][  0]LogPakFile: OnPakFileMounted2Time == 0.000043
+[2024.11.03-10.29.58:881][  0]LogPakFile: PakFile PrimaryIndexSize=184
+[2024.11.03-10.29.58:881][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:881][  0]LogPakFile: PakFile FullDirectoryIndexSize=142
+[2024.11.03-10.29.58:881][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_PuzzleBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:881][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_PuzzleBP.upack)
+[2024.11.03-10.29.58:881][  0]LogPakFile: OnPakFileMounted2Time == 0.000048
+[2024.11.03-10.29.58:881][  0]LogPakFile: PakFile PrimaryIndexSize=183
+[2024.11.03-10.29.58:882][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:882][  0]LogPakFile: PakFile FullDirectoryIndexSize=140
+[2024.11.03-10.29.58:882][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_Rolling.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:882][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_Rolling.upack)
+[2024.11.03-10.29.58:882][  0]LogPakFile: OnPakFileMounted2Time == 0.000038
+[2024.11.03-10.29.58:882][  0]LogPakFile: PakFile PrimaryIndexSize=185
+[2024.11.03-10.29.58:882][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:882][  0]LogPakFile: PakFile FullDirectoryIndexSize=144
+[2024.11.03-10.29.58:882][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_RollingBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:882][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_RollingBP.upack)
+[2024.11.03-10.29.58:882][  0]LogPakFile: OnPakFileMounted2Time == 0.000037
+[2024.11.03-10.29.58:883][  0]LogPakFile: PakFile PrimaryIndexSize=188
+[2024.11.03-10.29.58:883][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:883][  0]LogPakFile: PakFile FullDirectoryIndexSize=150
+[2024.11.03-10.29.58:883][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_SideScroller.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:883][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_SideScroller.upack)
+[2024.11.03-10.29.58:883][  0]LogPakFile: OnPakFileMounted2Time == 0.000050
+[2024.11.03-10.29.58:883][  0]LogPakFile: PakFile PrimaryIndexSize=190
+[2024.11.03-10.29.58:883][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:883][  0]LogPakFile: PakFile FullDirectoryIndexSize=154
+[2024.11.03-10.29.58:883][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_SideScrollerBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:883][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_SideScrollerBP.upack)
+[2024.11.03-10.29.58:883][  0]LogPakFile: OnPakFileMounted2Time == 0.000041
+[2024.11.03-10.29.58:884][  0]LogPakFile: PakFile PrimaryIndexSize=187
+[2024.11.03-10.29.58:884][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:884][  0]LogPakFile: PakFile FullDirectoryIndexSize=148
+[2024.11.03-10.29.58:884][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_ThirdPerson.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:884][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_ThirdPerson.upack)
+[2024.11.03-10.29.58:884][  0]LogPakFile: OnPakFileMounted2Time == 0.000037
+[2024.11.03-10.29.58:885][  0]LogPakFile: PakFile PrimaryIndexSize=189
+[2024.11.03-10.29.58:885][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:885][  0]LogPakFile: PakFile FullDirectoryIndexSize=152
+[2024.11.03-10.29.58:885][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_ThirdPersonBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:885][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_ThirdPersonBP.upack)
+[2024.11.03-10.29.58:885][  0]LogPakFile: OnPakFileMounted2Time == 0.000045
+[2024.11.03-10.29.58:885][  0]LogPakFile: PakFile PrimaryIndexSize=183
+[2024.11.03-10.29.58:885][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:886][  0]LogPakFile: PakFile FullDirectoryIndexSize=140
+[2024.11.03-10.29.58:886][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_TopDown.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:886][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_TopDown.upack)
+[2024.11.03-10.29.58:886][  0]LogPakFile: OnPakFileMounted2Time == 0.000052
+[2024.11.03-10.29.58:886][  0]LogPakFile: PakFile PrimaryIndexSize=185
+[2024.11.03-10.29.58:886][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:886][  0]LogPakFile: PakFile FullDirectoryIndexSize=144
+[2024.11.03-10.29.58:886][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_TopDownBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:886][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_TopDownBP.upack)
+[2024.11.03-10.29.58:886][  0]LogPakFile: OnPakFileMounted2Time == 0.000058
+[2024.11.03-10.29.58:887][  0]LogPakFile: PakFile PrimaryIndexSize=185
+[2024.11.03-10.29.58:887][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:887][  0]LogPakFile: PakFile FullDirectoryIndexSize=144
+[2024.11.03-10.29.58:887][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_TwinStick.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:887][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_TwinStick.upack)
+[2024.11.03-10.29.58:887][  0]LogPakFile: OnPakFileMounted2Time == 0.000040
+[2024.11.03-10.29.58:887][  0]LogPakFile: PakFile PrimaryIndexSize=187
+[2024.11.03-10.29.58:887][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:887][  0]LogPakFile: PakFile FullDirectoryIndexSize=148
+[2024.11.03-10.29.58:887][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_TwinStickBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:887][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_TwinStickBP.upack)
+[2024.11.03-10.29.58:887][  0]LogPakFile: OnPakFileMounted2Time == 0.000039
+[2024.11.03-10.29.58:888][  0]LogPakFile: PakFile PrimaryIndexSize=183
+[2024.11.03-10.29.58:888][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:888][  0]LogPakFile: PakFile FullDirectoryIndexSize=140
+[2024.11.03-10.29.58:888][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_Vehicle.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:888][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_Vehicle.upack)
+[2024.11.03-10.29.58:888][  0]LogPakFile: OnPakFileMounted2Time == 0.000044
+[2024.11.03-10.29.58:888][  0]LogPakFile: PakFile PrimaryIndexSize=186
+[2024.11.03-10.29.58:888][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:888][  0]LogPakFile: PakFile FullDirectoryIndexSize=146
+[2024.11.03-10.29.58:888][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_VehicleAdv.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:888][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_VehicleAdv.upack)
+[2024.11.03-10.29.58:888][  0]LogPakFile: OnPakFileMounted2Time == 0.000040
+[2024.11.03-10.29.58:889][  0]LogPakFile: PakFile PrimaryIndexSize=188
+[2024.11.03-10.29.58:889][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:889][  0]LogPakFile: PakFile FullDirectoryIndexSize=150
+[2024.11.03-10.29.58:889][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_VehicleAdvBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:889][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_VehicleAdvBP.upack)
+[2024.11.03-10.29.58:889][  0]LogPakFile: OnPakFileMounted2Time == 0.000037
+[2024.11.03-10.29.58:889][  0]LogPakFile: PakFile PrimaryIndexSize=185
+[2024.11.03-10.29.58:889][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:889][  0]LogPakFile: PakFile FullDirectoryIndexSize=144
+[2024.11.03-10.29.58:889][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_VehicleBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:889][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_VehicleBP.upack)
+[2024.11.03-10.29.58:889][  0]LogPakFile: OnPakFileMounted2Time == 0.000035
+[2024.11.03-10.29.58:890][  0]LogPakFile: PakFile PrimaryIndexSize=192
+[2024.11.03-10.29.58:890][  0]LogPakFile: PakFile PathHashIndexSize=101
+[2024.11.03-10.29.58:890][  0]LogPakFile: PakFile FullDirectoryIndexSize=158
+[2024.11.03-10.29.58:890][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: PakFile 'C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_VirtualRealityBP.upack' (chunk index -1, root 'root:/') mounted
+[2024.11.03-10.29.58:890][  0]LogShaderLibrary: Display: ShaderCodeLibraryPakFileMountedCallback: pending pak file info (ChunkID:-1 Root:root:/ File:C:/Program Files/Epic Games/UE_4.27/FeaturePacks/TP_VirtualRealityBP.upack)
+[2024.11.03-10.29.58:890][  0]LogPakFile: OnPakFileMounted2Time == 0.000035
+[2024.11.03-10.29.58:929][  0]LogNativeClassHierarchy: Verbose: Native class hierarchy updated for 'AddContentDialog' in 0.0003 seconds. Added 0 classes and 0 folders.
+[2024.11.03-10.29.58:932][  0]LogNativeClassHierarchy: Verbose: Native class hierarchy updated for 'SceneOutliner' in 0.0003 seconds. Added 2 classes and 0 folders.
+[2024.11.03-10.29.59:297][  0]LogSlate: Took 0.000199 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' (155K)
+[2024.11.03-10.29.59:298][  0]LogSlate: Took 0.000399 seconds to synchronously load lazily loaded font '../../../Engine/Content/Editor/Slate/Fonts/FontAwesome.ttf' (139K)
+[2024.11.03-10.29.59:300][  0]LogSlate: Took 0.000294 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Bold.ttf' (160K)
+[2024.11.03-10.29.59:375][  0]LogRenderer: Reallocating scene render targets to support 2192x804 Format 10 NumSamples 1 (Frame:1).
+[2024.11.03-10.29.59:568][  0]LogShaderCompilers: Display: Worker (1/13): shaders left to compile 16
+[2024.11.03-10.29.59:568][  0]LogShaderCompilers: Display: Worker (2/13): shaders left to compile 14
+[2024.11.03-10.29.59:568][  0]LogShaderCompilers: Display: Worker (3/13): shaders left to compile 12
+[2024.11.03-10.29.59:568][  0]LogShaderCompilers: Display: Worker (4/13): shaders left to compile 10
+[2024.11.03-10.29.59:568][  0]LogShaderCompilers: Display: Worker (5/13): shaders left to compile 8
+[2024.11.03-10.29.59:568][  0]LogShaderCompilers: Display: Worker (6/13): shaders left to compile 6
+[2024.11.03-10.29.59:568][  0]LogShaderCompilers: Display: Worker (7/13): shaders left to compile 4
+[2024.11.03-10.29.59:568][  0]LogShaderCompilers: Display: Worker (8/13): shaders left to compile 2
+[2024.11.03-10.29.59:568][  0]LogShaderCompilers: Display: Started 16 'Local' shader compile jobs with 'ForceLocal' priority
+[2024.11.03-10.29.59:576][  0]LogNativeClassHierarchy: Verbose: Native class hierarchy updated for 'HierarchicalLODOutliner' in 0.0005 seconds. Added 0 classes and 0 folders.
+[2024.11.03-10.29.59:576][  0]LogInput: Warning: Action SetDestination uses invalid key OculusGo_Left_Trigger_Click.
+[2024.11.03-10.29.59:576][  0]LogInput: Warning: Action ResetVR uses invalid key OculusGo_Left_Back_Click.
+[2024.11.03-10.29.59:576][  0]LogInput: Warning: Use -RemoveInvalidKeys to remove instances of these keys from the action mapping.
+[2024.11.03-10.29.59:576][  0]LogLoad: (Engine Initialization) Total time: 5.55 seconds
+[2024.11.03-10.29.59:576][  0]LogLoad: (Engine Initialization) Total Blueprint compile time: 0.00 seconds
+[2024.11.03-10.29.59:601][  0]AssetCheck: New page: Asset Save: Floor_400x400
+[2024.11.03-10.29.59:601][  0]LogContentValidation: Display: Validating StaticMesh /Game/MobileStarterContent/Architecture/Floor_400x400.Floor_400x400
+[2024.11.03-10.29.59:626][  0]LogAnimationCompression: Building Anim DDC data for AnimSequence /Game/Mannequin/Animations/ThirdPersonJump_End.ThirdPersonJump_End
+[2024.11.03-10.29.59:626][  0]LogAnimationCompression: Building Anim DDC data for AnimSequence /Game/Mannequin/Animations/ThirdPersonJump_Loop.ThirdPersonJump_Loop
+[2024.11.03-10.29.59:626][  0]LogAssetRegistry: Asset discovery search completed in 3.5990 seconds
+[2024.11.03-10.29.59:633][  0]LogCollectionManager: Fixed up redirectors for 0 collections in 0.000005 seconds (updated 0 objects)
+[2024.11.03-10.29.59:697][  0]LogContentStreaming: Texture pool size now 1000 MB
+[2024.11.03-10.29.59:763][  1]LogAnimationCompression: Building Anim DDC data for AnimSequence /Game/Mannequin/Animations/ThirdPersonRun.ThirdPersonRun
+[2024.11.03-10.29.59:763][  1]LogAnimationCompression: Building Anim DDC data for AnimSequence /Game/Mannequin/Animations/ThirdPersonJump_Start.ThirdPersonJump_Start
+[2024.11.03-10.30.39:801][ 42]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.03-10.30.39:807][ 42]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.03-10.30.39:809][ 42]PIE: New page: PIE session: TopDownExampleMap (Nov 3, 2024, 2:30:39 PM)
+[2024.11.03-10.30.39:810][ 42]LogOnline: OSS: Creating online subsystem instance for: NULL
+[2024.11.03-10.30.39:811][ 42]LogOnline: OSS: TryLoadSubsystemAndSetDefault: Loaded subsystem for module [NULL]
+[2024.11.03-10.30.39:811][ 42]LogPlayLevel: Creating play world package: /Game/TopDownBP/Maps/UEDPIE_0_TopDownExampleMap
+[2024.11.03-10.30.39:820][ 42]LogPlayLevel: PIE: StaticDuplicateObject took: (0.007824s)
+[2024.11.03-10.30.39:820][ 42]LogAIModule: Creating AISystem for world TopDownExampleMap
+[2024.11.03-10.30.39:821][ 42]LogPlayLevel: PIE: World Init took: (0.000750s)
+[2024.11.03-10.30.39:821][ 42]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/TopDownBP/Maps/TopDownExampleMap.TopDownExampleMap to /Game/TopDownBP/Maps/UEDPIE_0_TopDownExampleMap.TopDownExampleMap (0.008678s)
+[2024.11.03-10.30.39:824][ 42]LogUObjectHash: Compacting FUObjectHashTables data took   1.24ms
+[2024.11.03-10.30.39:826][ 42]LogAudio: Display: Creating Audio Device:                 Id: 2, Scope: Unique, Realtime: True
+[2024.11.03-10.30.39:826][ 42]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.03-10.30.39:826][ 42]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.03-10.30.39:826][ 42]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.03-10.30.39:826][ 42]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.03-10.30.39:826][ 42]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.03-10.30.39:826][ 42]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.03-10.30.39:826][ 42]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.03-10.30.39:826][ 42]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.03-10.30.39:826][ 42]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.03-10.30.39:826][ 42]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.03-10.30.39:826][ 42]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.03-10.30.39:826][ 42]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.03-10.30.39:829][ 42]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.03-10.30.39:829][ 42]LogAudioMixer: Display: 1: FrontRight
+[2024.11.03-10.30.39:840][ 42]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.03-10.30.39:840][ 42]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.03-10.30.39:840][ 42]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.03-10.30.39:840][ 42]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.03-10.30.39:840][ 42]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.03-10.30.39:840][ 42]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.03-10.30.39:840][ 42]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.03-10.30.39:841][ 42]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.03-10.30.39:841][ 42]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.03-10.30.39:841][ 42]LogInit: FAudioDevice initialized.
+[2024.11.03-10.30.39:841][ 42]LogAudio: Display: Audio Device (ID: 2) registered with world 'TopDownExampleMap'.
+[2024.11.03-10.30.39:847][ 42]LogLoad: Game class is 'TopDownGameMode_C'
+[2024.11.03-10.30.39:849][ 42]LogWorld: Bringing World /Game/TopDownBP/Maps/UEDPIE_0_TopDownExampleMap.TopDownExampleMap up for play (max tick rate 0) at 2024.11.03-12.30.39
+[2024.11.03-10.30.39:849][ 42]LogWorld: Bringing up level for play took: 0.001453
+[2024.11.03-10.30.39:849][ 42]LogOnline: OSS: Creating online subsystem instance for: :Context_2
+[2024.11.03-10.30.39:853][ 42]LogNativeClassHierarchy: Verbose: Native class hierarchy updated for 'MovieSceneCapture' in 0.0003 seconds. Added 20 classes and 0 folders.
+[2024.11.03-10.30.39:853][ 42]PIE: Server logged in
+[2024.11.03-10.30.39:855][ 42]PIE: Play in editor total start time 0.052 seconds.
+[2024.11.03-10.31.01:581][641]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.03-10.31.01:581][641]LogWorld: BeginTearingDown for /Game/TopDownBP/Maps/UEDPIE_0_TopDownExampleMap
+[2024.11.03-10.31.01:581][641]LogWorld: UWorld::CleanupWorld for TopDownExampleMap, bSessionEnded=true, bCleanupResources=true
+[2024.11.03-10.31.01:582][641]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.03-10.31.01:589][641]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.03-10.31.01:590][641]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.03-10.31.01:593][641]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.03-10.31.01:593][641]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.03-10.31.01:594][641]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.03-10.31.01:595][641]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.03-10.31.01:596][641]LogUObjectHash: Compacting FUObjectHashTables data took   0.42ms
+[2024.11.03-10.31.01:644][647]LogPlayLevel: Display: Destroying online subsystem :Context_2
+[2024.11.03-10.36.48:287][801]LogSlate: Window 'New Level' being destroyed
+[2024.11.03-10.36.48:292][801]Cmd: MAP LOAD FILE="../../../Engine/Content/Maps/Templates/Template_Default.umap" TEMPLATE=1 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.11.03-10.36.48:295][801]LogSlate: Took 0.000093 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
+[2024.11.03-10.36.48:305][801]LightingResults: New page: Lighting Build
+[2024.11.03-10.36.48:305][801]LoadErrors: New page: Loading map: Template_Default.umap
+[2024.11.03-10.36.48:307][801]LogWorld: UWorld::CleanupWorld for TopDownExampleMap, bSessionEnded=true, bCleanupResources=true
+[2024.11.03-10.36.48:307][801]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.03-10.36.48:307][801]MapCheck: New page: Map Check
+[2024.11.03-10.36.48:307][801]LightingResults: New page: Lighting Build
+[2024.11.03-10.36.48:309][801]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.03-10.36.48:311][801]LogUObjectHash: Compacting FUObjectHashTables data took   0.63ms
+[2024.11.03-10.36.48:316][801]LogTexture: Display: Building textures: DeprecatedTextureEB9CBE3C423008B5E8E130901E171C89 (BGRA8, 128X128)
+[2024.11.03-10.36.48:317][801]LogAudio: Display: Audio Device (ID: 1) registered with world 'Untitled_1'.
+[2024.11.03-10.36.48:318][801]LogAIModule: Creating AISystem for world Untitled_1
+[2024.11.03-10.36.48:352][801]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.11.03-10.36.48:356][801]LogUObjectHash: Compacting FUObjectHashTables data took   0.43ms
+[2024.11.03-10.36.48:366][801]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.11.03-10.36.48:366][801]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.052ms to complete.
+[2024.11.03-10.36.48:366][801]LogFileHelpers: Loading map 'Template_Default' took 0.074
+[2024.11.03-10.37.08:357][176]LogSlate: Took 0.000091 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
+[2024.11.03-10.37.18:416][176]LogSlate: Window 'Save Level As' being destroyed
+[2024.11.03-10.37.18:445][176]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.11.03-10.37.18:448][176]LogUObjectHash: Compacting FUObjectHashTables data took   0.49ms
+[2024.11.03-10.37.18:454][176]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level13C4891BD4563DE6417645B8D43295041.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap'
+[2024.11.03-10.37.18:464][176]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1_BuiltData" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1_BuiltData.uasset" SILENT=true
+[2024.11.03-10.37.18:473][176]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level1_BuiltData3510ACFF44B0987B39FEB7B385E1E2C6.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1_BuiltData.uasset'
+[2024.11.03-10.37.18:482][176]LogFileHelpers: Saving map 'Level1' took 0.061
+[2024.11.03-10.37.18:482][176]Cmd: MAP LOAD FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2024.11.03-10.37.18:494][176]LightingResults: New page: Lighting Build
+[2024.11.03-10.37.18:494][176]LoadErrors: New page: Loading map: Level1.umap
+[2024.11.03-10.37.18:494][176]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.03-10.37.18:494][176]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.03-10.37.18:494][176]MapCheck: New page: Map Check
+[2024.11.03-10.37.18:494][176]LightingResults: New page: Lighting Build
+[2024.11.03-10.37.18:497][176]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.03-10.37.18:501][176]LogUObjectHash: Compacting FUObjectHashTables data took   0.43ms
+[2024.11.03-10.37.18:504][176]LogAudio: Display: Audio Device (ID: 1) registered with world 'Level1'.
+[2024.11.03-10.37.18:505][176]LogAIModule: Creating AISystem for world Level1
+[2024.11.03-10.37.18:536][176]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2024.11.03-10.37.18:539][176]LogUObjectHash: Compacting FUObjectHashTables data took   0.60ms
+[2024.11.03-10.37.18:543][176]Cmd: MAP CHECKDEP NOCLEARLOG
+[2024.11.03-10.37.18:545][176]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 0.034ms to complete.
+[2024.11.03-10.37.18:545][176]LogFileHelpers: Loading map 'Level1' took 0.063
+[2024.11.03-10.37.18:547][176]AssetCheck: New page: Asset Save: multiple assets
+[2024.11.03-10.37.18:547][176]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
+[2024.11.03-10.37.18:547][176]LogContentValidation: Display: Validating MapBuildDataRegistry /Game/Maps/Level1_BuiltData.Level1_BuiltData
+[2024.11.03-10.37.22:426][615]LogSlate: Only BGRA pngs, bmps or icos are supported in by External Image Picker
+[2024.11.03-10.39.02:802][104]LogSlate: Took 0.000321 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Italic.ttf' (157K)
+[2024.11.03-11.33.22:103][843]LogAudioMixer: Warning: Changing default audio render device to new device: {0.0.0.00000000}.{21e5dd79-a202-4c67-9a23-e6105dd9a5da}.
+[2024.11.03-11.33.22:103][843]LogAudioMixer: Resetting audio stream to device id 
+[2024.11.03-11.33.22:105][843]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.03-11.33.22:105][843]LogAudioMixer: Display: 1: FrontRight
+[2024.11.03-12.18.03:745][850]LogAudioMixer: Warning: Changing default audio render device to new device: {0.0.0.00000000}.{1797d197-e51b-4a66-8c87-dd4d05161454}.
+[2024.11.03-12.18.03:745][850]LogAudioMixer: Resetting audio stream to device id 
+[2024.11.03-12.18.03:750][850]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.03-12.18.03:750][850]LogAudioMixer: Display: 1: FrontRight
