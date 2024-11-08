@@ -1393,3 +1393,977 @@ LogConfig: Setting CVar [[r.setres:1280x720]]
 [2024.11.08-14.23.28:575][670]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
 [2024.11.08-14.23.28:578][670]LogUObjectHash: Compacting FUObjectHashTables data took   2.11ms
 [2024.11.08-14.23.28:602][671]LogPlayLevel: Display: Destroying online subsystem :Context_20
+[2024.11.08-14.54.53:280][382]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.11.08-14.54.53:280][382]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.11.08-14.55.29:787][153]LogSlate: Only BGRA pngs, bmps or icos are supported in by External Image Picker
+[2024.11.08-14.56.28:925][  2]Cmd: TRANSACTION UNDO
+[2024.11.08-14.56.28:925][  2]LogEditorTransaction: Undo Remove Action Mapping Group
+[2024.11.08-14.56.28:974][  2]LogActorComponent: RegisterComponentWithWorld: (/Engine/Transient.World_14:PersistentLevel.AnimationEditorPreviewActor_0.DebugSkelMeshComponent_0) Already registered. Aborting.
+[2024.11.08-14.56.29:905][ 95]Cmd: TRANSACTION UNDO
+[2024.11.08-14.56.29:905][ 95]LogEditorTransaction: Undo Add Action Mapping To Group
+[2024.11.08-14.56.29:950][ 95]LogActorComponent: RegisterComponentWithWorld: (/Engine/Transient.World_14:PersistentLevel.AnimationEditorPreviewActor_0.DebugSkelMeshComponent_0) Already registered. Aborting.
+[2024.11.08-14.56.30:355][142]Cmd: TRANSACTION UNDO
+[2024.11.08-14.56.30:355][142]LogEditorTransaction: Undo Add Action Mapping
+[2024.11.08-14.56.30:401][142]LogActorComponent: RegisterComponentWithWorld: (/Engine/Transient.World_14:PersistentLevel.AnimationEditorPreviewActor_0.DebugSkelMeshComponent_0) Already registered. Aborting.
+[2024.11.08-14.56.31:146][230]Cmd: TRANSACTION UNDO
+[2024.11.08-14.56.31:146][230]LogEditorTransaction: Undo Remove Axis Mapping Group
+[2024.11.08-14.56.31:193][230]LogActorComponent: RegisterComponentWithWorld: (/Engine/Transient.World_14:PersistentLevel.AnimationEditorPreviewActor_0.DebugSkelMeshComponent_0) Already registered. Aborting.
+[2024.11.08-14.56.32:245][354]Cmd: TRANSACTION UNDO
+[2024.11.08-14.56.32:245][354]LogEditorTransaction: Undo Remove Axis Mapping Group
+[2024.11.08-14.56.32:291][354]LogActorComponent: RegisterComponentWithWorld: (/Engine/Transient.World_14:PersistentLevel.AnimationEditorPreviewActor_0.DebugSkelMeshComponent_0) Already registered. Aborting.
+[2024.11.08-14.56.32:655][396]Cmd: TRANSACTION UNDO
+[2024.11.08-14.56.32:655][396]LogEditorTransaction: Undo Remove Axis Mapping Group
+[2024.11.08-14.56.32:701][396]LogActorComponent: RegisterComponentWithWorld: (/Engine/Transient.World_14:PersistentLevel.AnimationEditorPreviewActor_0.DebugSkelMeshComponent_0) Already registered. Aborting.
+[2024.11.08-14.56.33:040][435]Cmd: TRANSACTION UNDO
+[2024.11.08-14.56.33:040][435]LogEditorTransaction: Undo Remove Action Mapping Group
+[2024.11.08-14.56.33:087][435]LogActorComponent: RegisterComponentWithWorld: (/Engine/Transient.World_14:PersistentLevel.AnimationEditorPreviewActor_0.DebugSkelMeshComponent_0) Already registered. Aborting.
+[2024.11.08-14.56.33:483][481]Cmd: TRANSACTION UNDO
+[2024.11.08-14.56.33:483][481]LogEditorTransaction: Undo Remove Action Mapping Group
+[2024.11.08-14.56.33:530][481]LogActorComponent: RegisterComponentWithWorld: (/Engine/Transient.World_14:PersistentLevel.AnimationEditorPreviewActor_0.DebugSkelMeshComponent_0) Already registered. Aborting.
+[2024.11.08-14.56.33:771][508]Cmd: TRANSACTION UNDO
+[2024.11.08-14.56.33:772][508]LogEditorTransaction: Undo Clicking on Actors
+[2024.11.08-14.56.33:819][508]LogActorComponent: RegisterComponentWithWorld: (/Engine/Transient.World_14:PersistentLevel.AnimationEditorPreviewActor_0.DebugSkelMeshComponent_0) Already registered. Aborting.
+[2024.11.08-14.57.32:930][247]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.11.08-14.57.32:930][247]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.11.08-14.58.15:380][187]BlueprintLog: New page: Compile PuzzleCharacter
+[2024.11.08-14.58.15:428][187]LogUObjectHash: Compacting FUObjectHashTables data took   3.92ms
+[2024.11.08-14.58.44:381][142]MapCheck: New page: Map Check
+[2024.11.08-14.58.44:393][142]Cmd: MAP REBUILD ALLVISIBLE
+[2024.11.08-14.58.44:393][142]LogEditorServer: Rebuildmap Clear paths rebuilt
+[2024.11.08-14.58.44:453][142]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=false
+[2024.11.08-14.58.44:460][142]LogNavigationDataBuild: Display: UNavigationSystemV1::Build started...
+[2024.11.08-14.58.44:460][142]LogNavigationDataBuild: Display:    Building navigation data using PHYSICS_INTERFACE_PHYSX.
+[2024.11.08-14.58.44:460][142]LogNavigationDataBuild: Display:    Building navigation data using WITH_PHYSX.
+[2024.11.08-14.58.44:498][142]LogUObjectHash: Compacting FUObjectHashTables data took   3.25ms
+[2024.11.08-14.58.44:503][142]LogLevel: Display: Export Material TexCoord Scales took 0.003 seconds.
+[2024.11.08-14.58.44:504][142]TextureStreamingBuild: Display: Build Texture Streaming took 0.002 seconds.
+[2024.11.08-14.58.44:518][142]LogUObjectHash: Compacting FUObjectHashTables data took   0.47ms
+[2024.11.08-14.58.44:521][142]LightingResults: New page: Lighting Build - Nov 8, 2024, 6:58:44 PM
+[2024.11.08-14.58.44:547][142]LogSwarmInterface: [OpenConnection] Registering TCP channel ...
+[2024.11.08-14.58.44:592][142]LogSwarmInterface: [OpenConnection] Connecting to agent ...
+[2024.11.08-14.58.44:599][142]LogSwarmInterface: [TryOpenConnection] Testing the Agent
+[2024.11.08-14.58.45:117][142]LogSwarmInterface: [TryOpenConnection] Opening Connection to Agent
+[2024.11.08-14.58.45:117][142]LogSwarmInterface: [TryOpenConnection] Local Process ID is 41672
+[2024.11.08-14.58.47:789][142]LogStaticLightingSystem: Warning: No importance volume found, so the scene bounding box was used.  You can optimize your scene's quality and lighting build times by adding importance volumes.
+[2024.11.08-14.58.47:789][142]LogStaticLightingSystem: Running Lightmass w/ ImmediateImport mode ENABLED
+[2024.11.08-14.58.47:789][142]LogStaticLightingSystem: Running Lightmass w/ ImmediateProcess mode ENABLED
+[2024.11.08-14.58.47:789][142]LogStaticLightingSystem: Running Lightmass w/ Sorting mode ENABLED
+[2024.11.08-14.58.47:789][142]LogStaticLightingSystem: Running Lightmass w/ Mapping paddings ENABLED
+[2024.11.08-14.58.47:789][142]LogStaticLightingSystem: Running Lightmass w/ Mapping debug paddings DISABLED
+[2024.11.08-14.58.47:884][142]Cmd: MAP CHECK DONTDISPLAYDIALOG
+[2024.11.08-14.58.47:884][142]MapCheck: New page: Level1 - Nov 8, 2024, 6:58:47 PM
+[2024.11.08-14.58.47:885][142]MapCheck: Warning: Room_2 Static mesh actor has NULL StaticMesh property 
+[2024.11.08-14.58.47:885][142]MapCheck: Warning: Room2 Static mesh actor has NULL StaticMesh property 
+[2024.11.08-14.58.47:885][142]MapCheck: Warning: Room2 Static mesh actor has NULL StaticMesh property 
+[2024.11.08-14.58.47:885][142]MapCheck: Map check complete: 0 Error(s), 3 Warning(s), took 0.428ms to complete.
+[2024.11.08-14.58.47:887][142]LogEditorBuildUtils: Build time 0:03
+[2024.11.08-14.58.48:105][142]LogShaderCompilers: Display: === FShaderJobCache stats ===
+[2024.11.08-14.58.48:105][142]LogShaderCompilers: Display: Total job queries 0, among them cache hits 0 (0.00%)
+[2024.11.08-14.58.48:105][142]LogShaderCompilers: Display: Tracking 0 distinct input hashes that result in 0 distinct outputs (0.00%)
+[2024.11.08-14.58.48:105][142]LogShaderCompilers: Display: RAM used: 0.00 MB (0.00 GB) of 3276.80 MB (3.20 GB) budget. Usage: 0.00%
+[2024.11.08-14.58.48:105][142]LogShaderCompilers: Display: ================================================
+[2024.11.08-14.58.48:246][144]LogUObjectHash: Compacting FUObjectHashTables data took   3.75ms
+[2024.11.08-14.58.48:970][179]Job is a success!
+[2024.11.08-14.58.49:039][180]LogVolumetricLightmapImport: Imported Volumetric Lightmap in 0.006s
+[2024.11.08-14.58.49:039][180]LogVolumetricLightmapImport:      Indirection Texture 16x16x16 = 0.0Mb
+[2024.11.08-14.58.49:039][180]LogVolumetricLightmapImport:      BrickData (all levels) 0.1Mb
+[2024.11.08-14.58.49:039][180]LogVolumetricLightmapImport:      Bricks at depth
+[2024.11.08-14.58.49:039][180]LogVolumetricLightmapImport:          0: 7.1% covering 100.0% of volume
+[2024.11.08-14.58.49:039][180]LogVolumetricLightmapImport:          1: 7.1% covering 1.6% of volume
+[2024.11.08-14.58.49:039][180]LogVolumetricLightmapImport:          2: 85.7% covering 0.3% of volume
+[2024.11.08-14.58.49:039][180]LogVolumetricLightmapImport:      Bricks in each level
+[2024.11.08-14.58.49:039][180]LogVolumetricLightmapImport:          Level1 			 14 bricks 	 100.0% (Persistent Level)
+[2024.11.08-14.58.49:063][180]LogTexture: Display: Building textures: HQ_Lightmap0_1 (OODLE_AutoDXT, 512X512)
+[2024.11.08-14.58.49:063][180]LogTexture: Display: Building textures: LQ_Lightmap_0_1 (OODLE_DXT1, 512X512)
+[2024.11.08-14.58.49:063][180]LogTexture: Display: Building textures: HQ_Lightmap0_2 (OODLE_AutoDXT, 64X64)
+[2024.11.08-14.58.49:063][180]LogTexture: Display: Building textures: LQ_Lightmap_0_2 (OODLE_DXT1, 64X64)
+[2024.11.08-14.58.49:063][180]LogTexture: Display: Building textures: ShadowMapTexture2D_1 (G8, 32X32)
+[2024.11.08-14.58.49:063][180]LogTexture: Display: Building textures: ShadowMapTexture2D_0 (G8, 16X256)
+[2024.11.08-14.58.49:063][180]LogStaticLightingSystem: Level1_BuiltData storing lightmap data for 3 meshes in 2 LightmapResourceClusters (1.5 Meshes per cluster).
+[2024.11.08-14.58.49:102][180]Lightmass on PASHA: 563 ms total, 56 ms importing, 4 ms setup, 54 ms photons, 413 ms processing, 0 ms extra exporting [21/21 mappings]. Threads: 6.19 sec total, 71 ms processing.
+[2024.11.08-14.58.49:102][180]LogUObjectHash: Compacting FUObjectHashTables data took   2.93ms
+[2024.11.08-14.58.49:137][180]LogStaticLightingSystem: Illumination: 4.56 sec (8 ms encoding lightmaps, 0 ms encoding shadowmaps)
+[2024.11.08-14.58.49:137][180]LogStaticLightingSystem: Lightmap texture memory:  0.5 MB (0.0 MB streaming, 0.5 MB non-streaming), 4 textures
+[2024.11.08-14.58.49:137][180]LogStaticLightingSystem: Shadowmap texture memory: 0.0 MB (0.0 MB streaming, 0.0 MB non-streaming), 2 textures
+[2024.11.08-14.58.49:792][180]DumpUnbuiltLightIteractions
+[2024.11.08-14.58.49:792][180]Lights with unbuilt interactions: 0
+[2024.11.08-14.58.49:792][180]
+[2024.11.08-14.58.49:792][180]Primitives with unbuilt interactions: 0
+[2024.11.08-14.58.49:837][180]LogTexture: Display: Building textures: NewReflectionComponentTexture85E6276441BEECDCDE91568E2469D526 (BGRA8, 128X128)
+[2024.11.08-14.58.49:866][181]Cmd: MAP CHECK NOTIFYRESULTS
+[2024.11.08-14.58.49:866][181]MapCheck: New page: Level1 - Nov 8, 2024, 6:58:49 PM
+[2024.11.08-14.58.49:867][181]MapCheck: Warning: Room_2 Static mesh actor has NULL StaticMesh property 
+[2024.11.08-14.58.49:867][181]MapCheck: Warning: Room2 Static mesh actor has NULL StaticMesh property 
+[2024.11.08-14.58.49:867][181]MapCheck: Warning: Room2 Static mesh actor has NULL StaticMesh property 
+[2024.11.08-14.58.49:867][181]MapCheck: Map check complete: 0 Error(s), 3 Warning(s), took 0.398ms to complete.
+[2024.11.08-14.58.53:430][571]LogSlate: Window 'Message Log' being destroyed
+[2024.11.08-14.58.53:434][571]LogSlate: Window 'Message Log' being destroyed
+[2024.11.08-14.59.25:494][ 61]BlueprintLog: New page: Compile PuzzleCharacter
+[2024.11.08-14.59.25:522][ 61]LogUObjectHash: Compacting FUObjectHashTables data took   2.90ms
+[2024.11.08-14.59.26:363][156]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Character/PuzzleCharacter" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleCharacter.uasset" SILENT=true
+[2024.11.08-14.59.26:369][156]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzleCharacter5FE9706B4A695C4E039C7DA67533F976.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleCharacter.uasset'
+[2024.11.08-14.59.26:382][156]AssetCheck: New page: Asset Save: PuzzleCharacter
+[2024.11.08-14.59.26:382][156]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Character/PuzzleCharacter.PuzzleCharacter
+[2024.11.08-14.59.29:433][519]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.08-14.59.29:441][519]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.08-14.59.29:441][519]PIE: New page: PIE session: Level1 (Nov 8, 2024, 6:59:29 PM)
+[2024.11.08-14.59.29:441][519]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-14.59.29:443][519]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002433s)
+[2024.11.08-14.59.29:443][519]LogAIModule: Creating AISystem for world Level1
+[2024.11.08-14.59.29:443][519]LogPlayLevel: PIE: World Init took: (0.000810s)
+[2024.11.08-14.59.29:444][519]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.003338s)
+[2024.11.08-14.59.29:464][519]LogUObjectHash: Compacting FUObjectHashTables data took   2.79ms
+[2024.11.08-14.59.29:465][519]LogAudio: Display: Creating Audio Device:                 Id: 6, Scope: Unique, Realtime: True
+[2024.11.08-14.59.29:465][519]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.08-14.59.29:465][519]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.08-14.59.29:465][519]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.08-14.59.29:465][519]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.08-14.59.29:465][519]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.08-14.59.29:465][519]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.08-14.59.29:465][519]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.08-14.59.29:465][519]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.08-14.59.29:465][519]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.08-14.59.29:465][519]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.08-14.59.29:465][519]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.08-14.59.29:465][519]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.08-14.59.29:469][519]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.08-14.59.29:469][519]LogAudioMixer: Display: 1: FrontRight
+[2024.11.08-14.59.29:482][519]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.08-14.59.29:482][519]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.08-14.59.29:482][519]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.08-14.59.29:482][519]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.08-14.59.29:482][519]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.08-14.59.29:482][519]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.08-14.59.29:482][519]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.08-14.59.29:483][519]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.08-14.59.29:483][519]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.08-14.59.29:483][519]LogInit: FAudioDevice initialized.
+[2024.11.08-14.59.29:483][519]LogAudio: Display: Audio Device (ID: 6) registered with world 'Level1'.
+[2024.11.08-14.59.29:491][519]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.08-14.59.29:491][519]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.08-16.59.29
+[2024.11.08-14.59.29:492][519]LogWorld: Bringing up level for play took: 0.000536
+[2024.11.08-14.59.29:492][519]LogOnline: OSS: Creating online subsystem instance for: :Context_21
+[2024.11.08-14.59.29:493][519]PIE: Server logged in
+[2024.11.08-14.59.29:494][519]PIE: Play in editor total start time 0.059 seconds.
+[2024.11.08-14.59.53:679][414]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-14.59.53:679][414]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-14.59.53:679][414]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-14.59.53:679][414]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-14.59.53:686][414]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.08-14.59.53:694][414]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-14.59.53:711][414]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.08-14.59.53:711][414]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-14.59.53:712][414]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-14.59.53:713][414]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-14.59.53:717][414]LogUObjectHash: Compacting FUObjectHashTables data took   2.16ms
+[2024.11.08-14.59.53:739][415]LogPlayLevel: Display: Destroying online subsystem :Context_21
+[2024.11.08-15.01.09:549][192]BlueprintLog: New page: Compile PuzzleAnimBP
+[2024.11.08-15.01.09:578][192]LogUObjectHash: Compacting FUObjectHashTables data took   2.54ms
+[2024.11.08-15.01.10:336][273]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Character/PuzzleAnimBP" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleAnimBP.uasset" SILENT=true
+[2024.11.08-15.01.10:361][273]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzleAnimBPFFC553F54752124FD36409BEF5F1DD69.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleAnimBP.uasset'
+[2024.11.08-15.01.10:369][273]AssetCheck: New page: Asset Save: PuzzleAnimBP
+[2024.11.08-15.01.10:369][273]LogContentValidation: Display: Validating AnimBlueprint /Game/Blueprints/Character/PuzzleAnimBP.PuzzleAnimBP
+[2024.11.08-15.01.12:485][525]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.08-15.01.12:492][525]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.08-15.01.12:492][525]PIE: New page: PIE session: Level1 (Nov 8, 2024, 7:01:12 PM)
+[2024.11.08-15.01.12:536][525]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.01.12:539][525]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002927s)
+[2024.11.08-15.01.12:540][525]LogAIModule: Creating AISystem for world Level1
+[2024.11.08-15.01.12:540][525]LogPlayLevel: PIE: World Init took: (0.000649s)
+[2024.11.08-15.01.12:540][525]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.003690s)
+[2024.11.08-15.01.12:561][525]LogUObjectHash: Compacting FUObjectHashTables data took   3.04ms
+[2024.11.08-15.01.12:562][525]LogAudio: Display: Creating Audio Device:                 Id: 7, Scope: Unique, Realtime: True
+[2024.11.08-15.01.12:562][525]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.08-15.01.12:562][525]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.08-15.01.12:562][525]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.08-15.01.12:562][525]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.08-15.01.12:562][525]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.08-15.01.12:562][525]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.08-15.01.12:562][525]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.08-15.01.12:562][525]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.08-15.01.12:563][525]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.08-15.01.12:563][525]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.08-15.01.12:563][525]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.08-15.01.12:563][525]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.08-15.01.12:565][525]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.08-15.01.12:565][525]LogAudioMixer: Display: 1: FrontRight
+[2024.11.08-15.01.12:576][525]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.08-15.01.12:576][525]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.08-15.01.12:577][525]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.08-15.01.12:577][525]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.08-15.01.12:577][525]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.08-15.01.12:577][525]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.08-15.01.12:577][525]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.08-15.01.12:578][525]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.08-15.01.12:578][525]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.08-15.01.12:578][525]LogInit: FAudioDevice initialized.
+[2024.11.08-15.01.12:578][525]LogAudio: Display: Audio Device (ID: 7) registered with world 'Level1'.
+[2024.11.08-15.01.12:588][525]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.08-15.01.12:589][525]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.08-17.01.12
+[2024.11.08-15.01.12:589][525]LogWorld: Bringing up level for play took: 0.000512
+[2024.11.08-15.01.12:589][525]LogOnline: OSS: Creating online subsystem instance for: :Context_22
+[2024.11.08-15.01.12:591][525]PIE: Server logged in
+[2024.11.08-15.01.12:591][525]PIE: Play in editor total start time 0.103 seconds.
+[2024.11.08-15.01.21:051][535]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.01.21:051][535]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.01.21:051][535]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.01.21:051][535]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.01.21:062][535]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.08-15.01.21:070][535]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.01.21:087][535]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.08-15.01.21:087][535]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.01.21:088][535]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.01.21:090][535]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.01.21:094][535]LogUObjectHash: Compacting FUObjectHashTables data took   2.98ms
+[2024.11.08-15.01.21:114][536]LogPlayLevel: Display: Destroying online subsystem :Context_22
+[2024.11.08-15.01.46:011][494]LogUObjectHash: Compacting FUObjectHashTables data took   2.16ms
+[2024.11.08-15.01.46:018][494]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Autosaves/Game/Maps/Level1_Auto4.umap" SILENT=true AUTOSAVING=true KEEPDIRTY=false
+[2024.11.08-15.01.46:026][494]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level1_Auto43621655A4659FE87FF75C78823104A14.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Autosaves/Game/Maps/Level1_Auto4.umap'
+[2024.11.08-15.01.46:027][494]LogFileHelpers: Editor autosave (incl. external actors) for '/Game/Maps/Level1' took 0.034
+[2024.11.08-15.01.46:027][494]LogFileHelpers: Editor autosave (incl. sublevels & external actors) for all levels took 0.034
+[2024.11.08-15.02.01:075][294]LogWorld: UWorld::CleanupWorld for World_6, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.02.01:075][294]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.02.02:784][488]LogUObjectHash: Compacting FUObjectHashTables data took   2.52ms
+[2024.11.08-15.02.03:998][488]LogSlate: Window 'Save Content' being destroyed
+[2024.11.08-15.02.04:019][488]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.11.08-15.02.04:056][488]LogUObjectHash: Compacting FUObjectHashTables data took   2.82ms
+[2024.11.08-15.02.04:064][488]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level12F691EAE40BB14119657088D0692DF7B.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap'
+[2024.11.08-15.02.04:066][488]LogFileHelpers: Saving map 'Level1' took 0.047
+[2024.11.08-15.02.04:066][488]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1_BuiltData" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1_BuiltData.uasset" SILENT=true
+[2024.11.08-15.02.04:074][488]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level1_BuiltDataA0198BCB49D39F55ECDDDDAB7FA32056.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1_BuiltData.uasset'
+[2024.11.08-15.02.04:083][488]AssetCheck: New page: Asset Save: multiple assets
+[2024.11.08-15.02.04:083][488]LogContentValidation: Display: Validating MapBuildDataRegistry /Game/Maps/Level1_BuiltData.Level1_BuiltData
+[2024.11.08-15.02.04:083][488]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
+[2024.11.08-15.02.06:718][795]LogWorld: UWorld::CleanupWorld for World_14, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.02.06:718][795]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.02.06:723][795]LogWorld: UWorld::CleanupWorld for World_13, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.02.06:723][795]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.02.06:770][795]LogWorld: UWorld::CleanupWorld for World_15, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.02.06:770][795]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.02.14:032][653]LogAssetEditorSubsystem: Opening Asset editor for Blueprint /Game/Blueprints/PuzzlePlayerController.PuzzlePlayerController
+[2024.11.08-15.02.17:170][987]LogSlate: Window 'PuzzlePlayerController' being destroyed
+[2024.11.08-15.02.19:496][266]LogSlate: Window 'PuzzlePlayerController' being destroyed
+[2024.11.08-15.02.19:538][266]LogWorld: UWorld::CleanupWorld for World_16, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.02.19:539][266]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.02.19:590][266]LogAssetEditorSubsystem: Opening Asset editor for Blueprint /Game/Blueprints/PuzzlePlayerController.PuzzlePlayerController
+[2024.11.08-15.02.22:550][579]LogSlate: Window 'PuzzlePlayerController' being destroyed
+[2024.11.08-15.05.01:584][940]BlueprintLog: New page: Compile PuzzlePlayerController
+[2024.11.08-15.05.01:625][940]LogUObjectHash: Compacting FUObjectHashTables data took   3.02ms
+[2024.11.08-15.05.02:193][  5]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/PuzzlePlayerController" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset" SILENT=true
+[2024.11.08-15.05.02:196][  5]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzlePlayerControllerDE605C704D4C2B8905909F9DAE9705F6.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset'
+[2024.11.08-15.05.02:209][  5]AssetCheck: New page: Asset Save: PuzzlePlayerController
+[2024.11.08-15.05.02:209][  5]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/PuzzlePlayerController.PuzzlePlayerController
+[2024.11.08-15.05.05:509][400]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.08-15.05.05:517][400]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.08-15.05.05:517][400]PIE: New page: PIE session: Level1 (Nov 8, 2024, 7:05:05 PM)
+[2024.11.08-15.05.05:541][400]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.05.05:544][400]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002433s)
+[2024.11.08-15.05.05:544][400]LogAIModule: Creating AISystem for world Level1
+[2024.11.08-15.05.05:545][400]LogPlayLevel: PIE: World Init took: (0.000786s)
+[2024.11.08-15.05.05:545][400]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.003320s)
+[2024.11.08-15.05.05:578][400]LogUObjectHash: Compacting FUObjectHashTables data took   1.71ms
+[2024.11.08-15.05.05:579][400]LogAudio: Display: Creating Audio Device:                 Id: 8, Scope: Unique, Realtime: True
+[2024.11.08-15.05.05:579][400]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.08-15.05.05:579][400]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.08-15.05.05:579][400]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.08-15.05.05:579][400]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.08-15.05.05:579][400]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.08-15.05.05:579][400]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.08-15.05.05:579][400]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.08-15.05.05:579][400]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.08-15.05.05:579][400]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.08-15.05.05:579][400]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.08-15.05.05:579][400]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.08-15.05.05:579][400]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.08-15.05.05:582][400]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.08-15.05.05:582][400]LogAudioMixer: Display: 1: FrontRight
+[2024.11.08-15.05.05:594][400]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.08-15.05.05:594][400]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.08-15.05.05:594][400]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.08-15.05.05:594][400]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.08-15.05.05:594][400]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.08-15.05.05:594][400]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.08-15.05.05:594][400]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.08-15.05.05:596][400]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.08-15.05.05:596][400]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.08-15.05.05:596][400]LogInit: FAudioDevice initialized.
+[2024.11.08-15.05.05:596][400]LogAudio: Display: Audio Device (ID: 8) registered with world 'Level1'.
+[2024.11.08-15.05.05:601][400]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.08-15.05.05:602][400]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.08-17.05.05
+[2024.11.08-15.05.05:602][400]LogWorld: Bringing up level for play took: 0.000506
+[2024.11.08-15.05.05:602][400]LogOnline: OSS: Creating online subsystem instance for: :Context_25
+[2024.11.08-15.05.05:604][400]PIE: Server logged in
+[2024.11.08-15.05.05:605][400]PIE: Play in editor total start time 0.093 seconds.
+[2024.11.08-15.05.07:662][646]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:665][647]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:673][648]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:682][649]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:689][650]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:698][651]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:707][652]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:715][653]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:723][654]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:731][655]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:739][656]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:748][657]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:757][658]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:765][659]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.07:773][660]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:916][ 37]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:923][ 38]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:932][ 39]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:939][ 40]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:949][ 41]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:956][ 42]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:965][ 43]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:974][ 44]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:981][ 45]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:989][ 46]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.10:999][ 47]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:007][ 48]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:015][ 49]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:458][102]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:465][103]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:473][104]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:482][105]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:490][106]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:499][107]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:507][108]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:515][109]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:523][110]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:532][111]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:540][112]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:548][113]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:557][114]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:565][115]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:573][116]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:582][117]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:590][118]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:599][119]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:607][120]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:615][121]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:623][122]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:632][123]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:640][124]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:649][125]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:657][126]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:665][127]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:673][128]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:682][129]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:690][130]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:699][131]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:707][132]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:715][133]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:723][134]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:732][135]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:740][136]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:748][137]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:757][138]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:765][139]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:774][140]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:781][141]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:789][142]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:799][143]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:807][144]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:815][145]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:823][146]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:831][147]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:839][148]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:848][149]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:857][150]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:864][151]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:873][152]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:882][153]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:890][154]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:898][155]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:907][156]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:915][157]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:923][158]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:931][159]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:939][160]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:948][161]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:957][162]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:965][163]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:973][164]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:982][165]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:990][166]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.11:998][167]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:007][168]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:015][169]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:023][170]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:032][171]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:040][172]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:049][173]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:057][174]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:065][175]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:073][176]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:082][177]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:090][178]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:098][179]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:107][180]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:115][181]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:123][182]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:132][183]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:140][184]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:148][185]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:157][186]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:165][187]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:174][188]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:182][189]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:190][190]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:198][191]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:207][192]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:215][193]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:223][194]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:232][195]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:240][196]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:249][197]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:257][198]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:265][199]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:273][200]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:282][201]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:290][202]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:298][203]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:306][204]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:315][205]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:323][206]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:332][207]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:340][208]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:348][209]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:357][210]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:365][211]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:373][212]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:382][213]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:389][214]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:398][215]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:407][216]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:415][217]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:424][218]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:432][219]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:440][220]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:448][221]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:456][222]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:465][223]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:473][224]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:482][225]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:490][226]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:498][227]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:507][228]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:515][229]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:523][230]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:531][231]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:540][232]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:549][233]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:557][234]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:565][235]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:573][236]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:582][237]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:590][238]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:598][239]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:606][240]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:615][241]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:624][242]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:632][243]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:639][244]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:648][245]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:657][246]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:665][247]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:673][248]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:682][249]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:690][250]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:698][251]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:707][252]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:715][253]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:724][254]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:732][255]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:740][256]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:748][257]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:757][258]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:765][259]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:774][260]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:781][261]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:790][262]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:799][263]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:807][264]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:815][265]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:823][266]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:831][267]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:839][268]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:848][269]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:857][270]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:865][271]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:873][272]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:882][273]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:890][274]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:898][275]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:907][276]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:915][277]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:923][278]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:932][279]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:940][280]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:948][281]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:957][282]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:965][283]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:974][284]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:982][285]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:990][286]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.12:998][287]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:007][288]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:015][289]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:024][290]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:032][291]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:040][292]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:048][293]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:057][294]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:066][295]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:073][296]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:082][297]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:090][298]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:099][299]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:107][300]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:115][301]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:123][302]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:132][303]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:140][304]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:148][305]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:157][306]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:165][307]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:173][308]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:182][309]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:190][310]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:198][311]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:207][312]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:215][313]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:223][314]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:232][315]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:240][316]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:248][317]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:257][318]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:265][319]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:274][320]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:282][321]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:290][322]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:298][323]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:307][324]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:315][325]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:323][326]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:331][327]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:339][328]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:348][329]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:356][330]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:365][331]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:374][332]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:381][333]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:389][334]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:399][335]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:407][336]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:415][337]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:423][338]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:431][339]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:439][340]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:448][341]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:456][342]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:465][343]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.13:473][344]LogBlueprintUserMessages: [PuzzlePlayerController_C_0] Gate Open
+[2024.11.08-15.05.15:326][562]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.05.15:326][562]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.05.15:326][562]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.05.15:327][562]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.05.15:334][562]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.08-15.05.15:340][562]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.05.15:351][562]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.05.15:351][562]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.05.15:352][562]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.05.15:355][562]LogUObjectHash: Compacting FUObjectHashTables data took   1.25ms
+[2024.11.08-15.05.15:394][564]LogPlayLevel: Display: Destroying online subsystem :Context_25
+[2024.11.08-15.05.18:415][926]LogEditorViewport: Clicking on Actor (LMB): Brush (BoxSubtractiveBrush)
+[2024.11.08-15.07.02:462][345]BlueprintLog: New page: Compile PuzzlePlayerController
+[2024.11.08-15.07.02:481][345]LogUObjectHash: Compacting FUObjectHashTables data took   1.96ms
+[2024.11.08-15.07.03:177][426]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/PuzzlePlayerController" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset" SILENT=true
+[2024.11.08-15.07.03:180][426]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzlePlayerController41C0586442943A40AADAD0B1EF0FC7B7.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset'
+[2024.11.08-15.07.03:193][426]AssetCheck: New page: Asset Save: PuzzlePlayerController
+[2024.11.08-15.07.03:193][426]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/PuzzlePlayerController.PuzzlePlayerController
+[2024.11.08-15.09.38:085][489]BlueprintLog: New page: Compile PuzzlePlayerController
+[2024.11.08-15.09.38:106][489]LogUObjectHash: Compacting FUObjectHashTables data took   1.92ms
+[2024.11.08-15.12.51:563][245]BlueprintLog: New page: Compile PuzzlePlayerController
+[2024.11.08-15.12.51:581][245]LogUObjectHash: Compacting FUObjectHashTables data took   2.16ms
+[2024.11.08-15.13.17:524][335]LogUObjectHash: Compacting FUObjectHashTables data took   1.91ms
+[2024.11.08-15.13.17:525][335]LogFileHelpers: Editor autosave (incl. external actors) for '/Game/Maps/Level1' took 0.013
+[2024.11.08-15.13.17:525][335]OBJ SavePackage: Generating thumbnails for [0] asset(s) in package [/Game/Blueprints/PuzzlePlayerController] ([2] browsable assets)...
+[2024.11.08-15.13.17:525][335]OBJ SavePackage: Finished generating thumbnails for package [/Game/Blueprints/PuzzlePlayerController]
+[2024.11.08-15.13.17:530][335]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzlePlayerController_Auto531F438BF47D6DC814718098B1C9A94D6.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Autosaves/Game/Blueprints/PuzzlePlayerController_Auto5.uasset'
+[2024.11.08-15.13.17:530][335]LogFileHelpers: Auto-saving content packages took 0.006
+[2024.11.08-15.13.20:519][692]BlueprintLog: New page: Compile PuzzlePlayerController
+[2024.11.08-15.13.20:536][692]LogUObjectHash: Compacting FUObjectHashTables data took   1.40ms
+[2024.11.08-15.13.21:131][761]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/PuzzlePlayerController" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset" SILENT=true
+[2024.11.08-15.13.21:137][761]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzlePlayerControllerB572D9B745B61289332F34A13645B606.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset'
+[2024.11.08-15.13.21:150][761]AssetCheck: New page: Asset Save: PuzzlePlayerController
+[2024.11.08-15.13.21:150][761]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/PuzzlePlayerController.PuzzlePlayerController
+[2024.11.08-15.15.10:013][818]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.08-15.15.10:020][818]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.08-15.15.10:020][818]PIE: New page: PIE session: Level1 (Nov 8, 2024, 7:15:10 PM)
+[2024.11.08-15.15.10:054][818]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.15.10:057][818]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002861s)
+[2024.11.08-15.15.10:058][818]LogAIModule: Creating AISystem for world Level1
+[2024.11.08-15.15.10:058][818]LogPlayLevel: PIE: World Init took: (0.000998s)
+[2024.11.08-15.15.10:058][818]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.004008s)
+[2024.11.08-15.15.10:070][818]LogUObjectHash: Compacting FUObjectHashTables data took   1.84ms
+[2024.11.08-15.15.10:074][818]LogAudio: Display: Creating Audio Device:                 Id: 9, Scope: Unique, Realtime: True
+[2024.11.08-15.15.10:074][818]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.08-15.15.10:074][818]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.08-15.15.10:074][818]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.08-15.15.10:074][818]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.08-15.15.10:074][818]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.08-15.15.10:074][818]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.08-15.15.10:074][818]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.08-15.15.10:074][818]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.08-15.15.10:074][818]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.08-15.15.10:074][818]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.08-15.15.10:074][818]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.08-15.15.10:074][818]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.08-15.15.10:077][818]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.08-15.15.10:077][818]LogAudioMixer: Display: 1: FrontRight
+[2024.11.08-15.15.10:092][818]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.08-15.15.10:092][818]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.08-15.15.10:092][818]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.08-15.15.10:092][818]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.08-15.15.10:092][818]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.08-15.15.10:092][818]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.08-15.15.10:092][818]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.08-15.15.10:093][818]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.08-15.15.10:093][818]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.08-15.15.10:093][818]LogInit: FAudioDevice initialized.
+[2024.11.08-15.15.10:093][818]LogAudio: Display: Audio Device (ID: 9) registered with world 'Level1'.
+[2024.11.08-15.15.10:097][818]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.08-15.15.10:098][818]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.08-17.15.10
+[2024.11.08-15.15.10:098][818]LogWorld: Bringing up level for play took: 0.000546
+[2024.11.08-15.15.10:098][818]LogOnline: OSS: Creating online subsystem instance for: :Context_26
+[2024.11.08-15.15.10:100][818]PIE: Server logged in
+[2024.11.08-15.15.10:101][818]PIE: Play in editor total start time 0.085 seconds.
+[2024.11.08-15.15.11:285][959]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:288][960]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:297][961]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:305][962]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:312][963]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:322][964]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:330][965]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:338][966]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:347][967]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:354][968]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:363][969]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:372][970]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:379][971]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:388][972]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:396][973]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:405][974]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:413][975]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:421][976]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:429][977]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.11:438][978]LogNavigation: Warning: UNavigationSystemV1::SimpleMoveToActor called for NavSys:None Controller:None controlling Pawn:NULL (if any of these is None then there's your problem
+[2024.11.08-15.15.15:639][477]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.15.15:639][477]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.15.15:639][477]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.15.15:639][477]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.15.15:648][477]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.08-15.15.15:657][477]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.15.15:667][477]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.08-15.15.15:667][477]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.15.15:667][477]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.15.15:669][477]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.15.15:671][477]LogUObjectHash: Compacting FUObjectHashTables data took   1.16ms
+[2024.11.08-15.15.15:713][479]LogPlayLevel: Display: Destroying online subsystem :Context_26
+[2024.11.08-15.16.58:037][124]LogEditorViewport: Clicking on Actor (LMB): Room_C (Room)
+[2024.11.08-15.17.02:207][616]LogEditorViewport: Clicking on Actor (LMB): NavMeshBoundsVolume (NavMeshBoundsVolume)
+[2024.11.08-15.17.31:101][823]LogEditorViewport: Clicking on Actor (LMB): BP_Sky_Sphere_C (Sky Sphere)
+[2024.11.08-15.18.02:749][156]BlueprintLog: New page: Compile PuzzlePlayerController
+[2024.11.08-15.18.02:769][156]LogUObjectHash: Compacting FUObjectHashTables data took   1.61ms
+[2024.11.08-15.18.03:469][235]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/PuzzlePlayerController" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset" SILENT=true
+[2024.11.08-15.18.03:475][235]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzlePlayerController50DB1AF4414094D34E23078F9F10C8B7.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset'
+[2024.11.08-15.18.03:487][235]AssetCheck: New page: Asset Save: PuzzlePlayerController
+[2024.11.08-15.18.03:487][235]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/PuzzlePlayerController.PuzzlePlayerController
+[2024.11.08-15.18.06:913][643]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.08-15.18.06:920][643]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.08-15.18.06:921][643]PIE: New page: PIE session: Level1 (Nov 8, 2024, 7:18:06 PM)
+[2024.11.08-15.18.06:958][643]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.18.06:960][643]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002730s)
+[2024.11.08-15.18.06:961][643]LogAIModule: Creating AISystem for world Level1
+[2024.11.08-15.18.06:961][643]LogPlayLevel: PIE: World Init took: (0.000652s)
+[2024.11.08-15.18.06:961][643]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.003500s)
+[2024.11.08-15.18.06:973][643]LogUObjectHash: Compacting FUObjectHashTables data took   1.74ms
+[2024.11.08-15.18.06:975][643]LogAudio: Display: Creating Audio Device:                 Id: 10, Scope: Unique, Realtime: True
+[2024.11.08-15.18.06:975][643]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.08-15.18.06:975][643]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.08-15.18.06:975][643]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.08-15.18.06:975][643]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.08-15.18.06:975][643]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.08-15.18.06:975][643]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.08-15.18.06:975][643]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.08-15.18.06:975][643]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.08-15.18.06:975][643]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.08-15.18.06:975][643]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.08-15.18.06:975][643]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.08-15.18.06:975][643]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.08-15.18.06:977][643]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.08-15.18.06:977][643]LogAudioMixer: Display: 1: FrontRight
+[2024.11.08-15.18.06:990][643]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.08-15.18.06:990][643]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.08-15.18.06:990][643]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.08-15.18.06:990][643]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.08-15.18.06:990][643]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.08-15.18.06:990][643]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.08-15.18.06:990][643]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.08-15.18.06:991][643]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.08-15.18.06:991][643]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.08-15.18.06:991][643]LogInit: FAudioDevice initialized.
+[2024.11.08-15.18.06:991][643]LogAudio: Display: Audio Device (ID: 10) registered with world 'Level1'.
+[2024.11.08-15.18.07:001][643]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.08-15.18.07:001][643]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.08-17.18.07
+[2024.11.08-15.18.07:001][643]LogWorld: Bringing up level for play took: 0.000520
+[2024.11.08-15.18.07:002][643]LogOnline: OSS: Creating online subsystem instance for: :Context_27
+[2024.11.08-15.18.07:003][643]PIE: Server logged in
+[2024.11.08-15.18.07:004][643]PIE: Play in editor total start time 0.088 seconds.
+[2024.11.08-15.18.12:182][260]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.18.12:182][260]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.18.12:182][260]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.18.12:182][260]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.18.12:191][260]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.08-15.18.12:198][260]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.18.12:208][260]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.08-15.18.12:208][260]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.18.12:208][260]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.18.12:210][260]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.18.12:212][260]LogUObjectHash: Compacting FUObjectHashTables data took   1.37ms
+[2024.11.08-15.18.12:259][262]LogPlayLevel: Display: Destroying online subsystem :Context_27
+[2024.11.08-15.18.46:730][386]BlueprintLog: New page: Compile PuzzlePlayerController
+[2024.11.08-15.18.46:748][386]LogUObjectHash: Compacting FUObjectHashTables data took   1.63ms
+[2024.11.08-15.18.47:560][480]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/PuzzlePlayerController" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset" SILENT=true
+[2024.11.08-15.18.47:567][480]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzlePlayerControllerC8D01931441C29E39FB0A6ACC8359AF8.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset'
+[2024.11.08-15.18.47:579][480]AssetCheck: New page: Asset Save: PuzzlePlayerController
+[2024.11.08-15.18.47:579][480]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/PuzzlePlayerController.PuzzlePlayerController
+[2024.11.08-15.18.49:287][684]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.08-15.18.49:294][684]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.08-15.18.49:294][684]PIE: New page: PIE session: Level1 (Nov 8, 2024, 7:18:49 PM)
+[2024.11.08-15.18.49:318][684]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.18.49:322][684]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002775s)
+[2024.11.08-15.18.49:323][684]LogAIModule: Creating AISystem for world Level1
+[2024.11.08-15.18.49:323][684]LogPlayLevel: PIE: World Init took: (0.001062s)
+[2024.11.08-15.18.49:323][684]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.003972s)
+[2024.11.08-15.18.49:334][684]LogUObjectHash: Compacting FUObjectHashTables data took   1.78ms
+[2024.11.08-15.18.49:335][684]LogAudio: Display: Creating Audio Device:                 Id: 11, Scope: Unique, Realtime: True
+[2024.11.08-15.18.49:335][684]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.08-15.18.49:335][684]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.08-15.18.49:335][684]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.08-15.18.49:335][684]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.08-15.18.49:335][684]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.08-15.18.49:335][684]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.08-15.18.49:335][684]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.08-15.18.49:335][684]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.08-15.18.49:335][684]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.08-15.18.49:335][684]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.08-15.18.49:335][684]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.08-15.18.49:335][684]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.08-15.18.49:338][684]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.08-15.18.49:338][684]LogAudioMixer: Display: 1: FrontRight
+[2024.11.08-15.18.49:348][684]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.08-15.18.49:348][684]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.08-15.18.49:348][684]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.08-15.18.49:348][684]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.08-15.18.49:349][684]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.08-15.18.49:349][684]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.08-15.18.49:349][684]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.08-15.18.49:350][684]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.08-15.18.49:350][684]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.08-15.18.49:350][684]LogInit: FAudioDevice initialized.
+[2024.11.08-15.18.49:350][684]LogAudio: Display: Audio Device (ID: 11) registered with world 'Level1'.
+[2024.11.08-15.18.49:361][684]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.08-15.18.49:361][684]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.08-17.18.49
+[2024.11.08-15.18.49:361][684]LogWorld: Bringing up level for play took: 0.000506
+[2024.11.08-15.18.49:362][684]LogOnline: OSS: Creating online subsystem instance for: :Context_28
+[2024.11.08-15.18.49:363][684]PIE: Server logged in
+[2024.11.08-15.18.49:364][684]PIE: Play in editor total start time 0.074 seconds.
+[2024.11.08-15.18.59:834][936]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.18.59:834][936]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.18.59:834][936]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.18.59:834][936]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.18.59:841][936]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.08-15.18.59:847][936]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.18.59:858][936]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.08-15.18.59:858][936]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.18.59:859][936]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.18.59:860][936]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.18.59:862][936]LogUObjectHash: Compacting FUObjectHashTables data took   1.39ms
+[2024.11.08-15.18.59:906][938]LogPlayLevel: Display: Destroying online subsystem :Context_28
+[2024.11.08-15.19.13:377][545]LogAssetEditorSubsystem: Opening Asset editor for Blueprint /Game/Blueprints/Character/PuzzleCharacter.PuzzleCharacter
+[2024.11.08-15.19.28:864][367]BlueprintLog: New page: Compile PuzzleCharacter
+[2024.11.08-15.19.28:890][367]LogUObjectHash: Compacting FUObjectHashTables data took   1.51ms
+[2024.11.08-15.19.29:510][438]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Character/PuzzleCharacter" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleCharacter.uasset" SILENT=true
+[2024.11.08-15.19.29:515][438]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzleCharacterD55B56C041F654DE4E3165B4C83D6532.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleCharacter.uasset'
+[2024.11.08-15.19.29:524][438]AssetCheck: New page: Asset Save: PuzzleCharacter
+[2024.11.08-15.19.29:524][438]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Character/PuzzleCharacter.PuzzleCharacter
+[2024.11.08-15.19.31:199][637]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.08-15.19.31:206][637]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.08-15.19.31:206][637]PIE: New page: PIE session: Level1 (Nov 8, 2024, 7:19:31 PM)
+[2024.11.08-15.19.31:239][637]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.19.31:242][637]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002748s)
+[2024.11.08-15.19.31:243][637]LogAIModule: Creating AISystem for world Level1
+[2024.11.08-15.19.31:243][637]LogPlayLevel: PIE: World Init took: (0.000780s)
+[2024.11.08-15.19.31:243][637]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.003627s)
+[2024.11.08-15.19.31:257][637]LogUObjectHash: Compacting FUObjectHashTables data took   1.42ms
+[2024.11.08-15.19.31:258][637]LogAudio: Display: Creating Audio Device:                 Id: 12, Scope: Unique, Realtime: True
+[2024.11.08-15.19.31:258][637]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.08-15.19.31:258][637]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.08-15.19.31:258][637]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.08-15.19.31:258][637]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.08-15.19.31:258][637]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.08-15.19.31:258][637]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.08-15.19.31:258][637]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.08-15.19.31:258][637]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.08-15.19.31:258][637]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.08-15.19.31:258][637]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.08-15.19.31:258][637]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.08-15.19.31:258][637]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.08-15.19.31:260][637]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.08-15.19.31:260][637]LogAudioMixer: Display: 1: FrontRight
+[2024.11.08-15.19.31:271][637]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.08-15.19.31:271][637]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.08-15.19.31:271][637]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.08-15.19.31:271][637]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.08-15.19.31:272][637]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.08-15.19.31:272][637]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.08-15.19.31:272][637]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.08-15.19.31:273][637]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.08-15.19.31:273][637]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.08-15.19.31:273][637]LogInit: FAudioDevice initialized.
+[2024.11.08-15.19.31:273][637]LogAudio: Display: Audio Device (ID: 12) registered with world 'Level1'.
+[2024.11.08-15.19.31:281][637]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.08-15.19.31:282][637]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.08-17.19.31
+[2024.11.08-15.19.31:282][637]LogWorld: Bringing up level for play took: 0.000608
+[2024.11.08-15.19.31:282][637]LogOnline: OSS: Creating online subsystem instance for: :Context_30
+[2024.11.08-15.19.31:284][637]PIE: Server logged in
+[2024.11.08-15.19.31:284][637]PIE: Play in editor total start time 0.082 seconds.
+[2024.11.08-15.20.11:965][ 32]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.20.11:965][ 32]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.20.11:965][ 32]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.20.11:965][ 32]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.20.11:974][ 32]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.08-15.20.11:980][ 32]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.20.11:992][ 32]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.08-15.20.11:992][ 32]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.20.11:993][ 32]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.20.11:995][ 32]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.20.11:996][ 32]LogUObjectHash: Compacting FUObjectHashTables data took   1.18ms
+[2024.11.08-15.20.12:038][ 36]LogPlayLevel: Display: Destroying online subsystem :Context_30
+[2024.11.08-15.20.18:737][480]BlueprintLog: New page: Compile PuzzleCharacter
+[2024.11.08-15.20.18:764][480]LogUObjectHash: Compacting FUObjectHashTables data took   1.43ms
+[2024.11.08-15.20.19:312][541]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Character/PuzzleCharacter" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleCharacter.uasset" SILENT=true
+[2024.11.08-15.20.19:317][541]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzleCharacter0544EF384C00819C9AC50B93B06053A3.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleCharacter.uasset'
+[2024.11.08-15.20.19:324][541]AssetCheck: New page: Asset Save: PuzzleCharacter
+[2024.11.08-15.20.19:324][541]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Character/PuzzleCharacter.PuzzleCharacter
+[2024.11.08-15.20.21:830][829]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.08-15.20.21:837][829]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.08-15.20.21:837][829]PIE: New page: PIE session: Level1 (Nov 8, 2024, 7:20:21 PM)
+[2024.11.08-15.20.21:837][829]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.20.21:840][829]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002712s)
+[2024.11.08-15.20.21:840][829]LogAIModule: Creating AISystem for world Level1
+[2024.11.08-15.20.21:841][829]LogPlayLevel: PIE: World Init took: (0.000644s)
+[2024.11.08-15.20.21:841][829]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.003439s)
+[2024.11.08-15.20.21:852][829]LogUObjectHash: Compacting FUObjectHashTables data took   1.43ms
+[2024.11.08-15.20.21:853][829]LogAudio: Display: Creating Audio Device:                 Id: 13, Scope: Unique, Realtime: True
+[2024.11.08-15.20.21:853][829]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.08-15.20.21:853][829]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.08-15.20.21:853][829]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.08-15.20.21:853][829]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.08-15.20.21:853][829]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.08-15.20.21:853][829]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.08-15.20.21:853][829]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.08-15.20.21:853][829]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.08-15.20.21:854][829]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.08-15.20.21:854][829]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.08-15.20.21:854][829]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.08-15.20.21:854][829]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.08-15.20.21:856][829]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.08-15.20.21:857][829]LogAudioMixer: Display: 1: FrontRight
+[2024.11.08-15.20.21:867][829]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.08-15.20.21:867][829]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.08-15.20.21:867][829]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.08-15.20.21:867][829]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.08-15.20.21:867][829]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.08-15.20.21:867][829]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.08-15.20.21:867][829]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.08-15.20.21:868][829]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.08-15.20.21:868][829]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.08-15.20.21:868][829]LogInit: FAudioDevice initialized.
+[2024.11.08-15.20.21:868][829]LogAudio: Display: Audio Device (ID: 13) registered with world 'Level1'.
+[2024.11.08-15.20.21:875][829]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.08-15.20.21:876][829]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.08-17.20.21
+[2024.11.08-15.20.21:876][829]LogWorld: Bringing up level for play took: 0.000488
+[2024.11.08-15.20.21:876][829]LogOnline: OSS: Creating online subsystem instance for: :Context_31
+[2024.11.08-15.20.21:878][829]PIE: Server logged in
+[2024.11.08-15.20.21:878][829]PIE: Play in editor total start time 0.045 seconds.
+[2024.11.08-15.20.35:995][511]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.20.35:995][511]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.20.35:995][511]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.08-15.20.35:995][511]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.20.36:000][511]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.08-15.20.36:007][511]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.08-15.20.36:018][511]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.08-15.20.36:019][511]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.20.36:019][511]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.08-15.20.36:020][511]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.08-15.20.36:023][511]LogUObjectHash: Compacting FUObjectHashTables data took   1.48ms
+[2024.11.08-15.20.36:068][515]LogPlayLevel: Display: Destroying online subsystem :Context_31
+[2024.11.08-15.20.52:470][472]BlueprintLog: New page: Compile PuzzleCharacter
+[2024.11.08-15.20.52:495][472]LogUObjectHash: Compacting FUObjectHashTables data took   1.44ms
+[2024.11.08-15.20.52:974][526]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/Character/PuzzleCharacter" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleCharacter.uasset" SILENT=true
+[2024.11.08-15.20.52:979][526]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzleCharacter92C1D80F4858D460AC2F0683F999D565.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/Character/PuzzleCharacter.uasset'
+[2024.11.08-15.20.52:988][526]AssetCheck: New page: Asset Save: PuzzleCharacter
+[2024.11.08-15.20.52:988][526]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/Character/PuzzleCharacter.PuzzleCharacter
+[2024.11.08-15.20.54:381][693]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.08-15.20.54:388][693]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.08-15.20.54:388][693]PIE: New page: PIE session: Level1 (Nov 8, 2024, 7:20:54 PM)
+[2024.11.08-15.20.54:388][693]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.08-15.20.54:391][693]LogPlayLevel: PIE: StaticDuplicateObject took: (0.002804s)
+[2024.11.08-15.20.54:391][693]LogAIModule: Creating AISystem for world Level1
+[2024.11.08-15.20.54:392][693]LogPlayLevel: PIE: World Init took: (0.000653s)
+[2024.11.08-15.20.54:392][693]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.003540s)
+[2024.11.08-15.20.54:404][693]LogUObjectHash: Compacting FUObjectHashTables data took   1.45ms
+[2024.11.08-15.20.54:405][693]LogAudio: Display: Creating Audio Device:                 Id: 14, Scope: Unique, Realtime: True
+[2024.11.08-15.20.54:405][693]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.08-15.20.54:405][693]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.08-15.20.54:405][693]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.08-15.20.54:405][693]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.08-15.20.54:405][693]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.08-15.20.54:405][693]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.08-15.20.54:405][693]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.08-15.20.54:405][693]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.08-15.20.54:405][693]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.08-15.20.54:405][693]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.08-15.20.54:405][693]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.08-15.20.54:405][693]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.08-15.20.54:409][693]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.08-15.20.54:409][693]LogAudioMixer: Display: 1: FrontRight
+[2024.11.08-15.20.54:419][693]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.08-15.20.54:419][693]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.08-15.20.54:419][693]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.08-15.20.54:419][693]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.08-15.20.54:419][693]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.08-15.20.54:419][693]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.08-15.20.54:419][693]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.08-15.20.54:419][693]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.08-15.20.54:419][693]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.08-15.20.54:421][693]LogInit: FAudioDevice initialized.
+[2024.11.08-15.20.54:421][693]LogAudio: Display: Audio Device (ID: 14) registered with world 'Level1'.
+[2024.11.08-15.20.54:426][693]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.08-15.20.54:427][693]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.08-17.20.54
+[2024.11.08-15.20.54:427][693]LogWorld: Bringing up level for play took: 0.000587
+[2024.11.08-15.20.54:427][693]LogOnline: OSS: Creating online subsystem instance for: :Context_32
+[2024.11.08-15.20.54:429][693]PIE: Server logged in
+[2024.11.08-15.20.54:429][693]PIE: Play in editor total start time 0.045 seconds.
+[2024.11.08-15.21.08:541][384]LogUObjectHash: Compacting FUObjectHashTables data took   1.19ms
+[2024.11.08-15.21.09:963][384]LogSlate: Window 'Save Content' being destroyed
+[2024.11.08-15.21.09:968][384]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.11.08-15.21.09:980][384]LogUObjectHash: Compacting FUObjectHashTables data took   0.32ms
+[2024.11.08-15.21.09:989][384]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level1DEB8746C47C3F5FEFFBC43BF47149A56.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap'
+[2024.11.08-15.21.09:993][384]LogFileHelpers: Saving map 'Level1' took 0.025
+[2024.11.08-15.21.09:996][384]AssetCheck: New page: Asset Save: Level1
+[2024.11.08-15.21.09:996][384]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
