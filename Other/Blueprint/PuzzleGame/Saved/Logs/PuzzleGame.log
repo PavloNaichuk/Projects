@@ -1469,3 +1469,11 @@ LogConfig: Setting CVar [[r.setres:1280x720]]
 [2024.11.10-13.01.20:364][ 71]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level1_Auto3C50E51DB44E1C544F4BB31A7BBB4803E.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Autosaves/Game/Maps/Level1_Auto3.umap'
 [2024.11.10-13.01.20:365][ 71]LogFileHelpers: Editor autosave (incl. external actors) for '/Game/Maps/Level1' took 0.025
 [2024.11.10-13.01.20:365][ 71]LogFileHelpers: Editor autosave (incl. sublevels & external actors) for all levels took 0.025
+[2024.11.10-13.01.33:666][249]LogUObjectHash: Compacting FUObjectHashTables data took   0.33ms
+[2024.11.10-13.01.34:979][249]LogSlate: Window 'Save Content' being destroyed
+[2024.11.10-13.01.34:997][249]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.11.10-13.01.35:010][249]LogUObjectHash: Compacting FUObjectHashTables data took   0.32ms
+[2024.11.10-13.01.35:020][249]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level109E64FE64635EEDE336A2FA371ECE261.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap'
+[2024.11.10-13.01.35:024][249]LogFileHelpers: Saving map 'Level1' took 0.026
+[2024.11.10-13.01.35:032][249]AssetCheck: New page: Asset Save: Level1
+[2024.11.10-13.01.35:032][249]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
