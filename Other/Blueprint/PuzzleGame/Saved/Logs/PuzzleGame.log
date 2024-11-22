@@ -1871,3 +1871,161 @@ LogConfig: Setting CVar [[r.setres:1280x720]]
 [2024.11.22-13.00.30:542][686]LogUObjectHash: Compacting FUObjectHashTables data took   1.58ms
 [2024.11.22-13.00.30:575][688]LogPlayLevel: Display: Destroying online subsystem :Context_9
 [2024.11.22-13.00.37:334][494]LogUObjectHash: Compacting FUObjectHashTables data took   1.54ms
+[2024.11.22-14.25.32:340][666]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.11.22-14.25.32:340][666]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.11.22-14.27.47:798][425]BlueprintLog: New page: Compile CameraVolume
+[2024.11.22-14.27.47:834][425]LogUObjectHash: Compacting FUObjectHashTables data took   2.16ms
+[2024.11.22-14.27.48:524][498]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/CameraVolume" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/CameraVolume.uasset" SILENT=true
+[2024.11.22-14.27.48:535][498]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/CameraVolumeED8186894BC7EC3C157970B14FCCD04C.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/CameraVolume.uasset'
+[2024.11.22-14.27.48:547][498]AssetCheck: New page: Asset Save: CameraVolume
+[2024.11.22-14.27.48:547][498]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/CameraVolume.CameraVolume
+[2024.11.22-14.28.14:948][643]LogUObjectHash: Compacting FUObjectHashTables data took   2.64ms
+[2024.11.22-14.28.14:959][643]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Autosaves/Game/Maps/Level1_Auto3.umap" SILENT=true AUTOSAVING=true KEEPDIRTY=false
+[2024.11.22-14.28.14:977][643]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level1_Auto31CA4CAE64677CCA0E9903FA1A3F463A4.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Autosaves/Game/Maps/Level1_Auto3.umap'
+[2024.11.22-14.28.14:977][643]LogFileHelpers: Editor autosave (incl. external actors) for '/Game/Maps/Level1' took 0.047
+[2024.11.22-14.28.14:977][643]LogFileHelpers: Editor autosave (incl. sublevels & external actors) for all levels took 0.047
+[2024.11.22-14.29.01:101][216]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.11.22-14.29.01:101][216]LogWindowsTextInputMethodSystem: Display: IME system deactivated.
+[2024.11.22-14.29.14:276][793]BlueprintLog: New page: Compile PuzzlePlayerController
+[2024.11.22-14.29.14:308][793]LogUObjectHash: Compacting FUObjectHashTables data took   1.90ms
+[2024.11.22-14.29.15:170][892]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/PuzzlePlayerController" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset" SILENT=true
+[2024.11.22-14.29.15:203][892]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzlePlayerControllerE6C7419940E0425E85C554A255A150BC.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset'
+[2024.11.22-14.29.15:217][892]AssetCheck: New page: Asset Save: PuzzlePlayerController
+[2024.11.22-14.29.15:217][892]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/PuzzlePlayerController.PuzzlePlayerController
+[2024.11.22-14.31.24:510][427]BlueprintLog: New page: Compile PuzzlePlayerController
+[2024.11.22-14.31.24:540][427]LogUObjectHash: Compacting FUObjectHashTables data took   2.41ms
+[2024.11.22-14.31.25:166][497]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/PuzzlePlayerController" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset" SILENT=true
+[2024.11.22-14.31.25:199][497]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/PuzzlePlayerController348EF7C1419B3E778FE476807812910A.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/PuzzlePlayerController.uasset'
+[2024.11.22-14.31.25:212][497]AssetCheck: New page: Asset Save: PuzzlePlayerController
+[2024.11.22-14.31.25:212][497]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/PuzzlePlayerController.PuzzlePlayerController
+[2024.11.22-14.34.09:537][196]BlueprintLog: New page: Compile CameraVolume
+[2024.11.22-14.34.09:571][196]LogUObjectHash: Compacting FUObjectHashTables data took   2.78ms
+[2024.11.22-14.34.10:162][263]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/CameraVolume" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/CameraVolume.uasset" SILENT=true
+[2024.11.22-14.34.10:173][263]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/CameraVolume5E3E290C4269BD4F3320398A478416CC.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/CameraVolume.uasset'
+[2024.11.22-14.34.10:186][263]AssetCheck: New page: Asset Save: CameraVolume
+[2024.11.22-14.34.10:186][263]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/CameraVolume.CameraVolume
+[2024.11.22-14.34.46:408][647]BlueprintLog: New page: Compile CameraVolume
+[2024.11.22-14.34.46:437][647]LogUObjectHash: Compacting FUObjectHashTables data took   2.58ms
+[2024.11.22-14.34.46:986][707]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/CameraVolume" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/CameraVolume.uasset" SILENT=true
+[2024.11.22-14.34.46:998][707]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/CameraVolume001675B04C4788C5A33A289A64B2899A.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/CameraVolume.uasset'
+[2024.11.22-14.34.47:010][707]AssetCheck: New page: Asset Save: CameraVolume
+[2024.11.22-14.34.47:010][707]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/CameraVolume.CameraVolume
+[2024.11.22-14.35.00:554][274]BlueprintLog: New page: Compile CameraVolume
+[2024.11.22-14.35.00:582][274]LogUObjectHash: Compacting FUObjectHashTables data took   2.56ms
+[2024.11.22-14.35.01:033][323]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Blueprints/CameraVolume" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/CameraVolume.uasset" SILENT=true
+[2024.11.22-14.35.01:045][323]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/CameraVolumeF1160A274E3C95C93F4C1C84D32CBE96.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Blueprints/CameraVolume.uasset'
+[2024.11.22-14.35.01:057][323]AssetCheck: New page: Asset Save: CameraVolume
+[2024.11.22-14.35.01:057][323]LogContentValidation: Display: Validating Blueprint /Game/Blueprints/CameraVolume.CameraVolume
+[2024.11.22-14.35.04:398][722]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.22-14.35.04:406][722]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.22-14.35.04:406][722]PIE: New page: PIE session: Level1 (Nov 22, 2024, 6:35:04 PM)
+[2024.11.22-14.35.04:437][722]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.22-14.35.04:440][722]LogPlayLevel: PIE: StaticDuplicateObject took: (0.003279s)
+[2024.11.22-14.35.04:441][722]LogAIModule: Creating AISystem for world Level1
+[2024.11.22-14.35.04:441][722]LogPlayLevel: PIE: World Init took: (0.000787s)
+[2024.11.22-14.35.04:441][722]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.004163s)
+[2024.11.22-14.35.04:458][722]LogUObjectHash: Compacting FUObjectHashTables data took   2.32ms
+[2024.11.22-14.35.04:459][722]LogAudio: Display: Creating Audio Device:                 Id: 6, Scope: Unique, Realtime: True
+[2024.11.22-14.35.04:459][722]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.22-14.35.04:459][722]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.22-14.35.04:459][722]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.22-14.35.04:459][722]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.22-14.35.04:459][722]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.22-14.35.04:459][722]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.22-14.35.04:459][722]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.22-14.35.04:459][722]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.22-14.35.04:459][722]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.22-14.35.04:459][722]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.22-14.35.04:459][722]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.22-14.35.04:459][722]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.22-14.35.04:461][722]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.22-14.35.04:461][722]LogAudioMixer: Display: 1: FrontRight
+[2024.11.22-14.35.04:472][722]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.22-14.35.04:472][722]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.22-14.35.04:472][722]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.22-14.35.04:472][722]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.22-14.35.04:473][722]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.22-14.35.04:473][722]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.22-14.35.04:473][722]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.22-14.35.04:474][722]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.22-14.35.04:474][722]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.22-14.35.04:474][722]LogInit: FAudioDevice initialized.
+[2024.11.22-14.35.04:474][722]LogAudio: Display: Audio Device (ID: 6) registered with world 'Level1'.
+[2024.11.22-14.35.04:481][722]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.22-14.35.04:482][722]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.22-16.35.04
+[2024.11.22-14.35.04:482][722]LogWorld: Bringing up level for play took: 0.001038
+[2024.11.22-14.35.04:482][722]LogOnline: OSS: Creating online subsystem instance for: :Context_10
+[2024.11.22-14.35.04:484][722]PIE: Server logged in
+[2024.11.22-14.35.04:484][722]PIE: Play in editor total start time 0.084 seconds.
+[2024.11.22-14.35.20:182][599]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.22-14.35.20:182][599]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.22-14.35.20:182][599]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.22-14.35.20:182][599]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.22-14.35.20:192][599]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.22-14.35.20:195][599]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.22-14.35.20:208][599]LogAudio: Display: Audio Device unregistered from world 'None'.
+[2024.11.22-14.35.20:208][599]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.22-14.35.20:209][599]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.22-14.35.20:210][599]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.22-14.35.20:213][599]LogUObjectHash: Compacting FUObjectHashTables data took   1.56ms
+[2024.11.22-14.35.20:246][601]LogPlayLevel: Display: Destroying online subsystem :Context_10
+[2024.11.22-14.38.17:047][660]LogTemp: Repeating last play command: Selected Viewport
+[2024.11.22-14.38.17:053][660]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2024.11.22-14.38.17:053][660]PIE: New page: PIE session: Level1 (Nov 22, 2024, 6:38:17 PM)
+[2024.11.22-14.38.17:053][660]LogPlayLevel: Creating play world package: /Game/Maps/UEDPIE_0_Level1
+[2024.11.22-14.38.17:056][660]LogPlayLevel: PIE: StaticDuplicateObject took: (0.003043s)
+[2024.11.22-14.38.17:057][660]LogAIModule: Creating AISystem for world Level1
+[2024.11.22-14.38.17:057][660]LogPlayLevel: PIE: World Init took: (0.000639s)
+[2024.11.22-14.38.17:057][660]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Maps/Level1.Level1 to /Game/Maps/UEDPIE_0_Level1.Level1 (0.003761s)
+[2024.11.22-14.38.17:073][660]LogUObjectHash: Compacting FUObjectHashTables data took   1.75ms
+[2024.11.22-14.38.17:076][660]LogAudio: Display: Creating Audio Device:                 Id: 7, Scope: Unique, Realtime: True
+[2024.11.22-14.38.17:076][660]LogAudioMixer: Display: Audio Mixer Platform Settings:
+[2024.11.22-14.38.17:076][660]LogAudioMixer: Display: 	Sample Rate:						  48000
+[2024.11.22-14.38.17:076][660]LogAudioMixer: Display: 	Callback Buffer Frame Size Requested: 1024
+[2024.11.22-14.38.17:076][660]LogAudioMixer: Display: 	Callback Buffer Frame Size To Use:	  1024
+[2024.11.22-14.38.17:076][660]LogAudioMixer: Display: 	Number of buffers to queue:			  2
+[2024.11.22-14.38.17:076][660]LogAudioMixer: Display: 	Max Channels (voices):				  32
+[2024.11.22-14.38.17:076][660]LogAudioMixer: Display: 	Number of Async Source Workers:		  0
+[2024.11.22-14.38.17:076][660]LogAudio: Display: AudioDevice MaxSources: 32
+[2024.11.22-14.38.17:076][660]LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+[2024.11.22-14.38.17:076][660]LogAudio: Display: Audio Reverb Plugin: None (built-in).
+[2024.11.22-14.38.17:076][660]LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+[2024.11.22-14.38.17:076][660]LogAudioMixer: Display: Initializing audio mixer.
+[2024.11.22-14.38.17:079][660]LogAudioMixer: Display: 0: FrontLeft
+[2024.11.22-14.38.17:079][660]LogAudioMixer: Display: 1: FrontRight
+[2024.11.22-14.38.17:088][660]LogAudioMixer: Display: Using Audio Device 1 - ASUS VG34V (AMD High Definition Audio Device)
+[2024.11.22-14.38.17:088][660]LogAudioMixer: Display: Initializing Sound Submixes...
+[2024.11.22-14.38.17:088][660]LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+[2024.11.22-14.38.17:088][660]LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+[2024.11.22-14.38.17:088][660]LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+[2024.11.22-14.38.17:088][660]LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+[2024.11.22-14.38.17:088][660]LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+[2024.11.22-14.38.17:089][660]LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+[2024.11.22-14.38.17:089][660]LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+[2024.11.22-14.38.17:089][660]LogInit: FAudioDevice initialized.
+[2024.11.22-14.38.17:089][660]LogAudio: Display: Audio Device (ID: 7) registered with world 'Level1'.
+[2024.11.22-14.38.17:094][660]LogLoad: Game class is 'PuzzleGameMode_C'
+[2024.11.22-14.38.17:095][660]LogWorld: Bringing World /Game/Maps/UEDPIE_0_Level1.Level1 up for play (max tick rate 0) at 2024.11.22-16.38.17
+[2024.11.22-14.38.17:095][660]LogWorld: Bringing up level for play took: 0.001054
+[2024.11.22-14.38.17:095][660]LogOnline: OSS: Creating online subsystem instance for: :Context_11
+[2024.11.22-14.38.17:097][660]PIE: Server logged in
+[2024.11.22-14.38.17:097][660]PIE: Play in editor total start time 0.048 seconds.
+[2024.11.22-14.38.28:096][973]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.22-14.38.28:096][973]LogWorld: BeginTearingDown for /Game/Maps/UEDPIE_0_Level1
+[2024.11.22-14.38.28:096][973]LogWorld: UWorld::CleanupWorld for Level1, bSessionEnded=true, bCleanupResources=true
+[2024.11.22-14.38.28:096][973]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.22-14.38.28:101][973]LogPlayLevel: Display: Shutting down PIE online subsystems
+[2024.11.22-14.38.28:104][973]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2024.11.22-14.38.28:118][973]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2024.11.22-14.38.28:118][973]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.22-14.38.28:119][973]LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+[2024.11.22-14.38.28:122][973]LogUObjectHash: Compacting FUObjectHashTables data took   1.62ms
+[2024.11.22-14.38.28:155][975]LogPlayLevel: Display: Destroying online subsystem :Context_11
+[2024.11.22-14.38.48:388][130]LogUObjectHash: Compacting FUObjectHashTables data took   1.67ms
+[2024.11.22-14.38.49:829][130]LogSlate: Window 'Save Content' being destroyed
+[2024.11.22-14.38.49:852][130]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Maps/Level1" FILE="D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2024.11.22-14.38.49:866][130]LogUObjectHash: Compacting FUObjectHashTables data took   0.40ms
+[2024.11.22-14.38.49:876][130]LogSavePackage: Moving 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Saved/Level1CAB58CC146C464E4E873AAB5F6B7FF51.tmp' to 'D:/GitHub/Projects/Other/Blueprint/PuzzleGame/Content/Maps/Level1.umap'
+[2024.11.22-14.38.49:880][130]LogFileHelpers: Saving map 'Level1' took 0.029
+[2024.11.22-14.38.49:895][130]AssetCheck: New page: Asset Save: Level1
+[2024.11.22-14.38.49:895][130]LogContentValidation: Display: Validating World /Game/Maps/Level1.Level1
