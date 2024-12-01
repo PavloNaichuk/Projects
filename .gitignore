@@ -142,22 +142,21 @@ Chess/Binaries/
 Chess/Intermediate/
 Chess/Saved/
 
-Other\Blueprint\Rolling/.vs/
-Other\Blueprint\Rolling/Binaries/
-Other\Blueprint\Rolling/Intermediate/
-Other\Blueprint\Rolling/Saved/
+Other/Blueprint/Rolling/.vs/
+Other/Blueprint/Rolling/Binaries/
+Other/Blueprint/Rolling/Intermediate/
+Other/Blueprint/Rolling/Saved/
 
-Other\Blueprint\BallBounce/.vs/
-Other\Blueprint\BallBounce/Binaries/
-Other\Blueprint\BallBounce/Intermediate/
-Other\Blueprint\BallBounce/Saved/
+Other/Blueprint/BallBounce/.vs/
+Other/Blueprint/BallBounce/Binaries/
+Other/Blueprint/BallBounce/Intermediate/
+Other/Blueprint/BallBounce/Saved/
 
-Other\Blueprint\PuzzleGame/.vs/
-Other\Blueprint\PuzzleGame/Binaries/
-Other\Blueprint\PuzzleGame/Intermediate/
-Other\Blueprint\PuzzleGame/Saved/
+Other/Blueprint/PuzzleGame/.vs/
+Other/Blueprint/PuzzleGame/Binaries/
+Other/Blueprint/PuzzleGame/Intermediate/
+Other/Blueprint/PuzzleGame/Saved/
 
-
-
-
+Other/HomeworkC++/.vs/
+Other/HomeworkC++/x64/
 
