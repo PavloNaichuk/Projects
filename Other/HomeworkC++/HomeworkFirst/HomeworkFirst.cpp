@@ -5,7 +5,6 @@ int main()
 {
     std::cout << "I love C++!\n";
 
-
     std::cout << "Enter number right triangle: ";
     int number;
     std::cin >> number;
