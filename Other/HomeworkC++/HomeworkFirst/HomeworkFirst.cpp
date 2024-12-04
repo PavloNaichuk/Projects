@@ -20,6 +20,6 @@ int main()
     else
         std::cout << "Sorry number must be greater than 1 \n";
    
-    return (0);
+    return 0;
 }
 
