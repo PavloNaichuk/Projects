@@ -44,7 +44,7 @@ int main()
     std::cout << "Integer used static_cast number: " << staticCastNumber << std::endl;
 
     // Used C-style
-    int cStyleNumber = int(dValue);
+    int cStyleNumber = (int)dValue;
     std::cout << "Integer used C-style number: " << cStyleNumber << std::endl;
 
     std::cout <<"Manipulators value:" << std::setw(20) << std::right << std::setfill('$') << dValue << std::endl;
@@ -73,7 +73,7 @@ int main()
     std::cout << "Enter number: ";
     int numberInteger;
     std::cin >> numberInteger;
-    bool booleanValue = bool(numberInteger);
+    bool booleanValue = (bool)numberInteger;
     std::cout << "Boolean value:  " << std::boolalpha << booleanValue << std::endl;
 
 
