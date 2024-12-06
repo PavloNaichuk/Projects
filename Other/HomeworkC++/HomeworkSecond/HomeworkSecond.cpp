@@ -28,7 +28,7 @@ int main()
     std::cin >> numberSecond;
 
     std::swap(numberFirst, numberSecond);
-
+   
     std::cout << "\n";
     std::cout << "Number first: " << numberFirst << std::endl;
     std::cout << "Number second: " << numberSecond << std::endl;
