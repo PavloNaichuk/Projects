@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 int maxNumber(int num1, int num2) 
 { 
@@ -16,6 +16,23 @@ bool AreEqual(float v1, float v2)
     const float epsilon = 0.001f;
     return (std::abs(v1 - v2) < epsilon);
 }
+
+enum class Month : int
+{
+    January = 1,
+    February,
+    March,
+    April,
+    May,
+    June,
+    July,
+    August,
+    September,
+    October,
+    November,
+    December,
+    Count
+};
 
 int main()
 {
@@ -48,7 +65,7 @@ int main()
     //if ((number % 5 == 0) && (number % 11 == 0))
        // std::cout << "Divisible by these numbers\n";
     //else
-       // std::cout << "Indivisible by these numbers\n";*/
+       // std::cout << "Indivisible by these numbers\n";
 
     // Task 3
     std::cout << "Task 3:\n";
@@ -87,6 +104,60 @@ int main()
 
     int minNum = minNumber(value1, value2);
     std::cout << "Min number: " << minNum << "\n";*/
+
+    // Task 5
+    std::cout << "Task 6:\n";
+
+    std::cout << "Enter value: ";
+    int value;
+    std::cin >> value;
+    if ((0 < value) && (value < static_cast<int>(Month::Count)))
+    {
+        const Month month = Month(value);
+        switch (month)
+        {
+            case Month::January:
+                std::cout << "January\n";
+                break;
+            case Month::February:
+                std::cout << "February\n";
+                break;
+            case Month::March:
+                std::cout << " March\n";
+                break;
+            case Month::April:
+                std::cout << "April\n";
+                break;
+            case Month::May:
+                std::cout << "May\n";
+                break;
+            case Month::June:
+                std::cout << "June\n";
+                break;
+            case Month::July:
+                std::cout << "July\n";
+                break;
+            case Month::August:
+                std::cout << "August\n";
+                break;
+            case Month::September:
+                std::cout << "September\n";
+                break;
+            case Month::October:
+                std::cout << "October\n";
+                break;
+            case Month::November:
+                std::cout << "November\n";
+                break;
+            case Month::December:
+                std::cout << "December\n";
+                break;
+        }
+    }
+    else
+    {
+        std::cout << "Invalid input\n";
+    }
 
     return 0;
 }
