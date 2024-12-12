@@ -97,10 +97,10 @@ int main()
     std::cout << "Task 4:\n";
 
     std::cout << "Enter value month: ";
-    int val;
-    std::cin >> val;
+    int monthNum;
+    std::cin >> monthNum;
 
-    switch (val)
+    switch (monthNum)
     {
         case 12:
         case 1:
