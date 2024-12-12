@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <string>
 
 int maxNumber(int num1, int num2) 
 { 
@@ -37,7 +38,7 @@ enum class Month : int
 int main()
 {
     // Task 1
-    /*std::cout << "Task 1:\n";
+    std::cout << "Task 1:\n";
 
     std::cout << "Enter first number: ";
     int num1;
@@ -56,19 +57,22 @@ int main()
     std::cout << "Max number: " << maxNum << "\n";
 
     // Task 2
+    std::cout << "\n";
     std::cout << "Task 2:\n";
 
     std::cout << "Enter number: ";
     int number;
     std::cin >> number;
 
-    //if ((number % 5 == 0) && (number % 11 == 0))
-       // std::cout << "Divisible by these numbers\n";
-    //else
-       // std::cout << "Indivisible by these numbers\n";
+    if ((number % 5 == 0) && (number % 11 == 0))
+       std::cout << "Divisible by these numbers\n";
+    else
+       std::cout << "Indivisible by these numbers\n";
 
     // Task 3
+    std::cout << "\n";
     std::cout << "Task 3:\n";
+
     std::cout << "Enter first triangle angle number: ";
     float angle1;
     std::cin >> angle1;
@@ -89,10 +93,43 @@ int main()
         std::cout << "Angles do not form a triangle\n";
 
     // Task 4
-    //std::cout << "Task 4:\n";
+    std::cout << "\n";
+    std::cout << "Task 4:\n";
+
+    std::cout << "Enter value month: ";
+    int val;
+    std::cin >> val;
+
+    switch (val)
+    {
+        case 12:
+        case 1:
+        case 2:
+            std::cout << "Winter\n";
+            break;
+        case 3:
+        case 4:
+        case 5: 
+            std::cout << "Spring\n";
+            break;
+        case 6:
+        case 7:
+        case 8: 
+            std::cout << "Summer\n";
+            break;
+        case 9:
+        case 10:
+        case 11:
+            std::cout << "Autumn\n";
+            break;
+        default:
+            std::cout << "Invalid input\n";
+            break;
+    }
 
     // Task 5
-    /*std::cout << "Task 5:\n";
+    std::cout << "\n";
+    std::cout << "Task 5:\n";
 
     std::cout << "Enter first value: ";
     int value1;
@@ -103,9 +140,10 @@ int main()
     std::cin >> value2;
 
     int minNum = minNumber(value1, value2);
-    std::cout << "Min number: " << minNum << "\n";*/
+    std::cout << "Min number: " << minNum << "\n";
 
-    // Task 5
+    // Task 6
+    std::cout << "\n";
     std::cout << "Task 6:\n";
 
     std::cout << "Enter value: ";
