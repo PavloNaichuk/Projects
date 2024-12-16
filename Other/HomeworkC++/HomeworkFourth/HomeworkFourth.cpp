@@ -38,7 +38,7 @@ enum class Month : int
 int main()
 {
     // Task 1
-   std::cout << "Task 1:\n";
+    std::cout << "Task 1:\n";
 
     std::cout << "Enter first number: ";
     int num1;
@@ -84,14 +84,21 @@ int main()
     std::cout << "Enter third triangle angle number: ";
     float angle3;
     std::cin >> angle3;
-    
-    float angleSum = angle1 + angle2 + angle3;
 
-    if (areEqual(angleSum, 180.0f))
-        std::cout << "Angles form a triangle\n";
+    if ((angle1 <= 0) || (angle2 <= 0) || (angle3 <= 0))
+    {
+        std::cout << "Enter a value greater than 0\n";
+    }
     else
-        std::cout << "Angles do not form a triangle\n";
+    {
+        float angleSum = angle1 + angle2 + angle3;
 
+        if (areEqual(angleSum, 180.0f))
+            std::cout << "Angles form a triangle\n";
+        else
+            std::cout << "Angles do not form a triangle\n";
+    }
+    
     // Task 4
     std::cout << "\n";
     std::cout << "Task 4:\n";
