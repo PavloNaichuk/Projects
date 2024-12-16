@@ -18,11 +18,6 @@ bool areEqual(float v1, float v2)
     return (std::abs(v1 - v2) < epsilon);
 }
 
-bool isTriangle(float v1, float v2, float v3)
-{
-    return ((v1 + v2 > v3) && (v1 + v3 > v2) && (v2 + v3 > v1));
-}
-
 enum class Month : int
 {
     January = 1,
@@ -92,7 +87,7 @@ int main()
     
     float angleSum = angle1 + angle2 + angle3;
 
-    if ((areEqual(angleSum, 180.0f) && (isTriangle(angle1, angle2, angle3))))
+    if (areEqual(angleSum, 180.0f))
         std::cout << "Angles form a triangle\n";
     else
         std::cout << "Angles do not form a triangle\n";
