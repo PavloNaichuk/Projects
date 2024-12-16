@@ -12,10 +12,15 @@ int minNumber(int num1, int num2)
     return (num1 < num2) ? num1 : num2; 
 }
 
-bool AreEqual(float v1, float v2) 
+bool areEqual(float v1, float v2) 
 {
     const float epsilon = 0.001f;
     return (std::abs(v1 - v2) < epsilon);
+}
+
+bool isTriangle(float v1, float v2, float v3)
+{
+    return ((v1 + v2 > v3) && (v1 + v3 > v2) && (v2 + v3 > v1));
 }
 
 enum class Month : int
@@ -38,7 +43,7 @@ enum class Month : int
 int main()
 {
     // Task 1
-    std::cout << "Task 1:\n";
+   std::cout << "Task 1:\n";
 
     std::cout << "Enter first number: ";
     int num1;
@@ -87,7 +92,7 @@ int main()
     
     float angleSum = angle1 + angle2 + angle3;
 
-    if (AreEqual(angleSum, 180.0f))
+    if ((areEqual(angleSum, 180.0f) && (isTriangle(angle1, angle2, angle3))))
         std::cout << "Angles form a triangle\n";
     else
         std::cout << "Angles do not form a triangle\n";
