@@ -62,7 +62,7 @@ class Game:
                 lines = f.readlines()
                 self.board = [line.strip().split(',') for line in lines]
         except FileNotFoundError:
-            print("Файл не знайдено.")
+            print("No find file.")
 
     def get_valid_moves(self, pos):
         r, c = pos
@@ -115,7 +115,6 @@ class Game:
                     if target == '' or target[0] != color:
                         moves.append((nr, nc))
 
-        # For Rook, Bishop, Queen directions
         for dr, dc in directions:
             nr, nc = r + dr, c + dc
             while 0 <= nr < 8 and 0 <= nc < 8:

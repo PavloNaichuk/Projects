@@ -11,7 +11,7 @@ class ChessApp:
     def __init__(self):
         pygame.init()
         self.win = pygame.display.set_mode((WIDTH + SIDE_WIDTH, HEIGHT))
-        pygame.display.set_caption("Шахи на Python")
+        pygame.display.set_caption("Chess")
         self.clock = pygame.time.Clock()
         self.images = load_images(SQUARE_SIZE)
         self.game = Game()
@@ -24,7 +24,7 @@ class ChessApp:
             self.handle_events()
 
     def draw(self):
-        self.win.fill((255, 255, 255))  # ← очищення екрану (світлий фон)
+        self.win.fill((255, 255, 255))
         draw_board(self.win, SQUARE_SIZE)
         draw_pieces(self.win, self.game.board, self.images, SQUARE_SIZE)
         draw_buttons(self.win)
