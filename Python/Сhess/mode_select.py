@@ -9,7 +9,7 @@ def select_mode(win):
     option2 = pygame.Rect(200, 300, 280, 50)
 
     while True:
-        win.fill((230, 230, 255))  # ніжно-блакитний фон
+        win.fill((230, 230, 255))
 
         title = font.render("Game:", True, (50, 50, 50))
         win.blit(title, (200, 140))
@@ -33,6 +33,6 @@ def select_mode(win):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
                 if option1.collidepoint(x, y):
-                    return False  # режим 1 на 1
+                    return False
                 elif option2.collidepoint(x, y):
-                    return True  # проти компʼютера
+                    return True
