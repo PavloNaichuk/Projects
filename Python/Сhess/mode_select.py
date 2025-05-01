@@ -12,16 +12,16 @@ def select_mode(win):
         win.fill((230, 230, 255))
 
         title = font.render("Game:", True, (50, 50, 50))
-        win.blit(title, (200, 140))
+        win.blit(title, (300, 140))
 
         pygame.draw.rect(win, (200, 200, 255), option1, border_radius=8)
         pygame.draw.rect(win, (200, 200, 255), option2, border_radius=8)
         pygame.draw.rect(win, (100, 100, 200), option1, 2, border_radius=8)
         pygame.draw.rect(win, (100, 100, 200), option2, 2, border_radius=8)
 
-        text1 = button_font.render("Play 1 to 1", True, (0, 0, 0))
-        text2 = button_font.render("Play witch PC", True, (0, 0, 0))
-        win.blit(text1, (option1.x + 50, option1.y + 12))
+        text1 = button_font.render("Play one-on-one", True, (0, 0, 0))
+        text2 = button_font.render("Play against the PC", True, (0, 0, 0))
+        win.blit(text1, (option1.x + 70, option1.y + 12))
         win.blit(text2, (option2.x + 50, option2.y + 12))
 
         pygame.display.update()
