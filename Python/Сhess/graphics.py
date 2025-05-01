@@ -1,6 +1,8 @@
 import pygame
 from game import Game
 from utils import load_images, draw_board, draw_pieces, draw_buttons
+from mode_select import select_mode
+from bot import bot_move
 
 WIDTH, HEIGHT = 640, 640
 SIDE_WIDTH = 160
@@ -16,12 +18,16 @@ class ChessApp:
         self.game = Game()
         self.running = True
         self.show_hints = False
+        self.vs_bot = select_mode(self.win)
 
     def run(self):
         while self.running:
             self.clock.tick(60)
             self.draw()
             self.handle_events()
+            if self.vs_bot and self.game.turn == 'b':
+                pygame.time.wait(300)
+                bot_move(self.game)
 
     def draw(self):
         self.win.fill((255, 255, 255))
@@ -74,10 +80,10 @@ class ChessApp:
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
-                if x < 640:
+                if x < 640 and (not self.vs_bot or self.game.turn == 'w'):
                     row, col = y // SQUARE_SIZE, x // SQUARE_SIZE
                     self.game.handle_click((row, col))
-                    self.show_hints = False  
+                    self.show_hints = False
                 elif 660 <= x <= 780:
                     if 50 <= y <= 90:
                         self.game.undo_move()
