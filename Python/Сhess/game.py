@@ -1,4 +1,3 @@
-
 class Game:
     def __init__(self):
         self.board = self.init_board()
@@ -18,6 +17,9 @@ class Game:
             ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
         ]
 
+    def switch_turn(self):
+        self.turn = 'b' if self.turn == 'w' else 'w'
+
     def handle_click(self, pos):
         row, col = pos
         if self.selected is None:
@@ -34,80 +36,51 @@ class Game:
         er, ec = end
         piece = self.board[sr][sc]
         target = self.board[er][ec]
-        self.move_log.append((start, end, piece, target))
-        self.board[er][ec] = piece
-        self.board[sr][sc] = ''
-        self.switch_turn()
-
-    def undo_move(self):
-        if self.move_log:
-            start, end, piece, captured = self.move_log.pop()
-            sr, sc = start
-            er, ec = end
-            self.board[sr][sc] = piece
-            self.board[er][ec] = captured
+        if piece != '' and (target == '' or target[0] != piece[0]):
+            self.board[er][ec] = piece
+            self.board[sr][sc] = ''
             self.switch_turn()
-
-    def switch_turn(self):
-        self.turn = 'b' if self.turn == 'w' else 'w'
-
-    def save_game(self, filename="save.txt"):
-        with open(filename, "w") as f:
-            for row in self.board:
-                f.write(",".join(row) + "\n")
-
-    def load_game(self, filename="save.txt"):
-        try:
-            with open(filename, "r") as f:
-                lines = f.readlines()
-                self.board = [line.strip().split(',') for line in lines]
-        except FileNotFoundError:
-            print("No find file.")
 
     def get_valid_moves(self, pos):
         r, c = pos
         piece = self.board[r][c]
         if piece == '':
             return []
-
-        color, ptype = piece[0], piece[1]
-        directions = []
+        color = piece[0]
         moves = []
+        directions = []
 
-        if ptype == 'P':
+        if piece[1] == 'P':
             dir = -1 if color == 'w' else 1
             start_row = 6 if color == 'w' else 1
             if self.board[r + dir][c] == '':
                 moves.append((r + dir, c))
-                if r == start_row and self.board[r + dir * 2][c] == '':
-                    moves.append((r + dir * 2, c))
+                if r == start_row and self.board[r + 2 * dir][c] == '':
+                    moves.append((r + 2 * dir, c))
             for dc in [-1, 1]:
-                if 0 <= c + dc < 8:
-                    target = self.board[r + dir][c + dc]
+                nc = c + dc
+                nr = r + dir
+                if 0 <= nc < 8 and 0 <= nr < 8:
+                    target = self.board[nr][nc]
                     if target != '' and target[0] != color:
-                        moves.append((r + dir, c + dc))
+                        moves.append((nr, nc))
 
-        elif ptype == 'R':
-            directions = [(-1,0), (1,0), (0,-1), (0,1)]
-
-        elif ptype == 'B':
-            directions = [(-1,-1), (-1,1), (1,-1), (1,1)]
-
-        elif ptype == 'Q':
-            directions = [(-1,0), (1,0), (0,-1), (0,1), (-1,-1), (-1,1), (1,-1), (1,1)]
-
-        elif ptype == 'N':
-            knight_moves = [(-2, -1), (-2, 1), (-1, -2), (-1, 2),
-                            (1, -2), (1, 2), (2, -1), (2, 1)]
+        elif piece[1] == 'R':
+            directions = [(-1,0),(1,0),(0,-1),(0,1)]
+        elif piece[1] == 'B':
+            directions = [(-1,-1),(-1,1),(1,-1),(1,1)]
+        elif piece[1] == 'Q':
+            directions = [(-1,0),(1,0),(0,-1),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)]
+        elif piece[1] == 'N':
+            knight_moves = [(-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)]
             for dr, dc in knight_moves:
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < 8 and 0 <= nc < 8:
                     target = self.board[nr][nc]
                     if target == '' or target[0] != color:
                         moves.append((nr, nc))
-
-        elif ptype == 'K':
-            king_moves = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]
+        elif piece[1] == 'K':
+            king_moves = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)]
             for dr, dc in king_moves:
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < 8 and 0 <= nc < 8:
@@ -130,3 +103,22 @@ class Game:
                 nc += dc
 
         return moves
+
+    def is_in_check(self, color):
+        king_pos = None
+        for r in range(8):
+            for c in range(8):
+                if self.board[r][c] == color + 'K':
+                    king_pos = (r, c)
+                    break
+        if not king_pos:
+            return True
+
+        for r in range(8):
+            for c in range(8):
+                piece = self.board[r][c]
+                if piece != '' and piece[0] != color:
+                    moves = self.get_valid_moves((r, c))
+                    if king_pos in moves:
+                        return True
+        return False
