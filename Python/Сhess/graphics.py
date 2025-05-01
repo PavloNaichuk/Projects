@@ -27,6 +27,18 @@ class ChessApp:
         self.win.fill((255, 255, 255))
         draw_board(self.win, SQUARE_SIZE)
 
+        mx, my = pygame.mouse.get_pos()
+        if mx < 640:
+            row, col = my // SQUARE_SIZE, mx // SQUARE_SIZE
+            piece = self.game.board[row][col]
+            if piece != '' and (row, col) != self.game.selected and piece[0] == self.game.turn:
+                pygame.draw.rect(
+                    self.win,
+                    (190, 170, 200),
+                    (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE),
+                    4
+                )
+
         if self.game.selected:
             row, col = self.game.selected
             pygame.draw.rect(
