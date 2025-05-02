@@ -23,11 +23,14 @@ class ChessApp:
     def run(self):
         while self.running:
             self.clock.tick(60)
-            self.draw()
             self.handle_events()
+            self.draw()
+
             if self.vs_bot and self.game.turn == 'b':
                 pygame.time.wait(300)
-                bot_move(self.game)
+                bot_move(self.game, depth=2)
+                self.draw()
+
             if self.game.is_checkmate():
                 print(f"{'Black' if self.game.turn == 'w' else 'White'} wins by checkmate.")
                 self.running = False
