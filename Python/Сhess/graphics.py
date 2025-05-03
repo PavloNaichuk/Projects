@@ -35,8 +35,7 @@ class ChessApp:
         self.hint_rect = pygame.Rect(x, 200, 120, 40)
 
         self.over_window = GameOverWindow(WIDTH, SIDE_WIDTH, HEIGHT, self.font, self.end_font)
-
-        self.vs_bot = select_mode(self.win)
+        self.vs_bot      = select_mode(self.win)
         self.reset_game()
 
     def reset_game(self):
@@ -101,6 +100,7 @@ class ChessApp:
                 pygame.draw.rect(surf, (*HOVER_COLOR, 255), surf.get_rect(), 4)
                 self.win.blit(surf, (hc * SQUARE_SIZE, hr * SQUARE_SIZE))
 
+        # Панель праворуч
         pygame.draw.rect(self.win, PANEL_COLOR, (WIDTH, 0, SIDE_WIDTH, HEIGHT))
         for rect, label in [
             (self.undo_rect, "Undo"),
