@@ -66,7 +66,7 @@ class ChessApp:
             winner = 'White' if self.game.turn == 'b' else 'Black'
             self.result    = f"{winner} wins"
             self.game_over = True
-        elif self.game.is_stalemate():
+        elif self.game.is_draw():
             self.result    = "Draw"
             self.game_over = True
 
@@ -100,7 +100,6 @@ class ChessApp:
                 pygame.draw.rect(surf, (*HOVER_COLOR, 255), surf.get_rect(), 4)
                 self.win.blit(surf, (hc * SQUARE_SIZE, hr * SQUARE_SIZE))
 
-        # Панель праворуч
         pygame.draw.rect(self.win, PANEL_COLOR, (WIDTH, 0, SIDE_WIDTH, HEIGHT))
         for rect, label in [
             (self.undo_rect, "Undo"),
@@ -140,7 +139,6 @@ class ChessApp:
                     self.game.load_game()
                 elif self.hint_rect.collidepoint(x, y):
                     self.show_hints = True
-
                 elif x < WIDTH and (not self.vs_bot or self.game.turn == 'w'):
                     row, col = y // SQUARE_SIZE, x // SQUARE_SIZE
                     self.game.handle_click((row, col))
