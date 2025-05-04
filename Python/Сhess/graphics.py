@@ -10,13 +10,14 @@ WIDTH, HEIGHT = 640, 640
 SIDE_WIDTH = 160
 SQUARE_SIZE = WIDTH // 8
 
-BG_COLOR            = (255, 255, 255)
-PANEL_COLOR         = (255, 255, 255)
-HIGHLIGHT_COLOR     = (140, 110, 150)
-HOVER_COLOR         = (190, 160, 200)
-BUTTON_COLOR        = (200, 200, 200)
-BUTTON_TEXT         = (0, 0, 0)
-HINT_ACTIVE_COLOR   = (180, 220, 180)
+# Colors
+BG_COLOR        = (255, 255, 255)
+PANEL_COLOR     = (255, 255, 255)
+HIGHLIGHT_COLOR = (140, 110, 150)
+HOVER_COLOR     = (190, 160, 200)
+BUTTON_COLOR    = (200, 200, 200)
+BUTTON_TEXT     = (0, 0, 0)
+HINT_ACTIVE_BG  = (180, 220, 180)
 
 class ChessApp:
     def __init__(self):
@@ -27,6 +28,10 @@ class ChessApp:
         self.font     = pygame.font.SysFont("arial", 20)
         self.end_font = pygame.font.SysFont("arial", 36)
         self.images   = load_images(SQUARE_SIZE)
+        self.small_images = {
+            k: pygame.transform.scale(v, (SQUARE_SIZE//2, SQUARE_SIZE//2))
+            for k, v in self.images.items()
+        }
 
         x = WIDTH + 20
         self.undo_rect = pygame.Rect(x,  50, 120, 40)
@@ -39,35 +44,32 @@ class ChessApp:
         self.reset_game()
 
     def reset_game(self):
-        self.game       = Game()
-        self.selected   = None
-        self.show_hints = False
-        self.game_over  = False
-        self.result     = ""
-        self.running    = True
+        self.game         = Game()
+        self.show_hints   = False
+        self.hint_squares = []
+        self.game_over    = False
+        self.result       = ""
+        self.running      = True
 
     def run(self):
         while self.running:
             self.clock.tick(60)
             self.handle_events()
-
             if not self.game_over and self.vs_bot and self.game.turn == 'b':
                 pygame.time.wait(300)
                 bot_move(self.game, depth=2)
                 self.check_end()
-
             self.draw()
-
         pygame.quit()
         sys.exit()
 
     def check_end(self):
         if self.game.is_checkmate():
-            winner = 'White' if self.game.turn == 'b' else 'Black'
-            self.result    = f"{winner} wins"
+            winner      = 'White' if self.game.turn == 'b' else 'Black'
+            self.result = f"{winner} wins"
             self.game_over = True
-        elif self.game.is_draw():
-            self.result    = "Draw"
+        elif self.game.is_stalemate():
+            self.result = "Draw"
             self.game_over = True
 
     def draw(self):
@@ -79,39 +81,57 @@ class ChessApp:
             r, c = self.game.selected
             pygame.draw.rect(
                 self.win, HIGHLIGHT_COLOR,
-                (c * SQUARE_SIZE, r * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE),
-                4
+                (c*SQUARE_SIZE, r*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 4
             )
-
-        if self.show_hints and self.game.selected:
-            r0, c0 = self.game.selected
-            for r, c in self.game.get_valid_moves((r0, c0)):
+    
+        if self.show_hints:
+            for hr, hc in self.hint_squares:
                 surf = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
                 pygame.draw.rect(surf, (*HIGHLIGHT_COLOR, 100), surf.get_rect())
-                self.win.blit(surf, (c * SQUARE_SIZE, r * SQUARE_SIZE))
-                
+                self.win.blit(surf, (hc*SQUARE_SIZE, hr*SQUARE_SIZE))
+  
         mx, my = pygame.mouse.get_pos()
         if mx < WIDTH:
-            hr, hc = my // SQUARE_SIZE, mx // SQUARE_SIZE
+            hr, hc = my//SQUARE_SIZE, mx//SQUARE_SIZE
             piece = self.game.board[hr][hc]
             if piece and (hr, hc) != self.game.selected and piece[0] == self.game.turn:
                 surf = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
                 pygame.draw.rect(surf, (*HOVER_COLOR, 255), surf.get_rect(), 4)
-                self.win.blit(surf, (hc * SQUARE_SIZE, hr * SQUARE_SIZE))
+                self.win.blit(surf, (hc*SQUARE_SIZE, hr*SQUARE_SIZE))
 
         pygame.draw.rect(self.win, PANEL_COLOR, (WIDTH, 0, SIDE_WIDTH, HEIGHT))
         for rect, label in [
             (self.undo_rect, "Undo"),
             (self.save_rect, "Save"),
-            (self.load_rect, "Load"),
+            (self.load_rect, "Load")
         ]:
             pygame.draw.rect(self.win, BUTTON_COLOR, rect)
             txt = self.font.render(label, True, BUTTON_TEXT)
             self.win.blit(txt, txt.get_rect(center=rect.center))
-        hint_color = HINT_ACTIVE_COLOR if self.show_hints else BUTTON_COLOR
-        pygame.draw.rect(self.win, hint_color, self.hint_rect)
+            
+        hint_bg = HINT_ACTIVE_BG if self.show_hints else BUTTON_COLOR
+        pygame.draw.rect(self.win, hint_bg, self.hint_rect)
         hint_txt = self.font.render("Hint", True, BUTTON_TEXT)
         self.win.blit(hint_txt, hint_txt.get_rect(center=self.hint_rect.center))
+
+        y_white_start = self.hint_rect.bottom + 20
+        white_caps = [cap for *_, cap in self.game.move_log if cap and cap[0] == 'w']
+        for i, p in enumerate(white_caps):
+            col = i % 2
+            row = i // 2
+            x0 = WIDTH + 10 + col * (SQUARE_SIZE//2 + 5)
+            y0 = y_white_start + row * (SQUARE_SIZE//2 + 5)
+            self.win.blit(self.small_images[p], (x0, y0))
+
+        reserve_rows = 2
+        y_black_start = y_white_start + reserve_rows * (SQUARE_SIZE//2 + 5) + 10
+        black_caps = [cap for *_, cap in self.game.move_log if cap and cap[0] == 'b']
+        for i, p in enumerate(black_caps):
+            col = i % 2
+            row = i // 2
+            x0 = WIDTH + 10 + col * (SQUARE_SIZE//2 + 5)
+            y0 = y_black_start + row * (SQUARE_SIZE//2 + 5)
+            self.win.blit(self.small_images[p], (x0, y0))
 
         if self.game_over:
             self.over_window.draw(self.win, self.result)
@@ -119,19 +139,18 @@ class ChessApp:
         pygame.display.update()
 
     def handle_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
                 self.running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif ev.type == pygame.MOUSEBUTTONDOWN:
                 if self.game_over:
-                    action = self.over_window.handle_event(event)
-                    if action == 'play_again':
+                    act = self.over_window.handle_event(ev)
+                    if act == 'play_again':
                         self.reset_game()
-                    elif action == 'exit':
+                    elif act == 'exit':
                         self.running = False
                     continue
-
-                x, y = event.pos
+                x, y = ev.pos
                 if self.undo_rect.collidepoint(x, y):
                     self.game.undo_move()
                 elif self.save_rect.collidepoint(x, y):
@@ -139,8 +158,13 @@ class ChessApp:
                 elif self.load_rect.collidepoint(x, y):
                     self.game.load_game()
                 elif self.hint_rect.collidepoint(x, y):
-                    self.show_hints = not self.show_hints
-                elif x < WIDTH and (not self.vs_bot or self.game.turn == 'w'):
-                    row, col = y // SQUARE_SIZE, x // SQUARE_SIZE
+                    if self.game.selected:
+                        self.hint_squares = self.game.get_valid_moves(self.game.selected)
+                        self.show_hints   = not self.show_hints
+                    else:
+                        self.show_hints   = False
+                        self.hint_squares = []
+                elif x < WIDTH and (not self.vs_bot or self.game.turn == 'w') and not self.game_over:
+                    row, col = y//SQUARE_SIZE, x//SQUARE_SIZE
                     self.game.handle_click((row, col))
                     self.check_end()
