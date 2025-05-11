@@ -1,38 +1,74 @@
-import pygame
-import sys
+import pygame, sys
+from network import GameServer, GameClient
 
 def select_mode(win):
-    font = pygame.font.SysFont("arial", 28)
-    button_font = pygame.font.SysFont("arial", 24)
+    width, height = win.get_size()
+    title_font = pygame.font.SysFont("arial", 32)
+    btn_font = pygame.font.SysFont("arial", 24)
 
-    option1 = pygame.Rect(200, 220, 280, 50)
-    option2 = pygame.Rect(200, 300, 280, 50)
+    btn_width, btn_height = 340, 50
+    x = (width - btn_width) // 2
+    spacing = 80
+    option1 = pygame.Rect(x, 200, btn_width, btn_height)
+    option2 = pygame.Rect(x, 200 + spacing, btn_width, btn_height)
+    option3 = pygame.Rect(x, 200 + spacing * 2, btn_width, btn_height)
 
     while True:
         win.fill((230, 230, 255))
+        title_surf = title_font.render("Choose mode:", True, (50, 50, 50))
+        title_rect = title_surf.get_rect(center=(width // 2, 140))
+        win.blit(title_surf, title_rect)
 
-        title = font.render("Game:", True, (50, 50, 50))
-        win.blit(title, (300, 140))
-
-        pygame.draw.rect(win, (200, 200, 255), option1, border_radius=8)
-        pygame.draw.rect(win, (200, 200, 255), option2, border_radius=8)
-        pygame.draw.rect(win, (100, 100, 200), option1, 2, border_radius=8)
-        pygame.draw.rect(win, (100, 100, 200), option2, 2, border_radius=8)
-
-        text1 = button_font.render("Play one-on-one", True, (0, 0, 0))
-        text2 = button_font.render("Play against the PC", True, (0, 0, 0))
-        win.blit(text1, (option1.x + 70, option1.y + 12))
-        win.blit(text2, (option2.x + 50, option2.y + 12))
+        for rect, label in [(option1, "Play 1-on-1"), (option2, "Play vs PC"), (option3, "Play over Network")]:
+            pygame.draw.rect(win, (200, 200, 255), rect, border_radius=8)
+            pygame.draw.rect(win, (100, 100, 200), rect, 2, border_radius=8)
+            txt = btn_font.render(label, True, (0, 0, 0))
+            win.blit(txt, txt.get_rect(center=rect.center))
 
         pygame.display.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = pygame.mouse.get_pos()
-                if option1.collidepoint(x, y):
-                    return False
-                elif option2.collidepoint(x, y):
-                    return True
+            elif e.type == pygame.MOUSEBUTTONDOWN:
+                if option1.collidepoint(e.pos):
+                    return ("local", None)
+                if option2.collidepoint(e.pos):
+                    return ("bot", None)
+                if option3.collidepoint(e.pos):
+                    return select_network_type(win)
+
+
+def select_network_type(win):
+    width, height = win.get_size()
+    title_font = pygame.font.SysFont("arial", 32)
+    btn_font = pygame.font.SysFont("arial", 24)
+
+    btn_width, btn_height = 340, 50
+    x = (width - btn_width) // 2
+    host_btn = pygame.Rect(x, 240, btn_width, btn_height)
+    join_btn = pygame.Rect(x, 240 + 80, btn_width, btn_height)
+
+    while True:
+        win.fill((230, 230, 255))
+        title_surf = title_font.render("Network:", True, (50, 50, 50))
+        title_rect = title_surf.get_rect(center=(width // 2, 180))
+        win.blit(title_surf, title_rect)
+
+        for rect, label in [(host_btn, "Host Game"), (join_btn, "Join Game")]:
+            pygame.draw.rect(win, (200, 200, 255), rect, border_radius=8)
+            pygame.draw.rect(win, (100, 100, 200), rect, 2, border_radius=8)
+            txt = btn_font.render(label, True, (0, 0, 0))
+            win.blit(txt, txt.get_rect(center=rect.center))
+
+        pygame.display.update()
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif e.type == pygame.MOUSEBUTTONDOWN:
+                if host_btn.collidepoint(e.pos):
+                    return ("net_host", None)
+                if join_btn.collidepoint(e.pos):
+                    host = input("Enter host IP: ")
+                    return ("net_client", host)
