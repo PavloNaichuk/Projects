@@ -79,4 +79,5 @@ def select_network_type(win):
                     return ("net_host", None)
                 if join_btn.collidepoint(e.pos):
                     host = get_ip_from_window()
-                    return ("net_client", host)
+                    if host and host.strip(): 
+                        return ("net_client", host)
