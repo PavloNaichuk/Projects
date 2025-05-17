@@ -167,11 +167,29 @@ class ChessApp:
                 elif x < WIDTH and not self.game_over:
                     allowed = (self.mode=="local" or (self.vs_bot and self.game.turn=='w') or (self.net and self.game.turn==self.local_turn))
                     if allowed:
-                        prev = self.game.selected
                         r, c = y//SQUARE_SIZE, x//SQUARE_SIZE
-                        self.game.handle_click((r, c))
-                        self.check_end()
-                        if self.show_hints and self.game.selected:
-                            self.hint_squares = self.game.get_valid_moves(self.game.selected)
-                        if self.net and prev is not None and self.game.selected is None:
-                            self.net.send_move(prev, (r, c))
+                        if self.game.selected is None:
+                            piece = self.game.board[r][c]
+                            if piece and piece[0] == self.game.turn:
+                                self.game.selected = (r, c)
+                                if self.show_hints:
+                                    self.hint_squares = self.game.get_valid_moves(self.game.selected)
+                                else:
+                                    self.hint_squares = []
+                        else:
+                            if (r, c) in self.game.get_valid_moves(self.game.selected):
+                                prev = self.game.selected
+                                self.game.handle_click((r, c))
+                                self.check_end()
+                                self.hint_squares = []
+                                if self.net and prev is not None and self.game.selected is None:
+                                    self.net.send_move(prev, (r, c))
+                            elif self.game.board[r][c] and self.game.board[r][c][0] == self.game.turn:
+                                self.game.selected = (r, c)
+                                if self.show_hints:
+                                    self.hint_squares = self.game.get_valid_moves(self.game.selected)
+                                else:
+                                    self.hint_squares = []
+                            else:
+                                self.game.selected = None
+                                self.hint_squares = []
