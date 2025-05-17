@@ -1,4 +1,3 @@
-
 import pygame
 import os
 
@@ -17,10 +16,21 @@ def load_images(square_size):
 def draw_board(win, square_size):
     white = (240, 217, 181)
     brown = (181, 136, 99)
+    font = pygame.font.SysFont("arial", 22)
+    letters = "abcdefgh"
+    numbers = "12345678"
     for row in range(8):
         for col in range(8):
             color = white if (row + col) % 2 == 0 else brown
             pygame.draw.rect(win, color, (col * square_size, row * square_size, square_size, square_size))
+            # Підписи: букви знизу
+            if row == 7:
+                letter = font.render(letters[col], True, (100, 100, 100))
+                win.blit(letter, (col * square_size + square_size // 2 - letter.get_width() // 2, 8 * square_size - 20))
+            # Підписи: цифри зліва
+            if col == 0:
+                number = font.render(str(8 - row), True, (100, 100, 100))
+                win.blit(number, (5, row * square_size + square_size // 2 - number.get_height() // 2))
 
 def draw_pieces(win, board, images, square_size):
     for row in range(8):
