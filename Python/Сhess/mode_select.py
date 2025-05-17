@@ -1,5 +1,14 @@
-import pygame, sys
-from network import GameServer, GameClient
+import pygame
+import sys
+import tkinter as tk
+from tkinter import simpledialog
+
+def get_ip_from_window():
+    root = tk.Tk()
+    root.withdraw()
+    ip = simpledialog.askstring("IP Address", "Enter host IP:")
+    root.destroy()
+    return ip
 
 def select_mode(win):
     width, height = win.get_size()
@@ -38,7 +47,6 @@ def select_mode(win):
                 if option3.collidepoint(e.pos):
                     return select_network_type(win)
 
-
 def select_network_type(win):
     width, height = win.get_size()
     title_font = pygame.font.SysFont("arial", 32)
@@ -70,5 +78,5 @@ def select_network_type(win):
                 if host_btn.collidepoint(e.pos):
                     return ("net_host", None)
                 if join_btn.collidepoint(e.pos):
-                    host = input("Enter host IP: ")
+                    host = get_ip_from_window()
                     return ("net_client", host)
