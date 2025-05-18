@@ -18,19 +18,24 @@ def draw_board(win, square_size):
     brown = (181, 136, 99)
     font = pygame.font.SysFont("arial", 22)
     letters = "abcdefgh"
-    numbers = "12345678"
+    numbers = "87654321" 
+
     for row in range(8):
         for col in range(8):
             color = white if (row + col) % 2 == 0 else brown
             pygame.draw.rect(win, color, (col * square_size, row * square_size, square_size, square_size))
-            # Підписи: букви знизу
+
+            if col == 0:
+                number = font.render(numbers[row], True, (100, 100, 100))
+                x = 5
+                y = row * square_size + 3 
+                win.blit(number, (x, y))
+
             if row == 7:
                 letter = font.render(letters[col], True, (100, 100, 100))
-                win.blit(letter, (col * square_size + square_size // 2 - letter.get_width() // 2, 8 * square_size - 20))
-            # Підписи: цифри зліва
-            if col == 0:
-                number = font.render(str(8 - row), True, (100, 100, 100))
-                win.blit(number, (5, row * square_size + square_size // 2 - number.get_height() // 2))
+                x = col * square_size + square_size - letter.get_width() - 5
+                y = 8 * square_size - letter.get_height() - 2
+                win.blit(letter, (x, y))
 
 def draw_pieces(win, board, images, square_size):
     for row in range(8):
