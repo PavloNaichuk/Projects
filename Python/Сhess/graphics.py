@@ -26,6 +26,7 @@ class ChessApp:
     def __init__(self):
         pygame.init()
         self.win = pygame.display.set_mode((WIDTH + SIDE_WIDTH, HEIGHT))
+        pygame.display.set_caption("Chess") 
         
         mode_title = ""
         res = select_mode(self.win)
@@ -36,11 +37,11 @@ class ChessApp:
             self.net_param = None
 
         if self.mode == "local":
-            mode_title = " (1-on-1)"
+            mode_title = " (Play 1-on-1)"
         elif self.mode == "bot":
-            mode_title = " (vs PC)"
+            mode_title = " (Play vs PC)"
         elif self.mode in ["net_host", "net_client"]:
-            mode_title = " (Network)"
+            mode_title = " (PC Over Network)"
         pygame.display.set_caption(f"Chess{mode_title}")
 
         self.clock = pygame.time.Clock()
