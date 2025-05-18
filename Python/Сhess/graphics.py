@@ -18,6 +18,9 @@ HOVER_COLOR = (190, 160, 200)
 BUTTON_COLOR = (200, 200, 200)
 BUTTON_TEXT = (0, 0, 0)
 HINT_ACTIVE_BG = (180, 220, 180)
+MOVE_BG = (220, 220, 220)
+MOVE_BG_ACTIVE = (180, 180, 200)
+LAST_BLACK_BG = (185, 185, 200)
 
 class ChessApp:
     def __init__(self):
@@ -120,21 +123,26 @@ class ChessApp:
         pygame.draw.rect(self.win, hint_bg, self.hint_rect)
         txt = self.font.render("Hint", True, BUTTON_TEXT)
         self.win.blit(txt, txt.get_rect(center=self.hint_rect.center))
-        y_ws = self.hint_rect.bottom + 20
-        white_caps = [cap for *_, cap in self.game.move_log if cap and cap[0]=='w']
-        for i, p in enumerate(white_caps):
-            col, row = i%2, i//2
-            x0 = WIDTH+10 + col*(SQUARE_SIZE//2+5)
-            y0 = y_ws   + row*(SQUARE_SIZE//2+5)
-            self.win.blit(self.small_images[p], (x0, y0))
-        reserved = max(2, (len(white_caps)+1)//2)
-        y_bs = y_ws + reserved*(SQUARE_SIZE//2+5) + 10
-        black_caps = [cap for *_, cap in self.game.move_log if cap and cap[0]=='b']
-        for i, p in enumerate(black_caps):
-            col, row = i%2, i//2
-            x0 = WIDTH+10 + col*(SQUARE_SIZE//2+5)
-            y0 = y_bs  + row*(SQUARE_SIZE//2+5)
-            self.win.blit(self.small_images[p], (x0, y0))
+
+        move_log = self.game.move_log
+        font = self.font
+        x0 = WIDTH + 10
+        y0 = self.hint_rect.bottom + 20
+        row_h = 28
+        col_w = 120
+
+        for idx, move in enumerate(move_log):
+            y = y0 + idx * row_h
+            move_number = idx + 1 
+            if idx % 2 == 1:
+                pygame.draw.rect(self.win, (190, 190, 210), (x0, y, col_w, row_h))
+            num_txt = font.render(f"{move_number}.", True, (0, 0, 0))
+            self.win.blit(num_txt, (x0, y + 4))
+            start, end, piece, _ = move
+            move_alg = f"{chr(start[1]+97)}{8-start[0]} - {chr(end[1]+97)}{8-end[0]}"
+            txt = font.render(move_alg, True, (0, 0, 0))
+            self.win.blit(txt, (x0 + 35, y + 4))
+
         if self.game_over:
             self.over_window.draw(self.win, self.result)
         pygame.display.update()
