@@ -26,7 +26,23 @@ class ChessApp:
     def __init__(self):
         pygame.init()
         self.win = pygame.display.set_mode((WIDTH + SIDE_WIDTH, HEIGHT))
-        pygame.display.set_caption("Chess")
+        
+        mode_title = ""
+        res = select_mode(self.win)
+        if isinstance(res, tuple):
+            self.mode, self.net_param = res
+        else:
+            self.mode = "bot" if res else "local"
+            self.net_param = None
+
+        if self.mode == "local":
+            mode_title = " (1-on-1)"
+        elif self.mode == "bot":
+            mode_title = " (vs PC)"
+        elif self.mode in ["net_host", "net_client"]:
+            mode_title = " (Network)"
+        pygame.display.set_caption(f"Chess{mode_title}")
+
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("arial", 20)
         self.end_font = pygame.font.SysFont("arial", 36)
@@ -41,12 +57,6 @@ class ChessApp:
         self.load_rect = pygame.Rect(x, 150, 120, 40)
         self.hint_rect = pygame.Rect(x, 200, 120, 40)
         self.over_window = GameOverWindow(WIDTH, SIDE_WIDTH, HEIGHT, self.font, self.end_font)
-        res = select_mode(self.win)
-        if isinstance(res, tuple):
-            self.mode, self.net_param = res
-        else:
-            self.mode = "bot" if res else "local"
-            self.net_param = None
         self.vs_bot = (self.mode == "bot")
         self.net = None
         if self.mode == "net_host":
@@ -201,3 +211,4 @@ class ChessApp:
                             else:
                                 self.game.selected = None
                                 self.hint_squares = []
+
