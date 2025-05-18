@@ -26,8 +26,8 @@ class ChessApp:
     def __init__(self):
         pygame.init()
         self.win = pygame.display.set_mode((WIDTH + SIDE_WIDTH, HEIGHT))
-        pygame.display.set_caption("Chess") 
-        
+        pygame.display.set_caption("Chess")
+
         mode_title = ""
         res = select_mode(self.win)
         if isinstance(res, tuple):
@@ -68,19 +68,24 @@ class ChessApp:
             self.local_turn = 'b'
         else:
             self.local_turn = None
+        self.max_visible_moves = 13
+        self.moves_scroll = 0
+        self.move_scroll_drag = False
         self.reset_game()
 
     def reset_game(self):
         self.game = Game()
-        self.show_hints = False
+        self.show_hints = True
         self.hint_squares = []
         self.game_over = False
         self.result = ""
         self.running = True
+        self.auto_scroll()
 
     def _on_remote_move(self, start, end):
         self.game.move_piece(start, end)
         self.check_end()
+        self.auto_scroll()
 
     def run(self):
         while self.running:
@@ -90,6 +95,7 @@ class ChessApp:
                 pygame.time.wait(300)
                 bot_move(self.game)
                 self.check_end()
+                self.auto_scroll()
             self.draw()
         pygame.quit()
         if self.net:
@@ -104,6 +110,14 @@ class ChessApp:
         elif self.game.is_stalemate():
             self.result = "Draw"
             self.game_over = True
+
+    def auto_scroll(self):
+        move_log = self.game.move_log
+        n = len(move_log)
+        if n > self.max_visible_moves:
+            self.moves_scroll = n - self.max_visible_moves
+        else:
+            self.moves_scroll = 0
 
     def draw(self):
         self.win.fill(BG_COLOR)
@@ -142,10 +156,37 @@ class ChessApp:
         row_h = 28
         col_w = 120
 
-        for idx, move in enumerate(move_log):
+        total_moves = len(move_log)
+        max_scroll = max(0, total_moves - self.max_visible_moves)
+        self.moves_scroll = min(self.moves_scroll, max_scroll)
+        start_idx = self.moves_scroll
+        end_idx = min(total_moves, start_idx + self.max_visible_moves)
+        visible_moves = move_log[start_idx:end_idx]
+
+        bar_x = x0 + col_w + 6
+        bar_y = y0
+        bar_w = 13
+        bar_h = self.max_visible_moves * row_h
+
+        if total_moves > self.max_visible_moves:
+            pygame.draw.rect(self.win, (220, 220, 220), (bar_x, bar_y, bar_w, bar_h), border_radius=6)
+            ratio = self.max_visible_moves / total_moves
+            scroll_h = max(int(bar_h * ratio), 20)
+            scroll_max_y = bar_y + bar_h - scroll_h
+            if max_scroll == 0:
+                scroll_y = bar_y
+            else:
+                scroll_y = int(bar_y + (bar_h - scroll_h) * (self.moves_scroll / max_scroll))
+            pygame.draw.rect(self.win, (180, 180, 180), (bar_x, scroll_y, bar_w, scroll_h), border_radius=5)
+            self._scrollbar_rect = pygame.Rect(bar_x, scroll_y, bar_w, scroll_h)
+            self._scrollbar_area = pygame.Rect(bar_x, bar_y, bar_w, bar_h)
+        else:
+            self._scrollbar_rect = None
+            self._scrollbar_area = None
+        for idx, move in enumerate(visible_moves):
             y = y0 + idx * row_h
-            move_number = idx + 1 
-            if idx % 2 == 1:
+            move_number = start_idx + idx + 1
+            if move_number % 2 == 0:
                 pygame.draw.rect(self.win, (190, 190, 210), (x0, y, col_w, row_h))
             num_txt = font.render(f"{move_number}.", True, (0, 0, 0))
             self.win.blit(num_txt, (x0, y + 4))
@@ -171,12 +212,18 @@ class ChessApp:
                         self.running = False
                     continue
                 x, y = ev.pos
-                if self.undo_rect.collidepoint(x, y):
+                # Скрол-бар drag
+                if self._scrollbar_rect and self._scrollbar_rect.collidepoint(x, y):
+                    self.move_scroll_drag = True
+                    self._drag_offset = y - self._scrollbar_rect.y
+                elif self.undo_rect.collidepoint(x, y):
                     self.game.undo_move()
+                    self.auto_scroll()
                 elif self.save_rect.collidepoint(x, y):
                     self.game.save_game()
                 elif self.load_rect.collidepoint(x, y):
                     self.game.load_game()
+                    self.auto_scroll()
                 elif self.hint_rect.collidepoint(x, y):
                     self.show_hints = not self.show_hints
                     if self.show_hints and self.game.selected:
@@ -203,6 +250,7 @@ class ChessApp:
                                 self.hint_squares = []
                                 if self.net and prev is not None and self.game.selected is None:
                                     self.net.send_move(prev, (r, c))
+                                self.auto_scroll()
                             elif self.game.board[r][c] and self.game.board[r][c][0] == self.game.turn:
                                 self.game.selected = (r, c)
                                 if self.show_hints:
@@ -212,4 +260,31 @@ class ChessApp:
                             else:
                                 self.game.selected = None
                                 self.hint_squares = []
-
+            elif ev.type == pygame.MOUSEBUTTONUP:
+                self.move_scroll_drag = False
+            elif ev.type == pygame.MOUSEMOTION:
+                if self.move_scroll_drag and self._scrollbar_area:
+                    bar_y = self._scrollbar_area.y
+                    bar_h = self._scrollbar_area.height
+                    total_moves = len(self.game.move_log)
+                    max_scroll = max(0, total_moves - self.max_visible_moves)
+                    if total_moves > self.max_visible_moves:
+                        scroll_h = max(int(bar_h * self.max_visible_moves / total_moves), 20)
+                        my = ev.pos[1]
+                        rel = (my - bar_y - getattr(self, "_drag_offset", 0))
+                        rel = max(0, min(rel, bar_h - scroll_h))
+                        scroll_pos = rel / (bar_h - scroll_h) if (bar_h - scroll_h) > 0 else 0
+                        self.moves_scroll = int(scroll_pos * max_scroll)
+            elif ev.type == pygame.MOUSEWHEEL:
+                move_log = self.game.move_log
+                total_moves = len(move_log)
+                max_scroll = max(0, total_moves - self.max_visible_moves)
+                if ev.y > 0:
+                    self.moves_scroll = max(0, self.moves_scroll - 1)
+                elif ev.y < 0:
+                    self.moves_scroll = min(self.moves_scroll + 1, max_scroll)
+            elif ev.type == pygame.KEYDOWN:
+                # Ctrl+Z = undo (завжди автоскрол вниз)
+                if ev.key == pygame.K_z and (pygame.key.get_mods() & pygame.KMOD_CTRL):
+                    self.game.undo_move()
+                    self.auto_scroll()
