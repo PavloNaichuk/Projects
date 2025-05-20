@@ -217,11 +217,21 @@ class ChessApp:
             self.win.blit(num_txt, (x0, y + 4))
             start, end, piece, captured = move
             capture = captured != ""
-            move_alg = f"{chr(start[1]+97)}{8-start[0]} - {chr(end[1]+97)}{8-end[0]}"
+            PIECE_LETTER = {
+                'P': '',
+                'N': 'N',
+                'B': 'B',
+                'R': 'R',
+                'Q': 'Q',
+                'K': 'K'
+            }
+            piece_letter = PIECE_LETTER.get(piece[1].upper(), '')
+            move_alg = f"{piece_letter}{chr(start[1]+97)}{8-start[0]} - {chr(end[1]+97)}{8-end[0]}"
             if capture:
                 move_alg += " +"
             txt = font.render(move_alg, True, (0, 0, 0))
             self.win.blit(txt, (x0 + 35, y + 4))
+
         if self.game_over:
             self.over_window.draw(self.win, self.result)
         
