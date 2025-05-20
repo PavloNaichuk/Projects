@@ -71,6 +71,13 @@ class ChessApp:
         self.max_visible_moves = 13
         self.moves_scroll = 0
         self.move_scroll_drag = False
+
+        # --- Додаємо змінні для анімації ---
+        self.animating = False
+        self.anim_move = None
+        self.anim_progress = 0.0
+        self._pending_move = None
+
         self.reset_game()
 
     def reset_game(self):
@@ -80,6 +87,10 @@ class ChessApp:
         self.game_over = False
         self.result = ""
         self.running = True
+        self.animating = False
+        self.anim_move = None
+        self.anim_progress = 0.0
+        self._pending_move = None
         self.auto_scroll()
 
     def _on_remote_move(self, start, end):
@@ -91,7 +102,19 @@ class ChessApp:
         while self.running:
             self.clock.tick(60)
             self.handle_events()
-            if not self.game_over and self.vs_bot and self.game.turn == 'b':
+
+            if self.animating:
+                self.anim_progress += 0.1
+                if self.anim_progress >= 1.0:
+                    self.animating = False
+                    self.anim_progress = 0.0
+                    self.anim_move = None
+                    if self._pending_move:
+                        self.game.move_piece(*self._pending_move)
+                        self.check_end()
+                        self.auto_scroll()
+                        self._pending_move = None
+            elif not self.game_over and self.vs_bot and self.game.turn == 'b':
                 pygame.time.wait(300)
                 bot_move(self.game)
                 self.check_end()
@@ -197,6 +220,16 @@ class ChessApp:
 
         if self.game_over:
             self.over_window.draw(self.win, self.result)
+        
+        # --- Малюємо анімацію (останнім!) ---
+        if self.animating and self.anim_move:
+            (sr, sc), (er, ec), img = self.anim_move
+            prog = self.anim_progress
+            cx = sc * SQUARE_SIZE + (ec - sc) * SQUARE_SIZE * prog
+            cy = sr * SQUARE_SIZE + (er - sr) * SQUARE_SIZE * prog
+            pygame.draw.rect(self.win, ((240, 217, 181) if (er+ec)%2==0 else (181, 136, 99)), (ec*SQUARE_SIZE, er*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+            self.win.blit(img, (cx, cy))
+
         pygame.display.update()
 
     def handle_events(self):
@@ -212,7 +245,6 @@ class ChessApp:
                         self.running = False
                     continue
                 x, y = ev.pos
-                # Скрол-бар drag
                 if self._scrollbar_rect and self._scrollbar_rect.collidepoint(x, y):
                     self.move_scroll_drag = True
                     self._drag_offset = y - self._scrollbar_rect.y
@@ -245,10 +277,13 @@ class ChessApp:
                         else:
                             if (r, c) in self.game.get_valid_moves(self.game.selected):
                                 prev = self.game.selected
-                                self.game.handle_click((r, c))
-                                self.check_end()
+                                piece = self.game.board[prev[0]][prev[1]]
+                                piece_img = self.images.get(piece)
+                                self._pending_move = (prev, (r, c))
+                                self.start_animation(prev, (r, c), piece_img)
+                                self.game.selected = None
                                 self.hint_squares = []
-                                if self.net and prev is not None and self.game.selected is None:
+                                if self.net and prev is not None:
                                     self.net.send_move(prev, (r, c))
                                 self.auto_scroll()
                             elif self.game.board[r][c] and self.game.board[r][c][0] == self.game.turn:
@@ -284,7 +319,11 @@ class ChessApp:
                 elif ev.y < 0:
                     self.moves_scroll = min(self.moves_scroll + 1, max_scroll)
             elif ev.type == pygame.KEYDOWN:
-                # Ctrl+Z = undo (завжди автоскрол вниз)
                 if ev.key == pygame.K_z and (pygame.key.get_mods() & pygame.KMOD_CTRL):
                     self.game.undo_move()
                     self.auto_scroll()
+
+    def start_animation(self, start, end, piece_img):
+        self.animating = True
+        self.anim_move = (start, end, piece_img)
+        self.anim_progress = 0.0
