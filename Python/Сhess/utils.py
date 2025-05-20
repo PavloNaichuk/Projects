@@ -37,9 +37,11 @@ def draw_board(win, square_size):
                 y = 8 * square_size - letter.get_height() - 2
                 win.blit(letter, (x, y))
 
-def draw_pieces(win, board, images, square_size):
+def draw_pieces(win, board, images, square_size, skip_piece=None):
     for row in range(8):
         for col in range(8):
+            if skip_piece is not None and (row, col) == skip_piece:
+                continue  
             piece = board[row][col]
             if piece != '':
                 win.blit(images[piece], (col * square_size, row * square_size))

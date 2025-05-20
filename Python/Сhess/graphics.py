@@ -72,7 +72,6 @@ class ChessApp:
         self.moves_scroll = 0
         self.move_scroll_drag = False
 
-        # --- Додаємо змінні для анімації ---
         self.animating = False
         self.anim_move = None
         self.anim_progress = 0.0
@@ -104,7 +103,7 @@ class ChessApp:
             self.handle_events()
 
             if self.animating:
-                self.anim_progress += 0.1
+                self.anim_progress += 0.03
                 if self.anim_progress >= 1.0:
                     self.animating = False
                     self.anim_progress = 0.0
@@ -145,7 +144,10 @@ class ChessApp:
     def draw(self):
         self.win.fill(BG_COLOR)
         draw_board(self.win, SQUARE_SIZE)
-        draw_pieces(self.win, self.game.board, self.images, SQUARE_SIZE)
+        skip_piece = None
+        if self.animating and self.anim_move:
+            skip_piece = self.anim_move[0]
+        draw_pieces(self.win, self.game.board, self.images, SQUARE_SIZE, skip_piece=skip_piece)
         if self.game.selected:
             r, c = self.game.selected
             pygame.draw.rect(self.win, HIGHLIGHT_COLOR, (c*SQUARE_SIZE, r*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 4)
@@ -221,7 +223,6 @@ class ChessApp:
         if self.game_over:
             self.over_window.draw(self.win, self.result)
         
-        # --- Малюємо анімацію (останнім!) ---
         if self.animating and self.anim_move:
             (sr, sc), (er, ec), img = self.anim_move
             prog = self.anim_progress
