@@ -22,6 +22,13 @@ MOVE_BG = (220, 220, 220)
 MOVE_BG_ACTIVE = (180, 180, 200)
 LAST_BLACK_BG = (185, 185, 200)
 
+pygame.mixer.init()
+move_sound = pygame.mixer.Sound("sounds/move.wav")
+capture_sound = pygame.mixer.Sound("sounds/capture.wav")
+check_sound = pygame.mixer.Sound("sounds/check.wav")
+checkmate_sound = pygame.mixer.Sound("sounds/checkmate.wav")
+start_sound = pygame.mixer.Sound("sounds/start.wav")
+
 class ChessApp:
     def __init__(self):
         pygame.init()
@@ -91,6 +98,7 @@ class ChessApp:
         self.anim_progress = 0.0
         self._pending_move = None
         self.auto_scroll()
+        start_sound.play()
 
     def _on_remote_move(self, start, end):
         self.game.move_piece(start, end)
@@ -109,13 +117,16 @@ class ChessApp:
                     self.anim_progress = 0.0
                     self.anim_move = None
                     if self._pending_move:
-                        self.game.move_piece(*self._pending_move)
+                        prev, dst = self._pending_move
+                        self._play_move_sound(prev, dst)
+                        self.game.move_piece(prev, dst)
                         self.check_end()
                         self.auto_scroll()
                         self._pending_move = None
             elif not self.game_over and self.vs_bot and self.game.turn == 'b':
                 pygame.time.wait(300)
                 bot_move(self.game)
+                self._play_move_sound(*self.game.move_log[-1][:2])
                 self.check_end()
                 self.auto_scroll()
             self.draw()
@@ -129,10 +140,20 @@ class ChessApp:
             winner = 'White' if self.game.turn == 'b' else 'Black'
             self.result = f"{winner} wins"
             self.game_over = True
+            checkmate_sound.play()
         elif self.game.is_stalemate():
             self.result = "Draw"
             self.game_over = True
-
+    def _play_move_sound(self, start, end):
+        piece = self.game.board[start[0]][start[1]]
+        captured = self.game.board[end[0]][end[1]]
+        if captured and captured[0] != piece[0]:
+            capture_sound.play()
+        elif self.game.is_in_check(self.game.turn):
+            check_sound.play()
+        else:
+            move_sound.play()
+    
     def auto_scroll(self):
         move_log = self.game.move_log
         n = len(move_log)
