@@ -115,7 +115,6 @@ class ChessApp:
                 if self.anim_progress >= 1.0:
                     self.animating = False
                     self.anim_progress = 0.0
-                    self.anim_move = None
                     if self._pending_move:
                         prev, dst = self._pending_move
                         self._play_move_sound(prev, dst)
@@ -123,6 +122,7 @@ class ChessApp:
                         self.check_end()
                         self.auto_scroll()
                         self._pending_move = None
+                    self.anim_move = None
             elif not self.game_over and self.vs_bot and self.game.turn == 'b':
                 pygame.time.wait(300)
                 bot_move(self.game)
@@ -261,7 +261,6 @@ class ChessApp:
             prog = self.anim_progress
             cx = sc * SQUARE_SIZE + (ec - sc) * SQUARE_SIZE * prog
             cy = sr * SQUARE_SIZE + (er - sr) * SQUARE_SIZE * prog
-            pygame.draw.rect(self.win, ((240, 217, 181) if (er+ec)%2==0 else (181, 136, 99)), (ec*SQUARE_SIZE, er*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
             self.win.blit(img, (cx, cy))
 
         pygame.display.update()
@@ -317,9 +316,9 @@ class ChessApp:
                                 self.start_animation(prev, (r, c), piece_img)
                                 self.game.selected = None
                                 self.hint_squares = []
+                                self.auto_scroll()
                                 if self.net and prev is not None:
                                     self.net.send_move(prev, (r, c))
-                                self.auto_scroll()
                             elif self.game.board[r][c] and self.game.board[r][c][0] == self.game.turn:
                                 self.game.selected = (r, c)
                                 if self.show_hints:
