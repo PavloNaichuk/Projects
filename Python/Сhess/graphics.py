@@ -292,7 +292,7 @@ class ChessApp:
                 elif self.hint_rect.collidepoint(x, y):
                     self.show_hints = not self.show_hints
                     if self.show_hints and self.game.selected:
-                        self.hint_squares = self.game.get_valid_moves(self.game.selected)
+                        self.hint_squares = self.game.get_legal_moves(self.game.selected)
                     else:
                         self.hint_squares = []
                 elif x < WIDTH and not self.game_over:
@@ -304,11 +304,11 @@ class ChessApp:
                             if piece and piece[0] == self.game.turn:
                                 self.game.selected = (r, c)
                                 if self.show_hints:
-                                    self.hint_squares = self.game.get_valid_moves(self.game.selected)
+                                    self.hint_squares = self.game.get_legal_moves(self.game.selected)
                                 else:
                                     self.hint_squares = []
                         else:
-                            if (r, c) in self.game.get_valid_moves(self.game.selected):
+                            if (r, c) in self.game.get_legal_moves(self.game.selected):
                                 prev = self.game.selected
                                 piece = self.game.board[prev[0]][prev[1]]
                                 piece_img = self.images.get(piece)
@@ -322,7 +322,7 @@ class ChessApp:
                             elif self.game.board[r][c] and self.game.board[r][c][0] == self.game.turn:
                                 self.game.selected = (r, c)
                                 if self.show_hints:
-                                    self.hint_squares = self.game.get_valid_moves(self.game.selected)
+                                    self.hint_squares = self.game.get_legal_moves(self.game.selected)
                                 else:
                                     self.hint_squares = []
                             else:
