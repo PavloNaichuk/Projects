@@ -35,10 +35,10 @@ class Game:
             if piece and piece[0] == self.turn:
                 self.selected = (r, c)
         else:
-            if (r, c) in self.get_valid_moves(self.selected):
+            if (r, c) in self.get_legal_moves(self.selected):
                 self.move_piece(self.selected, (r, c))
             self.selected = None
-
+            
     def move_piece(self, start, end):
         sr, sc = start
         er, ec = end
@@ -132,13 +132,24 @@ class Game:
 
         return moves
 
+    def get_legal_moves(self, pos):
+        color = self.board[pos[0]][pos[1]][0]
+        legal = []
+        for dest in self.get_valid_moves(pos):
+            self.move_piece(pos, dest)
+            in_check = self.is_in_check(color)
+            self.undo_move()
+            if not in_check:
+                legal.append(dest)
+        return legal
+    
     def get_all_moves(self, color):
         moves = []
         for r in range(8):
             for c in range(8):
                 p = self.board[r][c]
                 if p and p[0] == color:
-                    for dest in self.get_valid_moves((r, c)):
+                    for dest in self.get_legal_moves((r, c)):
                         moves.append(((r, c), dest))
         return moves
 
