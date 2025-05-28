@@ -45,11 +45,14 @@ class Game:
         piece = self.board[sr][sc]
         captured = self.board[er][ec]
 
-        self.move_log.append((start, end, piece, captured))
+        orig_piece = piece
+        if orig_piece[1] == 'P' and ((orig_piece[0] == 'w' and er == 0) or (orig_piece[0] == 'b' and er == 7)):
+            piece = orig_piece[0] + 'Q'
+        self.move_log.append((start, end, orig_piece, captured))
         self.board[er][ec] = piece
         self.board[sr][sc] = ''
 
-        if piece[1] == 'P' or captured:
+        if orig_piece[1] == 'P' or captured:
             self.halfmove_clock = 0
         else:
             self.halfmove_clock += 1
