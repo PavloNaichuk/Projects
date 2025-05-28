@@ -39,7 +39,7 @@ class Game:
                 self.move_piece(self.selected, (r, c))
             self.selected = None
             
-    def move_piece(self, start, end):
+    def move_piece(self, start, end, promotion=None):
         sr, sc = start
         er, ec = end
         piece = self.board[sr][sc]
@@ -47,7 +47,8 @@ class Game:
 
         orig_piece = piece
         if orig_piece[1] == 'P' and ((orig_piece[0] == 'w' and er == 0) or (orig_piece[0] == 'b' and er == 7)):
-            piece = orig_piece[0] + 'Q'
+            promo = promotion if promotion in ('Q','R','B','N') else 'Q'
+            piece = orig_piece[0] + promo
         self.move_log.append((start, end, orig_piece, captured))
         self.board[er][ec] = piece
         self.board[sr][sc] = ''

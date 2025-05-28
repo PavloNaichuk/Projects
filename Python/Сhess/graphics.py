@@ -115,21 +115,39 @@ class ChessApp:
                 if self.anim_progress >= 1.0:
                     self.animating = False
                     self.anim_progress = 0.0
+                    
                     if self._pending_move:
                         prev, dst = self._pending_move
                         self._play_move_sound(prev, dst)
-                        self.game.move_piece(prev, dst)
+
+                        piece = self.game.board[prev[0]][prev[1]]
+                        is_pawn = piece[1] == 'P'
+                        reached_last = (piece[0] == 'w' and dst[0] == 0) or (piece[0] == 'b' and dst[0] == 7)
+
+                        if is_pawn and reached_last:
+                            promo = self.prompt_promotion(prev, dst)
+                            self.game.move_piece(prev, dst, promotion=promo)
+                        else:
+                            self.game.move_piece(prev, dst)
+
                         self.check_end()
                         self.auto_scroll()
+
                         self._pending_move = None
+
                     self.anim_move = None
+
+
             elif not self.game_over and self.vs_bot and self.game.turn == 'b':
                 pygame.time.wait(300)
                 bot_move(self.game)
-                self._play_move_sound(*self.game.move_log[-1][:2])
+                last_move = self.game.move_log[-1]
+                self._play_move_sound(*last_move[:2])
                 self.check_end()
                 self.auto_scroll()
+
             self.draw()
+
         pygame.quit()
         if self.net:
             self.net.close()
@@ -360,3 +378,43 @@ class ChessApp:
         self.animating = True
         self.anim_move = (start, end, piece_img)
         self.anim_progress = 0.0
+        
+    def prompt_promotion(self, prev, dst):
+        self.draw()
+        background = self.win.copy()
+        
+        color = self.game.board[prev[0]][prev[1]][0]
+        options = ['Q','R','B','N']
+        imgs = [self.images[color + opt] for opt in options]
+        width = SQUARE_SIZE * 4
+        height = SQUARE_SIZE
+        x0 = WIDTH//2 - width//2
+        y0 = HEIGHT//2 - height//2
+        rects = [pygame.Rect(x0 + i*SQUARE_SIZE, y0, SQUARE_SIZE, SQUARE_SIZE) for i in range(4)]
+
+        selecting = True
+        choice = 'Q'
+        while selecting:
+            self.win.blit(background, (0, 0))
+            for ev in pygame.event.get():
+                if ev.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif ev.type == pygame.MOUSEBUTTONDOWN:
+                    mx, my = ev.pos
+                    for i, rect in enumerate(rects):
+                        if rect.collidepoint(mx, my):
+                            choice = options[i]
+                            selecting = False
+
+            overlay = pygame.Surface((WIDTH+SIDE_WIDTH, HEIGHT), pygame.SRCALPHA)
+            overlay.fill((0,0,0,180))
+            self.win.blit(overlay, (0,0))
+
+            for i, img in enumerate(imgs):
+                self.win.blit(img, rects[i])
+
+            pygame.display.update()
+            self.clock.tick(30)
+
+        return choice
