@@ -9,15 +9,13 @@ class Game:
         self.move_log = []
         self.position_history = [self.get_board_key()]
         self.halfmove_clock = 0
-        
-        self.halfmove_clock = 0
         self.has_moved = {
-            (7, 4): False, 
+            (7, 4): False,  
             (7, 0): False, 
             (7, 7): False,  
             (0, 4): False, 
             (0, 0): False, 
-            (0, 7): False, 
+            (0, 7): False,  
         }
 
     def init_board(self):
@@ -48,23 +46,23 @@ class Game:
             if (r, c) in self.get_legal_moves(self.selected):
                 self.move_piece(self.selected, (r, c))
             self.selected = None
-            
-    def move_piece(self, start, end, promotion=None):  
+
+    def move_piece(self, start, end, promotion=None):
         sr, sc = start
         er, ec = end
         piece = self.board[sr][sc]
         captured = self.board[er][ec]
-        
-        if piece[1] == 'K':
+
+        if piece[1] in ('K', 'R'):
             self.has_moved[(sr, sc)] = True
-        elif piece[1] == 'R':
-            self.has_moved[(sr, sc)] = True
-        
+
         orig_piece = piece
         if orig_piece[1] == 'P' and ((orig_piece[0] == 'w' and er == 0) or (orig_piece[0] == 'b' and er == 7)):
             promo = promotion if promotion in ('Q','R','B','N') else 'Q'
             piece = orig_piece[0] + promo
+
         self.move_log.append((start, end, orig_piece, captured))
+
         if orig_piece[1] == 'K' and abs(ec - sc) == 2:
             if ec > sc:
                 self.board[sr][5] = self.board[sr][7]
@@ -74,9 +72,12 @@ class Game:
                 self.board[sr][3] = self.board[sr][0]
                 self.board[sr][0] = ''
                 self.has_moved[(sr, 0)] = True
-                    
+
         self.board[er][ec] = piece
         self.board[sr][sc] = ''
+
+        if orig_piece[1] in ('K', 'R'):
+            self.has_moved[(er, ec)] = self.has_moved.pop((sr, sc))
 
         if orig_piece[1] == 'P' or captured:
             self.halfmove_clock = 0
@@ -92,8 +93,10 @@ class Game:
         start, end, piece, captured = self.move_log.pop()
         sr, sc = start
         er, ec = end
+        
         self.board[sr][sc] = piece
         self.board[er][ec] = captured
+
         if piece[1] == 'K' and abs(ec - sc) == 2:
             if ec > sc:
                 self.board[sr][7] = self.board[sr][5]
@@ -115,30 +118,29 @@ class Game:
 
         color, p = piece[0], piece[1]
         moves = []
-
         if p == 'P':
-            direction = -1 if color == 'w' else 1
+            step = -1 if color == 'w' else 1
             start_row = 6 if color == 'w' else 1
-            nr, nc = r + direction, c
+            nr, nc = r + step, c
             if 0 <= nr < 8 and self.board[nr][nc] == '':
                 moves.append((nr, nc))
-                nr2 = r + 2 * direction
+                nr2 = r + 2*step
                 if r == start_row and self.board[nr2][nc] == '':
                     moves.append((nr2, nc))
+        
             for dc in (-1, 1):
-                nr, nc = r + direction, c + dc
+                nr, nc = r + step, c + dc
                 if 0 <= nr < 8 and 0 <= nc < 8:
-                    target = self.board[nr][nc]
-                    if target and target[0] != color and target[1] != 'K':
+                    t = self.board[nr][nc]
+                    if t and t[0] != color and t[1] != 'K':
                         moves.append((nr, nc))
-
 
         elif p == 'N':
             for dr, dc in [(-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)]:
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < 8 and 0 <= nc < 8:
-                    target = self.board[nr][nc]
-                    if not target or (target[0] != color and target[1] != 'K'):
+                    t = self.board[nr][nc]
+                    if not t or (t[0] != color and t[1] != 'K'):
                         moves.append((nr, nc))
 
         elif p == 'K':
@@ -148,13 +150,13 @@ class Game:
                         continue
                     nr, nc = r + dr, c + dc
                     if 0 <= nr < 8 and 0 <= nc < 8:
-                        target = self.board[nr][nc]
-                        if not target or (target[0] != color and target[1] != 'K'):
+                        t = self.board[nr][nc]
+                        if not t or (t[0] != color and t[1] != 'K'):
                             moves.append((nr, nc))
 
-            if not self.has_moved[(r, c)] and not self.is_in_check(color):
+            if not self.has_moved.get((r, c), True) and not self.is_in_check(color):
                 row = r
-                if (not self.has_moved[(row, 7)]
+                if (not self.has_moved.get((row, 7), True)
                     and self.board[row][5] == '' and self.board[row][6] == ''):
                     safe = True
                     for cc in (5, 6):
@@ -166,7 +168,8 @@ class Game:
                             break
                     if safe:
                         moves.append((row, 6))
-                if (not self.has_moved[(row, 0)]
+
+                if (not self.has_moved.get((row, 0), True)
                     and self.board[row][1] == '' and self.board[row][2] == '' and self.board[row][3] == ''):
                     safe = True
                     for cc in (3, 2):
@@ -185,35 +188,37 @@ class Game:
             elif p == 'B':
                 directions = [(-1,-1),(-1,1),(1,-1),(1,1)]
             elif p == 'Q':
-                directions = [(-1,0),(1,0),(0,-1),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)]
+                directions = [(-1,0),(1,0),(0,-1),(0,1), (-1,-1),(-1,1),(1,-1),(1,1)]
             else:
                 directions = []
-
+                
             for dr, dc in directions:
                 nr, nc = r + dr, c + dc
                 while 0 <= nr < 8 and 0 <= nc < 8:
-                    target = self.board[nr][nc]
-                    if not target:
+                    t = self.board[nr][nc]
+                    if not t:
                         moves.append((nr, nc))
                     else:
-                        if target[0] != color and target[1] != 'K':
+                        if t[0] != color and t[1] != 'K':
                             moves.append((nr, nc))
                         break
-                    nr += dr
-                    nc += dc
+                    nr += dr; nc += dc
+
         return moves
 
     def get_legal_moves(self, pos):
         color = self.board[pos[0]][pos[1]][0]
         legal = []
+        orig_has_moved = self.has_moved.copy()
         for dest in self.get_valid_moves(pos):
             self.move_piece(pos, dest)
             in_check = self.is_in_check(color)
             self.undo_move()
+            self.has_moved = orig_has_moved.copy()
             if not in_check:
                 legal.append(dest)
         return legal
-    
+
     def get_all_moves(self, color):
         moves = []
         for r in range(8):
@@ -223,7 +228,7 @@ class Game:
                     for dest in self.get_legal_moves((r, c)):
                         moves.append(((r, c), dest))
         return moves
-
+    
     def is_in_check(self, color):
         king = f"{color}K"
         kr = kc = None
