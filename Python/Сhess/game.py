@@ -1,5 +1,6 @@
 import pickle
 import copy
+import time
 
 class Game:
     def __init__(self):
@@ -17,6 +18,9 @@ class Game:
             (0, 0): False, 
             (0, 7): False,  
         }
+        self.time_control    = (300, 2)
+        self.time_remaining  = {'w': self.time_control[0], 'b': self.time_control[0]}
+        self.move_start_time = time.time()
 
     def init_board(self):
         return [
@@ -33,6 +37,12 @@ class Game:
     def get_board_key(self):
         return (tuple(tuple(row) for row in self.board), self.turn)
 
+    def get_time_left(self, color):
+        rem = self.time_remaining[color]
+        if self.turn == color:
+            rem -= (time.time() - self.move_start_time)
+        return max(0, rem)
+    
     def switch_turn(self):
         self.turn = 'b' if self.turn == 'w' else 'w'
 
@@ -84,7 +94,13 @@ class Game:
         else:
             self.halfmove_clock += 1
 
+        now      = time.time()
+        elapsed  = now - self.move_start_time
+        self.time_remaining[self.turn] -= elapsed
+        self.time_remaining[self.turn] += self.time_control[1]
+
         self.switch_turn()
+        self.move_start_time = time.time()
         self.position_history.append(self.get_board_key())
 
     def undo_move(self):

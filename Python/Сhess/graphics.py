@@ -1,5 +1,6 @@
 import sys
 import pygame
+import time
 from game import Game
 from utils import load_images, draw_board, draw_pieces
 from mode_select import select_mode
@@ -37,11 +38,15 @@ class ChessApp:
 
         mode_title = ""
         res = select_mode(self.win)
-        if isinstance(res, tuple):
+        if isinstance(res, tuple) and len(res) == 3:
+            self.mode, self.net_param, self.time_control = res
+        elif isinstance(res, tuple):
             self.mode, self.net_param = res
+            self.time_control = (5*60, 0)
         else:
             self.mode = "bot" if res else "local"
             self.net_param = None
+            self.time_control = (5*60, 0)
 
         if self.mode == "local":
             mode_title = " (Play 1-on-1)"
@@ -75,7 +80,7 @@ class ChessApp:
             self.local_turn = 'b'
         else:
             self.local_turn = None
-        self.max_visible_moves = 13
+        self.max_visible_moves = 12
         self.moves_scroll = 0
         self.move_scroll_drag = False
 
@@ -88,6 +93,12 @@ class ChessApp:
 
     def reset_game(self):
         self.game = Game()
+        self.game.time_control   = self.time_control
+        self.game.time_remaining = {
+            'w': self.time_control[0],
+            'b': self.time_control[0]
+        }
+        self.game.move_start_time = time.time()
         self.show_hints = True
         self.hint_squares = []
         self.game_over = False
@@ -187,6 +198,30 @@ class ChessApp:
         if self.animating and self.anim_move:
             skip_piece = self.anim_move[0]
         draw_pieces(self.win, self.game.board, self.images, SQUARE_SIZE, skip_piece=skip_piece)
+        pygame.draw.rect(self.win, PANEL_COLOR, (WIDTH, 0, SIDE_WIDTH, HEIGHT))
+
+        t_w = self.game.get_time_left('w')
+        mins, secs = divmod(int(t_w), 60)
+        txt = self.font.render(f"White: {mins:02d}:{secs:02d}", True, (0,0,0))
+        self.win.blit(txt, (WIDTH+20, 20))
+        
+        for rect, label in [(self.undo_rect, "Undo"),
+                            (self.save_rect, "Save"),
+                            (self.load_rect, "Load")]:
+            pygame.draw.rect(self.win, BUTTON_COLOR, rect)
+            txt = self.font.render(label, True, BUTTON_TEXT)
+            self.win.blit(txt, txt.get_rect(center=rect.center))
+        hint_bg = HINT_ACTIVE_BG if self.show_hints else BUTTON_COLOR
+        pygame.draw.rect(self.win, hint_bg, self.hint_rect)
+        txt = self.font.render("Hint", True, BUTTON_TEXT)
+        self.win.blit(txt, txt.get_rect(center=self.hint_rect.center))
+
+        timer_y = self.hint_rect.bottom + 20
+        t_b = self.game.get_time_left('b')
+        mins, secs = divmod(int(t_b), 60)
+        txt = self.font.render(f"Black: {mins:02d}:{secs:02d}", True, (0,0,0))
+        self.win.blit(txt, (WIDTH+20, timer_y))    
+                            
         if self.game.selected:
             r, c = self.game.selected
             pygame.draw.rect(self.win, HIGHLIGHT_COLOR, (c*SQUARE_SIZE, r*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 4)
@@ -203,11 +238,6 @@ class ChessApp:
                 surf = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
                 pygame.draw.rect(surf, (*HOVER_COLOR, 255), surf.get_rect(), 4)
                 self.win.blit(surf, (hc*SQUARE_SIZE, hr*SQUARE_SIZE))
-        pygame.draw.rect(self.win, PANEL_COLOR, (WIDTH, 0, SIDE_WIDTH, HEIGHT))
-        for rect, label in [(self.undo_rect, "Undo"), (self.save_rect, "Save"), (self.load_rect, "Load")]:
-            pygame.draw.rect(self.win, BUTTON_COLOR, rect)
-            txt = self.font.render(label, True, BUTTON_TEXT)
-            self.win.blit(txt, txt.get_rect(center=rect.center))
         hint_bg = HINT_ACTIVE_BG if self.show_hints else BUTTON_COLOR
         pygame.draw.rect(self.win, hint_bg, self.hint_rect)
         txt = self.font.render("Hint", True, BUTTON_TEXT)
@@ -216,7 +246,7 @@ class ChessApp:
         move_log = self.game.move_log
         font = self.font
         x0 = WIDTH + 10
-        y0 = self.hint_rect.bottom + 20
+        y0 = timer_y  + 30
         row_h = 28
         col_w = 120
 
