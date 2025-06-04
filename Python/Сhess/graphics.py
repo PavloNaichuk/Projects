@@ -9,7 +9,7 @@ from network import GameServer, GameClient
 from game_over_window import GameOverWindow
 
 WIDTH, HEIGHT = 640, 640
-SIDE_WIDTH = 160
+SIDE_WIDTH = 180
 SQUARE_SIZE = WIDTH // 8
 
 BG_COLOR = (255, 255, 255)
@@ -248,7 +248,7 @@ class ChessApp:
         x0 = WIDTH + 10
         y0 = timer_y  + 30
         row_h = 28
-        col_w = 120
+        col_w = 130
 
         total_moves = len(move_log)
         max_scroll = max(0, total_moves - self.max_visible_moves)
