@@ -75,6 +75,7 @@ class ChessApp:
         
         self.save_highlight = False
         self.load_highlight = False
+        self.undo_highlight = False
         self.highlight_time  = 0.0
         self.status_message = None
         self.status_time    = 0.0
@@ -218,15 +219,19 @@ class ChessApp:
         txt = self.font.render(f"White: {mins:02d}:{secs:02d}", True, (0,0,0))
         self.win.blit(txt, (WIDTH+20, 20))
         
-        pygame.draw.rect(self.win, BUTTON_COLOR, self.undo_rect)
+        color_undo = HOVER_COLOR if (self.undo_highlight and (time.time() - self.highlight_time < 0.3)) else BUTTON_COLOR
+        pygame.draw.rect(self.win, color_undo, self.undo_rect)
         txt_undo = self.font.render("Undo", True, BUTTON_TEXT)
         self.win.blit(txt_undo, txt_undo.get_rect(center=self.undo_rect.center))
+        
         color_save = HOVER_COLOR if self.save_highlight and (time.time() - self.highlight_time < 0.3) else BUTTON_COLOR
         pygame.draw.rect(self.win, color_save, self.save_rect)
         txt_save = self.font.render("Save", True, BUTTON_TEXT)
         self.win.blit(txt_save, txt_save.get_rect(center=self.save_rect.center))
-        if self.save_highlight and (time.time() - self.highlight_time >= 0.3):
-            self.save_highlight = False
+        
+        if self.undo_highlight and (time.time() - self.highlight_time >= 0.3):
+            self.undo_highlight = False
+                
         color_load = HOVER_COLOR if self.load_highlight and (time.time() - self.highlight_time < 0.3) else BUTTON_COLOR
         pygame.draw.rect(self.win, color_load, self.load_rect)
         txt_load = self.font.render("Load", True, BUTTON_TEXT)
@@ -364,6 +369,11 @@ class ChessApp:
                 elif self.undo_rect.collidepoint(x, y):
                     self.game.undo_move()
                     self.auto_scroll()
+                    self.undo_highlight = True
+                    self.highlight_time = time.time()
+                    self.status_message = "Undo"
+                    self.status_time = time.time()
+                    continue
                 elif self.save_rect.collidepoint(x, y):
                     self.game.save_game()
                     self.save_highlight = True
