@@ -72,6 +72,13 @@ class ChessApp:
         self.over_window = GameOverWindow(WIDTH, SIDE_WIDTH, HEIGHT, self.font, self.end_font)
         self.vs_bot = (self.mode == "bot")
         self.net = None
+        
+        self.save_highlight = False
+        self.load_highlight = False
+        self.highlight_time  = 0.0
+        self.status_message = None
+        self.status_time    = 0.0
+
         if self.mode == "net_host":
             self.net = GameServer(on_move=self._on_remote_move)
             self.local_turn = 'w'
@@ -88,6 +95,12 @@ class ChessApp:
         self.anim_move = None
         self.anim_progress = 0.0
         self._pending_move = None
+        
+        self.save_highlight = False
+        self.load_highlight = False
+        self.highlight_time = 0.0
+        self.status_message = None
+        self.status_time = 0.0
 
         self.reset_game()
 
@@ -205,17 +218,36 @@ class ChessApp:
         txt = self.font.render(f"White: {mins:02d}:{secs:02d}", True, (0,0,0))
         self.win.blit(txt, (WIDTH+20, 20))
         
-        for rect, label in [(self.undo_rect, "Undo"),
-                            (self.save_rect, "Save"),
-                            (self.load_rect, "Load")]:
-            pygame.draw.rect(self.win, BUTTON_COLOR, rect)
-            txt = self.font.render(label, True, BUTTON_TEXT)
-            self.win.blit(txt, txt.get_rect(center=rect.center))
+        pygame.draw.rect(self.win, BUTTON_COLOR, self.undo_rect)
+        txt_undo = self.font.render("Undo", True, BUTTON_TEXT)
+        self.win.blit(txt_undo, txt_undo.get_rect(center=self.undo_rect.center))
+        color_save = HOVER_COLOR if self.save_highlight and (time.time() - self.highlight_time < 0.3) else BUTTON_COLOR
+        pygame.draw.rect(self.win, color_save, self.save_rect)
+        txt_save = self.font.render("Save", True, BUTTON_TEXT)
+        self.win.blit(txt_save, txt_save.get_rect(center=self.save_rect.center))
+        if self.save_highlight and (time.time() - self.highlight_time >= 0.3):
+            self.save_highlight = False
+        color_load = HOVER_COLOR if self.load_highlight and (time.time() - self.highlight_time < 0.3) else BUTTON_COLOR
+        pygame.draw.rect(self.win, color_load, self.load_rect)
+        txt_load = self.font.render("Load", True, BUTTON_TEXT)
+        self.win.blit(txt_load, txt_load.get_rect(center=self.load_rect.center))
+        if self.load_highlight and (time.time() - self.highlight_time >= 0.3):
+            self.load_highlight = False
+            
         hint_bg = HINT_ACTIVE_BG if self.show_hints else BUTTON_COLOR
         pygame.draw.rect(self.win, hint_bg, self.hint_rect)
         txt = self.font.render("Hint", True, BUTTON_TEXT)
         self.win.blit(txt, txt.get_rect(center=self.hint_rect.center))
 
+        if self.status_message and (time.time() - self.status_time < 2):
+            msg_surf = self.font.render(self.status_message, True, (0, 0, 0))
+            total_w = WIDTH + SIDE_WIDTH
+            total_h = HEIGHT
+            msg_rect = msg_surf.get_rect(center=(total_w // 2, total_h // 2))
+            self.win.blit(msg_surf, msg_rect)
+        elif self.status_message and (time.time() - self.status_time >= 2):
+            self.status_message = None
+        
         timer_y = self.hint_rect.bottom + 20
         t_b = self.game.get_time_left('b')
         mins, secs = divmod(int(t_b), 60)
@@ -334,9 +366,19 @@ class ChessApp:
                     self.auto_scroll()
                 elif self.save_rect.collidepoint(x, y):
                     self.game.save_game()
+                    self.save_highlight = True
+                    self.highlight_time = time.time()
+                    self.status_message = "Save"
+                    self.status_time = time.time()
+                    continue
                 elif self.load_rect.collidepoint(x, y):
                     self.game.load_game()
                     self.auto_scroll()
+                    self.load_highlight = True
+                    self.highlight_time = time.time()
+                    self.status_message = "Load"
+                    self.status_time = time.time()
+                    continue
                 elif self.hint_rect.collidepoint(x, y):
                     self.show_hints = not self.show_hints
                     if self.show_hints and self.game.selected:
