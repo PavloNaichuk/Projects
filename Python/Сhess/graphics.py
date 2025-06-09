@@ -489,18 +489,22 @@ class ChessApp:
                             choice = options[i]
                             selecting = False
 
-            overlay = pygame.Surface((WIDTH+SIDE_WIDTH, HEIGHT), pygame.SRCALPHA)
-            overlay.fill((0,0,0,120))
-            self.win.blit(overlay, (0,0))
+            small   = pygame.transform.smoothscale(background, (background.get_width()//8, background.get_height()//8))
+            blurred = pygame.transform.smoothscale( small, (background.get_width(), background.get_height()))
+            self.win.blit(blurred, (0, 0))
+            
             bg_rect = pygame.Rect(x0-5, y0-5, width+10, height+10)
             panel_surf = pygame.Surface((bg_rect.width, bg_rect.height), pygame.SRCALPHA)
-            panel_surf.fill((50, 50, 50, 200)) 
+            panel_surf.fill((210, 180, 140, 200)) 
             self.win.blit(panel_surf, (bg_rect.x, bg_rect.y))
 
             mx, my = pygame.mouse.get_pos()
             for i, img in enumerate(imgs):
                 rect = rects[i]
                 if rect.collidepoint(mx, my):
+                    hl = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
+                    hl.fill((210, 180, 140, 150))  
+                    self.win.blit(hl, rect.topleft)
                     pygame.draw.rect(self.win, HOVER_COLOR, rect, 3)
                 self.win.blit(img, rect)
 
