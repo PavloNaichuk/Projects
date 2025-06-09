@@ -180,4 +180,7 @@ Other/Blueprint/PuzzleGame/Content/InfinityBladeGrassLands/Maps/ElvenRuins_Built
 
 /Python/Сhess/__pycache__
 /Python/Сhess/build
-
+/Python/Сhess/build
+/Python/Сhess
+Python/Сhess/build/main/main.pkg
+*.pyc
