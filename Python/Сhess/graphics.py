@@ -464,21 +464,54 @@ class ChessApp:
     def prompt_promotion(self, prev, dst):
         self.draw()
         background = self.win.copy()
-        
-        color = self.game.board[prev[0]][prev[1]][0]
+
+        color   = self.game.board[prev[0]][prev[1]][0]
         options = ['Q','R','B','N']
-        imgs = [self.images[color + opt] for opt in options]
-        width = SQUARE_SIZE * 4
-        height = SQUARE_SIZE
+        imgs    = [self.images[color + opt] for opt in options]
+        width   = SQUARE_SIZE * 4
+        height  = SQUARE_SIZE
         total_w = WIDTH + SIDE_WIDTH
-        x0 = total_w//2 - width//2
-        y0 = HEIGHT//2 - height//2
-        rects = [pygame.Rect(x0 + i*SQUARE_SIZE, y0, SQUARE_SIZE, SQUARE_SIZE) for i in range(4)]
+        x0      = total_w // 2 - width  // 2
+        y0      = HEIGHT   // 2 - height // 2
+        rects   = [
+            pygame.Rect(x0 + i*SQUARE_SIZE, y0, SQUARE_SIZE, SQUARE_SIZE)
+            for i in range(4)
+        ]
 
         selecting = True
-        choice = 'Q'
+        choice     = 'Q'
         while selecting:
-            self.win.blit(background, (0, 0))
+            board_bg = background.subsurface((0, 0, WIDTH, HEIGHT)).copy()
+            small    = pygame.transform.smoothscale(
+                board_bg, (WIDTH//16, HEIGHT//16)
+            )
+            blurred  = pygame.transform.smoothscale(
+                small, (WIDTH, HEIGHT)
+            )
+            self.win.blit(blurred, (0, 0))
+
+            panel_bg = background.subsurface((WIDTH, 0, SIDE_WIDTH, HEIGHT)).copy()
+            self.win.blit(panel_bg, (WIDTH, 0))
+
+            bg_rect   = pygame.Rect(x0-5, y0-5, width+10, height+10)
+            panel_surf = pygame.Surface(
+                (bg_rect.width, bg_rect.height), pygame.SRCALPHA
+            )
+            panel_surf.fill((210, 180, 140, 200))
+            self.win.blit(panel_surf, (bg_rect.x, bg_rect.y))
+
+            mx, my = pygame.mouse.get_pos()
+            for i, img in enumerate(imgs):
+                rect = rects[i]
+                if rect.collidepoint(mx, my):
+                    hl = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
+                    hl.fill((210, 180, 140, 150))
+                    self.win.blit(hl, rect.topleft)
+                    pygame.draw.rect(self.win, HOVER_COLOR, rect, 3)
+                self.win.blit(img, rect)
+
+            pygame.display.update()
+
             for ev in pygame.event.get():
                 if ev.type == pygame.QUIT:
                     pygame.quit()
@@ -490,26 +523,7 @@ class ChessApp:
                             choice = options[i]
                             selecting = False
 
-            small   = pygame.transform.smoothscale(background, (background.get_width()//8, background.get_height()//8))
-            blurred = pygame.transform.smoothscale( small, (background.get_width(), background.get_height()))
-            self.win.blit(blurred, (0, 0))
-            
-            bg_rect = pygame.Rect(x0-5, y0-5, width+10, height+10)
-            panel_surf = pygame.Surface((bg_rect.width, bg_rect.height), pygame.SRCALPHA)
-            panel_surf.fill((210, 180, 140, 200)) 
-            self.win.blit(panel_surf, (bg_rect.x, bg_rect.y))
-
-            mx, my = pygame.mouse.get_pos()
-            for i, img in enumerate(imgs):
-                rect = rects[i]
-                if rect.collidepoint(mx, my):
-                    hl = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
-                    hl.fill((210, 180, 140, 150))  
-                    self.win.blit(hl, rect.topleft)
-                    pygame.draw.rect(self.win, HOVER_COLOR, rect, 3)
-                self.win.blit(img, rect)
-
-            pygame.display.update()
             self.clock.tick(30)
 
         return choice
+
