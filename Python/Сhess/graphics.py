@@ -158,6 +158,7 @@ class ChessApp:
                         if is_pawn and reached_last:
                             promo = self.prompt_promotion(prev, dst)
                             pygame.event.clear()
+                            self.game.move_piece(prev, dst, promotion=promo)
                         else:
                             self.game.move_piece(prev, dst)
 
@@ -476,9 +477,8 @@ class ChessApp:
         imgs    = [self.images[color + opt] for opt in options]
         width   = SQUARE_SIZE * 4
         height  = SQUARE_SIZE
-        total_w = WIDTH + SIDE_WIDTH
-        x0      = total_w // 2 - width  // 2
-        y0      = HEIGHT   // 2 - height // 2
+        x0 = WIDTH//2 - width//2
+        y0 = HEIGHT//2 - height//2
         rects   = [
             pygame.Rect(x0 + i*SQUARE_SIZE, y0, SQUARE_SIZE, SQUARE_SIZE)
             for i in range(4)
