@@ -221,10 +221,11 @@ class ChessApp:
         draw_pieces(self.win, self.game.board, self.images, SQUARE_SIZE, skip_piece=skip_piece)
         pygame.draw.rect(self.win, PANEL_COLOR, (WIDTH, 0, SIDE_WIDTH, HEIGHT))
 
-        t_w = self.game.get_time_left('w')
-        mins, secs = divmod(int(t_w), 60)
-        txt = self.font.render(f"White: {mins:02d}:{secs:02d}", True, (0,0,0))
-        self.win.blit(txt, (WIDTH+20, 20))
+        if self.game.time_control and self.game.time_control[0] > 0:
+            t_w = self.game.get_time_left('w')
+            mins, secs = divmod(int(t_w), 60)
+            txt = self.font.render(f"White: {mins:02d}:{secs:02d}", True, (0,0,0))
+            self.win.blit(txt, (WIDTH+20, 20))
         
         color_undo = HOVER_COLOR if (self.undo_highlight and (time.time() - self.highlight_time < 0.3)) else BUTTON_COLOR
         pygame.draw.rect(self.win, color_undo, self.undo_rect)
@@ -261,10 +262,11 @@ class ChessApp:
             self.status_message = None
         
         timer_y = self.hint_rect.bottom + 20
-        t_b = self.game.get_time_left('b')
-        mins, secs = divmod(int(t_b), 60)
-        txt = self.font.render(f"Black: {mins:02d}:{secs:02d}", True, (0,0,0))
-        self.win.blit(txt, (WIDTH+20, timer_y))    
+        if self.game.time_control and self.game.time_control[0] > 0:
+            t_b = self.game.get_time_left('b')
+            mins, secs = divmod(int(t_b), 60)
+            txt = self.font.render(f"Black: {mins:02d}:{secs:02d}", True, (0,0,0))
+            self.win.blit(txt, (WIDTH+20, timer_y))    
                             
         if self.game.selected:
             r, c = self.game.selected
