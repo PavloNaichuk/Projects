@@ -1,5 +1,6 @@
 import sys
 import pygame
+from PIL import Image, ImageFilter
 import time
 from game import Game
 from utils import load_images, draw_board, draw_pieces
@@ -30,6 +31,11 @@ check_sound = pygame.mixer.Sound("sounds/check.wav")
 checkmate_sound = pygame.mixer.Sound("sounds/checkmate.wav")
 start_sound = pygame.mixer.Sound("sounds/start.wav")
 
+def gaussian_blur_surface(surf, radius=4):
+        raw_str = pygame.image.tostring(surf, 'RGBA')
+        img = Image.frombytes('RGBA', surf.get_size(), raw_str)
+        img = img.filter(ImageFilter.GaussianBlur(radius))
+        return pygame.image.fromstring(img.tobytes(), img.size, 'RGBA')
 class ChessApp:
     def __init__(self):
         pygame.init()
@@ -481,13 +487,8 @@ class ChessApp:
         selecting = True
         choice     = 'Q'
         while selecting:
-            board_bg = background.subsurface((0, 0, WIDTH, HEIGHT)).copy()
-            small    = pygame.transform.smoothscale(
-                board_bg, (WIDTH//16, HEIGHT//16)
-            )
-            blurred  = pygame.transform.smoothscale(
-                small, (WIDTH, HEIGHT)
-            )
+            board_bg = background.subsurface((0,0,WIDTH,HEIGHT)).copy()
+            blurred = gaussian_blur_surface(board_bg, radius = 3)
             self.win.blit(blurred, (0, 0))
 
             panel_bg = background.subsurface((WIDTH, 0, SIDE_WIDTH, HEIGHT)).copy()
