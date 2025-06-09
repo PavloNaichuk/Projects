@@ -494,7 +494,7 @@ class ChessApp:
             self.win.blit(overlay, (0,0))
             bg_rect = pygame.Rect(x0-5, y0-5, width+10, height+10)
             panel_surf = pygame.Surface((bg_rect.width, bg_rect.height), pygame.SRCALPHA)
-            panel_surf.fill((255,255,255,200))
+            panel_surf.fill((50, 50, 50, 200)) 
             self.win.blit(panel_surf, (bg_rect.x, bg_rect.y))
 
             mx, my = pygame.mouse.get_pos()
