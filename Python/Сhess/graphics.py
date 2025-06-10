@@ -106,6 +106,9 @@ class ChessApp:
         self.save_highlight = False
         self.load_highlight = False
         self.highlight_time = 0.0
+        self.undo_hover = False
+        self.save_hover = False
+        self.load_hover = False
         self.status_message = None
         self.status_time = 0.0
 
@@ -215,6 +218,10 @@ class ChessApp:
     def draw(self):
         self.win.fill(BG_COLOR)
         draw_board(self.win, SQUARE_SIZE)
+        mx, my = pygame.mouse.get_pos()
+        self.undo_hover = self.undo_rect.collidepoint((mx, my))
+        self.save_hover = self.save_rect.collidepoint((mx, my))
+        self.load_hover = self.load_rect.collidepoint((mx, my))
         skip_piece = None
         if self.animating and self.anim_move:
             skip_piece = self.anim_move[0]
@@ -227,12 +234,12 @@ class ChessApp:
             txt = self.font.render(f"White: {mins:02d}:{secs:02d}", True, (0,0,0))
             self.win.blit(txt, (WIDTH+20, 20))
         
-        color_undo = HOVER_COLOR if (self.undo_highlight and (time.time() - self.highlight_time < 0.3)) else BUTTON_COLOR
+        color_undo = HOVER_COLOR if self.undo_hover else BUTTON_COLOR
         pygame.draw.rect(self.win, color_undo, self.undo_rect)
         txt_undo = self.font.render("Undo", True, BUTTON_TEXT)
         self.win.blit(txt_undo, txt_undo.get_rect(center=self.undo_rect.center))
         
-        color_save = HOVER_COLOR if self.save_highlight and (time.time() - self.highlight_time < 0.3) else BUTTON_COLOR
+        color_save = HOVER_COLOR if self.save_hover else BUTTON_COLOR
         pygame.draw.rect(self.win, color_save, self.save_rect)
         txt_save = self.font.render("Save", True, BUTTON_TEXT)
         self.win.blit(txt_save, txt_save.get_rect(center=self.save_rect.center))
@@ -240,7 +247,7 @@ class ChessApp:
         if self.undo_highlight and (time.time() - self.highlight_time >= 0.3):
             self.undo_highlight = False
                 
-        color_load = HOVER_COLOR if self.load_highlight and (time.time() - self.highlight_time < 0.3) else BUTTON_COLOR
+        color_load = HOVER_COLOR if self.load_hover else BUTTON_COLOR
         pygame.draw.rect(self.win, color_load, self.load_rect)
         txt_load = self.font.render("Load", True, BUTTON_TEXT)
         self.win.blit(txt_load, txt_load.get_rect(center=self.load_rect.center))
