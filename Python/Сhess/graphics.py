@@ -42,6 +42,10 @@ class ChessApp:
         self.win = pygame.display.set_mode((WIDTH + SIDE_WIDTH, HEIGHT))
         pygame.display.set_caption("Chess")
 
+        self.show_side_rect = False
+        self.side_rect_time = 0
+        self.last_clicked_button_rect = None
+        
         mode_title = ""
         res = select_mode(self.win)
         if isinstance(res, tuple) and len(res) == 3:
@@ -82,7 +86,6 @@ class ChessApp:
         self.save_highlight = False
         self.load_highlight = False
         self.undo_highlight = False
-        self.highlight_time  = 0.0
         self.status_message = None
         self.status_time    = 0.0
 
@@ -103,9 +106,6 @@ class ChessApp:
         self.anim_progress = 0.0
         self._pending_move = None
         
-        self.save_highlight = False
-        self.load_highlight = False
-        self.highlight_time = 0.0
         self.undo_hover = False
         self.save_hover = False
         self.load_hover = False
@@ -234,26 +234,47 @@ class ChessApp:
             txt = self.font.render(f"White: {mins:02d}:{secs:02d}", True, (0,0,0))
             self.win.blit(txt, (WIDTH+20, 20))
         
-        color_undo = HOVER_COLOR if self.undo_hover else BUTTON_COLOR
+        if self.show_side_rect and self.last_clicked_button_rect == self.undo_rect:
+            color_undo = (130, 100, 160) 
+        else:
+            color_undo = BUTTON_COLOR  
+
         pygame.draw.rect(self.win, color_undo, self.undo_rect)
+
+        if self.undo_hover:
+            pygame.draw.rect(self.win, (130, 100, 160), self.undo_rect, 4)
+
         txt_undo = self.font.render("Undo", True, BUTTON_TEXT)
         self.win.blit(txt_undo, txt_undo.get_rect(center=self.undo_rect.center))
         
-        color_save = HOVER_COLOR if self.save_hover else BUTTON_COLOR
+        
+        if self.show_side_rect and self.last_clicked_button_rect == self.save_rect:
+            color_save = (130, 100, 160) 
+        else:
+            color_save = BUTTON_COLOR  
+
         pygame.draw.rect(self.win, color_save, self.save_rect)
+
+        if self.save_hover:
+            pygame.draw.rect(self.win, (130, 100, 160), self.save_rect, 4)
+
         txt_save = self.font.render("Save", True, BUTTON_TEXT)
         self.win.blit(txt_save, txt_save.get_rect(center=self.save_rect.center))
         
-        if self.undo_highlight and (time.time() - self.highlight_time >= 0.3):
-            self.undo_highlight = False
-                
-        color_load = HOVER_COLOR if self.load_hover else BUTTON_COLOR
+
+        if self.show_side_rect and self.last_clicked_button_rect == self.load_rect:
+            color_load = (130, 100, 160) 
+        else:
+            color_load= BUTTON_COLOR  
+
         pygame.draw.rect(self.win, color_load, self.load_rect)
+
+        if self.load_hover:
+            pygame.draw.rect(self.win, (130, 100, 160), self.load_rect, 4)
+
         txt_load = self.font.render("Load", True, BUTTON_TEXT)
         self.win.blit(txt_load, txt_load.get_rect(center=self.load_rect.center))
-        if self.load_highlight and (time.time() - self.highlight_time >= 0.3):
-            self.load_highlight = False
-            
+    
         hint_bg = HINT_ACTIVE_BG if self.show_hints else BUTTON_COLOR
         pygame.draw.rect(self.win, hint_bg, self.hint_rect)
         txt = self.font.render("Hint", True, BUTTON_TEXT)
@@ -363,7 +384,11 @@ class ChessApp:
             cx = sc * SQUARE_SIZE + (ec - sc) * SQUARE_SIZE * prog
             cy = sr * SQUARE_SIZE + (er - sr) * SQUARE_SIZE * prog
             self.win.blit(img, (cx, cy))
-
+        
+        if self.show_side_rect:
+            if time.time() - self.side_rect_time > 2:
+                self.show_side_rect = False
+                    
         pygame.display.update()
 
     def handle_events(self):
@@ -386,24 +411,30 @@ class ChessApp:
                     self.game.undo_move()
                     self.auto_scroll()
                     self.undo_highlight = True
-                    self.highlight_time = time.time()
                     self.status_message = "Undo"
                     self.status_time = time.time()
+                    self.show_side_rect = True
+                    self.side_rect_time = time.time()
+                    self.last_clicked_button_rect = self.undo_rect  
                     continue
                 elif self.save_rect.collidepoint(x, y):
                     self.game.save_game()
                     self.save_highlight = True
-                    self.highlight_time = time.time()
                     self.status_message = "Save"
                     self.status_time = time.time()
+                    self.show_side_rect = True 
+                    self.side_rect_time = time.time()
+                    self.last_clicked_button_rect = self.save_rect 
                     continue
                 elif self.load_rect.collidepoint(x, y):
                     self.game.load_game()
                     self.auto_scroll()
                     self.load_highlight = True
-                    self.highlight_time = time.time()
                     self.status_message = "Load"
                     self.status_time = time.time()
+                    self.show_side_rect = True
+                    self.side_rect_time = time.time() 
+                    self.last_clicked_button_rect = self.load_rect 
                     continue
                 elif self.hint_rect.collidepoint(x, y):
                     self.show_hints = not self.show_hints
