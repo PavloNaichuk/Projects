@@ -46,6 +46,9 @@ class ChessApp:
         self.side_rect_time = 0
         self.last_clicked_button_rect = None
         
+        self.ui_locked = False
+        self.ui_locked_time = 0
+        
         mode_title = ""
         res = select_mode(self.win)
         if isinstance(res, tuple) and len(res) == 3:
@@ -388,10 +391,20 @@ class ChessApp:
         if self.show_side_rect:
             if time.time() - self.side_rect_time > 2:
                 self.show_side_rect = False
-                    
+        if self.ui_locked:
+            overlay = pygame.Surface((WIDTH + SIDE_WIDTH, HEIGHT))
+            overlay.set_alpha(150)
+            overlay.fill((0, 0, 0))
+            self.win.blit(overlay, (0, 0))
+            txt = self.font.render("Please wait...", True, (255, 255, 255))
+            self.win.blit(txt, txt.get_rect(center=(WIDTH // 2, HEIGHT // 2)))
+        if self.ui_locked and time.time() - self.ui_locked_time > 2:
+            self.ui_locked = False          
         pygame.display.update()
 
     def handle_events(self):
+        if self.ui_locked:
+            return
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
                 self.running = False
@@ -415,7 +428,9 @@ class ChessApp:
                     self.status_time = time.time()
                     self.show_side_rect = True
                     self.side_rect_time = time.time()
-                    self.last_clicked_button_rect = self.undo_rect  
+                    self.last_clicked_button_rect = self.undo_rect 
+                    self.ui_locked = True
+                    self.ui_locked_time = time.time() 
                     continue
                 elif self.save_rect.collidepoint(x, y):
                     self.game.save_game()
@@ -425,6 +440,8 @@ class ChessApp:
                     self.show_side_rect = True 
                     self.side_rect_time = time.time()
                     self.last_clicked_button_rect = self.save_rect 
+                    self.ui_locked = True
+                    self.ui_locked_time = time.time()
                     continue
                 elif self.load_rect.collidepoint(x, y):
                     self.game.load_game()
@@ -435,6 +452,8 @@ class ChessApp:
                     self.show_side_rect = True
                     self.side_rect_time = time.time() 
                     self.last_clicked_button_rect = self.load_rect 
+                    self.ui_locked = True
+                    self.ui_locked_time = time.time()
                     continue
                 elif self.hint_rect.collidepoint(x, y):
                     self.show_hints = not self.show_hints
