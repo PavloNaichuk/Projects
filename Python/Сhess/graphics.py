@@ -1,6 +1,8 @@
 import sys
 import pygame
 from PIL import Image, ImageFilter
+import tkinter as tk
+from tkinter import filedialog
 import time
 from game import Game
 from utils import load_images, draw_board, draw_pieces
@@ -41,7 +43,7 @@ class ChessApp:
         pygame.init()
         self.win = pygame.display.set_mode((WIDTH + SIDE_WIDTH, HEIGHT))
         pygame.display.set_caption("Chess")
-
+        
         self.show_side_rect = False
         self.side_rect_time = 0
         self.last_clicked_button_rect = None
@@ -116,7 +118,26 @@ class ChessApp:
         self.status_time = 0.0
 
         self.reset_game()
+    def ask_save_filename(self):
+        root = tk.Tk()
+        root.withdraw()
+        filename = filedialog.asksaveasfilename(
+            defaultextension=".pkl",
+            filetypes=[("Pickle files","*.pkl"),("All files","*.*")]
+        )
+        root.destroy()
+        return filename
 
+    def ask_load_filename(self):
+        root = tk.Tk()
+        root.withdraw()
+        filename = filedialog.askopenfilename(
+            defaultextension=".pkl",
+            filetypes=[("Pickle files","*.pkl"),("All files","*.*")]
+        )
+        root.destroy()
+        return filename
+    
     def reset_game(self):
         self.game = Game()
         self.game.time_control   = self.time_control
@@ -433,27 +454,31 @@ class ChessApp:
                     self.ui_locked_time = time.time() 
                     continue
                 elif self.save_rect.collidepoint(x, y):
-                    self.game.save_game()
-                    self.save_highlight = True
-                    self.status_message = "Save"
-                    self.status_time = time.time()
-                    self.show_side_rect = True 
-                    self.side_rect_time = time.time()
-                    self.last_clicked_button_rect = self.save_rect 
-                    self.ui_locked = True
-                    self.ui_locked_time = time.time()
+                    filename = self.ask_save_filename()
+                    if filename:
+                        self.game.save_game(filename)
+                        self.save_highlight = True
+                        self.status_message = "Save"
+                        self.status_time = time.time()
+                        self.show_side_rect = True
+                        self.side_rect_time = time.time()
+                        self.last_clicked_button_rect = self.save_rect
+                        self.ui_locked = True
+                        self.ui_locked_time = time.time()
                     continue
                 elif self.load_rect.collidepoint(x, y):
-                    self.game.load_game()
-                    self.auto_scroll()
-                    self.load_highlight = True
-                    self.status_message = "Load"
-                    self.status_time = time.time()
-                    self.show_side_rect = True
-                    self.side_rect_time = time.time() 
-                    self.last_clicked_button_rect = self.load_rect 
-                    self.ui_locked = True
-                    self.ui_locked_time = time.time()
+                    filename = self.ask_load_filename()
+                    if filename:
+                        self.game.load_game(filename)
+                        self.auto_scroll()
+                        self.load_highlight = True
+                        self.status_message = "Load"
+                        self.status_time = time.time()
+                        self.show_side_rect = True
+                        self.side_rect_time = time.time()
+                        self.last_clicked_button_rect = self.load_rect
+                        self.ui_locked = True
+                        self.ui_locked_time = time.time()
                     continue
                 elif self.hint_rect.collidepoint(x, y):
                     self.show_hints = not self.show_hints
