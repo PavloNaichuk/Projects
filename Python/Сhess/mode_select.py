@@ -3,6 +3,10 @@ import sys
 import tkinter as tk
 from tkinter import simpledialog
 
+BUTTON_BG        = (200, 200, 200)
+BUTTON_TEXT      = (  0,   0,   0)
+HIGHLIGHT_COLOR = (130, 100, 160)
+HOVER_COLOR      = (190, 160, 200)
 class Button:
     def __init__(self, rect, text, font, action):
         self.rect   = pygame.Rect(rect)
@@ -22,18 +26,13 @@ class Button:
         elif ev.type == pygame.MOUSEBUTTONUP and ev.button == 1:
             self.active = False
 
-    def draw(self, surf,
-             bg_color=(200,200,255),
-             border_color=(0, 0,128) ,
-             hover_border=(0,0,128),
-             active_bg=(140,110,150),
-             text_color=(0,0,0)):
-        bg = active_bg if self.active else bg_color
+    def draw(self, surf):
+        bg = HIGHLIGHT_COLOR if self.active else BUTTON_BG
         pygame.draw.rect(surf, bg, self.rect, border_radius=8)
-        col = hover_border if self.hover else border_color
-        w   = 4 if self.hover else 2
-        pygame.draw.rect(surf, col, self.rect, w, border_radius=8)
-        txt = self.font.render(self.text, True, text_color)
+        border_col   = HIGHLIGHT_COLOR if (self.hover or self.active) else BUTTON_TEXT
+        border_width = 4 if (self.hover or self.active) else 2
+        pygame.draw.rect(surf, border_col, self.rect, border_width, border_radius=8)
+        txt = self.font.render(self.text, True, BUTTON_TEXT)
         surf.blit(txt, txt.get_rect(center=self.rect.center))
         
 def get_ip_from_window():
@@ -49,12 +48,11 @@ def select_mode(win):
     btn_font   = pygame.font.SysFont("arial", 24)
     result = {}
 
-    # callbacks
+ 
     def choose_local():   result.update(mode='local', net=None)
     def choose_bot():     result.update(mode='bot',   net=None)
     def choose_network(): result.update(mode='net',   net='ask')
 
-    # побудова кнопок
     btn_w, btn_h = 340, 50
     x = (width - btn_w) // 2
     spacing = 80
@@ -68,7 +66,7 @@ def select_mode(win):
 
     clock = pygame.time.Clock()
     while True:
-        win.fill((230,230,255))
+        win.fill((240,240,240))
         title = title_font.render("Choose mode:", True, (50,50,50))
         win.blit(title, title.get_rect(center=(width//2,140)))
 
@@ -112,7 +110,7 @@ def select_network_type(win):
 
     clock = pygame.time.Clock()
     while True:
-        win.fill((230,230,255))
+        win.fill((240,240,240))
         title = title_font.render("Network:", True, (50,50,50))
         win.blit(title, title.get_rect(center=(width//2,180)))
 
