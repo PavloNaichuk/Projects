@@ -26,6 +26,7 @@ MOVE_BG = (220, 220, 220)
 MOVE_BG_ACTIVE = (180, 180, 200)
 LAST_BLACK_BG = (185, 185, 200)
 
+
 pygame.mixer.init()
 move_sound = pygame.mixer.Sound("sounds/move.wav")
 capture_sound = pygame.mixer.Sound("sounds/capture.wav")
@@ -114,6 +115,7 @@ class ChessApp:
         self.undo_hover = False
         self.save_hover = False
         self.load_hover = False
+        self.hint_hover = False 
         self.status_message = None
         self.status_time = 0.0
 
@@ -246,6 +248,7 @@ class ChessApp:
         self.undo_hover = self.undo_rect.collidepoint((mx, my))
         self.save_hover = self.save_rect.collidepoint((mx, my))
         self.load_hover = self.load_rect.collidepoint((mx, my))
+        self.hint_hover = self.hint_rect.collidepoint(mx, my)
         skip_piece = None
         if self.animating and self.anim_move:
             skip_piece = self.anim_move[0]
@@ -299,11 +302,6 @@ class ChessApp:
         txt_load = self.font.render("Load", True, BUTTON_TEXT)
         self.win.blit(txt_load, txt_load.get_rect(center=self.load_rect.center))
     
-        hint_bg = HINT_ACTIVE_BG if self.show_hints else BUTTON_COLOR
-        pygame.draw.rect(self.win, hint_bg, self.hint_rect)
-        txt = self.font.render("Hint", True, BUTTON_TEXT)
-        self.win.blit(txt, txt.get_rect(center=self.hint_rect.center))
-
         if self.status_message and (time.time() - self.status_time < 2):
             msg_surf = self.font.render(self.status_message, True, (0, 0, 0))
             total_w = WIDTH + SIDE_WIDTH
@@ -336,10 +334,14 @@ class ChessApp:
                 surf = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
                 pygame.draw.rect(surf, (*HOVER_COLOR, 255), surf.get_rect(), 4)
                 self.win.blit(surf, (hc*SQUARE_SIZE, hr*SQUARE_SIZE))
+                
         hint_bg = HINT_ACTIVE_BG if self.show_hints else BUTTON_COLOR
         pygame.draw.rect(self.win, hint_bg, self.hint_rect)
         txt = self.font.render("Hint", True, BUTTON_TEXT)
         self.win.blit(txt, txt.get_rect(center=self.hint_rect.center))
+
+        if not self.show_hints and self.hint_hover:
+            pygame.draw.rect(self.win, HIGHLIGHT_COLOR, self.hint_rect, 4)
 
         move_log = self.game.move_log
         font = self.font
