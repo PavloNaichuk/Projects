@@ -3,6 +3,39 @@ import sys
 import tkinter as tk
 from tkinter import simpledialog
 
+class Button:
+    def __init__(self, rect, text, font, action):
+        self.rect   = pygame.Rect(rect)
+        self.text   = text
+        self.font   = font
+        self.action = action
+        self.hover  = False
+        self.active = False
+
+    def handle_event(self, ev):
+        if ev.type == pygame.MOUSEMOTION:
+            self.hover = self.rect.collidepoint(ev.pos)
+        elif ev.type == pygame.MOUSEBUTTONDOWN and ev.button == 1:
+            if self.rect.collidepoint(ev.pos):
+                self.action()
+                self.active = True
+        elif ev.type == pygame.MOUSEBUTTONUP and ev.button == 1:
+            self.active = False
+
+    def draw(self, surf,
+             bg_color=(200,200,255),
+             border_color=(0, 0,128) ,
+             hover_border=(0,0,128),
+             active_bg=(140,110,150),
+             text_color=(0,0,0)):
+        bg = active_bg if self.active else bg_color
+        pygame.draw.rect(surf, bg, self.rect, border_radius=8)
+        col = hover_border if self.hover else border_color
+        w   = 4 if self.hover else 2
+        pygame.draw.rect(surf, col, self.rect, w, border_radius=8)
+        txt = self.font.render(self.text, True, text_color)
+        surf.blit(txt, txt.get_rect(center=self.rect.center))
+        
 def get_ip_from_window():
     root = tk.Tk()
     root.withdraw()
@@ -13,113 +46,130 @@ def get_ip_from_window():
 def select_mode(win):
     width, height = win.get_size()
     title_font = pygame.font.SysFont("arial", 32)
-    btn_font = pygame.font.SysFont("arial", 24)
+    btn_font   = pygame.font.SysFont("arial", 24)
+    result = {}
 
-    btn_width, btn_height = 340, 50
-    x = (width - btn_width) // 2
+    # callbacks
+    def choose_local():   result.update(mode='local', net=None)
+    def choose_bot():     result.update(mode='bot',   net=None)
+    def choose_network(): result.update(mode='net',   net='ask')
+
+    # побудова кнопок
+    btn_w, btn_h = 340, 50
+    x = (width - btn_w) // 2
     spacing = 80
-    option1 = pygame.Rect(x, 200, btn_width, btn_height)
-    option2 = pygame.Rect(x, 200 + spacing, btn_width, btn_height)
-    option3 = pygame.Rect(x, 200 + spacing * 2, btn_width, btn_height)
+    labels = [("Play 1-on-1", choose_local),
+              ("Play vs PC",   choose_bot),
+              ("Play over Network", choose_network)]
+    buttons = [
+        Button((x, 200 + i*spacing, btn_w, btn_h), txt, btn_font, cb)
+        for i, (txt, cb) in enumerate(labels)
+    ]
 
+    clock = pygame.time.Clock()
     while True:
-        win.fill((230, 230, 255))
-        title_surf = title_font.render("Choose mode:", True, (50, 50, 50))
-        title_rect = title_surf.get_rect(center=(width // 2, 140))
-        win.blit(title_surf, title_rect)
+        win.fill((230,230,255))
+        title = title_font.render("Choose mode:", True, (50,50,50))
+        win.blit(title, title.get_rect(center=(width//2,140)))
 
-        for rect, label in [(option1, "Play 1-on-1"), (option2, "Play vs PC"), (option3, "Play over Network")]:
-            pygame.draw.rect(win, (200, 200, 255), rect, border_radius=8)
-            pygame.draw.rect(win, (100, 100, 200), rect, 2, border_radius=8)
-            txt = btn_font.render(label, True, (0, 0, 0))
-            win.blit(txt, txt.get_rect(center=rect.center))
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                pygame.quit(); sys.exit()
+            for btn in buttons:
+                btn.handle_event(ev)
+
+        for btn in buttons:
+            btn.draw(win)
 
         pygame.display.update()
-        for e in pygame.event.get():
-            if e.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif e.type == pygame.MOUSEBUTTONDOWN:
-                if option1.collidepoint(e.pos):
-                    mode, net = "local", None
-                elif option2.collidepoint(e.pos):
-                    mode, net = "bot", None
-                elif option3.collidepoint(e.pos):
-                    return select_network_type(win)
-                else:
-                    continue
-                tc = select_time_control(win)
-                return (mode, net, tc)
+        clock.tick(60)
+
+        if 'mode' in result:
+            if result['net'] == 'ask':
+                return ('net_client', get_ip_from_window())
+            tc = select_time_control(win)
+            return (result['mode'], result['net'], tc)
+
 
 def select_network_type(win):
     width, height = win.get_size()
     title_font = pygame.font.SysFont("arial", 32)
-    btn_font = pygame.font.SysFont("arial", 24)
+    btn_font   = pygame.font.SysFont("arial", 24)
+    result = {}
 
-    btn_width, btn_height = 340, 50
-    x = (width - btn_width) // 2
-    host_btn = pygame.Rect(x, 240, btn_width, btn_height)
-    join_btn = pygame.Rect(x, 240 + 80, btn_width, btn_height)
+    def host():  result['type'] = ('net_host', None)
+    def join():  result['type'] = ('net_client', get_ip_from_window())
 
+    btn_w, btn_h = 340, 50
+    x = (width - btn_w) // 2
+    spacing = 80
+    labels = [("Host Game", host),
+              ("Join Game", join)]
+    buttons = [
+        Button((x, 240 + i*spacing, btn_w, btn_h), txt, btn_font, cb)
+        for i, (txt, cb) in enumerate(labels)
+    ]
+
+    clock = pygame.time.Clock()
     while True:
-        win.fill((230, 230, 255))
-        title_surf = title_font.render("Network:", True, (50, 50, 50))
-        title_rect = title_surf.get_rect(center=(width // 2, 180))
-        win.blit(title_surf, title_rect)
+        win.fill((230,230,255))
+        title = title_font.render("Network:", True, (50,50,50))
+        win.blit(title, title.get_rect(center=(width//2,180)))
 
-        for rect, label in [(host_btn, "Host Game"), (join_btn, "Join Game")]:
-            pygame.draw.rect(win, (200, 200, 255), rect, border_radius=8)
-            pygame.draw.rect(win, (100, 100, 200), rect, 2, border_radius=8)
-            txt = btn_font.render(label, True, (0, 0, 0))
-            win.blit(txt, txt.get_rect(center=rect.center))
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                pygame.quit(); sys.exit()
+            for btn in buttons:
+                btn.handle_event(ev)
+
+        for btn in buttons:
+            btn.draw(win)
 
         pygame.display.update()
-        for e in pygame.event.get():
-            if e.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif e.type == pygame.MOUSEBUTTONDOWN:
-                if host_btn.collidepoint(e.pos):
-                    return ("net_host", None)
-                if join_btn.collidepoint(e.pos):
-                    host = get_ip_from_window()
-                    if host and host.strip(): 
-                        return ("net_client", host)
+        clock.tick(60)
+
+        if 'type' in result:
+            return result['type']
 
 def select_time_control(win):
     width, height = win.get_size()
     title_font = pygame.font.SysFont("arial", 32)
     btn_font   = pygame.font.SysFont("arial", 24)
+    result = {}
 
     options = [
-        ("3",  (3*60, 2)),
-        ("5",  (5*60, 0)),
-        ("10", (10*60,5)),
-        ("None", (0,   0)),
+        ("3",    (3*60, 2)),
+        ("5",    (5*60, 0)),
+        ("10",   (10*60,5)),
+        ("None", (0,     0)),
     ]
     btn_w, btn_h = 300, 50
-    x = (width - btn_w)//2
+    x = (width - btn_w) // 2
     spacing = 80
 
+    buttons = [
+        Button((x, 200 + i*spacing, btn_w, btn_h), label, btn_font,
+               lambda tc=tc: result.update(tc=tc))
+        for i, (label, tc) in enumerate(options)
+    ]
+
+    clock = pygame.time.Clock()
     while True:
         win.fill((240,240,240))
         title = title_font.render("Time Control:", True, (0,0,0))
-        win.blit(title, title.get_rect(center=(width//2, 120)))
+        win.blit(title, title.get_rect(center=(width//2,120)))
 
-        for i, (label, _) in enumerate(options):
-            rect = pygame.Rect(x, 200 + i*spacing, btn_w, btn_h)
-            pygame.draw.rect(win, (200,200,255), rect, border_radius=8)
-            pygame.draw.rect(win, (100,100,200), rect, 2, border_radius=8)
-            txt = btn_font.render(label, True, (0,0,0))
-            win.blit(txt, txt.get_rect(center=rect.center))
-
-        pygame.display.update()
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif ev.type == pygame.MOUSEBUTTONDOWN:
-                for i, (_, tc) in enumerate(options):
-                    rect = pygame.Rect(x, 200 + i*spacing, btn_w, btn_h)
-                    if rect.collidepoint(ev.pos):
-                        return tc
+                pygame.quit(); sys.exit()
+            for btn in buttons:
+                btn.handle_event(ev)
+
+        for btn in buttons:
+            btn.draw(win)
+
+        pygame.display.update()
+        clock.tick(60)
+
+        if 'tc' in result:
+            return result['tc']
