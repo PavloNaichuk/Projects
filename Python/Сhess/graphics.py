@@ -178,8 +178,10 @@ class ChessApp:
                     
                     if self._pending_move:
                         prev, dst = self._pending_move
-                        self._play_move_sound(prev, dst)
-
+                        piece    = self.game.board[prev[0]][prev[1]]
+                        captured = self.game.board[dst[0]][dst[1]]
+                        self._play_move_sound(prev, dst, piece, captured)
+                        
                         piece = self.game.board[prev[0]][prev[1]]
                         is_pawn = piece[1] == 'P'
                         reached_last = (piece[0] == 'w' and dst[0] == 0) or (piece[0] == 'b' and dst[0] == 7)
@@ -203,7 +205,8 @@ class ChessApp:
                 pygame.time.wait(300)
                 bot_move(self.game)
                 last_move = self.game.move_log[-1]
-                self._play_move_sound(*last_move[:2])
+                self._play_move_sound(*last_move) 
+                
                 self.check_end()
                 self.auto_scroll()
 
@@ -223,16 +226,14 @@ class ChessApp:
         elif self.game.is_stalemate():
             self.result = "Draw"
             self.game_over = True
-    def _play_move_sound(self, start, end):
-        piece = self.game.board[start[0]][start[1]]
-        captured = self.game.board[end[0]][end[1]]
+    def _play_move_sound(self, start, end, piece, captured):
         if captured and captured[0] != piece[0]:
             capture_sound.play()
         elif self.game.is_in_check(self.game.turn):
             check_sound.play()
         else:
             move_sound.play()
-    
+
     def auto_scroll(self):
         move_log = self.game.move_log
         n = len(move_log)
