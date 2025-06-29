@@ -57,11 +57,19 @@ class Game:
 
         is_pawn = piece and piece[1] == 'P'
         reached_last = (piece and is_pawn and ((piece[0] == 'w' and er == 0) or (piece[0] == 'b' and er == 7)))
+        if reached_last and promotion is None:
+            return False 
         if reached_last and not promotion:
             promotion = 'Q'
 
         move = (start, end, promotion) 
         self.board.push(move)
+        kings = sum(1 for r in range(8) for c in range(8)
+                if self.board.board[r][c] in ('wK', 'bK'))
+        if kings < 2:
+            print("Illegal state: one king captured!")
+            self.board.pop()
+            return False
         self.move_log.append((start, end, piece, captured))
         self.position_history.append(self.board.fen())
         self.turn = 'b' if self.turn == 'w' else 'w'
@@ -70,6 +78,7 @@ class Game:
             print(msg)
             self.game_over = True
             self.game_over_message = msg
+        return True
     
     def undo_move(self):
         self.board.pop()
@@ -85,6 +94,21 @@ class Game:
             for move in self.board.legal_moves()
             if move[0] == start
         ]  
+        
+    def generate_legal_moves(self, color):
+        moves = []
+        for move in self.generate_pseudo_legal_moves(color):
+            self.push(move)
+            if not self.is_check(color):
+                _, end, _ = move
+                target = self.board[end[0]][end[1]]
+                if target is not None and target[1] == 'K' and target[0] != color:
+                    self.pop()
+                    continue
+                moves.append(move)
+            self.pop()
+        return moves
+    
     def get_all_moves(self, color):
         return list(self.board.legal_moves())
 

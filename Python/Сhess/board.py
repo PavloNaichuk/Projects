@@ -153,6 +153,8 @@ class Board:
                     else:
                         sq = self.board[rr][cc]
                         if sq and sq[0] != col:
+                            if sq and sq[1] == 'K':
+                                continue
                             if rr in (0,7):
                                 for p in 'QRBN': moves.append(((r, c), (rr, cc), p))
                             else:
@@ -169,6 +171,8 @@ class Board:
             rr, cc = r+dr, c+dc
             if 0 <= rr < 8 and 0 <= cc < 8:
                 sq = self.board[rr][cc]
+                if sq and sq[1] == 'K':
+                    continue
                 if not sq or sq[0] != col:
                     moves.append((pos, (rr, cc), None))
         return moves
@@ -184,6 +188,8 @@ class Board:
                 if not sq:
                     moves.append((pos, (rr, cc), None))
                 else:
+                    if sq[1] == 'K':
+                        break 
                     if sq[0] != col:
                         moves.append((pos, (rr, cc), None))
                     break
@@ -202,6 +208,8 @@ class Board:
                 rr, cc = r+dr, c+dc
                 if 0 <= rr < 8 and 0 <= cc < 8:
                     sq = self.board[rr][cc]
+                    if sq and sq[1] == 'K':
+                        continue 
                     if not sq or sq[0] != col:
                         moves.append((pos, (rr, cc), None))
         return moves
@@ -226,7 +234,11 @@ class Board:
                     pin_dir = pins.get(pos)
                     moves = self._gen_moves_for_piece(sq[1], pos, pin_dir=pin_dir)
                     for move in moves:
+                        (_, (er, ec), _) = move
+                        target = self.board[er][ec]
                         if sq[1] == 'K' and move[1] in enemy_attacks:
+                            continue
+                        if target and target[1] == 'K':
                             continue
                         legal.append(move)
         return legal 
@@ -238,6 +250,13 @@ class Board:
                 sq = self.board[r][c]
                 if sq and sq[0] == self.turn:
                     moves.extend(self._gen_moves_for_piece(sq[1], (r, c)))
+                    filtered = []
+                    for m in pmoves:
+                        (_, (er, ec), _) = m
+                        target = self.board[er][ec]
+                        if not (target and target[1] == 'K'):
+                            filtered.append(m)
+                    moves.extend(filtered)
         return moves
     
     def is_check(self, color):
