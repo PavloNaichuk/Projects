@@ -512,8 +512,14 @@ class ChessApp:
                             if (r, c) in self.game.get_legal_moves(self.game.selected):
                                 prev = self.game.selected
                                 piece = self.game.board[prev[0]][prev[1]]
+                                is_pawn = piece and piece[1] == 'P'
+                                reached_last = (piece and is_pawn and ((piece[0] == 'w' and r == 0) or (piece[0] == 'b' and r == 7)))
                                 piece_img = self.images.get(piece)
                                 self._pending_move = (prev, (r, c))
+                                if is_pawn and reached_last:
+                                    self._promo = 'ask'
+                                else:
+                                    self._promo = None
                                 self.start_animation(prev, (r, c), piece_img)
                                 self.game.selected = None
                                 self.hint_squares = []
