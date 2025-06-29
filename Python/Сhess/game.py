@@ -48,9 +48,6 @@ class Game:
     def move_piece(self, start, end, promotion=None):
         sr, sc = start
         er, ec = end
-        if not self.board.board[sr][sc]:
-            sr = 7 - sr
-            er = 7 - er
         piece    = self.board.board[sr][sc]
         captured = self.board.board[er][ec]
         move = (start, end, promotion)
@@ -109,4 +106,15 @@ class Game:
         self.selected = None
         
     def copy(self):
-        return copy.deepcopy(self)
+        new_game = Game()
+        new_game.board = self.board.copy()    
+        new_game.turn = self.turn
+        new_game.selected = self.selected
+        new_game.move_log = list(self.move_log)
+        new_game.position_history = list(self.position_history)
+        new_game.halfmove_clock = self.halfmove_clock
+        new_game.has_moved = dict(self.has_moved)
+        new_game.time_control = self.time_control
+        new_game.time_remaining = dict(self.time_remaining)
+        new_game.move_start_time = self.move_start_time
+        return new_game
