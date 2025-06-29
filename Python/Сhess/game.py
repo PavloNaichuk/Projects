@@ -44,7 +44,7 @@ class Game:
             if (r, c) in self.get_legal_moves(self.selected):
                 self.move_piece(self.selected, (r, c))
             self.selected = None
-
+    
     def move_piece(self, start, end, promotion=None):
         sr, sc = start
         er, ec = end
@@ -55,6 +55,11 @@ class Game:
         self.move_log.append((start, end, piece, captured))
         self.position_history.append(self.board.fen())
         self.turn = 'b' if self.turn == 'w' else 'w'
+        is_over, msg = check_game_result(self.board)
+        if is_over:
+            print(msg)
+            self.game_over = True
+            self.game_over_message = msg
     
     def undo_move(self):
         self.board.pop()
@@ -118,3 +123,18 @@ class Game:
         new_game.time_remaining = dict(self.time_remaining)
         new_game.move_start_time = self.move_start_time
         return new_game
+  
+def check_game_result(board):
+    if board.is_checkmate():
+        winner = 'Black' if board.turn == 'w' else 'White'
+        return True, f"Checkmate! {winner} wins."
+    elif board.is_stalemate():
+        return True, "Stalemate — draw!"
+    elif board.is_threefold_repetition():
+        return True, "Draw: threefold repetition!"
+    elif board.is_fifty_move_rule():
+        return True, "Draw: 50-move rule (no capture or pawn move)!"
+    elif board.is_insufficient_material():
+        return True, "Draw: insufficient material for mate!"
+    else:
+        return False, ""

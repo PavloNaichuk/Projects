@@ -241,6 +241,8 @@ class Board:
         return moves
     
     def is_check(self, color):
+        if color is None:
+            color = self.turn
         kr = kc = None
         for r in range(8):
             for c in range(8):
@@ -299,19 +301,29 @@ class Board:
         pieces = [p[1] for row in self.board for p in row if p]
         return set(pieces) <= set(['K'])
 
-    def is_checkmate(self):
+    def is_checkmate(self, color=None):
+        if color is None:
+            color = self.turn
         return self.is_check(self.turn) and not self.legal_moves()
 
-    def is_stalemate(self):
+    def is_stalemate(self, color=None):
+        if color is None:
+            color = self.turn
         return not self.is_check(self.turn) and not self.legal_moves()
 
     def is_draw(self):
+        if color is None:
+            color = self.turn
         return (
             self.is_stalemate() or
             self.is_insufficient_material() or
             self.is_threefold_repetition() or
             self.is_fifty_move_rule()
         )
+    def is_game_over(self, color=None):
+        if color is None:
+            color = self.turn
+        return self.is_checkmate(color) or self.is_draw(color)
     
     def copy(self):
         new_board = Board()

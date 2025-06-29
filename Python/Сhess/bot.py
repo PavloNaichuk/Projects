@@ -178,11 +178,25 @@ class AlphaBetaBot:
         score += self.rook_open_file_score(game, color)
         score += self.king_shelter_score(game, color)
         score += self.seventh_rank_bonus(game, color)
+        score += self.castling_status_score(game, color)
+        score += self.knight_on_rim_penalty(game, color)
+        score += self.center_control_score(game, color)
+        score += self.queen_early_activity_penalty(game, color)
+        score += self.king_endgame_activity(game, color)
+        score += self.passed_pawn_bonus(game, color)
+        score += self.hanging_piece_penalty(game, color)
 
         score -= self.pawn_structure_score(game, opp_color)
         score -= self.rook_open_file_score(game, opp_color)
         score -= self.king_shelter_score(game, opp_color)
         score -= self.seventh_rank_bonus(game, opp_color)
+        score -= self.castling_status_score(game, opp_color)
+        score -= self.knight_on_rim_penalty(game, opp_color)
+        score -= self.center_control_score(game, opp_color)
+        score -= self.queen_early_activity_penalty(game, opp_color)
+        score -= self.king_endgame_activity(game, opp_color)
+        score -= self.passed_pawn_bonus(game, opp_color)
+        score -= self.hanging_piece_penalty(game, opp_color)
         
         return score
 
@@ -337,6 +351,118 @@ class AlphaBetaBot:
             if sq and sq[0] == color and sq[1] in 'RQ':
                 score += 35
         return score
+    
+    def castling_status_score(self, game, color):
+        has_castled = False
+        king_pos = None
+        for r in range(8):
+            for c in range(8):
+                if game.board.board[r][c] == color + 'K':
+                    king_pos = (r, c)
+        if color == 'w':
+            has_castled = king_pos in [(7, 6), (7, 2)]
+        else:
+            has_castled = king_pos in [(0, 6), (0, 2)]
+        score = 0
+        if has_castled:
+            score += 30
+        else:
+            if game.board.fullmove_number > 10:
+                score -= 30
+        return score
+
+    def knight_on_rim_penalty(self, game, color):
+        score = 0
+        for r in [0, 7]:
+            for c in range(8):
+                sq = game.board.board[r][c]
+                if sq and sq[0] == color and sq[1] == 'N':
+                    score -= 15
+        for r in range(8):
+            for c in [0, 7]:
+                sq = game.board.board[r][c]
+                if sq and sq[0] == color and sq[1] == 'N':
+                    score -= 15
+        return score
+
+    def center_control_score(self, game, color):
+        center_squares = [(3,3), (3,4), (4,3), (4,4)]
+        score = 0
+        for r, c in center_squares:
+            sq = game.board.board[r][c]
+            if sq and sq[0] == color and sq[1] in 'QNRB':
+                score += 12
+            if sq and sq[0] == color and sq[1] == 'P':
+                score += 6
+        return score
+
+    def queen_early_activity_penalty(self, game, color):
+        queen_home = (7, 3) if color == 'w' else (0, 3)
+        for r in range(8):
+            for c in range(8):
+                sq = game.board.board[r][c]
+                if sq and sq[0] == color and sq[1] == 'Q':
+                    if (r, c) != queen_home and game.board.fullmove_number <= 8:
+                        return -22
+        return 0
+
+    def king_endgame_activity(self, game, color):
+        material = 0
+        for r in range(8):
+            for c in range(8):
+                sq = game.board.board[r][c]
+                if sq and sq[0] == color and sq[1] != 'K':
+                    material += {'Q': 9, 'R': 5, 'B': 3, 'N': 3, 'P': 1}.get(sq[1], 0)
+        if material < 12:
+            king_pos = None
+            for r in range(8):
+                for c in range(8):
+                    if game.board.board[r][c] == color + 'K':
+                        king_pos = (r, c)
+            if king_pos in [(3,3), (3,4), (4,3), (4,4)]:
+                return 30
+        return 0
+    def passed_pawn_bonus(self, game, color):
+        score = 0
+        for r in range(8):
+            for c in range(8):
+                sq = game.board.board[r][c]
+                if sq and sq[0] == color and sq[1] == 'P':
+                    passed = True
+                    opp = 'b' if color == 'w' else 'w'
+                    dir = -1 if color == 'w' else 1
+                    rr = r + dir
+                    while 0 <= rr < 8:
+                        for dc in [-1, 0, 1]:
+                            cc = c + dc
+                            if 0 <= cc < 8:
+                                s2 = game.board.board[rr][cc]
+                                if s2 and s2[0] == opp and s2[1] == 'P':
+                                    passed = False
+                        rr += dir
+                    if passed:
+                        score += 45 + (abs((6 - r) if color == 'w' else (r - 1)) * 8)
+        return score
+    
+    def hanging_piece_penalty(self, game, color):
+        opp_color = 'b' if color == 'w' else 'w'
+        penalty = 0
+        attacked = set()
+        for move in game.get_all_moves(opp_color):
+            _, end, _ = move
+            attacked.add(end)
+        for r in range(8):
+            for c in range(8):
+                sq = game.board.board[r][c]
+                if sq and sq[0] == color and (r, c) in attacked:
+                    defenders = 0
+                    for m in game.get_all_moves(color):
+                        _, e, _ = m
+                        if e == (r, c):
+                            defenders += 1
+                    if defenders == 0:
+                        penalty -= PIECE_VALUES[sq[1]] // 8
+        return penalty
 
 def bot_move(game: Game, max_depth=4, time_limit=1.2):
     bot = AlphaBetaBot(max_depth=max_depth, time_limit=time_limit)
