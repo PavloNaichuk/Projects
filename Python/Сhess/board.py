@@ -1,7 +1,4 @@
 class Board:
-    """
-    Клас для внутрішнього представлення шахової дошки та генерації легальних ходів.
-    """
     def __init__(self, fen=None):
         self.board = self._init_board() if fen is None else self._from_fen(fen)
         self.turn = 'w'
@@ -10,7 +7,6 @@ class Board:
         self.halfmove_clock = 0
         self.fullmove_number = 1
         self.move_stack = []
-        # Історія FEN для перевірки триразового повторення
         self.history = [self.fen()]
 
     def __getitem__(self, idx):
@@ -57,7 +53,6 @@ class Board:
         er, ec = move[1]
         promo = move[2]
         piece = self.board[sr][sc]
-        # determine captured
         captured = ''
         if piece[1] == 'P' and self.ep_square == (er, ec) and sc != ec:
             cap_r, cap_c = sr, ec
@@ -65,19 +60,16 @@ class Board:
             self.board[cap_r][cap_c] = ''
         else:
             captured = self.board[er][ec]
-        # save state
         self.move_stack.append((
             sr, sc, er, ec, piece, captured,
             { 'w': self.castling_rights['w'].copy(), 'b': self.castling_rights['b'].copy() },
             self.ep_square, self.halfmove_clock, self.fullmove_number, self.turn
         ))
-        # move and promotion
         if promo and piece[1] == 'P' and er in (0, 7):
             self.board[er][ec] = piece[0] + promo
         else:
             self.board[er][ec] = piece
         self.board[sr][sc] = ''
-        # update castling
         if piece[1] == 'K':
             self.castling_rights[piece[0]] = {'K': False, 'Q': False}   
         if piece[1] == 'R':
@@ -85,36 +77,28 @@ class Board:
                 self.castling_rights[piece[0]]['Q'] = False
             if sc == 7:
                 self.castling_rights[piece[0]]['K'] = False
-        # update en passant
         if piece[1] == 'P' and abs(er - sr) == 2:
             self.ep_square = ((sr + er) // 2, sc)
         else:
             self.ep_square = None
-        # update clocks
         if piece[1] == 'P' or captured:
             self.halfmove_clock = 0
         else:
             self.halfmove_clock += 1
-        # update fullmove number
         if self.turn == 'b':
             self.fullmove_number += 1
-        # switch turn
         self.turn = 'b' if self.turn == 'w' else 'w'
-        # record history
         self.history.append(self.fen())
 
     def pop(self):
         sr, sc, er, ec, piece, captured, crights, ep, half, full, turn = self.move_stack.pop()
-        # restore pieces
         self.board[sr][sc] = piece
         self.board[er][ec] = captured
-        # restore state
         self.castling_rights = { 'w': crights['w'].copy(), 'b': crights['b'].copy() }
         self.ep_square = ep
         self.halfmove_clock = half
         self.fullmove_number = full
         self.turn = turn
-        # restore history
         if len(self.history) > 1:
             self.history.pop()
 
@@ -136,14 +120,12 @@ class Board:
             rows.append(fen_rank)
         placement = '/'.join(rows)
         active = self.turn
-        # castling rights
         cr = ''
         if self.castling_rights['w']['K']: cr += 'K'
         if self.castling_rights['w']['Q']: cr += 'Q'
         if self.castling_rights['b']['K']: cr += 'k'
         if self.castling_rights['b']['Q']: cr += 'q'
         if not cr: cr = '-'
-        # en passant
         if self.ep_square:
             file = chr(self.ep_square[1] + ord('a'))
             rank = str(8 - self.ep_square[0])
@@ -189,7 +171,6 @@ class Board:
         col = self.turn
         dr = -1 if col == 'w' else 1
         start = 6 if col == 'w' else 1
-        # forward
         if 0 <= r+dr < 8 and not self.board[r+dr][c]:
             if (r+dr) in (0,7):
                 for p in 'QRBN': moves.append((pos, (r+dr, c), p))
@@ -197,7 +178,6 @@ class Board:
                 moves.append((pos, (r+dr, c), None))
             if r == start and not self.board[r+2*dr][c]:
                 moves.append((pos, (r+2*dr, c), None))
-        # captures and en passant
         for dc in (-1, 1):
             rr, cc = r+dr, c+dc
             if 0 <= rr < 8 and 0 <= cc < 8:
@@ -245,7 +225,6 @@ class Board:
         moves = []
         r, c = pos
         col = self.turn
-        # one-square moves
         for dr in (-1,0,1):
             for dc in (-1,0,1):
                 if dr == 0 and dc == 0:
@@ -255,14 +234,11 @@ class Board:
                     sq = self.board[rr][cc]
                     if not sq or sq[0] != col:
                         moves.append((pos, (rr, cc), None))
-        # castling
         if not self.is_check(col):
-            # king side
             if self.castling_rights[col]['K']:
                 if all(not self.board[r][cc] for cc in (c+1, c+2)):
                     if not self.is_check_on_square(r, c+1, col) and not self.is_check_on_square(r, c+2, col):
                         moves.append((pos, (r, c+2), None))
-            # queen side
             if self.castling_rights[col]['Q']:
                 if all(not self.board[r][cc] for cc in (c-1, c-2, c-3)):
                     if not self.is_check_on_square(r, c-1, col) and not self.is_check_on_square(r, c-2, col):
@@ -270,7 +246,6 @@ class Board:
         return moves
 
     def is_check_on_square(self, r, c, color):
-        """Допоміжна для рокіровки: перевіряє, чи клітина під атакою."""
         attacker = 'w' if color == 'b' else 'b'
         orig_piece = self.board[r][c]
         self.board[r][c] = color + 'K'
@@ -279,7 +254,6 @@ class Board:
         return res
 
     def is_check(self, color):
-        # find king
         kr = kc = None
         for r in range(8):
             for c in range(8):
@@ -291,18 +265,15 @@ class Board:
         if kr is None:
             return False
         attacker = 'w' if color == 'b' else 'b'
-        # pawn attacks
         dr = -1 if attacker == 'w' else 1
         for dc in (-1, 1):
             rr, cc = kr+dr, kc+dc
             if 0 <= rr < 8 and 0 <= cc < 8 and self.board[rr][cc] == attacker + 'P':
                 return True
-        # knight
         for dr, dc in [(-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)]:
             rr, cc = kr+dr, kc+dc
             if 0 <= rr < 8 and 0 <= cc < 8 and self.board[rr][cc] == attacker + 'N':
                 return True
-        # diagonal sliders
         for dr, dc in [(-1,-1),(-1,1),(1,-1),(1,1)]:
             rr, cc = kr+dr, kc+dc
             while 0 <= rr < 8 and 0 <= cc < 8:
@@ -312,7 +283,6 @@ class Board:
                         return True
                     break
                 rr += dr; cc += dc
-        # orthogonal sliders
         for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
             rr, cc = kr+dr, kc+dc
             while 0 <= rr < 8 and 0 <= cc < 8:
@@ -322,7 +292,6 @@ class Board:
                         return True
                     break
                 rr += dr; cc += dc
-        # adjacent king
         for dr in (-1,0,1):
             for dc in (-1,0,1):
                 if dr == 0 and dc == 0:
