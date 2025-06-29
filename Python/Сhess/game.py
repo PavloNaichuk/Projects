@@ -21,7 +21,7 @@ class Game:
         self.time_control    = (300, 2)
         self.time_remaining  = {'w': self.time_control[0], 'b': self.time_control[0]}
         self.move_start_time = time.time()
-
+        
     def get_board_key(self):
         return (tuple(tuple(row) for row in self.board.board), self.turn)
 
@@ -48,6 +48,9 @@ class Game:
     def move_piece(self, start, end, promotion=None):
         sr, sc = start
         er, ec = end
+        if not self.board.board[sr][sc]:
+            sr = 7 - sr
+            er = 7 - er
         piece    = self.board.board[sr][sc]
         captured = self.board.board[er][ec]
         move = (start, end, promotion)
@@ -55,6 +58,14 @@ class Game:
         self.move_log.append((start, end, piece, captured))
         self.position_history.append(self.board.fen())
         self.turn = 'b' if self.turn == 'w' else 'w'
+    
+    def undo_move(self):
+        self.board.pop()
+        self.turn = 'b' if self.turn == 'w' else 'w'
+        if self.move_log:
+            self.move_log.pop()
+        if self.position_history:
+            self.position_history.pop()
     
     def get_legal_moves(self, start):
         return [
@@ -96,3 +107,6 @@ class Game:
         self.position_history = data['position_history']
         self.halfmove_clock = data['halfmove_clock']
         self.selected = None
+        
+    def copy(self):
+        return copy.deepcopy(self)
