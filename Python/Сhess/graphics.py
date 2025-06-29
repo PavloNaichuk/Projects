@@ -337,7 +337,7 @@ class ChessApp:
         mx, my = pygame.mouse.get_pos()
         if mx < WIDTH:
             hr, hc = my//SQUARE_SIZE, mx//SQUARE_SIZE
-            p = self.game.board[hr][hc]
+            p = self.game.board.board[hr][hc]
             if p and (hr, hc) != self.game.selected and p[0] == self.game.turn:
                 surf = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
                 pygame.draw.rect(surf, (*HOVER_COLOR, 255), surf.get_rect(), 4)
@@ -393,7 +393,7 @@ class ChessApp:
             num_txt = font.render(f"{move_number}.", True, (0, 0, 0))
             self.win.blit(num_txt, (x0, y + 4))
             start, end, piece, captured = move
-            capture = captured != ""
+            capture = captured is not None and captured != ''
             PIECE_LETTER = {
                 'P': '',
                 'N': 'N',

@@ -13,182 +13,152 @@ class Board:
         return self.board[idx]
 
     def _init_board(self):
-        return [
+        board = [
             ['bR','bN','bB','bQ','bK','bB','bN','bR'],
             ['bP']*8,
-            ['']*8,
-            ['']*8,
-            ['']*8,
-            ['']*8,
+            [None]*8,
+            [None]*8,
+            [None]*8,
+            [None]*8,
             ['wP']*8,
-            ['wR','wN','wB','wQ','wK','wB','wN','wR']
+            ['wR','wN','wB','wQ','wK','wB','wN','wR'],
         ]
-
-    def _from_fen(self, fen):
-        parts = fen.split()
-        rows = parts[0].split('/')
-        board = []
-        for r in rows:
-            row = []
-            for ch in r:
-                if ch.isdigit():
-                    row.extend([''] * int(ch))
-                else:
-                    color = 'w' if ch.isupper() else 'b'
-                    row.append(color + ch.lower().upper())
-            board.append(row)
-        self.turn = parts[1]
-        cr = parts[2]
-        self.castling_rights = {
-            'w': {'K': 'K' in cr, 'Q': 'Q' in cr},
-            'b': {'K': 'k' in cr, 'Q': 'q' in cr}
-        }
-        self.ep_square = None if parts[3] == '-' else (8 - int(parts[3][1]), ord(parts[3][0]) - ord('a'))
-        self.halfmove_clock = int(parts[4])
-        self.fullmove_number = int(parts[5])
         return board
 
-    def push(self, move):
-        (sr, sc), (er, ec), promo = move
-        piece = self.board[sr][sc]
-        if not piece:
-            raise ValueError(f"Board.push: no piece at square {(sr, sc)}, move={move}")
-        captured = ''
-        if piece[1] == 'P' and self.ep_square == (er, ec) and sc != ec:
-            cap_r, cap_c = sr, ec
-            captured = self.board[cap_r][cap_c]
-            self.board[cap_r][cap_c] = ''
-        else:
-            captured = self.board[er][ec]
-        self.move_stack.append((
-            sr, sc, er, ec, piece, captured,
-            { 'w': self.castling_rights['w'].copy(), 'b': self.castling_rights['b'].copy() },
-            self.ep_square, self.halfmove_clock, self.fullmove_number, self.turn
-        ))
-        if promo and piece[1] == 'P' and er in (0, 7):
-            self.board[er][ec] = piece[0] + promo
-        else:
-            self.board[er][ec] = piece
-        self.board[sr][sc] = ''
-        if piece[1] == 'K':
-            self.castling_rights[piece[0]] = {'K': False, 'Q': False}   
-        if piece[1] == 'R':
-            if sc == 0:
-                self.castling_rights[piece[0]]['Q'] = False
-            if sc == 7:
-                self.castling_rights[piece[0]]['K'] = False
-        if piece[1] == 'P' and abs(er - sr) == 2:
-            self.ep_square = ((sr + er) // 2, sc)
-        else:
-            self.ep_square = None
-        if piece[1] == 'P' or captured:
-            self.halfmove_clock = 0
-        else:
-            self.halfmove_clock += 1
-        if self.turn == 'b':
-            self.fullmove_number += 1
-        self.turn = 'b' if self.turn == 'w' else 'w'
-        self.history.append(self.fen())
-
-    def pop(self):
-        sr, sc, er, ec, piece, captured, crights, ep, half, full, turn = self.move_stack.pop()
-        self.board[sr][sc] = piece
-        self.board[er][ec] = captured
-        self.castling_rights = { 'w': crights['w'].copy(), 'b': crights['b'].copy() }
-        self.ep_square = ep
-        self.halfmove_clock = half
-        self.fullmove_number = full
-        self.turn = turn
-        if len(self.history) > 1:
-            self.history.pop()
+    def _from_fen(self, fen):
+        board = []
+        rows = fen.split()[0].split('/')
+        for row in rows:
+            b_row = []
+            for ch in row:
+                if ch.isdigit():
+                    b_row += [None]*int(ch)
+                else:
+                    color = 'w' if ch.isupper() else 'b'
+                    piece = ch.upper()
+                    b_row.append(color + piece)
+            board.append(b_row)
+        return board
 
     def fen(self):
         rows = []
-        for rank in self.board:
+        for row in self.board:
             empty = 0
-            fen_rank = ''
-            for sq in rank:
+            fen_row = ''
+            for sq in row:
                 if not sq:
                     empty += 1
                 else:
-                    if empty:
-                        fen_rank += str(empty)
+                    if empty > 0:
+                        fen_row += str(empty)
                         empty = 0
-                    fen_rank += sq[1].upper() if sq[0] == 'w' else sq[1].lower()
-            if empty:
-                fen_rank += str(empty)
-            rows.append(fen_rank)
-        placement = '/'.join(rows)
-        active = self.turn
-        cr = ''
-        if self.castling_rights['w']['K']: cr += 'K'
-        if self.castling_rights['w']['Q']: cr += 'Q'
-        if self.castling_rights['b']['K']: cr += 'k'
-        if self.castling_rights['b']['Q']: cr += 'q'
-        if not cr: cr = '-'
-        if self.ep_square:
-            file = chr(self.ep_square[1] + ord('a'))
-            rank = str(8 - self.ep_square[0])
-            ep = file + rank
-        else:
-            ep = '-'
-        return f"{placement} {active} {cr} {ep} {self.halfmove_clock} {self.fullmove_number}"
+                    color, piece = sq[0], sq[1]
+                    fen_row += piece.upper() if color == 'w' else piece.lower()
+            if empty > 0:
+                fen_row += str(empty)
+            rows.append(fen_row)
+        return '/'.join(rows)
 
-    def is_legal(self, move):
-        if move not in self.generate_pseudo_legal_moves():
-            return False
-        self.push(move)
-        valid = not self.is_check(self.turn)
-        self.pop()
-        return valid
+    def find_pins(self, color):
+        king_pos = None
+        for r in range(8):
+            for c in range(8):
+                if self.board[r][c] == color + 'K':
+                    king_pos = (r, c)
+                    break
+        if king_pos is None:
+            return {}
+        enemy = 'b' if color == 'w' else 'w'
+        pins = {}
+        directions = [(-1,0), (1,0), (0,-1), (0,1), (-1,-1), (-1,1), (1,-1), (1,1)]
+        for dr, dc in directions:
+            found_ally = None
+            r1, c1 = king_pos[0]+dr, king_pos[1]+dc
+            while 0 <= r1 < 8 and 0 <= c1 < 8:
+                sq = self.board[r1][c1]
+                if sq:
+                    if sq[0] == color:
+                        if found_ally is None:
+                            found_ally = (r1, c1)
+                        else:
+                            break
+                    else:
+                        pt = sq[1]
+                        if found_ally is not None:
+                            if (dr == 0 or dc == 0) and pt in ('Q', 'R'):
+                                pins[found_ally] = (dr, dc)
+                            elif (dr != 0 and dc != 0) and pt in ('Q', 'B'):
+                                pins[found_ally] = (dr, dc)
+                        break
+                r1 += dr
+                c1 += dc
+        return pins
 
-    def legal_moves(self):
-        return [m for m in self.generate_pseudo_legal_moves() if self.is_legal(m)]
-
-    def generate_pseudo_legal_moves(self):
-        moves = []
+    def attack_map(self, color, only_pawns=False):
+        attacked = set()
         for r in range(8):
             for c in range(8):
                 sq = self.board[r][c]
-                if sq and sq[0] == self.turn:
-                    moves.extend(self._gen_moves_for_piece(sq[1], (r, c)))
-        return moves
+                if sq and sq[0] == color:
+                    if only_pawns and sq[1] != 'P':
+                        continue
+                    moves = self._gen_moves_for_piece(
+                        sq[1], (r, c),
+                        ignore_pins=True,
+                        only_attacks=True
+                    )
+                    for _, end, _ in moves:
+                        attacked.add(end)
+        return attacked
 
-    def _gen_moves_for_piece(self, pt, pos):
-        if pt == 'P': return self._gen_pawn_moves(pos)
-        if pt == 'N': return self._gen_knight_moves(pos)
-        if pt in ('B', 'R', 'Q'):
+    def _gen_moves_for_piece(self, pt, pos, ignore_pins=False, only_attacks=False, pin_dir=None):
+        if pt == 'P':
+            return self._gen_pawn_moves(pos, only_attacks=only_attacks, pin_dir=pin_dir if not ignore_pins else None)
+        elif pt == 'N':
+            if pin_dir and not ignore_pins:
+                return []
+            return self._gen_knight_moves(pos)
+        elif pt in ('B', 'R', 'Q'):
             dirs = []
             if pt in ('B', 'Q'): dirs += [(-1,-1),(-1,1),(1,-1),(1,1)]
             if pt in ('R', 'Q'): dirs += [(-1,0),(1,0),(0,-1),(0,1)]
+            if pin_dir and not ignore_pins:
+                dirs = [d for d in dirs if d == pin_dir or d == (-pin_dir[0], -pin_dir[1])]
             return self._gen_sliding_moves(pos, dirs)
-        if pt == 'K': return self._gen_king_moves(pos)
+        elif pt == 'K':
+            return self._gen_king_moves(pos)
         return []
 
-    def _gen_pawn_moves(self, pos):
+    def _gen_pawn_moves(self, pos, only_attacks=False, pin_dir=None):
         moves = []
         r, c = pos
         col = self.turn
         dr = -1 if col == 'w' else 1
         start = 6 if col == 'w' else 1
-        if 0 <= r+dr < 8 and not self.board[r+dr][c]:
-            if (r+dr) in (0,7):
-                for p in 'QRBN': moves.append((pos, (r+dr, c), p))
-            else:
-                moves.append((pos, (r+dr, c), None))
-            if r == start and not self.board[r+2*dr][c]:
-                moves.append((pos, (r+2*dr, c), None))
+        if not only_attacks:
+            if (not pin_dir) or (pin_dir == (dr, 0)):
+                if 0 <= r+dr < 8 and not self.board[r+dr][c]:
+                    if (r+dr) in (0,7):
+                        for p in 'QRBN': moves.append(((r, c), (r+dr, c), p))
+                    else:
+                        moves.append(((r, c), (r+dr, c), None))
+                    if r == start and not self.board[r+2*dr][c]:
+                        moves.append(((r, c), (r+2*dr, c), None))
         for dc in (-1, 1):
             rr, cc = r+dr, c+dc
             if 0 <= rr < 8 and 0 <= cc < 8:
-                sq = self.board[rr][cc]
-                if sq and sq[0] != col:
-                    if rr in (0,7):
-                        for p in 'QRBN': moves.append((pos, (rr, cc), p))
+                if only_attacks or (not pin_dir) or (pin_dir == (dr, dc)):
+                    if only_attacks:
+                        moves.append(((r, c), (rr, cc), None))
                     else:
-                        moves.append((pos, (rr, cc), None))
-                elif (rr, cc) == self.ep_square:
-                    moves.append((pos, self.ep_square, None))
+                        sq = self.board[rr][cc]
+                        if sq and sq[0] != col:
+                            if rr in (0,7):
+                                for p in 'QRBN': moves.append(((r, c), (rr, cc), p))
+                            else:
+                                moves.append(((r, c), (rr, cc), None))
+                        elif self.ep_square and (rr, cc) == self.ep_square:
+                            moves.append(((r, c), (rr, cc), None))
         return moves
 
     def _gen_knight_moves(self, pos):
@@ -234,25 +204,42 @@ class Board:
                     sq = self.board[rr][cc]
                     if not sq or sq[0] != col:
                         moves.append((pos, (rr, cc), None))
-        if not self.is_check(col):
-            if self.castling_rights[col]['K']:
-                if c+2 < 8 and all(0 <= cc < 8 and not self.board[r][cc] for cc in (c+1, c+2)):
-                    if not self.is_check_on_square(r, c+1, col) and not self.is_check_on_square(r, c+2, col):
-                        moves.append((pos, (r, c+2), None))
-            if self.castling_rights[col]['Q']:
-                if c-3 >= 0 and all(0 <= cc < 8 and not self.board[r][cc] for cc in (c-1, c-2, c-3)):
-                    if not self.is_check_on_square(r, c-1, col) and not self.is_check_on_square(r, c-2, col):
-                        moves.append((pos, (r, c-2), None))
         return moves
 
-    def is_check_on_square(self, r, c, color):
-        attacker = 'w' if color == 'b' else 'b'
-        orig_piece = self.board[r][c]
-        self.board[r][c] = color + 'K'
-        res = self.is_check(color)
-        self.board[r][c] = orig_piece
-        return res
+    def legal_moves(self):
+        color = self.turn
+        enemy = 'b' if color == 'w' else 'w'
+        pins = self.find_pins(color)
+        enemy_attacks = self.attack_map(enemy)
+        king_pos = None
+        for r in range(8):
+            for c in range(8):
+                if self.board[r][c] == color+'K':
+                    king_pos = (r, c)
+                    break
+        legal = []
+        for r in range(8):
+            for c in range(8):
+                sq = self.board[r][c]
+                if sq and sq[0] == color:
+                    pos = (r, c)
+                    pin_dir = pins.get(pos)
+                    moves = self._gen_moves_for_piece(sq[1], pos, pin_dir=pin_dir)
+                    for move in moves:
+                        if sq[1] == 'K' and move[1] in enemy_attacks:
+                            continue
+                        legal.append(move)
+        return legal 
 
+    def generate_pseudo_legal_moves(self):
+        moves = []
+        for r in range(8):
+            for c in range(8):
+                sq = self.board[r][c]
+                if sq and sq[0] == self.turn:
+                    moves.extend(self._gen_moves_for_piece(sq[1], (r, c)))
+        return moves
+    
     def is_check(self, color):
         kr = kc = None
         for r in range(8):
@@ -330,3 +317,20 @@ class Board:
         new_board = Board()
         new_board.board = [list(row) for row in self.board]
         return new_board
+
+    def push(self, move):
+        (sr, sc), (er, ec), promotion = move if len(move) == 3 else (*move, None)
+        piece = self.board[sr][sc]
+        captured = self.board[er][ec]
+        self.move_stack.append(((sr, sc), (er, ec), piece, captured, promotion))
+        self.board[er][ec] = piece if not promotion else piece[0] + promotion
+        self.board[sr][sc] = None
+        self.turn = 'b' if self.turn == 'w' else 'w'
+
+    def pop(self):
+        if not self.move_stack:
+            return
+        (sr, sc), (er, ec), piece, captured, promotion = self.move_stack.pop()
+        self.board[sr][sc] = piece
+        self.board[er][ec] = captured
+        self.turn = 'b' if self.turn == 'w' else 'w'

@@ -42,8 +42,8 @@ def draw_pieces(win, board, images, square_size, skip_piece=None):
         for col in range(8):
             if skip_piece is not None and (row, col) == skip_piece:
                 continue  
-            piece = board[row][col]
-            if piece != '':
+            piece = board.board[row][col]
+            if piece is not None and piece != '':
                 win.blit(images[piece], (col * square_size, row * square_size))
 
 def draw_buttons(win):
