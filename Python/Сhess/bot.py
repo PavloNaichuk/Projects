@@ -22,34 +22,28 @@ class AlphaBetaBot:
         self.ttable = {}
         self.visited_history = {}
 
-    ### ШВИДКА ТАКТИКА ###
     def fast_tactics(self, game, color):
         score = 0
         opp_color = 'b' if color == 'w' else 'w'
         attacked_by_me = set()
         attacked_by_opp = set()
 
-        # Всі можливі ходи свої
         for move in game.get_all_moves(color):
             _, end, _ = move
             attacked_by_me.add(end)
 
-        # Всі можливі ходи суперника
         for move in game.get_all_moves(opp_color):
             _, end, _ = move
             attacked_by_opp.add(end)
 
-        # Штраф за свої фігури під боєм
         for r in range(8):
             for c in range(8):
                 sq = game.board.board[r][c]
                 if sq and sq[0] == color and (r, c) in attacked_by_opp:
                     score -= 50
-                # Бонус за фігури, які атакують чужих
                 if sq and sq[0] == opp_color and (r, c) in attacked_by_me:
                     score += 40
 
-        # Проста "вилка": якщо одна фігура атакує >1 чужу фігуру одразу
         my_attack_map = {}
         for move in game.get_all_moves(color):
             start, end, _ = move
@@ -64,7 +58,6 @@ class AlphaBetaBot:
                 score += 80 * (attacked_targets - 1)
         return score
 
-    ### АНТИ-ЦИКЛ + MOVE ORDERING ###
     def order_moves(self, moves, game, color):
         if len(game.move_log) > 0:
             last_move = game.move_log[-1]
@@ -91,13 +84,11 @@ class AlphaBetaBot:
         game_copy.move_piece(*move)
         return game_copy.is_in_check('b' if color == 'w' else 'w')
 
-    ### ГОЛОВНА ОЦІНКА ПОЗИЦІЇ ###
     def evaluate_board(self, game: Game, color: str):
         score = 0
         opp_color = 'b' if color == 'w' else 'w'
         num_moves = len(game.move_log)
 
-        # Матеріал
         for r in range(8):
             for c in range(8):
                 sq = game.board.board[r][c]
@@ -106,7 +97,6 @@ class AlphaBetaBot:
                     sign = 1 if sq[0] == color else -1
                     score += val * sign
 
-        # Контроль центру, розвиток, просунуті пішаки
         for r in range(8):
             for c in range(8):
                 sq = game.board.board[r][c]
@@ -135,7 +125,6 @@ class AlphaBetaBot:
                         undeveloped += 1
         score -= undeveloped * 70
 
-        # Бонус за перехід фігури на нову клітинку
         for r in range(8):
             for c in range(8):
                 sq = game.board.board[r][c]
@@ -174,7 +163,6 @@ class AlphaBetaBot:
             if safe < 2:
                 score -= 100
 
-        # Жорсткий штраф за циклічні ходи
         if len(game.move_log) >= 2:
             last_move = game.move_log[-1]
             prev_move = game.move_log[-2]
@@ -185,12 +173,19 @@ class AlphaBetaBot:
         if hasattr(game, 'position_history') and game.position_history.count(fen) > 1:
             score -= 400 * (game.position_history.count(fen) - 1)
 
-        # Додаємо ШВИДКУ тактичну оцінку
         score += self.fast_tactics(game, color)
+        score += self.pawn_structure_score(game, color)
+        score += self.rook_open_file_score(game, color)
+        score += self.king_shelter_score(game, color)
+        score += self.seventh_rank_bonus(game, color)
 
+        score -= self.pawn_structure_score(game, opp_color)
+        score -= self.rook_open_file_score(game, opp_color)
+        score -= self.king_shelter_score(game, opp_color)
+        score -= self.seventh_rank_bonus(game, opp_color)
+        
         return score
 
-    ### QUIESCENCE SEARCH ###
     def quiescence(self, game, alpha, beta, color, start_time):
         stand_pat = self.evaluate_board(game, color)
         if stand_pat >= beta:
@@ -211,7 +206,6 @@ class AlphaBetaBot:
         moves = game.get_all_moves(color)
         return [m for m in moves if game.board.board[m[1][0]][m[1][1]]]
 
-    ### АЛЬФА-БЕТА ###
     def minimax(self, game: Game, depth: int, alpha: int, beta: int, maximizing_player: bool, color: str, start_time: float):
         fen = game.board.fen()
         tt_key = (fen, depth, maximizing_player)
@@ -254,7 +248,6 @@ class AlphaBetaBot:
             self.ttable[tt_key] = min_eval
             return min_eval
 
-    ### ІТЕРАТИВНЕ ПОГЛИБЛЕННЯ ###
     def choose_move(self, game: Game):
         best_move = None
         start = time.time()
@@ -278,6 +271,72 @@ class AlphaBetaBot:
             if current_best:
                 best_move = current_best
         return best_move
+    
+    def pawn_structure_score(self, game, color):
+        print("pawn_structure_score called")
+        score = 0
+        pawns = []
+        for r in range(8):
+            for c in range(8):
+                sq = game.board.board[r][c]
+                if sq and sq[0] == color and sq[1] == 'P':
+                    pawns.append((r, c))
+        files = [c for r, c in pawns]
+        for c in set(files):
+            count = files.count(c)
+            if count > 1:
+                score -= 32 * (count - 1)
+            if not any(f == c-1 or f == c+1 for f in files):
+                score -= 30
+        return score
+
+    def rook_open_file_score(self, game, color):
+        score = 0
+        for r in range(8):
+            for c in range(8):
+                sq = game.board.board[r][c]
+                if sq and sq[0] == color and sq[1] == 'R':
+                    col_pawns = [game.board.board[rr][c] for rr in range(8)]
+                    own_pawns = any(p and p[0] == color and p[1] == 'P' for p in col_pawns)
+                    enemy_pawns = any(p and p[0] != color and p[1] == 'P' for p in col_pawns)
+                    if not own_pawns and not enemy_pawns:
+                        score += 40
+                    elif not own_pawns:
+                        score += 20
+        return score
+
+    def king_shelter_score(self, game, color):
+        score = 0
+        king_pos = None
+        for r in range(8):
+            for c in range(8):
+                if game.board.board[r][c] == color + 'K':
+                    king_pos = (r, c)
+        if not king_pos:
+            return 0
+        shelter = 0
+        for dr in [-1, 0, 1]:
+            for dc in [-1, 0, 1]:
+                if dr == 0 and dc == 0:
+                    continue
+                rr, cc = king_pos[0]+dr, king_pos[1]+dc
+                if 0 <= rr < 8 and 0 <= cc < 8:
+                    sq = game.board.board[rr][cc]
+                    if sq and sq[0] == color and sq[1] == 'P':
+                        shelter += 1
+        score += shelter * 15
+        if shelter < 2:
+            score -= 50
+        return score
+
+    def seventh_rank_bonus(self, game, color):
+        score = 0
+        rank = 1 if color == 'w' else 6
+        for c in range(8):
+            sq = game.board.board[rank][c]
+            if sq and sq[0] == color and sq[1] in 'RQ':
+                score += 35
+        return score
 
 def bot_move(game: Game, max_depth=4, time_limit=1.2):
     bot = AlphaBetaBot(max_depth=max_depth, time_limit=time_limit)
