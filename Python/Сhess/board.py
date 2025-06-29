@@ -49,10 +49,10 @@ class Board:
         return board
 
     def push(self, move):
-        sr, sc = move[0]
-        er, ec = move[1]
-        promo = move[2]
+        (sr, sc), (er, ec), promo = move
         piece = self.board[sr][sc]
+        if not piece:
+            raise ValueError(f"Board.push: no piece at square {(sr, sc)}, move={move}")
         captured = ''
         if piece[1] == 'P' and self.ep_square == (er, ec) and sc != ec:
             cap_r, cap_c = sr, ec
