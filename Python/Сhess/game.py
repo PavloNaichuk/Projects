@@ -48,9 +48,15 @@ class Game:
     def move_piece(self, start, end, promotion=None):
         sr, sc = start
         er, ec = end
-        piece    = self.board.board[sr][sc]
+        piece = self.board.board[sr][sc]
         captured = self.board.board[er][ec]
-        move = (start, end, promotion)
+
+        is_pawn = piece and piece[1] == 'P'
+        reached_last = (piece and is_pawn and ((piece[0] == 'w' and er == 0) or (piece[0] == 'b' and er == 7)))
+        if reached_last and not promotion:
+            promotion = 'Q'
+
+        move = (start, end, promotion) 
         self.board.push(move)
         self.move_log.append((start, end, piece, captured))
         self.position_history.append(self.board.fen())
