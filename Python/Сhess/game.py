@@ -73,16 +73,19 @@ class Game:
         self.move_log.append((start, end, piece, captured))
         self.position_history.append(self.board.fen())
         self.turn = 'b' if self.turn == 'w' else 'w'
+        self.board.turn = self.turn
         is_over, msg = check_game_result(self.board)
         if is_over:
             print(msg)
             self.game_over = True
             self.game_over_message = msg
+            return True
         return True
     
     def undo_move(self):
         self.board.pop()
         self.turn = 'b' if self.turn == 'w' else 'w'
+        self.board.turn = self.turn
         if self.move_log:
             self.move_log.pop()
         if self.position_history:

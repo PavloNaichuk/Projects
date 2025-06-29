@@ -317,8 +317,14 @@ class Board:
         return self.halfmove_clock >= 100
 
     def is_insufficient_material(self):
-        pieces = [p[1] for row in self.board for p in row if p]
-        return set(pieces) <= set(['K'])
+        pieces = [p for row in self.board for p in row if p]
+        if set(p[1] for p in pieces) == {'K'} and len(pieces) == 2:
+            return True
+        if len(pieces) == 3:
+            names = sorted(p[1] for p in pieces)
+            if names.count('K') == 2 and ('B' in names or 'N' in names):
+                return True
+        return False
 
     def is_checkmate(self, color=None):
         if color is None:
@@ -331,6 +337,7 @@ class Board:
         return not self.is_check(self.turn) and not self.legal_moves()
 
     def is_draw(self):
+        print("CHECKING DRAW:", self.board.is_stalemate(), self.board.is_insufficient_material(), self.board.is_threefold_repetition(), self.board.is_fifty_move_rule())
         if color is None:
             color = self.turn
         return (

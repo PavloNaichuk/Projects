@@ -1,4 +1,4 @@
-import sys
+import sys 
 import pygame
 from PIL import Image, ImageFilter
 import tkinter as tk
@@ -26,7 +26,6 @@ MOVE_BG = (220, 220, 220)
 MOVE_BG_ACTIVE = (180, 180, 200)
 LAST_BLACK_BG = (185, 185, 200)
 
-
 pygame.mixer.init()
 move_sound = pygame.mixer.Sound("sounds/move.wav")
 capture_sound = pygame.mixer.Sound("sounds/capture.wav")
@@ -35,10 +34,11 @@ checkmate_sound = pygame.mixer.Sound("sounds/checkmate.wav")
 start_sound = pygame.mixer.Sound("sounds/start.wav")
 
 def gaussian_blur_surface(surf, radius=4):
-        raw_str = pygame.image.tostring(surf, 'RGBA')
-        img = Image.frombytes('RGBA', surf.get_size(), raw_str)
-        img = img.filter(ImageFilter.GaussianBlur(radius))
-        return pygame.image.fromstring(img.tobytes(), img.size, 'RGBA')
+    raw_str = pygame.image.tostring(surf, 'RGBA')
+    img = Image.frombytes('RGBA', surf.get_size(), raw_str)
+    img = img.filter(ImageFilter.GaussianBlur(radius))
+    return pygame.image.fromstring(img.tobytes(), img.size, 'RGBA')
+
 class ChessApp:
     def __init__(self):
         pygame.init()
@@ -165,10 +165,11 @@ class ChessApp:
         self._promo    = None
         self.bot_moved = False
 
-    def _on_remote_move(self, start, end):
-        self.game.move_piece(start, end)
-        self.check_end()
-        self.auto_scroll()
+    def _on_remote_move(self, start, end, promotion=None):
+        ok = self.game.move_piece(start, end, promotion=promotion)
+        if ok:
+            self.check_end()
+            self.auto_scroll()
 
     def run(self):
         self.running = True
@@ -194,12 +195,12 @@ class ChessApp:
                         if self._promo == 'ask':
                             promo = self.prompt_promotion(prev, dst)
                             pygame.event.clear()
-                            self.game.move_piece(prev, dst, promotion=promo)
+                            ok = self.game.move_piece(prev, dst, promotion=promo)
                         else:
-                            self.game.move_piece(prev, dst, promotion=self._promo)
-
-                        self.check_end()
-                        self.auto_scroll()
+                            ok = self.game.move_piece(prev, dst, promotion=self._promo)
+                        if ok:
+                            self.check_end()
+                            self.auto_scroll()
                         self._pending_move = None
                         self._promo        = None
 
@@ -210,11 +211,12 @@ class ChessApp:
                 mv = bot_move(self.game)
                 if mv:
                     promo = mv[2] if len(mv) > 2 else None
-                    self.game.move_piece(mv[0], mv[1], promotion=promo)
-                    last = self.game.move_log[-1]
-                    self._play_move_sound(*last)
-                    self.check_end()
-                    self.auto_scroll()
+                    ok = self.game.move_piece(mv[0], mv[1], promotion=promo)
+                    if ok:
+                        last = self.game.move_log[-1]
+                        self._play_move_sound(*last)
+                        self.check_end()
+                        self.auto_scroll()
                 self.bot_moved = True
 
             self.draw()
@@ -225,14 +227,17 @@ class ChessApp:
         sys.exit()
         
     def check_end(self):
-        if self.game.is_checkmate():
-            winner = 'White' if self.game.turn == 'b' else 'Black'
-            self.result = f"{winner} wins"
+        is_over = getattr(self.game, 'game_over', False)
+        msg = getattr(self.game, 'game_over_message', "")
+        if is_over:
+            self.result = msg
             self.game_over = True
-            checkmate_sound.play()
-        elif self.game.is_stalemate():
-            self.result = "Draw"
-            self.game_over = True
+            if "Checkmate" in msg:
+                checkmate_sound.play()
+            elif "draw" in msg or "Draw" in msg:
+                move_sound.play()
+            else:
+                move_sound.play()
             
     def _play_move_sound(self, start, end, piece, captured):
         if (captured and piece
@@ -419,7 +424,7 @@ class ChessApp:
         if self.animating and self.anim_move:
             (sr, sc), (er, ec), img = self.anim_move
             prog = self.anim_progress
-            cx = sc * SQUARE_SIZE + (ec - sc) * SQUARE_SIZE * prog
+            cx = sc * SQUARE_SIZE + (er - sc) * SQUARE_SIZE * prog
             cy = sr * SQUARE_SIZE + (er - sr) * SQUARE_SIZE * prog
             self.win.blit(img, (cx, cy))
         
@@ -457,6 +462,7 @@ class ChessApp:
                     self._drag_offset = y - self._scrollbar_rect.y
                 elif self.undo_rect.collidepoint(x, y):
                     self.game.undo_move()
+                    self.check_end()
                     self.auto_scroll()
                     self.undo_highlight = True
                     self.status_message = "Undo"
@@ -484,6 +490,7 @@ class ChessApp:
                     filename = self.ask_load_filename()
                     if filename:
                         self.game.load_game(filename)
+                        self.check_end()
                         self.auto_scroll()
                         self.load_highlight = True
                         self.status_message = "Load"
@@ -565,6 +572,7 @@ class ChessApp:
             elif ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_z and (pygame.key.get_mods() & pygame.KMOD_CTRL):
                     self.game.undo_move()
+                    self.check_end()
                     self.auto_scroll()
 
     def start_animation(self, start, end, piece_img):
@@ -631,4 +639,3 @@ class ChessApp:
             self.clock.tick(30)
 
         return choice
-
