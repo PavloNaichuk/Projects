@@ -236,11 +236,11 @@ class Board:
                         moves.append((pos, (rr, cc), None))
         if not self.is_check(col):
             if self.castling_rights[col]['K']:
-                if all(not self.board[r][cc] for cc in (c+1, c+2)):
+                if c+2 < 8 and all(0 <= cc < 8 and not self.board[r][cc] for cc in (c+1, c+2)):
                     if not self.is_check_on_square(r, c+1, col) and not self.is_check_on_square(r, c+2, col):
                         moves.append((pos, (r, c+2), None))
             if self.castling_rights[col]['Q']:
-                if all(not self.board[r][cc] for cc in (c-1, c-2, c-3)):
+                if c-3 >= 0 and all(0 <= cc < 8 and not self.board[r][cc] for cc in (c-1, c-2, c-3)):
                     if not self.is_check_on_square(r, c-1, col) and not self.is_check_on_square(r, c-2, col):
                         moves.append((pos, (r, c-2), None))
         return moves
@@ -325,3 +325,8 @@ class Board:
             self.is_threefold_repetition() or
             self.is_fifty_move_rule()
         )
+    
+    def copy(self):
+        new_board = Board()
+        new_board.board = [list(row) for row in self.board]
+        return new_board
