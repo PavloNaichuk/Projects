@@ -233,10 +233,14 @@ class ChessApp:
         elif self.game.is_stalemate():
             self.result = "Draw"
             self.game_over = True
+            
     def _play_move_sound(self, start, end, piece, captured):
-        if captured and captured[0] != piece[0]:
+        if (captured and piece
+                and isinstance(captured, str) and isinstance(piece, str)
+                and len(captured) > 1 and len(piece) > 1
+                and captured[0] != piece[0]):
             capture_sound.play()
-        elif self.game.is_in_check(self.game.turn):
+        elif piece and isinstance(piece, str) and len(piece) > 1 and self.game.is_in_check(self.game.turn):
             check_sound.play()
         else:
             move_sound.play()
