@@ -1,116 +1,71 @@
-import copy
 import time
-from board import Board
+from game import Game
 
-PIECE_VALUES = {'P': 1, 'N': 3, 'B': 3, 'R': 5, 'Q': 9, 'K': 10000}
+PIECE_VALUES = {'P': 100, 'N': 320, 'B': 330, 'R': 500, 'Q': 900, 'K': 20000}
 
-CENTER_SQUARES = {(3, 3), (3, 4), (4, 3), (4, 4)}
+class AlphaBetaBot:
+    def __init__(self, max_depth=4, time_limit=2.0):
+        self.max_depth = max_depth   
+        self.time_limit = time_limit    
 
-PAWN_POSITION_SCORE = [
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
-    [0.2, 0.2, 0.3, 0.4, 0.4, 0.3, 0.2, 0.2],
-    [0.1, 0.1, 0.2, 0.3, 0.3, 0.2, 0.1, 0.1],
-    [0, 0, 0.1, 0.2, 0.2, 0.1, 0, 0],
-    [0.1, -0.1, -0.1, 0, 0, -0.1, -0.1, 0.1],
-    [0.1, 0.2, 0.2, -0.2, -0.2, 0.2, 0.2, 0.1],
-    [0, 0, 0, 0, 0, 0, 0, 0]
-]
+    def evaluate_board(self, game: Game, color: str):
+        score = 0
+        for r in range(8):
+            for c in range(8):
+                sq = game.board.board[r][c]
+                if sq:
+                    val = PIECE_VALUES[sq[1]]
+                    score += val if sq[0] == color else -val
+        return score
 
-def evaluate_board(game, color='b'):
-    opponent = 'w' if color == 'b' else 'b'
-    score = 0
-
-    for r in range(8):
-        for c in range(8):
-            piece = game.board.board[r][c]
-            if piece:
-                piece_type = piece[1]
-                piece_color = piece[0]
-
-                val = PIECE_VALUES[piece_type]
-                position_bonus = 0
-
-                if piece_type == 'P':
-                    position_bonus = PAWN_POSITION_SCORE[r][c] if piece_color == 'w' else PAWN_POSITION_SCORE[7-r][c]
-                elif piece_type in ('N', 'B'):
-                    position_bonus = 0.1 if (r, c) in CENTER_SQUARES else 0
-
-                total_piece_value = val + position_bonus
-
-                score += total_piece_value if piece_color == color else -total_piece_value
-
-    my_moves = len(game.get_all_moves(color))
-    opp_moves = len(game.get_all_moves(opponent))
-    score += 0.1 * (my_moves - opp_moves)
-
-    if game.is_checkmate():
-        if game.turn == color:
-            score -= 9999
+    def minimax(self, game: Game, depth: int, alpha: int, beta: int, maximizing_player: bool, color: str, start_time: float):
+        if depth == 0 or game.is_checkmate() or game.is_stalemate():
+            return self.evaluate_board(game, color)
+        if time.time() - start_time > self.time_limit:
+            return self.evaluate_board(game, color)
+        if maximizing_player:
+            max_eval = -float('inf')
+            for move in game.get_all_moves(color):
+                game_copy = game.copy()
+                game_copy.move_piece(*move)
+                eval = self.minimax(game_copy, depth - 1, alpha, beta, False, color, start_time)
+                max_eval = max(max_eval, eval)
+                alpha = max(alpha, eval)
+                if beta <= alpha:
+                    break
+            return max_eval
         else:
-            score += 9999
-    elif game.is_in_check(opponent):
-        score += 1
-    elif game.is_in_check(color):
-        score -= 1
+            min_eval = float('inf')
+            opp_color = 'b' if color == 'w' else 'w'
+            for move in game.get_all_moves(opp_color):
+                game_copy = game.copy()
+                game_copy.move_piece(*move)
+                eval = self.minimax(game_copy, depth - 1, alpha, beta, True, color, start_time)
+                min_eval = min(min_eval, eval)
+                beta = min(beta, eval)
+                if beta <= alpha:
+                    break
+            return min_eval
 
-    if game.is_stalemate() or game.is_draw():
-        score -= 50
-
-    return score
-
-def _alphabeta(game, depth, alpha, beta, maximizing, root_color):
-    if depth == 0 or game.is_checkmate() or game.is_draw():
-        return evaluate_board(game, root_color), None
-
-    moves = game.get_all_moves(root_color if maximizing else ('w' if root_color == 'b' else 'b'))
-    moves.sort(key=lambda move: evaluate_move(game, move, root_color), reverse=maximizing)
-
-    best_move = None
-    if maximizing:
-        value = float('-inf')
-        for move in moves:
-            new_game = copy.deepcopy(game)
-            new_game.move_piece(move[0], move[1])
-            val, _ = _alphabeta(new_game, depth-1, alpha, beta, False, root_color)
-            if val > value:
-                value = val
-                best_move = move
-            alpha = max(alpha, value)
-            if alpha >= beta:
+    def choose_move(self, game: Game):
+        best_move = None
+        best_value = -float('inf')
+        start = time.time()
+        for move in game.get_all_moves(game.turn):
+            if time.time() - start > self.time_limit:
                 break
-        return value, best_move
-    else:
-        value = float('inf')
-        for move in moves:
-            new_game = copy.deepcopy(game)
-            new_game.move_piece(move[0], move[1])
-            val, _ = _alphabeta(new_game, depth-1, alpha, beta, True, root_color)
-            if val < value:
-                value = val
+            game_copy = game.copy()
+            game_copy.move_piece(*move)
+            board_value = self.minimax(game_copy, self.max_depth - 1, -float('inf'), float('inf'), False, game.turn, start)
+            if board_value > best_value:
+                best_value = board_value
                 best_move = move
-            beta = min(beta, value)
-            if beta <= alpha:
-                break
-        return value, best_move
-
-def evaluate_move(game, move, root_color):
-    new_game = copy.deepcopy(game)
-    new_game.move_piece(move[0], move[1])
-    return evaluate_board(new_game, root_color)
+        return best_move
 
 
-def bot_move(game, max_depth=3, max_time=2.0):
-    start_time = time.time()
-    best_move = None
-
-    for depth in range(1, max_depth + 1):
-        if time.time() - start_time > max_time:
-            break
-        score, current_best_move = _alphabeta(game, depth, float('-inf'), float('inf'), True, 'b')
-        if current_best_move:
-            best_move = current_best_move
-
-    if best_move:
-        game.move_piece(best_move[0], best_move[1], best_move[2] if len(best_move) == 3 else None)
+def bot_move(game: Game, max_depth=4, time_limit=2.0):
+    bot = AlphaBetaBot(max_depth=max_depth, time_limit=time_limit)
+    move = bot.choose_move(game)
+    if move:
         game.selected = None
+    return move
