@@ -1,5 +1,6 @@
 import copy
 import time
+from board import Board
 
 PIECE_VALUES = {'P': 1, 'N': 3, 'B': 3, 'R': 5, 'Q': 9, 'K': 10000}
 
@@ -22,7 +23,7 @@ def evaluate_board(game, color='b'):
 
     for r in range(8):
         for c in range(8):
-            piece = game.board[r][c]
+            piece = game.board.board[r][c]
             if piece:
                 piece_type = piece[1]
                 piece_color = piece[0]
@@ -111,5 +112,5 @@ def bot_move(game, max_depth=3, max_time=2.0):
             best_move = current_best_move
 
     if best_move:
-        game.move_piece(best_move[0], best_move[1])
+        game.move_piece(best_move[0], best_move[1], best_move[2] if len(best_move) == 3 else None)
         game.selected = None
