@@ -178,9 +178,8 @@ Other/Blueprint/PuzzleGame/Content/InfinityBladeGrassLands/Maps/ElvenRuins_Built
 /Tic Tac Toe/.vs
 /Tic Tac Toe/Tic Tac Toe/Debug
 
+*.pkl
+/Python/Сhess/dist
 /Python/Сhess/__pycache__
-/Python/Сhess/build
-/Python/Сhess/build
-/Python/Сhess
-Python/Сhess/build/main/main.pkg
+/Python/Сhess/__pycache__
 *.pyc
