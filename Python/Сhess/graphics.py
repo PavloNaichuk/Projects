@@ -51,6 +51,7 @@ class ChessApp:
         
         self.ui_locked = False
         self.ui_locked_time = 0
+        self.bot_moved = False
         
         mode_title = ""
         res = select_mode(self.win)
@@ -119,6 +120,8 @@ class ChessApp:
         self.status_message = None
         self.status_time = 0.0
 
+        self._promo    = None
+        self.bot_moved = False
         self.reset_game()
     def ask_save_filename(self):
         root = tk.Tk()
@@ -159,6 +162,8 @@ class ChessApp:
         self._pending_move = None
         self.auto_scroll()
         start_sound.play()
+        self._promo    = None
+        self.bot_moved = False
 
     def _on_remote_move(self, start, end):
         self.game.move_piece(start, end)
@@ -166,49 +171,51 @@ class ChessApp:
         self.auto_scroll()
 
     def run(self):
+        self.running = True
         while self.running:
             self.clock.tick(60)
+            if self.vs_bot and self.game.turn == 'w':
+                self.bot_moved = False
+
             self.handle_events()
 
             if self.animating:
                 self.anim_progress += 0.03
                 if self.anim_progress >= 1.0:
                     self.animating = False
+                    self.ui_locked = False
                     self.anim_progress = 0.0
-                    
                     if self._pending_move:
                         prev, dst = self._pending_move
                         piece    = self.game.board[prev[0]][prev[1]]
                         captured = self.game.board[dst[0]][dst[1]]
                         self._play_move_sound(prev, dst, piece, captured)
-                        
-                        piece = self.game.board[prev[0]][prev[1]]
-                        is_pawn = piece[1] == 'P'
-                        reached_last = (piece[0] == 'w' and dst[0] == 0) or (piece[0] == 'b' and dst[0] == 7)
 
-                        if is_pawn and reached_last:
+                        if self._promo == 'ask':
                             promo = self.prompt_promotion(prev, dst)
                             pygame.event.clear()
                             self.game.move_piece(prev, dst, promotion=promo)
                         else:
-                            self.game.move_piece(prev, dst)
+                            self.game.move_piece(prev, dst, promotion=self._promo)
 
                         self.check_end()
                         self.auto_scroll()
-
                         self._pending_move = None
+                        self._promo        = None
 
                     self.anim_move = None
 
-
-            elif not self.game_over and self.vs_bot and self.game.turn == 'b':
+            elif self.vs_bot and not self.game_over and self.game.turn == 'b' and not self.bot_moved:
                 pygame.time.wait(300)
-                bot_move(self.game)
-                last_move = self.game.move_log[-1]
-                self._play_move_sound(*last_move) 
-                
-                self.check_end()
-                self.auto_scroll()
+                mv = bot_move(self.game)
+                if mv:
+                    promo = mv[2] if len(mv) > 2 else None
+                    self.game.move_piece(mv[0], mv[1], promotion=promo)
+                    last = self.game.move_log[-1]
+                    self._play_move_sound(*last)
+                    self.check_end()
+                    self.auto_scroll()
+                self.bot_moved = True
 
             self.draw()
 
@@ -216,7 +223,7 @@ class ChessApp:
         if self.net:
             self.net.close()
         sys.exit()
-
+        
     def check_end(self):
         if self.game.is_checkmate():
             winner = 'White' if self.game.turn == 'b' else 'Black'
