@@ -424,7 +424,7 @@ class ChessApp:
         if self.animating and self.anim_move:
             (sr, sc), (er, ec), img = self.anim_move
             prog = self.anim_progress
-            cx = sc * SQUARE_SIZE + (er - sc) * SQUARE_SIZE * prog
+            cx = sc * SQUARE_SIZE + (ec - sc) * SQUARE_SIZE * prog
             cy = sr * SQUARE_SIZE + (er - sr) * SQUARE_SIZE * prog
             self.win.blit(img, (cx, cy))
         
