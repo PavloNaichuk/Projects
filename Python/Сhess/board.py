@@ -111,6 +111,17 @@ class Board:
                         attacked.add(end)
         return attacked
 
+    def is_attacked(self, r, c, by_color):
+        for rr in range(8):
+            for cc in range(8):
+                piece = self.board[rr][cc]
+                if piece and piece[0] == by_color:
+                    moves = self._gen_moves_for_piece(piece[1], (rr, cc), only_attacks=True)
+                    for move in moves:
+                        if len(move) >= 2 and move[1] == (r, c):
+                            return True
+        return False
+
     def _gen_moves_for_piece(self, pt, pos, ignore_pins=False, only_attacks=False, pin_dir=None):
         if pt == 'P':
             return self._gen_pawn_moves(pos, only_attacks=only_attacks, pin_dir=pin_dir if not ignore_pins else None)
@@ -126,7 +137,7 @@ class Board:
                 dirs = [d for d in dirs if d == pin_dir or d == (-pin_dir[0], -pin_dir[1])]
             return self._gen_sliding_moves(pos, dirs)
         elif pt == 'K':
-            return self._gen_king_moves(pos)
+            return self._gen_king_moves(pos, only_attacks=only_attacks)
         return []
 
     def _gen_pawn_moves(self, pos, only_attacks=False, pin_dir=None):
@@ -197,7 +208,7 @@ class Board:
                 cc += dc
         return moves
 
-    def _gen_king_moves(self, pos):
+    def _gen_king_moves(self, pos, only_attacks=False):
         moves = []
         r, c = pos
         col = self.turn
@@ -212,6 +223,37 @@ class Board:
                         continue 
                     if not sq or sq[0] != col:
                         moves.append((pos, (rr, cc), None))
+        if only_attacks:
+            return moves
+        enemy_color = 'b' if col == 'w' else 'w'
+        home_row = 7 if col == 'w' else 0
+
+        if (
+            self.castling_rights[col]['K']
+            and self.board[home_row][5] is None
+            and self.board[home_row][6] is None
+            and not self.is_check(col)
+            and not self.is_attacked(home_row, 4, enemy_color)
+            and not self.is_attacked(home_row, 5, enemy_color)
+            and not self.is_attacked(home_row, 6, enemy_color)
+            and self.board[home_row][4] == col+'K'
+            and self.board[home_row][7] == col+'R'
+        ):
+            moves.append(((home_row, 4), (home_row, 6), None)) 
+
+        if (
+            self.castling_rights[col]['Q']
+            and self.board[home_row][3] is None
+            and self.board[home_row][2] is None
+            and self.board[home_row][1] is None
+            and not self.is_check(col)
+            and not self.is_attacked(home_row, 4, enemy_color)
+            and not self.is_attacked(home_row, 3, enemy_color)
+            and not self.is_attacked(home_row, 2, enemy_color)
+            and self.board[home_row][4] == col+'K'
+            and self.board[home_row][0] == col+'R'
+        ):
+            moves.append(((home_row, 4), (home_row, 2), None))  
         return moves
 
     def legal_moves(self):
