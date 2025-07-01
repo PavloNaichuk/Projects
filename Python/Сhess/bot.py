@@ -271,6 +271,9 @@ class AlphaBetaBot:
         for depth in range(1, self.max_depth + 1):
             current_best = None
             current_value = -float('inf')
+            legal_moves = list(game.board.legal_moves())
+            if not legal_moves:
+                return None
             for move in self.order_moves(game.get_all_moves(color), game, color):
                 if time.time() - start > max_time:
                     break

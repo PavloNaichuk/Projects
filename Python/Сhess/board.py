@@ -234,13 +234,16 @@ class Board:
                     pin_dir = pins.get(pos)
                     moves = self._gen_moves_for_piece(sq[1], pos, pin_dir=pin_dir)
                     for move in moves:
-                        (_, (er, ec), _) = move
+                        (_, (er, ec), promo) = move
                         target = self.board[er][ec]
                         if sq[1] == 'K' and move[1] in enemy_attacks:
                             continue
                         if target and target[1] == 'K':
                             continue
-                        legal.append(move)
+                        board_copy = self.copy()
+                        board_copy._move_piece_internal(pos, (er, ec), promo)
+                        if not board_copy.is_check(color):
+                            legal.append(move)
         return legal 
 
     def generate_pseudo_legal_moves(self):
@@ -352,23 +355,107 @@ class Board:
         return self.is_checkmate(color) or self.is_draw(color)
     
     def copy(self):
+        import copy
         new_board = Board()
-        new_board.board = [list(row) for row in self.board]
+        new_board.board = copy.deepcopy(self.board)
+        new_board.turn = self.turn
+        new_board.castling_rights = copy.deepcopy(self.castling_rights)
+        new_board.ep_square = self.ep_square
+        new_board.halfmove_clock = self.halfmove_clock
+        new_board.fullmove_number = self.fullmove_number
+        new_board.move_stack = list(self.move_stack)
+        new_board.history = list(self.history)
         return new_board
 
     def push(self, move):
         (sr, sc), (er, ec), promotion = move if len(move) == 3 else (*move, None)
         piece = self.board[sr][sc]
         captured = self.board[er][ec]
-        self.move_stack.append(((sr, sc), (er, ec), piece, captured, promotion))
-        self.board[er][ec] = piece if not promotion else piece[0] + promotion
-        self.board[sr][sc] = None
+
+        old_castling = {side: self.castling_rights[side].copy() for side in self.castling_rights}
+        old_ep = self.ep_square
+
+        if piece and piece[1] == 'K':
+            self.castling_rights[piece[0]]['K'] = False
+            self.castling_rights[piece[0]]['Q'] = False
+        if piece and piece[1] == 'R':
+            if (sr, sc) == (7, 0):
+                self.castling_rights['w']['Q'] = False
+            elif (sr, sc) == (7, 7):
+                self.castling_rights['w']['K'] = False
+            elif (sr, sc) == (0, 0):
+                self.castling_rights['b']['Q'] = False
+            elif (sr, sc) == (0, 7):
+                self.castling_rights['b']['K'] = False
+        if captured and captured[1] == 'R':
+            if (er, ec) == (7, 0):
+                self.castling_rights['w']['Q'] = False
+            elif (er, ec) == (7, 7):
+                self.castling_rights['w']['K'] = False
+            elif (er, ec) == (0, 0):
+                self.castling_rights['b']['Q'] = False
+            elif (er, ec) == (0, 7):
+                self.castling_rights['b']['K'] = False
+
+        self.ep_square = None
+        if piece and piece[1] == 'P' and abs(er - sr) == 2:
+            self.ep_square = ((sr + er) // 2, sc)
+
+        self.move_stack.append(((sr, sc), (er, ec), piece, captured, promotion, old_castling, old_ep))
+        self._move_piece_internal((sr, sc), (er, ec), promotion)
         self.turn = 'b' if self.turn == 'w' else 'w'
 
     def pop(self):
         if not self.move_stack:
             return
-        (sr, sc), (er, ec), piece, captured, promotion = self.move_stack.pop()
+        (sr, sc), (er, ec), piece, captured, promotion, old_castling, old_ep = self.move_stack.pop()
         self.board[sr][sc] = piece
-        self.board[er][ec] = captured
+        if promotion and piece and piece[1] == 'P' and (er == 0 or er == 7):
+            self.board[er][ec] = None
+        else:
+            self.board[er][ec] = captured
+        if piece and piece[1] == 'K' and abs(ec - sc) == 2:
+            if ec > sc:
+                self.board[sr][7], self.board[sr][ec-1] = self.board[sr][ec-1], None
+            else:
+                self.board[sr][0], self.board[sr][ec+1] = self.board[sr][ec+1], None
+        if piece and piece[1] == 'P' and sc != ec and captured is None:
+            if piece[0] == 'w':
+                self.board[er+1][ec] = 'bP'
+            else:
+                self.board[er-1][ec] = 'wP'
+            self.board[er][ec] = None
+
         self.turn = 'b' if self.turn == 'w' else 'w'
+        self.castling_rights = {side: old_castling[side].copy() for side in old_castling}
+        self.ep_square = old_ep
+
+        
+    def _move_piece_internal(self, start, end, promotion=None):
+        sr, sc = start
+        er, ec = end
+        piece = self.board[sr][sc]
+        if piece and piece[1] == 'P' and self.ep_square == (er, ec) and sc != ec and self.board[er][ec] is None:
+            self.board[sr][sc] = None
+            self.board[er][ec] = piece
+            if piece[0] == 'w':
+                self.board[er+1][ec] = None
+            else:
+                self.board[er-1][ec] = None
+            return
+        if piece and piece[1] == 'K' and abs(ec - sc) == 2:
+            self.board[sr][sc] = None
+            self.board[er][ec] = piece
+            if ec > sc:
+                self.board[sr][7], self.board[sr][ec-1] = None, self.board[sr][7]
+            else:
+                self.board[sr][0], self.board[sr][ec+1] = None, self.board[sr][0]
+            return
+
+        if promotion and piece and piece[1] == 'P' and (er == 0 or er == 7):
+            self.board[er][ec] = piece[0] + promotion
+            self.board[sr][sc] = None
+            return
+        self.board[er][ec] = piece
+        self.board[sr][sc] = None
+

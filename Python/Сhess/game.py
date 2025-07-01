@@ -54,7 +54,6 @@ class Game:
         if captured is not None and captured[1] == 'K':
             print("Illegal move: cannot capture king!")
             return False
-
         is_pawn = piece and piece[1] == 'P'
         reached_last = (piece and is_pawn and ((piece[0] == 'w' and er == 0) or (piece[0] == 'b' and er == 7)))
         if reached_last and promotion is None:
@@ -74,6 +73,10 @@ class Game:
         self.position_history.append(self.board.fen())
         self.turn = 'b' if self.turn == 'w' else 'w'
         self.board.turn = self.turn
+        if self.is_in_check(self.turn):
+            self.undo_move()
+            print("Illegal move: King in check after move!")
+            return False
         is_over, msg = check_game_result(self.board)
         if is_over:
             print(msg)
