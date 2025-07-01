@@ -262,25 +262,40 @@ class AlphaBetaBot:
             self.ttable[tt_key] = min_eval
             return min_eval
 
-    def choose_move(self, game: Game):
+    def choose_move(self, game):
         best_move = None
         start = time.time()
         color = game.turn
         max_time = self.time_limit
+        
+        legal_moves = list(game.board.legal_moves())
+        if not legal_moves:
+            return None
 
-        for depth in range(1, self.max_depth + 1):
-            current_best = None
-            current_value = -float('inf')
-            legal_moves = list(game.board.legal_moves())
+        if game.is_in_check(color):
+            escaping_moves = []
+            for move in legal_moves:
+                game_copy = game.copy()
+                game_copy.move_piece(*move)
+                if not game_copy.is_in_check(color):
+                    escaping_moves.append(move)
+            legal_moves = escaping_moves
             if not legal_moves:
                 return None
-            for move in self.order_moves(game.get_all_moves(color), game, color):
+
+        current_best = None
+        current_value = -float('inf')
+
+        for depth in range(1, self.max_depth + 1):
+            for move in self.order_moves(legal_moves, game, color):
                 if time.time() - start > max_time:
                     break
                 game_copy = game.copy()
                 game_copy.move_piece(*move)
-                board_value = self.minimax(game_copy, depth - 1, -float('inf'), float('inf'), False, color, start)
-                if board_value > current_value:
+                board_value = self.minimax(
+                    game_copy, depth - 1, -float('inf'), float('inf'), False, color, start
+                )
+                if board_value > current_value or current_best is None:
                     current_value = board_value
                     current_best = move
             if time.time() - start > max_time:
@@ -288,7 +303,7 @@ class AlphaBetaBot:
             if current_best:
                 best_move = current_best
         return best_move
-    
+
     def pawn_structure_score(self, game, color):
         print("pawn_structure_score called")
         score = 0
