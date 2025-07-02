@@ -131,7 +131,7 @@ class Game:
     def is_draw(self):
         return self.board.is_draw()
     
-    def save_game(self, filename):
+    def save_game(self, filename="autosave.sav"):
         with open(filename, "wb") as f:
             pickle.dump({
                 'board': self.board,

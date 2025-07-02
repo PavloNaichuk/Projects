@@ -223,6 +223,12 @@ class ChessApp:
                 self.bot_moved = True
 
             self.draw()
+        if hasattr(self, "game") and self.game is not None:
+            try:
+                self.game.save_game("autosave.sav")
+                print("Game automatically saved to autosave.sav")
+            except Exception as e:
+                print("Failed to autosave:", e)
         pygame.quit()
         if self.net:
             self.net.close()
