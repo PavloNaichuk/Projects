@@ -1,8 +1,10 @@
 import pygame
 
 OVERLAY_COLOR = (0, 0, 0, 180)
-BUTTON_COLOR = (200, 200, 200)
-BUTTON_TEXT_COLOR = (0, 0, 0)
+BUTTON_BG        = (200, 200, 200)
+BUTTON_TEXT      = (  0,   0,   0)
+HIGHLIGHT_COLOR  = (130, 100, 160)
+HOVER_COLOR      = (190, 160, 200)
 
 class GameOverWindow:
     def __init__(self, width, side_width, height, font, end_font=None):
@@ -24,6 +26,8 @@ class GameOverWindow:
             120,
             40
         )
+        self.play_again_hover = False
+        self.exit_hover = False
 
     def draw(self, win, result_text):
         overlay = pygame.Surface((self.width + self.side_width, self.height), pygame.SRCALPHA)
@@ -34,15 +38,26 @@ class GameOverWindow:
         text_rect = text_surf.get_rect(center=(self.width // 2, self.height // 2 - 50))
         win.blit(text_surf, text_rect)
 
-        pygame.draw.rect(win, BUTTON_COLOR, self.play_again_rect)
-        pa_text = self.font.render("Play Again", True, BUTTON_TEXT_COLOR)
+        play_bg = HOVER_COLOR if self.play_again_hover else BUTTON_BG
+        pygame.draw.rect(win, play_bg, self.play_again_rect, border_radius=8)
+        border_col = HIGHLIGHT_COLOR if self.play_again_hover else BUTTON_TEXT
+        border_width = 4 if self.play_again_hover else 2
+        pygame.draw.rect(win, border_col, self.play_again_rect, border_width, border_radius=8)
+        pa_text = self.font.render("Play Again", True, BUTTON_TEXT)
         win.blit(pa_text, pa_text.get_rect(center=self.play_again_rect.center))
 
-        pygame.draw.rect(win, BUTTON_COLOR, self.exit_rect)
-        ex_text = self.font.render("Exit", True, BUTTON_TEXT_COLOR)
+        exit_bg = HOVER_COLOR if self.exit_hover else BUTTON_BG
+        pygame.draw.rect(win, exit_bg, self.exit_rect, border_radius=8)
+        border_col = HIGHLIGHT_COLOR if self.exit_hover else BUTTON_TEXT
+        border_width = 4 if self.exit_hover else 2
+        pygame.draw.rect(win, border_col, self.exit_rect, border_width, border_radius=8)
+        ex_text = self.font.render("Exit", True, BUTTON_TEXT)
         win.blit(ex_text, ex_text.get_rect(center=self.exit_rect.center))
 
     def handle_event(self, event):
+        if event.type == pygame.MOUSEMOTION:
+            self.play_again_hover = self.play_again_rect.collidepoint(event.pos)
+            self.exit_hover = self.exit_rect.collidepoint(event.pos)
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.play_again_rect.collidepoint(event.pos):
                 return 'play_again'
