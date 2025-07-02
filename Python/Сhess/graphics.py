@@ -53,6 +53,10 @@ class ChessApp:
         self.ui_locked_time = 0
         self.bot_moved = False
         
+        self.illegal_move_time = 0
+        self.illegal_move_message = ""
+        self.selected = None
+        
         mode_title = ""
         res = select_mode(self.win)
         if isinstance(res, tuple) and len(res) == 3:
@@ -441,6 +445,20 @@ class ChessApp:
         if self.ui_locked and time.time() - self.ui_locked_time > 2:
             self.ui_locked = False          
         pygame.display.update()
+        
+        if self.illegal_move_message:
+            now = pygame.time.get_ticks()
+            if now - self.illegal_move_time < 3000:
+                overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+                overlay.fill((0, 0, 0, 180))
+                self.screen.blit(overlay, (0, 0))
+                font = pygame.font.SysFont("Arial", 40, bold=True)
+                text = font.render(self.illegal_move_message, True, (255, 0, 0))
+                rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2))
+                self.screen.blit(text, rect)
+                pygame.event.clear()
+            else:
+                self.illegal_move_message = ""
 
     def handle_events(self):
         if self.ui_locked:
@@ -544,6 +562,8 @@ class ChessApp:
                                 else:
                                     self.hint_squares = []
                             else:
+                                self.illegal_move_message = "You cannot move there: your king would be in check!"
+                                self.illegal_move_time = pygame.time.get_ticks()
                                 self.game.selected = None
                                 self.hint_squares = []
             elif ev.type == pygame.MOUSEBUTTONUP:
@@ -574,7 +594,6 @@ class ChessApp:
                     self.game.undo_move()
                     self.check_end()
                     self.auto_scroll()
-
     def start_animation(self, start, end, piece_img):
         self.animating = True
         self.anim_move = (start, end, piece_img)
