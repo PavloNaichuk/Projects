@@ -131,8 +131,8 @@ class ChessApp:
         root = tk.Tk()
         root.withdraw()
         filename = filedialog.asksaveasfilename(
-            defaultextension=".pkl",
-            filetypes=[("Pickle files","*.pkl"),("All files","*.*")]
+            defaultextension=".sav",
+            filetypes=[("Pickle files","*.sav"),("All files","*.*")]
         )
         root.destroy()
         return filename
@@ -141,8 +141,8 @@ class ChessApp:
         root = tk.Tk()
         root.withdraw()
         filename = filedialog.askopenfilename(
-            defaultextension=".pkl",
-            filetypes=[("Pickle files","*.pkl"),("All files","*.*")]
+            defaultextension=".sav",
+            filetypes=[("Pickle files","*.sav"),("All files","*.*")]
         )
         root.destroy()
         return filename
