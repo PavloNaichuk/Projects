@@ -131,7 +131,7 @@ class Game:
     def is_draw(self):
         return self.board.is_draw()
     
-    def save_game(self, filename="savegame.pkl"):
+    def save_game(self, filename):
         with open(filename, "wb") as f:
             pickle.dump({
                 'board': self.board,
@@ -141,7 +141,7 @@ class Game:
                 'halfmove_clock': self.halfmove_clock
             }, f)
 
-    def load_game(self, filename="savegame.pkl"):
+    def load_game(self, filename):
         with open(filename, "rb") as f:
             data = pickle.load(f)
         self.board = data['board']
