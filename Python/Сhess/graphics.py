@@ -271,6 +271,14 @@ class ChessApp:
         skip_piece = None
         if self.animating and self.anim_move:
             skip_piece = self.anim_move[0]
+        if self.game.move_log:
+            last_move = self.game.move_log[-1]
+            start, end = last_move[0], last_move[1]
+            highlight_surf = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
+            highlight_surf.fill((246, 246, 105, 120))
+            self.win.blit(highlight_surf, (start[1] * SQUARE_SIZE, start[0] * SQUARE_SIZE))
+            self.win.blit(highlight_surf, (end[1] * SQUARE_SIZE, end[0] * SQUARE_SIZE))
+            
         draw_pieces(self.win, self.game.board, self.images, SQUARE_SIZE, skip_piece=skip_piece)
         pygame.draw.rect(self.win, PANEL_COLOR, (WIDTH, 0, SIDE_WIDTH, HEIGHT))
 
