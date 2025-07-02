@@ -71,12 +71,13 @@ class Game:
             return False
         self.move_log.append((start, end, piece, captured))
         self.position_history.append(self.board.fen())
-        self.turn = 'b' if self.turn == 'w' else 'w'
-        self.board.turn = self.turn
-        if self.is_in_check(self.turn):
+        color_just_moved = self.turn
+        if self.is_in_check(color_just_moved):
             self.undo_move()
             print("Illegal move: King in check after move!")
             return False
+        self.turn = 'b' if self.turn == 'w' else 'w'
+        self.board.turn = self.turn
         is_over, msg = check_game_result(self.board)
         if is_over:
             print(msg)
