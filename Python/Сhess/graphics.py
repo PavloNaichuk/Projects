@@ -215,16 +215,14 @@ class ChessApp:
                 mv = bot_move(self.game)
                 if mv:
                     promo = mv[2] if len(mv) > 2 else None
-                    ok = self.game.move_piece(mv[0], mv[1], promotion=promo)
-                    if ok:
-                        last = self.game.move_log[-1]
-                        self._play_move_sound(*last)
-                        self.check_end()
-                        self.auto_scroll()
+                    piece = self.game.board[mv[0][0]][mv[0][1]]
+                    piece_img = self.images.get(piece)
+                    self._pending_move = (mv[0], mv[1])
+                    self._promo = promo
+                    self.start_animation(mv[0], mv[1], piece_img)
                 self.bot_moved = True
 
             self.draw()
-
         pygame.quit()
         if self.net:
             self.net.close()
