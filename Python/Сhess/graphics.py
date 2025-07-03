@@ -293,6 +293,11 @@ class ChessApp:
             mins, secs = divmod(int(t_w), 60)
             txt = self.font.render(f"White: {mins:02d}:{secs:02d}", True, (0,0,0))
             self.win.blit(txt, (WIDTH+20, 20))
+
+            t_b = self.game.get_time_left('b')
+            mins_b, secs_b = divmod(int(t_b), 60)
+            txt_b = self.font.render(f"Black: {mins_b:02d}:{secs_b:02d}", True, (0,0,0))
+            self.win.blit(txt_b, (WIDTH+20, self.hint_rect.bottom + 20))
         
         timer_y = self.hint_rect.bottom + 20
         y0 = timer_y + 30
@@ -429,13 +434,13 @@ class ChessApp:
         if self.illegal_move_message:
             now = pygame.time.get_ticks()
             if now - self.illegal_move_time < 3000:
-                overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+                overlay = pygame.Surface(self.win.get_size(), pygame.SRCALPHA)
                 overlay.fill((0, 0, 0, 180))
-                self.screen.blit(overlay, (0, 0))
+                self.win.blit(overlay, (0, 0))
                 font = pygame.font.SysFont("Arial", 40, bold=True)
                 text = font.render(self.illegal_move_message, True, (255, 0, 0))
-                rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2))
-                self.screen.blit(text, rect)
+                rect = text.get_rect(center=(self.win.get_width() // 2, self.win.get_height() // 2))
+                self.win.blit(text, rect)
                 pygame.event.clear()
             else:
                 self.illegal_move_message = ""
