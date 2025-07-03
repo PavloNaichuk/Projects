@@ -56,6 +56,7 @@ class ChessApp:
         self.illegal_move_time = 0
         self.illegal_move_message = ""
         self.selected = None
+        self.just_undid = False
         
         mode_title = ""
         res = select_mode(self.win)
@@ -210,7 +211,7 @@ class ChessApp:
 
                     self.anim_move = None
 
-            elif self.vs_bot and not self.game_over and self.game.turn == 'b' and not self.bot_moved:
+            elif self.vs_bot and not self.game_over and self.game.turn == 'b' and not self.bot_moved and not self.just_undid:
                 pygame.time.wait(300)
                 mv = bot_move(self.game)
                 if mv:
@@ -223,6 +224,7 @@ class ChessApp:
                 self.bot_moved = True
 
             self.draw()
+            self.just_undid = False
         if hasattr(self, "game") and self.game is not None:
             try:
                 self.game.save_game("autosave.sav")
@@ -465,6 +467,9 @@ class ChessApp:
                     self._drag_offset = y - self._scrollbar_rect.y
                 elif self.undo_rect.collidepoint(x, y):
                     self.game.undo_move()
+                    if self.vs_bot:
+                        self.game.undo_move()
+                    self.just_undid = True
                     self.check_end()
                     self.auto_scroll()
                     self.undo_highlight = True
