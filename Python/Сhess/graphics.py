@@ -450,6 +450,15 @@ class ChessApp:
     def handle_events(self):
         if self.ui_locked:
             return
+        if self.game_over:
+            for event in pygame.event.get():
+                action = self.over_window.handle_event(event)
+                if action == 'play_again':
+                    self.reset_game()
+                    self.game_over = False
+                elif action == 'exit':
+                    self.running = False
+            return
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
                 self.running = False

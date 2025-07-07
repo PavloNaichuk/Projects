@@ -1,5 +1,6 @@
 import pygame
 
+OVERLAY_COLOR = (0, 0, 0, 160)
 BUTTON_BG        = (200, 200, 200)
 BUTTON_TEXT      = (  0,   0,   0)
 HIGHLIGHT_COLOR  = (130, 100, 160)
@@ -12,7 +13,6 @@ class GameOverWindow:
         self.height = height
         self.font = font
         self.end_font = end_font or pygame.font.SysFont("arial", 36)
-        
         self.play_again_rect = pygame.Rect(
             self.width // 2 - 140,
             self.height // 2 + 10,
@@ -31,7 +31,11 @@ class GameOverWindow:
         self.exit_active = False
 
     def draw(self, win, result_text):
-        text_surf = self.end_font.render(result_text, True, (0, 0, 0))
+        overlay = pygame.Surface((self.width + self.side_width, self.height), pygame.SRCALPHA)
+        overlay.fill(OVERLAY_COLOR)
+        win.blit(overlay, (0, 0))
+
+        text_surf = self.end_font.render(result_text, True, (255, 255, 255))
         text_rect = text_surf.get_rect(center=(self.width // 2, self.height // 2 - 60))
         win.blit(text_surf, text_rect)
 
