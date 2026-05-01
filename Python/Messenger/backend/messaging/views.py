@@ -4,7 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Conversation, Message
-from .serializers import ConversationSerializer, MessageSerializer
+from .serializers import (
+    ConversationCreateSerializer,
+    ConversationSerializer,
+    MessageSerializer,
+)
 
 
 class ConversationListView(APIView):
@@ -17,6 +21,28 @@ class ConversationListView(APIView):
 
         serializer = ConversationSerializer(conversations, many=True)
         return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = ConversationCreateSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        user_id = serializer.validated_data["user_id"]
+
+        if user_id == request.user.id:
+            return Response(
+                {"detail": "You cannot create a conversation with yourself."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        conversation = Conversation.objects.create()
+
+        conversation.participants.create(user=request.user)
+        conversation.participants.create(user_id=user_id)
+
+        response_serializer = ConversationSerializer(conversation)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ConversationMessagesView(APIView):
