@@ -25,27 +25,18 @@ class ConversationListView(APIView):
         return Response(serializer.data)
     
     def post(self, request):
-        serializer = ConversationCreateSerializer(data=request.data)
+        serializer = ConversationCreateSerializer(
+            data=request.data,
+            context={"request": request}
+        )
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         user_id = serializer.validated_data["user_id"]
 
-        if user_id == request.user.id:
-            return Response(
-                {"detail": "You cannot create a conversation with yourself."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         User = get_user_model()
-        target_user = User.objects.filter(id=user_id).first()
-
-        if not target_user:
-            return Response(
-                {"detail": "User not found."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        target_user = User.objects.get(id=user_id)
 
         existing_conversation = (
             Conversation.objects.filter(participants__user=request.user)
