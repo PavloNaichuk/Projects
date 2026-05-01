@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -36,10 +38,30 @@ class ConversationListView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        User = get_user_model()
+        target_user = User.objects.filter(id=user_id).first()
+
+        if not target_user:
+            return Response(
+                {"detail": "User not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        existing_conversation = (
+            Conversation.objects.filter(participants__user=request.user)
+            .filter(participants__user=target_user)
+            .distinct()
+            .first()
+        )
+
+        if existing_conversation:
+            response_serializer = ConversationSerializer(existing_conversation)
+            return Response(response_serializer.data, status=status.HTTP_200_OK)
+
         conversation = Conversation.objects.create()
 
         conversation.participants.create(user=request.user)
-        conversation.participants.create(user_id=user_id)
+        conversation.participants.create(user=target_user)
 
         response_serializer = ConversationSerializer(conversation)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
