@@ -12,11 +12,12 @@ class UserShortSerializer(serializers.ModelSerializer):
 
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserShortSerializer(read_only=True)
+    conversation = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Message
         fields = ("id", "conversation", "sender", "text", "created_at", "is_read")
-
+        read_only_fields = ("id", "conversation", "sender", "created_at", "is_read")
 
 class ConversationParticipantSerializer(serializers.ModelSerializer):
     user = UserShortSerializer(read_only=True)
