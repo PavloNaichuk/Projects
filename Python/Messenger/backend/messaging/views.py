@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -29,3 +30,26 @@ class ConversationMessagesView(APIView):
 
         serializer = MessageSerializer(messages, many=True)
         return Response(serializer.data)
+
+    def post(self, request, conversation_id):
+        conversation = Conversation.objects.filter(
+            id=conversation_id,
+            participants__user=request.user
+        ).first()
+
+        if not conversation:
+            return Response(
+                {"detail": "Conversation not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = MessageSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save(
+                conversation=conversation,
+                sender=request.user
+            )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
