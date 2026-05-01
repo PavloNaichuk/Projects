@@ -33,3 +33,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
         fields = ("id", "participants", "created_at", "updated_at")
+        
+
+class ConversationCreateSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
