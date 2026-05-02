@@ -23,8 +23,8 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ("id", "conversation", "sender", "text", "created_at", "is_read")
-        read_only_fields = ("id", "conversation", "sender", "created_at", "is_read")
+        fields = ("id", "conversation", "sender", "text", "created_at", "updated_at", "is_read")
+        read_only_fields = ("id", "conversation", "sender", "created_at", "updated_at", "is_read")
 
     def validate_text(self, value):
         value = value.strip()
@@ -43,12 +43,39 @@ class ConversationParticipantSerializer(serializers.ModelSerializer):
 
 class ConversationSerializer(serializers.ModelSerializer):
     participants = ConversationParticipantSerializer(many=True, read_only=True)
+    last_message = serializers.SerializerMethodField()
+    unread_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
-        fields = ("id", "participants", "created_at", "updated_at")
-        
+        fields = (
+            "id",
+            "participants",
+            "last_message",
+            "unread_count",
+            "created_at",
+            "updated_at",
+        )
 
+    def get_last_message(self, obj):
+        message = obj.messages.select_related("sender").last()
+
+        if not message:
+            return None
+
+        return MessageSerializer(message).data
+
+    def get_unread_count(self, obj):
+        request = self.context.get("request")
+
+        if not request:
+            return 0
+
+        return obj.messages.filter(
+            is_read=False
+        ).exclude(
+            sender=request.user
+        ).count()
 class ConversationCreateSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
 
