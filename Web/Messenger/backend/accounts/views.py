@@ -23,3 +23,10 @@ class UserSearchView(APIView):
 
         serializer = UserSearchSerializer(users[:20], many=True)
         return Response(serializer.data)
+    
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSearchSerializer(request.user)
+        return Response(serializer.data)
