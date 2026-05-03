@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Images/BrickWall.jpg</file>
+        <file>Images/EnemyTank.png</file>
+        <file>Images/PlayerBase.png</file>
+        <file>Images/PlayerTank.png</file>
+        <file>Images/SteelWall.jpg</file>
+        <file>Images/Missile.jpg</file>
+        <file>Levels/Level1.txt</file>
+        <file>QML/StartMenu.qml</file>
+        <file>QML/EndMenu.qml</file>
+        <file>QML/PlayGame.qml</file>
+        <file>QML/BrickWall.qml</file>
+        <file>QML/EnemyTank.qml</file>
+        <file>QML/PlayerBase.qml</file>
+        <file>QML/PlayerTank.qml</file>
+        <file>QML/SteelWall.qml</file>
+        <file>QML/Missile.qml</file>
+        <file>QML/MainWidget.qml</file>
+    </qresource>
+</RCC>
