@@ -9,6 +9,13 @@ class UserSearchSerializer(serializers.ModelSerializer):
         fields = ("id", "username", "email")
         
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(
+        required=True,
+        error_messages={
+            "required": "Username is required.",
+            "blank": "Username is required.",
+        },
+    )
     email = serializers.EmailField(
         required=True,
         error_messages={
@@ -24,6 +31,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = ("id", "username", "email", "password")
         read_only_fields = ("id",)
 
+    def validate_username(self, value):
+        value = value.strip()
+
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("User with this username already exists.")
+
+        return value
+
     def validate_email(self, value):
         value = value.lower().strip()
 
@@ -31,11 +46,3 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("User with this email already exists.")
 
         return value
-
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data["username"],
-            email=validated_data["email"],
-            password=validated_data["password"],
-        )
-        return user
