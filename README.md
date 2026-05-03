@@ -26,21 +26,6 @@ Own version of Pac Man game. The game borrows a lot of ideas to manage game enti
 ![Alt text](/Images/PacMan/gameOver.jpg?raw=true "")
 
 
-<b>Find Files (C++, Qt, multi-threading)</b>   
-FindFiles app demonstrates file search containing a word of interest in a particular directory using multi-threaded approach.
-
-The algorithm starts with accumulating list of files in the directory. This step is accomplished by the main thread. As soon as the list of files in the directory has been populated, we split it into subranges. After, we start a dedicated thread for each subrange of files from the list. The number of the subranges and, consequently, number of threads is defined by the actual count of hardware threads that could be launched on the PC. In Qt this information could be retrieved using QThread::idealThreadCount() function.  
-
-Apart from this, the app demonstrates search progress, exploiting Qt progress bar component. The progress is calculated based on the current number of processed bytes by all the threads relative to the total byte size of all the files.   
-The user is allowed to pause the search operation. Qt threading library does not provide support for suspending the thread compared to Win API. To mimic such behaviour, "while (mIsPaused)" polling is used in conjunction with Qt::sleep() to avoid unnecessary CPU work. 
-Naturally, the user is allowed to cancel the search in a graceful way as well.   
-
-For the directory with 268 files, the single-threaded search took 21324 milliseconds. In its turn, the multi-threaded search took 5910 milliseconds with launched 8 hardware threads on Intel Core i7 CPU. We observe considerable performance gain in the second scenario. 
-
-It is worth noting that we still encounter performance drop while iterating the file direcory
-the collect the files required for the inspection as the first step of the algorithm. As a future improvement this step could
-also benefit from multi-threaded approach.
-
 ![Alt text](/Images/FindFiles/FoundFiles.jpg?raw=true "")
 ![Alt text](/Images/FindFiles/Cancel.jpg?raw=true "")
 
