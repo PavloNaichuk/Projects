@@ -162,3 +162,46 @@ class ConversationMarkReadView(APIView):
                 "updated_count": updated_count,
             }
         )
+
+class MessageDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, message_id):
+        message = Message.objects.filter(
+            id=message_id,
+            sender=request.user,
+        ).select_related("sender").first()
+
+        if not message:
+            return Response(
+                {"detail": "Message not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = MessageSerializer(
+            message,
+            data=request.data,
+            partial=True,
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, message_id):
+        message = Message.objects.filter(
+            id=message_id,
+            sender=request.user,
+        ).first()
+
+        if not message:
+            return Response(
+                {"detail": "Message not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        message.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
