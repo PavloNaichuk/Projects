@@ -32,19 +32,22 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "daphne",
     
-    'rest_framework',
-    'corsheaders',
-    'rest_framework_simplejwt.token_blacklist',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
-    'accounts',
-    'messaging',
+    "rest_framework",
+    "corsheaders",
+    "channels",
+    "rest_framework_simplejwt.token_blacklist",
+
+    "accounts",
+    "messaging",
 ]
 
 MIDDLEWARE = [
@@ -150,4 +153,12 @@ CORS_ALLOWED_ORIGINS = [
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+ASGI_APPLICATION = "config.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
 }

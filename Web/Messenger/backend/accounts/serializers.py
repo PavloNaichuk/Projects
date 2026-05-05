@@ -79,3 +79,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             password=validated_data["password"],
         )
         return user
+    
+    CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
