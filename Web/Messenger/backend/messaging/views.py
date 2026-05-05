@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import F, Max
+from django.utils import timezone
 
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -185,7 +186,7 @@ class MessageDetailView(APIView):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(edited_at=timezone.now())
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

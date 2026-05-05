@@ -23,8 +23,25 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ("id", "conversation", "sender", "text", "created_at", "updated_at", "is_read")
-        read_only_fields = ("id", "conversation", "sender", "created_at", "updated_at", "is_read")
+        fields = (
+            "id",
+            "conversation",
+            "sender",
+            "text",
+            "created_at",
+            "updated_at",
+            "edited_at",
+            "is_read",
+        )
+        read_only_fields = (
+            "id",
+            "conversation",
+            "sender",
+            "created_at",
+            "updated_at",
+            "edited_at",
+            "is_read",
+        )
 
     def validate_text(self, value):
         value = value.strip()
