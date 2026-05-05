@@ -15,6 +15,16 @@ class ConversationParticipantAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ("id", "conversation", "sender", "text", "created_at", "is_read")
-    list_filter = ("is_read", "created_at")
+    list_display = (
+        "id",
+        "conversation",
+        "sender",
+        "text",
+        "created_at",
+        "updated_at",
+        "edited_at",
+        "is_read",
+    )
+    list_filter = ("is_read", "created_at", "updated_at", "edited_at")
     search_fields = ("text", "sender__username", "sender__email")
+    readonly_fields = ("created_at", "updated_at", "edited_at")
