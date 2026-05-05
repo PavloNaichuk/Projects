@@ -179,18 +179,18 @@ class MessageDetailView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = MessageSerializer(
-            message,
-            data=request.data,
-            partial=True,
-        )
+        if message.is_deleted:
+            return Response(
+                {"detail": "Deleted message cannot be edited."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        if serializer.is_valid():
-            serializer.save(edited_at=timezone.now())
-            return Response(serializer.data)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        if "text" not in request.data:
+            return Response(
+                {"text": ["Message text is required."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+    
     def delete(self, request, message_id):
         message = Message.objects.filter(
             id=message_id,
@@ -203,6 +203,10 @@ class MessageDetailView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        message.delete()
+        message.text = ""
+        message.is_deleted = True
+        message.deleted_at = timezone.now()
+        message.save(update_fields=["text", "is_deleted", "deleted_at", "updated_at"])
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        serializer = MessageSerializer(message)
+        return Response(serializer.data, status=status.HTTP_200_OK)

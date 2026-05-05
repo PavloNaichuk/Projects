@@ -45,6 +45,8 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     edited_at = models.DateTimeField(null=True, blank=True)
+    is_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True, blank=True)
     is_read = models.BooleanField(default=False)
 
     class Meta:
