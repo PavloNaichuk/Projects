@@ -191,7 +191,19 @@ class MessageDetailView(APIView):
                 {"text": ["Message text is required."]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-    
+
+        serializer = MessageSerializer(
+            message,
+            data=request.data,
+            partial=True,
+        )
+
+        if serializer.is_valid():
+            serializer.save(edited_at=timezone.now())
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self, request, message_id):
         message = Message.objects.filter(
             id=message_id,

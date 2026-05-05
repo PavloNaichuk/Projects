@@ -79,7 +79,12 @@ class ConversationSerializer(serializers.ModelSerializer):
         )
 
     def get_last_message(self, obj):
-        message = obj.messages.select_related("sender").last()
+        message = (
+            obj.messages
+            .select_related("sender")
+            .order_by("-created_at", "-id")
+            .first()
+        )
 
         if not message:
             return None
