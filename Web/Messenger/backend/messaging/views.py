@@ -153,6 +153,7 @@ class ConversationMarkReadView(APIView):
         updated_count = Message.objects.filter(
             conversation=conversation,
             is_read=False,
+            is_deleted=False,
         ).exclude(
             sender=request.user,
         ).update(is_read=True)

@@ -93,10 +93,12 @@ class ConversationSerializer(serializers.ModelSerializer):
             return 0
 
         return obj.messages.filter(
-            is_read=False
+            is_read=False,
+            is_deleted=False,
         ).exclude(
             sender=request.user
         ).count()
+
 class ConversationCreateSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
 
