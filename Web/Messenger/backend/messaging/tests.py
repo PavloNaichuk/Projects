@@ -642,3 +642,22 @@ class MessagingWebSocketTests(TransactionTestCase):
         async_to_sync(test)()
 
         self.assertEqual(Message.objects.count(), 0)
+    
+    def test_websocket_rejects_invalid_json(self):
+        async def test():
+            communicator, connected = await self.connect_to_conversation(self.user)
+
+            self.assertTrue(connected)
+
+            await communicator.send_to(text_data="{invalid json")
+
+            response = await communicator.receive_json_from()
+
+            self.assertEqual(response["type"], "error")
+            self.assertEqual(response["detail"], "Invalid JSON.")
+
+            await communicator.disconnect()
+
+        async_to_sync(test)()
+
+        self.assertEqual(Message.objects.count(), 0)
