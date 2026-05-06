@@ -1,8 +1,8 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { WS_BASE_URL } from "./api/config";
 import "./App.css";
 import { getCurrentUser, login, type User } from "./api/auth";
 import {
-  createConversationMessage,
   getConversationMessages,
   getConversations,
   type Conversation,
@@ -24,6 +24,7 @@ function App() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
+  const socketRef = useRef<WebSocket | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
 
   const [username, setUsername] = useState("pavlo");
@@ -35,6 +36,75 @@ function App() {
   const [newMessage, setNewMessage] = useState("");
   const [messageError, setMessageError] = useState("");
   const [isSending, setIsSending] = useState(false);
+
+
+  useEffect(() => {
+    if (!accessToken || !selectedConversation) {
+        return;
+    }
+
+    const websocketUrl = `${WS_BASE_URL}/conversations/${selectedConversation.id}/?token=${accessToken}`;
+    const socket = new WebSocket(websocketUrl);
+
+    socketRef.current = socket;
+
+    socket.onopen = () => {
+      console.log("WebSocket connected");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === "message") {
+        const receivedMessage = data.message as Message;
+
+        setMessages((previousMessages) => {
+          const alreadyExists = previousMessages.some(
+            (message) => message.id === receivedMessage.id
+          );
+
+          if (alreadyExists) {
+            return previousMessages;
+          }
+
+          return [...previousMessages, receivedMessage];
+        });
+
+        setConversations((previousConversations) =>
+          previousConversations.map((conversation) =>
+            conversation.id === receivedMessage.conversation
+              ? {
+                  ...conversation,
+                  last_message: receivedMessage,
+                  updated_at: receivedMessage.created_at,
+                }
+              : conversation
+          )
+        );
+      }
+
+      if (data.type === "error") {
+        setMessageError(data.detail);
+      }
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      setMessageError("WebSocket connection error.");
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket disconnected");
+    };
+
+    return () => {
+      socket.close();
+
+      if (socketRef.current === socket) {
+        socketRef.current = null;
+      }
+    };
+  }, [accessToken, selectedConversation]);
 
   async function loadMessages(token: string, conversationId: number) {
     setIsMessagesLoading(true);
@@ -93,7 +163,7 @@ function App() {
   async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!accessToken || !selectedConversation) {
+    if (!selectedConversation) {
       return;
     }
 
@@ -104,29 +174,24 @@ function App() {
       return;
     }
 
+    const socket = socketRef.current;
+
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      setMessageError("WebSocket is not connected.");
+      return;
+    }
+
     setMessageError("");
     setIsSending(true);
 
     try {
-      const createdMessage = await createConversationMessage(
-        accessToken,
-        selectedConversation.id,
-        text
+      socket.send(
+        JSON.stringify({
+          text,
+        })
       );
 
-      setMessages((previousMessages) => [...previousMessages, createdMessage]);
       setNewMessage("");
-
-      const conversationsData = await getConversations(accessToken);
-      setConversations(conversationsData);
-
-      const updatedSelectedConversation = conversationsData.find(
-        (conversation) => conversation.id === selectedConversation.id
-      );
-
-      if (updatedSelectedConversation) {
-        setSelectedConversation(updatedSelectedConversation);
-      }
     } catch {
       setMessageError("Failed to send message.");
     } finally {
