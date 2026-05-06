@@ -661,3 +661,54 @@ class MessagingWebSocketTests(TransactionTestCase):
         async_to_sync(test)()
 
         self.assertEqual(Message.objects.count(), 0)
+    
+    def test_websocket_broadcasts_message_to_conversation_participants(self):
+        async def test():
+            sender_communicator, sender_connected = await self.connect_to_conversation(
+                self.user
+            )
+            receiver_communicator, receiver_connected = await self.connect_to_conversation(
+                self.other_user
+            )
+
+            self.assertTrue(sender_connected)
+            self.assertTrue(receiver_connected)
+
+            await sender_communicator.send_json_to(
+                {
+                    "text": "Broadcast message",
+                }
+            )
+
+            sender_response = await sender_communicator.receive_json_from()
+            receiver_response = await receiver_communicator.receive_json_from()
+
+            self.assertEqual(sender_response["type"], "message")
+            self.assertEqual(receiver_response["type"], "message")
+
+            self.assertEqual(
+                sender_response["message"]["text"],
+                "Broadcast message",
+            )
+            self.assertEqual(
+                receiver_response["message"]["text"],
+                "Broadcast message",
+            )
+
+            self.assertEqual(
+                sender_response["message"]["id"],
+                receiver_response["message"]["id"],
+            )
+
+            await sender_communicator.disconnect()
+            await receiver_communicator.disconnect()
+
+        async_to_sync(test)()
+
+        self.assertEqual(Message.objects.count(), 1)
+
+        message = Message.objects.first()
+
+        self.assertEqual(message.text, "Broadcast message")
+        self.assertEqual(message.sender, self.user)
+        self.assertEqual(message.conversation, self.conversation)
