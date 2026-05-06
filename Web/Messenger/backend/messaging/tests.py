@@ -1,10 +1,16 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from .models import Conversation, Message
+
+from asgiref.sync import async_to_sync
+from channels.testing import WebsocketCommunicator
+from rest_framework_simplejwt.tokens import AccessToken
+
+from config.asgi import application
 
 
 class MessagingAPITests(TestCase):
@@ -522,3 +528,117 @@ class MessagingAPITests(TestCase):
 
         self.assertFalse(message.is_deleted)
         self.assertEqual(message.text, "Pavlo message")
+        
+class MessagingWebSocketTests(TransactionTestCase):
+    def setUp(self):
+        User = get_user_model()
+
+        self.user = User.objects.create_user(
+            username="pavlo",
+            email="pavlo@test.ua",
+            password="testpassword123",
+        )
+        self.other_user = User.objects.create_user(
+            username="user1",
+            email="user1@test.ua",
+            password="testpassword123",
+        )
+        self.outsider_user = User.objects.create_user(
+            username="outsider",
+            email="outsider@test.ua",
+            password="testpassword123",
+        )
+
+        self.conversation = Conversation.objects.create()
+        self.conversation.participants.create(user=self.user)
+        self.conversation.participants.create(user=self.other_user)
+
+    def get_access_token(self, user):
+        return str(AccessToken.for_user(user))
+
+    async def connect_to_conversation(self, user):
+        access_token = self.get_access_token(user)
+
+        communicator = WebsocketCommunicator(
+            application,
+            f"/ws/conversations/{self.conversation.id}/?token={access_token}",
+        )
+
+        connected, _ = await communicator.connect()
+        return communicator, connected
+
+    def test_participant_can_connect_to_websocket(self):
+        async def test():
+            communicator, connected = await self.connect_to_conversation(self.user)
+
+            self.assertTrue(connected)
+
+            await communicator.disconnect()
+
+        async_to_sync(test)()
+
+    def test_non_participant_cannot_connect_to_websocket(self):
+        async def test():
+            communicator, connected = await self.connect_to_conversation(
+                self.outsider_user
+            )
+
+            self.assertFalse(connected)
+
+            await communicator.disconnect()
+
+        async_to_sync(test)()
+
+    def test_websocket_message_is_saved_to_database(self):
+        async def test():
+            communicator, connected = await self.connect_to_conversation(self.user)
+
+            self.assertTrue(connected)
+
+            await communicator.send_json_to(
+                {
+                    "text": "Hello from WebSocket test",
+                }
+            )
+
+            response = await communicator.receive_json_from()
+
+            self.assertEqual(response["type"], "message")
+            self.assertEqual(response["message"]["text"], "Hello from WebSocket test")
+            self.assertEqual(response["message"]["conversation"], self.conversation.id)
+            self.assertEqual(response["message"]["sender"]["id"], self.user.id)
+
+            await communicator.disconnect()
+
+        async_to_sync(test)()
+
+        self.assertEqual(Message.objects.count(), 1)
+
+        message = Message.objects.first()
+
+        self.assertEqual(message.text, "Hello from WebSocket test")
+        self.assertEqual(message.sender, self.user)
+        self.assertEqual(message.conversation, self.conversation)
+
+    def test_websocket_rejects_empty_message(self):
+        async def test():
+            communicator, connected = await self.connect_to_conversation(self.user)
+
+            self.assertTrue(connected)
+
+            await communicator.send_json_to(
+                {
+                    "text": "   ",
+                }
+            )
+
+            response = await communicator.receive_json_from()
+
+            self.assertEqual(response["type"], "error")
+            self.assertEqual(response["detail"], "Message text cannot be empty.")
+
+            await communicator.disconnect()
+
+        async_to_sync(test)()
+
+        self.assertEqual(Message.objects.count(), 0)
