@@ -24,8 +24,9 @@ function App() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
-  const socketRef = useRef<WebSocket | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+
+  const socketRef = useRef<WebSocket | null>(null);
 
   const [username, setUsername] = useState("pavlo");
   const [password, setPassword] = useState("");
@@ -33,14 +34,68 @@ function App() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
   const [newMessage, setNewMessage] = useState("");
   const [messageError, setMessageError] = useState("");
   const [isSending, setIsSending] = useState(false);
 
+  async function loadMessages(token: string, conversationId: number) {
+    setIsMessagesLoading(true);
+
+    try {
+      const messagesData = await getConversationMessages(token, conversationId);
+      setMessages(messagesData);
+    } catch {
+      setMessages([]);
+    } finally {
+      setIsMessagesLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    async function restoreSession() {
+      const savedAccessToken = localStorage.getItem("accessToken");
+
+      if (!savedAccessToken) {
+        setIsAuthChecking(false);
+        return;
+      }
+
+      try {
+        const user = await getCurrentUser(savedAccessToken);
+        setCurrentUser(user);
+        setAccessToken(savedAccessToken);
+
+        const conversationsData = await getConversations(savedAccessToken);
+        setConversations(conversationsData);
+
+        const firstConversation = conversationsData[0] ?? null;
+        setSelectedConversation(firstConversation);
+
+        if (firstConversation) {
+          await loadMessages(savedAccessToken, firstConversation.id);
+        }
+      } catch {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+
+        setCurrentUser(null);
+        setAccessToken(null);
+        setConversations([]);
+        setSelectedConversation(null);
+        setMessages([]);
+      } finally {
+        setIsAuthChecking(false);
+      }
+    }
+
+    restoreSession();
+  }, []);
 
   useEffect(() => {
     if (!accessToken || !selectedConversation) {
-        return;
+      return;
     }
 
     const websocketUrl = `${WS_BASE_URL}/conversations/${selectedConversation.id}/?token=${accessToken}`;
@@ -81,6 +136,16 @@ function App() {
               : conversation
           )
         );
+
+        setSelectedConversation((previousConversation) =>
+          previousConversation?.id === receivedMessage.conversation
+            ? {
+                ...previousConversation,
+                last_message: receivedMessage,
+                updated_at: receivedMessage.created_at,
+              }
+            : previousConversation
+        );
       }
 
       if (data.type === "error") {
@@ -104,20 +169,7 @@ function App() {
         socketRef.current = null;
       }
     };
-  }, [accessToken, selectedConversation]);
-
-  async function loadMessages(token: string, conversationId: number) {
-    setIsMessagesLoading(true);
-
-    try {
-      const messagesData = await getConversationMessages(token, conversationId);
-      setMessages(messagesData);
-    } catch {
-      setMessages([]);
-    } finally {
-      setIsMessagesLoading(false);
-    }
-  }
+  }, [accessToken, selectedConversation?.id]);
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -197,6 +249,17 @@ function App() {
     } finally {
       setIsSending(false);
     }
+  }
+
+  if (isAuthChecking) {
+    return (
+      <div className="auth-page">
+        <div className="auth-card">
+          <h1>Messenger</h1>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   if (!currentUser || !accessToken) {
