@@ -15,4 +15,5 @@ staticfiles/
 # Environment variables
 .env
 .env.*
+!.env.example
 websocket_test.py 
