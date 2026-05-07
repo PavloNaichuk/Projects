@@ -11,6 +11,10 @@ export type LoginResponse = {
   refresh: string;
 };
 
+export type RefreshTokenResponse = {
+  access: string;
+};
+
 export async function login(
   username: string,
   password: string
@@ -25,6 +29,24 @@ export async function login(
 
   if (!response.ok) {
     throw new Error("Invalid username or password.");
+  }
+
+  return response.json();
+}
+
+export async function refreshAccessToken(
+  refreshToken: string
+): Promise<RefreshTokenResponse> {
+  const response = await fetch(`${API_BASE_URL}/auth/token/refresh/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ refresh: refreshToken }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to refresh token.");
   }
 
   return response.json();
