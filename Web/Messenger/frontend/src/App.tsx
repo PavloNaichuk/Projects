@@ -4,15 +4,18 @@ import "./App.css";
 import {
   getCurrentUser,
   login,
+  logout,
   refreshAccessToken,
   type User,
 } from "./api/auth";
 import {
+  createConversation,
   getConversationMessages,
   getConversations,
   type Conversation,
   type Message,
 } from "./api/conversations";
+import { searchUsers } from "./api/users";
 
 function getConversationName(conversation: Conversation, currentUser: User) {
   const otherParticipant = conversation.participants.find(
@@ -44,6 +47,11 @@ function App() {
   const [newMessage, setNewMessage] = useState("");
   const [messageError, setMessageError] = useState("");
   const [isSending, setIsSending] = useState(false);
+
+  const [userSearchQuery, setUserSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [isSearchingUsers, setIsSearchingUsers] = useState(false);
+  const [userSearchError, setUserSearchError] = useState("");
 
   async function loadMessages(token: string, conversationId: number) {
     setIsMessagesLoading(true);
@@ -78,11 +86,37 @@ function App() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
 
+    if (socketRef.current) {
+      socketRef.current.close();
+      socketRef.current = null;
+    }
+
     setCurrentUser(null);
     setAccessToken(null);
     setConversations([]);
     setSelectedConversation(null);
     setMessages([]);
+    setSearchResults([]);
+    setUserSearchQuery("");
+  }
+
+  async function handleLogout() {
+    const savedRefreshToken = localStorage.getItem("refreshToken");
+
+    if (socketRef.current) {
+      socketRef.current.close();
+      socketRef.current = null;
+    }
+
+    if (accessToken && savedRefreshToken) {
+      try {
+        await logout(accessToken, savedRefreshToken);
+      } catch {
+        console.error("Logout request failed.");
+      }
+    }
+
+    clearSession();
   }
 
   useEffect(() => {
@@ -234,6 +268,69 @@ function App() {
     await loadMessages(accessToken, conversation.id);
   }
 
+  async function handleSearchUsers(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!accessToken) {
+      return;
+    }
+
+    const query = userSearchQuery.trim();
+
+    if (!query) {
+      setSearchResults([]);
+      setUserSearchError("");
+      return;
+    }
+
+    setIsSearchingUsers(true);
+    setUserSearchError("");
+
+    try {
+      const users = await searchUsers(accessToken, query);
+      setSearchResults(users);
+    } catch {
+      setSearchResults([]);
+      setUserSearchError("Failed to search users.");
+    } finally {
+      setIsSearchingUsers(false);
+    }
+  }
+
+  async function handleStartConversation(user: User) {
+    if (!accessToken) {
+      return;
+    }
+
+    setUserSearchError("");
+
+    try {
+      const conversation = await createConversation(accessToken, user.id);
+
+      setConversations((previousConversations) => {
+        const alreadyExists = previousConversations.some(
+          (item) => item.id === conversation.id
+        );
+
+        if (alreadyExists) {
+          return previousConversations.map((item) =>
+            item.id === conversation.id ? conversation : item
+          );
+        }
+
+        return [conversation, ...previousConversations];
+      });
+
+      setSelectedConversation(conversation);
+      await loadMessages(accessToken, conversation.id);
+
+      setUserSearchQuery("");
+      setSearchResults([]);
+    } catch {
+      setUserSearchError("Failed to create conversation.");
+    }
+  }
+
   async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -331,11 +428,44 @@ function App() {
         <div className="sidebar-header">
           <h1>Messenger</h1>
           <p>Logged in as {currentUser.username}</p>
+          <button className="logout-button" type="button" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
 
-        <div className="search-box">
-          <input type="text" placeholder="Search users..." />
-        </div>
+        <form className="search-box" onSubmit={handleSearchUsers}>
+          <input
+            type="text"
+            value={userSearchQuery}
+            onChange={(event) => setUserSearchQuery(event.target.value)}
+            placeholder="Search users..."
+          />
+          <button type="submit" disabled={isSearchingUsers}>
+            {isSearchingUsers ? "Searching..." : "Search"}
+          </button>
+        </form>
+
+        {userSearchError && (
+          <div className="sidebar-error">{userSearchError}</div>
+        )}
+
+        {searchResults.length > 0 && (
+          <div className="user-search-results">
+            <div className="user-search-title">Users</div>
+
+            {searchResults.map((user) => (
+              <button
+                key={user.id}
+                type="button"
+                className="user-search-item"
+                onClick={() => handleStartConversation(user)}
+              >
+                <span className="user-search-name">{user.username}</span>
+                <span className="user-search-email">{user.email}</span>
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="conversation-list">
           {conversations.length === 0 && (

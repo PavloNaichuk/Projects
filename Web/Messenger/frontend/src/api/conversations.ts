@@ -65,25 +65,21 @@ export async function getConversationMessages(
   return response.json();
 }
 
-export async function createConversationMessage(
+export async function createConversation(
   accessToken: string,
-  conversationId: number,
-  text: string
-): Promise<Message> {
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/messages/`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ text }),
-    }
-  );
+  userId: number
+): Promise<Conversation> {
+  const response = await fetch(`${API_BASE_URL}/conversations/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ user_id: userId }),
+  });
 
   if (!response.ok) {
-    throw new Error("Failed to send message.");
+    throw new Error("Failed to create conversation.");
   }
 
   return response.json();

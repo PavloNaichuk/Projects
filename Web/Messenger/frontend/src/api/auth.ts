@@ -65,3 +65,21 @@ export async function getCurrentUser(accessToken: string): Promise<User> {
 
   return response.json();
 }
+
+export async function logout(
+  accessToken: string,
+  refreshToken: string
+): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/auth/logout/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ refresh: refreshToken }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to logout.");
+  }
+}
