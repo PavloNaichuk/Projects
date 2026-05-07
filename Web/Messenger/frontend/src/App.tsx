@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { WS_BASE_URL } from "./api/config";
 import "./App.css";
-import { getCurrentUser, login, type User } from "./api/auth";
+import {
+  getCurrentUser,
+  login,
+  refreshAccessToken,
+  type User,
+} from "./api/auth";
 import {
   getConversationMessages,
   getConversations,
@@ -53,38 +58,67 @@ function App() {
     }
   }
 
+  async function loadUserData(token: string) {
+    const user = await getCurrentUser(token);
+    setCurrentUser(user);
+    setAccessToken(token);
+
+    const conversationsData = await getConversations(token);
+    setConversations(conversationsData);
+
+    const firstConversation = conversationsData[0] ?? null;
+    setSelectedConversation(firstConversation);
+
+    if (firstConversation) {
+      await loadMessages(token, firstConversation.id);
+    }
+  }
+
+  function clearSession() {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+
+    setCurrentUser(null);
+    setAccessToken(null);
+    setConversations([]);
+    setSelectedConversation(null);
+    setMessages([]);
+  }
+
   useEffect(() => {
     async function restoreSession() {
       const savedAccessToken = localStorage.getItem("accessToken");
+      const savedRefreshToken = localStorage.getItem("refreshToken");
 
-      if (!savedAccessToken) {
+      if (!savedAccessToken && !savedRefreshToken) {
         setIsAuthChecking(false);
         return;
       }
 
       try {
-        const user = await getCurrentUser(savedAccessToken);
-        setCurrentUser(user);
-        setAccessToken(savedAccessToken);
+        if (savedAccessToken) {
+          await loadUserData(savedAccessToken);
+          return;
+        }
 
-        const conversationsData = await getConversations(savedAccessToken);
-        setConversations(conversationsData);
-
-        const firstConversation = conversationsData[0] ?? null;
-        setSelectedConversation(firstConversation);
-
-        if (firstConversation) {
-          await loadMessages(savedAccessToken, firstConversation.id);
+        if (savedRefreshToken) {
+          const refreshedToken = await refreshAccessToken(savedRefreshToken);
+          localStorage.setItem("accessToken", refreshedToken.access);
+          await loadUserData(refreshedToken.access);
         }
       } catch {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+        if (!savedRefreshToken) {
+          clearSession();
+          return;
+        }
 
-        setCurrentUser(null);
-        setAccessToken(null);
-        setConversations([]);
-        setSelectedConversation(null);
-        setMessages([]);
+        try {
+          const refreshedToken = await refreshAccessToken(savedRefreshToken);
+          localStorage.setItem("accessToken", refreshedToken.access);
+          await loadUserData(refreshedToken.access);
+        } catch {
+          clearSession();
+        }
       } finally {
         setIsAuthChecking(false);
       }
@@ -180,22 +214,10 @@ function App() {
     try {
       const tokens = await login(username, password);
 
-      setAccessToken(tokens.access);
       localStorage.setItem("accessToken", tokens.access);
       localStorage.setItem("refreshToken", tokens.refresh);
 
-      const user = await getCurrentUser(tokens.access);
-      setCurrentUser(user);
-
-      const conversationsData = await getConversations(tokens.access);
-      setConversations(conversationsData);
-
-      const firstConversation = conversationsData[0] ?? null;
-      setSelectedConversation(firstConversation);
-
-      if (firstConversation) {
-        await loadMessages(tokens.access, firstConversation.id);
-      }
+      await loadUserData(tokens.access);
     } catch {
       setError("Invalid username or password.");
     } finally {
