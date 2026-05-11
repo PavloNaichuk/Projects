@@ -35,6 +35,20 @@ function formatMessageTime(dateString: string) {
   });
 }
 
+function formatMessageDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString([], {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function isSameMessageDate(firstDate: string, secondDate: string) {
+  return (
+    new Date(firstDate).toDateString() === new Date(secondDate).toDateString()
+  );
+}
+
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -466,6 +480,20 @@ function App() {
     }
   }
 
+  function handleMessageKeyDown(
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+
+      const form = event.currentTarget.form;
+
+      if (form) {
+        form.requestSubmit();
+      }
+    }
+  }
+
   function handleStartEditMessage(message: Message) {
     setEditingMessageId(message.id);
     setEditingMessageText(message.text);
@@ -679,88 +707,103 @@ function App() {
               <div className="empty-state">No messages yet.</div>
             )}
 
-          {messages.map((message) => {
+          {messages.map((message, index) => {
+            const previousMessage = messages[index - 1];
+            const shouldShowDateSeparator =
+              !previousMessage ||
+              !isSameMessageDate(
+                previousMessage.created_at,
+                message.created_at
+              );
+
             const isOwnMessage = message.sender.id === currentUser.id;
             const isEditing = editingMessageId === message.id;
 
             return (
-              <div
-                key={message.id}
-                className={
-                  message.is_deleted
-                    ? "message deleted"
-                    : isOwnMessage
-                    ? "message outgoing"
-                    : "message incoming"
-                }
-              >
-                {isEditing ? (
-                  <div className="edit-message-form">
-                    <input
-                      type="text"
-                      value={editingMessageText}
-                      onChange={(event) =>
-                        setEditingMessageText(event.target.value)
-                      }
-                      disabled={isEditingMessage}
-                    />
-
-                    <div className="message-actions">
-                      <button
-                        type="button"
-                        onClick={() => handleSaveEditedMessage(message.id)}
-                        disabled={isEditingMessage}
-                      >
-                        Save
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleCancelEditMessage}
-                        disabled={isEditingMessage}
-                      >
-                        Cancel
-                      </button>
-                    </div>
+              <div key={message.id} className="message-row">
+                {shouldShowDateSeparator && (
+                  <div className="date-separator">
+                    {formatMessageDate(message.created_at)}
                   </div>
-                ) : (
-                  <>
-                    <p>
-                      {message.is_deleted
-                        ? "This message was deleted"
-                        : message.text}
-                    </p>
+                )}
 
-                    <div className="message-footer">
-                      {message.edited_at && !message.is_deleted && (
-                        <span className="message-meta">edited</span>
-                      )}
+                <div
+                  className={
+                    message.is_deleted
+                      ? "message deleted"
+                      : isOwnMessage
+                      ? "message outgoing"
+                      : "message incoming"
+                  }
+                >
+                  {isEditing ? (
+                    <div className="edit-message-form">
+                      <input
+                        type="text"
+                        value={editingMessageText}
+                        onChange={(event) =>
+                          setEditingMessageText(event.target.value)
+                        }
+                        disabled={isEditingMessage}
+                      />
 
-                      <span className="message-time">
-                        {formatMessageTime(message.created_at)}
-                      </span>
-                    </div>
-
-                    {isOwnMessage && !message.is_deleted && (
                       <div className="message-actions">
                         <button
                           type="button"
-                          onClick={() => handleStartEditMessage(message)}
+                          onClick={() => handleSaveEditedMessage(message.id)}
+                          disabled={isEditingMessage}
                         >
-                          Edit
+                          Save
                         </button>
                         <button
                           type="button"
-                          onClick={() => handleDeleteMessage(message.id)}
-                          disabled={isDeletingMessageId === message.id}
+                          onClick={handleCancelEditMessage}
+                          disabled={isEditingMessage}
                         >
-                          {isDeletingMessageId === message.id
-                            ? "Deleting..."
-                            : "Delete"}
+                          Cancel
                         </button>
                       </div>
-                    )}
-                  </>
-                )}
+                    </div>
+                  ) : (
+                    <>
+                      <p>
+                        {message.is_deleted
+                          ? "This message was deleted"
+                          : message.text}
+                      </p>
+
+                      <div className="message-footer">
+                        {message.edited_at && !message.is_deleted && (
+                          <span className="message-meta">edited</span>
+                        )}
+
+                        <span className="message-time">
+                          {formatMessageTime(message.created_at)}
+                        </span>
+                      </div>
+
+                      {isOwnMessage && !message.is_deleted && (
+                        <div className="message-actions">
+                          <button
+                            type="button"
+                            onClick={() => handleStartEditMessage(message)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteMessage(message.id)}
+                            disabled={isDeletingMessageId === message.id}
+                          >
+                            {isDeletingMessageId === message.id
+                              ? "Deleting..."
+                              : "Delete"}
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             );
           })}
@@ -771,12 +814,13 @@ function App() {
         {messageError && <div className="message-error">{messageError}</div>}
 
         <form className="message-form" onSubmit={handleSendMessage}>
-          <input
-            type="text"
+          <textarea
             value={newMessage}
             onChange={(event) => setNewMessage(event.target.value)}
+            onKeyDown={handleMessageKeyDown}
             placeholder="Type a message..."
             disabled={!selectedConversation || isSending}
+            rows={1}
           />
           <button type="submit" disabled={!selectedConversation || isSending}>
             {isSending ? "Sending..." : "Send"}

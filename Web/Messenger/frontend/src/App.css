@@ -427,3 +427,62 @@
 .message.deleted .message-footer {
   color: #6b7280;
 }
+
+.message-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-separator {
+  align-self: center;
+  margin: 12px 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.message p {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message-form textarea {
+  flex: 1;
+  min-height: 22px;
+  max-height: 120px;
+  resize: none;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.message-form textarea:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.message > .message-actions {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.message:hover > .message-actions,
+.message:focus-within > .message-actions {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.edit-message-form .message-actions {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
