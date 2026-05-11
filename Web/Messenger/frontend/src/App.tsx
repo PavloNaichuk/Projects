@@ -666,7 +666,19 @@ function App() {
             </label>
           )}
 
-          {error && <div className="auth-error">{error}</div>}
+          {error && (
+            <div className="auth-error" role="alert">
+              <strong>
+                {authMode === "register" ? "Please check the form:" : "Sign in failed:"}
+              </strong>
+
+              <ul>
+                {error.split("\n").map((message) => (
+                  <li key={message}>{message}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <button type="submit" disabled={isLoading}>
             {isLoading

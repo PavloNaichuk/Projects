@@ -59,11 +59,26 @@
 }
 
 .auth-error {
-  padding: 10px;
-  border-radius: 8px;
-  background: #fee2e2;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fef2f2;
   color: #991b1b;
   font-size: 14px;
+  border: 1px solid #fecaca;
+}
+
+.auth-error strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.auth-error ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.auth-error li {
+  margin: 3px 0;
 }
 
 .app {

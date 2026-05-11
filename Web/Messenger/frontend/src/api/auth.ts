@@ -63,20 +63,30 @@ export async function register(
     const errorData = await response.json().catch(() => null);
 
     if (errorData) {
+      const fieldLabels: Record<string, string> = {
+        username: "Username",
+        email: "Email",
+        password: "Password",
+        password_confirm: "Confirm password",
+        non_field_errors: "Error",
+      };
+
       const errorMessages = Object.entries(errorData)
         .map(([field, value]) => {
+          const label = fieldLabels[field] ?? field;
+
           if (Array.isArray(value)) {
-            return `${field}: ${value.join(", ")}`;
+            return `${label}: ${value.join(", ")}`;
           }
 
-          return `${field}: ${String(value)}`;
+          return `${label}: ${String(value)}`;
         })
-        .join(" ");
+        .join("\n");
 
       throw new Error(errorMessages);
     }
 
-    throw new Error("Failed to register.");
+    throw new Error("Failed to create account.");
   }
 
   return response.json();
