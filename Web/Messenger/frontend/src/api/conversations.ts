@@ -123,3 +123,28 @@ export async function deleteMessage(
 
   return response.json();
 }
+
+export type MarkConversationAsReadResponse = {
+  updated_count: number;
+};
+
+export async function markConversationAsRead(
+  accessToken: string,
+  conversationId: number
+): Promise<MarkConversationAsReadResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/conversations/${conversationId}/mark-read/`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to mark conversation as read.");
+  }
+
+  return response.json();
+}

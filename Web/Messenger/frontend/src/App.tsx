@@ -14,9 +14,11 @@ import {
   editMessage,
   getConversationMessages,
   getConversations,
+  markConversationAsRead,
   type Conversation,
   type Message,
 } from "./api/conversations";
+
 import { searchUsers } from "./api/users";
 
 function getConversationName(conversation: Conversation, currentUser: User) {
@@ -62,12 +64,21 @@ function App() {
     null
   );
 
-  async function loadMessages(token: string, conversationId: number) {
+  async function loadMessages(
+    token: string,
+    conversationId: number,
+    shouldMarkAsRead = true
+  ) {
     setIsMessagesLoading(true);
 
     try {
       const messagesData = await getConversationMessages(token, conversationId);
       setMessages(messagesData);
+
+      if (shouldMarkAsRead) {
+        await markConversationAsRead(token, conversationId);
+        markConversationReadInState(conversationId);
+      }
     } catch {
       setMessages([]);
     } finally {
@@ -83,12 +94,8 @@ function App() {
     const conversationsData = await getConversations(token);
     setConversations(conversationsData);
 
-    const firstConversation = conversationsData[0] ?? null;
-    setSelectedConversation(firstConversation);
-
-    if (firstConversation) {
-      await loadMessages(token, firstConversation.id);
-    }
+    setSelectedConversation(null);
+    setMessages([]);
   }
 
   function clearSession() {
@@ -153,6 +160,28 @@ function App() {
             ...previousConversation,
             last_message: updatedMessage,
             updated_at: updatedMessage.updated_at,
+          }
+        : previousConversation
+    );
+  }
+
+  function markConversationReadInState(conversationId: number) {
+    setConversations((previousConversations) =>
+      previousConversations.map((conversation) =>
+        conversation.id === conversationId
+          ? {
+              ...conversation,
+              unread_count: 0,
+            }
+          : conversation
+      )
+    );
+
+    setSelectedConversation((previousConversation) =>
+      previousConversation?.id === conversationId
+        ? {
+            ...previousConversation,
+            unread_count: 0,
           }
         : previousConversation
     );
