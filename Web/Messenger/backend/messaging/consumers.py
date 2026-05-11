@@ -85,6 +85,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
             return
 
+        if data.get("type") == "typing":
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "typing_event",
+                    "user": {
+                        "id": self.user.id,
+                        "username": self.user.username,
+                        "email": self.user.email,
+                    },
+                    "is_typing": bool(data.get("is_typing", False)),
+                },
+            )
+            return
+        
         text = data.get("text", "")
 
         message_data, error = await create_message(
@@ -118,6 +133,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 {
                     "type": "message",
                     "message": event["message"],
+                }
+            )
+        )
+    
+    async def typing_event(self, event):
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "typing",
+                    "user": event["user"],
+                    "is_typing": event["is_typing"],
                 }
             )
         )

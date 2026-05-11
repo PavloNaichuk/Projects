@@ -88,6 +88,7 @@ function App() {
 
   const socketRef = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const typingTimeoutRef = useRef<number | null>(null);
 
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
@@ -104,6 +105,7 @@ function App() {
   const [newMessage, setNewMessage] = useState("");
   const [messageError, setMessageError] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [typingUser, setTypingUser] = useState<User | null>(null);
 
   const [userSearchQuery, setUserSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
@@ -356,6 +358,19 @@ function App() {
       if (data.type === "error") {
         setMessageError(data.detail);
       }
+      if (data.type === "typing") {
+        const receivedTypingUser = data.user as User;
+
+        if (receivedTypingUser.id === currentUser?.id) {
+          return;
+        }
+
+        if (data.is_typing) {
+          setTypingUser(receivedTypingUser);
+        } else {
+          setTypingUser(null);
+        }
+      }
     };
 
     socket.onerror = () => {
@@ -363,6 +378,13 @@ function App() {
     };
 
     return () => {
+      if (typingTimeoutRef.current) {
+        window.clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
+
+      setTypingUser(null);
+
       socket.close();
 
       if (socketRef.current === socket) {
@@ -449,6 +471,7 @@ function App() {
     setSelectedConversation(conversation);
     setEditingMessageId(null);
     setEditingMessageText("");
+    setTypingUser(null);
     setMessageError("");
 
     await loadMessages(accessToken, conversation.id);
@@ -522,6 +545,40 @@ function App() {
     }
   }
 
+
+  function sendTypingStatus(isTyping: boolean) {
+    const socket = socketRef.current;
+
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      return;
+    }
+
+    socket.send(
+      JSON.stringify({
+        type: "typing",
+        is_typing: isTyping,
+      })
+    );
+  }
+
+  function handleNewMessageChange(value: string) {
+    setNewMessage(value);
+
+    if (!selectedConversation) {
+      return;
+    }
+
+    sendTypingStatus(true);
+
+    if (typingTimeoutRef.current) {
+      window.clearTimeout(typingTimeoutRef.current);
+    }
+
+    typingTimeoutRef.current = window.setTimeout(() => {
+      sendTypingStatus(false);
+    }, 1200);
+  }
+
   async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -548,6 +605,13 @@ function App() {
 
     try {
       socket.send(JSON.stringify({ text }));
+      sendTypingStatus(false);
+
+      if (typingTimeoutRef.current) {
+        window.clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
+
       setNewMessage("");
     } catch {
       setMessageError("Failed to send message.");
@@ -962,13 +1026,17 @@ function App() {
 
           <div ref={messagesEndRef} />
         </section>
-
+        {typingUser && (
+          <div className="typing-indicator">
+            {typingUser.username} is typing...
+          </div>
+        )}
         {messageError && <div className="message-error">{messageError}</div>}
 
         <form className="message-form" onSubmit={handleSendMessage}>
           <textarea
             value={newMessage}
-            onChange={(event) => setNewMessage(event.target.value)}
+            onChange={(event) => handleNewMessageChange(event.target.value)}
             onKeyDown={handleMessageKeyDown}
             placeholder="Type a message..."
             disabled={!selectedConversation || isSending}
