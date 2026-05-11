@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent,
+} from "react";
 import { WS_BASE_URL } from "./api/config";
 import "./App.css";
 import {
@@ -6,6 +12,7 @@ import {
   login,
   logout,
   refreshAccessToken,
+  register,
   type User,
 } from "./api/auth";
 import {
@@ -61,8 +68,12 @@ function App() {
   const socketRef = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  const [authMode, setAuthMode] = useState<"login" | "register">("login");
+
   const [username, setUsername] = useState("pavlo");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -262,10 +273,6 @@ function App() {
 
     socketRef.current = socket;
 
-    socket.onopen = () => {
-      console.log("WebSocket connected");
-    };
-
     socket.onmessage = async (event) => {
       const data = JSON.parse(event.data);
 
@@ -326,13 +333,8 @@ function App() {
       }
     };
 
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
+    socket.onerror = () => {
       setMessageError("WebSocket connection error.");
-    };
-
-    socket.onclose = () => {
-      console.log("WebSocket disconnected");
     };
 
     return () => {
@@ -366,6 +368,50 @@ function App() {
     } catch {
       setError("Invalid username or password.");
     } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function handleRegister(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const trimmedUsername = username.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    const trimmedPasswordConfirm = passwordConfirm.trim();
+
+    if (!trimmedUsername || !trimmedEmail || !trimmedPassword) {
+      setError("Username, email and password are required.");
+      return;
+    }
+
+    if (trimmedPassword !== trimmedPasswordConfirm) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const tokens = await register(
+        trimmedUsername,
+        trimmedEmail,
+        trimmedPassword,
+        trimmedPasswordConfirm
+      );
+
+      localStorage.setItem("accessToken", tokens.access);
+      localStorage.setItem("refreshToken", tokens.refresh);
+
+      await loadUserData(tokens.access);
+    } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("Failed to create account.");
+        }
+      } finally {
       setIsLoading(false);
     }
   }
@@ -480,9 +526,7 @@ function App() {
     }
   }
 
-  function handleMessageKeyDown(
-    event: React.KeyboardEvent<HTMLTextAreaElement>
-  ) {
+  function handleMessageKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
 
@@ -567,11 +611,16 @@ function App() {
   }
 
   if (!currentUser || !accessToken) {
+    const isRegisterMode = authMode === "register";
+
     return (
       <div className="auth-page">
-        <form className="auth-card" onSubmit={handleLogin}>
+        <form
+          className="auth-card"
+          onSubmit={isRegisterMode ? handleRegister : handleLogin}
+        >
           <h1>Messenger</h1>
-          <p>Sign in to continue</p>
+          <p>{isRegisterMode ? "Create your account" : "Sign in to continue"}</p>
 
           <label>
             Username
@@ -583,6 +632,18 @@ function App() {
             />
           </label>
 
+          {isRegisterMode && (
+            <label>
+              Email
+              <input
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="Email"
+              />
+            </label>
+          )}
+
           <label>
             Password
             <input
@@ -593,10 +654,41 @@ function App() {
             />
           </label>
 
+          {isRegisterMode && (
+            <label>
+              Confirm password
+              <input
+                type="password"
+                value={passwordConfirm}
+                onChange={(event) => setPasswordConfirm(event.target.value)}
+                placeholder="Confirm password"
+              />
+            </label>
+          )}
+
           {error && <div className="auth-error">{error}</div>}
 
           <button type="submit" disabled={isLoading}>
-            {isLoading ? "Signing in..." : "Sign in"}
+            {isLoading
+              ? isRegisterMode
+                ? "Creating account..."
+                : "Signing in..."
+              : isRegisterMode
+              ? "Create account"
+              : "Sign in"}
+          </button>
+
+          <button
+            type="button"
+            className="auth-switch-button"
+            onClick={() => {
+              setError("");
+              setAuthMode(isRegisterMode ? "login" : "register");
+            }}
+          >
+            {isRegisterMode
+              ? "Already have an account? Sign in"
+              : "No account? Create one"}
           </button>
         </form>
       </div>

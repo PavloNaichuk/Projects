@@ -11,6 +11,12 @@ export type LoginResponse = {
   refresh: string;
 };
 
+export type RegisterResponse = {
+  user: User;
+  access: string;
+  refresh: string;
+};
+
 export type RefreshTokenResponse = {
   access: string;
 };
@@ -29,6 +35,48 @@ export async function login(
 
   if (!response.ok) {
     throw new Error("Invalid username or password.");
+  }
+
+  return response.json();
+}
+
+export async function register(
+  username: string,
+  email: string,
+  password: string,
+  passwordConfirm: string
+): Promise<RegisterResponse> {
+  const response = await fetch(`${API_BASE_URL}/auth/register/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username,
+      email,
+      password,
+      password_confirm: passwordConfirm,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    if (errorData) {
+      const errorMessages = Object.entries(errorData)
+        .map(([field, value]) => {
+          if (Array.isArray(value)) {
+            return `${field}: ${value.join(", ")}`;
+          }
+
+          return `${field}: ${String(value)}`;
+        })
+        .join(" ");
+
+      throw new Error(errorMessages);
+    }
+
+    throw new Error("Failed to register.");
   }
 
   return response.json();
