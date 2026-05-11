@@ -11,7 +11,7 @@ charset-normalizer==3.4.7
 constantly==23.10.4
 cryptography==48.0.0
 daphne==4.2.1
-Django==5.2.13
+Django==5.2.14
 django-cors-headers==4.9.0
 djangorestframework==3.17.1
 djangorestframework_simplejwt==5.5.1
@@ -31,7 +31,7 @@ requests==2.33.1
 service-identity==24.2.0
 sqlparse==0.5.5
 tomli==2.4.1
-Twisted==25.5.0
+Twisted==26.4.0
 txaio==25.9.2
 typing_extensions==4.15.0
 tzdata==2026.2
