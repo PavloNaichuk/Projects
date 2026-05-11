@@ -41,14 +41,14 @@ function getOtherParticipant(conversation: Conversation, currentUser: User) {
   )?.user;
 }
 
-function formatShortTime(dateString: string) {
+function formatMessageTime(dateString: string) {
   return new Date(dateString).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
   });
 }
 
-function formatMessageTime(dateString: string) {
+function formatShortTime(dateString: string) {
   return new Date(dateString).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
@@ -66,6 +66,14 @@ function formatMessageDate(dateString: string) {
 function isSameMessageDate(firstDate: string, secondDate: string) {
   return (
     new Date(firstDate).toDateString() === new Date(secondDate).toDateString()
+  );
+}
+
+function sortConversationsByUpdatedAt(conversations: Conversation[]) {
+  return [...conversations].sort(
+    (firstConversation, secondConversation) =>
+      new Date(secondConversation.updated_at).getTime() -
+      new Date(firstConversation.updated_at).getTime()
   );
 }
 
@@ -159,7 +167,7 @@ function App() {
     setAccessToken(token);
 
     const conversationsData = await getConversations(token);
-    setConversations(conversationsData);
+    setConversations(sortConversationsByUpdatedAt(conversationsData));
 
     setSelectedConversation(null);
     setMessages([]);
@@ -212,14 +220,16 @@ function App() {
     );
 
     setConversations((previousConversations) =>
-      previousConversations.map((conversation) =>
-        conversation.last_message?.id === updatedMessage.id
-          ? {
-              ...conversation,
-              last_message: updatedMessage,
-              updated_at: updatedMessage.updated_at,
-            }
-          : conversation
+      sortConversationsByUpdatedAt(
+        previousConversations.map((conversation) =>
+          conversation.last_message?.id === updatedMessage.id
+            ? {
+                ...conversation,
+                last_message: updatedMessage,
+                updated_at: updatedMessage.updated_at,
+              }
+            : conversation
+        )
       )
     );
 
@@ -305,14 +315,16 @@ function App() {
         });
 
         setConversations((previousConversations) =>
-          previousConversations.map((conversation) =>
-            conversation.id === receivedMessage.conversation
-              ? {
-                  ...conversation,
-                  last_message: receivedMessage,
-                  updated_at: receivedMessage.created_at,
-                }
-              : conversation
+          sortConversationsByUpdatedAt(
+            previousConversations.map((conversation) =>
+              conversation.id === receivedMessage.conversation
+                ? {
+                    ...conversation,
+                    last_message: receivedMessage,
+                    updated_at: receivedMessage.created_at,
+                  }
+                : conversation
+            )
           )
         );
 
@@ -419,12 +431,12 @@ function App() {
 
       await loadUserData(tokens.access);
     } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("Failed to create account.");
-        }
-      } finally {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Failed to create account.");
+      }
+    } finally {
       setIsLoading(false);
     }
   }
@@ -487,12 +499,17 @@ function App() {
         );
 
         if (alreadyExists) {
-          return previousConversations.map((item) =>
-            item.id === conversation.id ? conversation : item
+          return sortConversationsByUpdatedAt(
+            previousConversations.map((item) =>
+              item.id === conversation.id ? conversation : item
+            )
           );
         }
 
-        return [conversation, ...previousConversations];
+        return sortConversationsByUpdatedAt([
+          conversation,
+          ...previousConversations,
+        ]);
       });
 
       setSelectedConversation(conversation);
@@ -682,7 +699,9 @@ function App() {
           {error && (
             <div className="auth-error" role="alert">
               <strong>
-                {authMode === "register" ? "Please check the form:" : "Sign in failed:"}
+                {authMode === "register"
+                  ? "Please check the form:"
+                  : "Sign in failed:"}
               </strong>
 
               <ul>
@@ -794,18 +813,18 @@ function App() {
               </div>
 
               <div className="conversation-preview">
-              <span className="conversation-last-message">
-                {conversation.last_message?.is_deleted
-                  ? "This message was deleted"
-                  : conversation.last_message?.text || "No messages yet"}
-              </span>
-
-              {conversation.last_message && (
-                <span className="conversation-time">
-                  {formatShortTime(conversation.last_message.created_at)}
+                <span className="conversation-last-message">
+                  {conversation.last_message?.is_deleted
+                    ? "This message was deleted"
+                    : conversation.last_message?.text || "No messages yet"}
                 </span>
-              )}
-            </div>
+
+                {conversation.last_message && (
+                  <span className="conversation-time">
+                    {formatShortTime(conversation.last_message.created_at)}
+                  </span>
+                )}
+              </div>
 
               {conversation.unread_count > 0 && (
                 <span className="unread-badge">{conversation.unread_count}</span>
