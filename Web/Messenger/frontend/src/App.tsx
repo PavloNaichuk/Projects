@@ -35,6 +35,19 @@ function getConversationName(conversation: Conversation, currentUser: User) {
   return otherParticipant?.user.username ?? "Unknown user";
 }
 
+function getOtherParticipant(conversation: Conversation, currentUser: User) {
+  return conversation.participants.find(
+    (participant) => participant.user.id !== currentUser.id
+  )?.user;
+}
+
+function formatShortTime(dateString: string) {
+  return new Date(dateString).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 function formatMessageTime(dateString: string) {
   return new Date(dateString).toLocaleTimeString([], {
     hour: "2-digit",
@@ -711,6 +724,10 @@ function App() {
     ? getConversationName(selectedConversation, currentUser)
     : "No conversation selected";
 
+  const selectedConversationUser = selectedConversation
+    ? getOtherParticipant(selectedConversation, currentUser)
+    : null;
+
   return (
     <div className="app">
       <aside className="sidebar">
@@ -776,11 +793,19 @@ function App() {
                 {getConversationName(conversation, currentUser)}
               </div>
 
-              <div className="conversation-last-message">
+              <div className="conversation-preview">
+              <span className="conversation-last-message">
                 {conversation.last_message?.is_deleted
                   ? "This message was deleted"
                   : conversation.last_message?.text || "No messages yet"}
-              </div>
+              </span>
+
+              {conversation.last_message && (
+                <span className="conversation-time">
+                  {formatShortTime(conversation.last_message.created_at)}
+                </span>
+              )}
+            </div>
 
               {conversation.unread_count > 0 && (
                 <span className="unread-badge">{conversation.unread_count}</span>
@@ -792,8 +817,12 @@ function App() {
 
       <main className="chat">
         <header className="chat-header">
-          <h2>{selectedConversationName}</h2>
-          <span>Online</span>
+          <div>
+            <h2>{selectedConversationName}</h2>
+            {selectedConversationUser && (
+              <p className="chat-user-email">{selectedConversationUser.email}</p>
+            )}
+          </div>
         </header>
 
         <section className="messages">
