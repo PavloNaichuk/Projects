@@ -18,7 +18,6 @@ import {
   type Conversation,
   type Message,
 } from "./api/conversations";
-
 import { searchUsers } from "./api/users";
 
 function getConversationName(conversation: Conversation, currentUser: User) {
@@ -27,6 +26,13 @@ function getConversationName(conversation: Conversation, currentUser: User) {
   );
 
   return otherParticipant?.user.username ?? "Unknown user";
+}
+
+function formatMessageTime(dateString: string) {
+  return new Date(dateString).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 function App() {
@@ -39,6 +45,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([]);
 
   const socketRef = useRef<WebSocket | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const [username, setUsername] = useState("pavlo");
   const [password, setPassword] = useState("");
@@ -63,6 +70,28 @@ function App() {
   const [isDeletingMessageId, setIsDeletingMessageId] = useState<number | null>(
     null
   );
+
+  function markConversationReadInState(conversationId: number) {
+    setConversations((previousConversations) =>
+      previousConversations.map((conversation) =>
+        conversation.id === conversationId
+          ? {
+              ...conversation,
+              unread_count: 0,
+            }
+          : conversation
+      )
+    );
+
+    setSelectedConversation((previousConversation) =>
+      previousConversation?.id === conversationId
+        ? {
+            ...previousConversation,
+            unread_count: 0,
+          }
+        : previousConversation
+    );
+  }
 
   async function loadMessages(
     token: string,
@@ -114,6 +143,8 @@ function App() {
     setMessages([]);
     setSearchResults([]);
     setUserSearchQuery("");
+    setNewMessage("");
+    setMessageError("");
   }
 
   async function handleLogout() {
@@ -160,28 +191,6 @@ function App() {
             ...previousConversation,
             last_message: updatedMessage,
             updated_at: updatedMessage.updated_at,
-          }
-        : previousConversation
-    );
-  }
-
-  function markConversationReadInState(conversationId: number) {
-    setConversations((previousConversations) =>
-      previousConversations.map((conversation) =>
-        conversation.id === conversationId
-          ? {
-              ...conversation,
-              unread_count: 0,
-            }
-          : conversation
-      )
-    );
-
-    setSelectedConversation((previousConversation) =>
-      previousConversation?.id === conversationId
-        ? {
-            ...previousConversation,
-            unread_count: 0,
           }
         : previousConversation
     );
@@ -243,7 +252,7 @@ function App() {
       console.log("WebSocket connected");
     };
 
-    socket.onmessage = (event) => {
+    socket.onmessage = async (event) => {
       const data = JSON.parse(event.data);
 
       if (data.type === "message") {
@@ -279,9 +288,23 @@ function App() {
                 ...previousConversation,
                 last_message: receivedMessage,
                 updated_at: receivedMessage.created_at,
+                unread_count: 0,
               }
             : previousConversation
         );
+
+        if (
+          accessToken &&
+          selectedConversation.id === receivedMessage.conversation &&
+          receivedMessage.sender.id !== currentUser?.id
+        ) {
+          try {
+            await markConversationAsRead(accessToken, selectedConversation.id);
+            markConversationReadInState(selectedConversation.id);
+          } catch {
+            console.error("Failed to mark WebSocket message as read.");
+          }
+        }
       }
 
       if (data.type === "error") {
@@ -305,7 +328,13 @@ function App() {
         socketRef.current = null;
       }
     };
-  }, [accessToken, selectedConversation?.id]);
+  }, [accessToken, selectedConversation?.id, currentUser?.id]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages, selectedConversation?.id]);
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -335,6 +364,8 @@ function App() {
     setSelectedConversation(conversation);
     setEditingMessageId(null);
     setEditingMessageText("");
+    setMessageError("");
+
     await loadMessages(accessToken, conversation.id);
   }
 
@@ -699,9 +730,15 @@ function App() {
                         : message.text}
                     </p>
 
-                    {message.edited_at && !message.is_deleted && (
-                      <span className="message-meta">edited</span>
-                    )}
+                    <div className="message-footer">
+                      {message.edited_at && !message.is_deleted && (
+                        <span className="message-meta">edited</span>
+                      )}
+
+                      <span className="message-time">
+                        {formatMessageTime(message.created_at)}
+                      </span>
+                    </div>
 
                     {isOwnMessage && !message.is_deleted && (
                       <div className="message-actions">
@@ -727,6 +764,8 @@ function App() {
               </div>
             );
           })}
+
+          <div ref={messagesEndRef} />
         </section>
 
         {messageError && <div className="message-error">{messageError}</div>}

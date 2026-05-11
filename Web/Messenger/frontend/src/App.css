@@ -406,3 +406,24 @@
   border: 1px dashed #9ca3af;
   font-style: italic;
 }
+
+.message-footer {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.message-time {
+  font-size: 11px;
+}
+
+.message.outgoing .message-footer {
+  color: #e5e7eb;
+}
+
+.message.incoming .message-footer,
+.message.deleted .message-footer {
+  color: #6b7280;
+}
