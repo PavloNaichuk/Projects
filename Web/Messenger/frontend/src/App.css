@@ -355,3 +355,54 @@
   color: #6b7280;
   font-size: 14px;
 }
+
+.message-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.message-actions button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.25);
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.message.incoming .message-actions button {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.message-actions button:hover {
+  opacity: 0.85;
+}
+
+.message-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.edit-message-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-message-form input {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+}
+
+.message.deleted {
+  align-self: flex-end;
+  background: #e5e7eb;
+  color: #6b7280;
+  border: 1px dashed #9ca3af;
+  font-style: italic;
+}

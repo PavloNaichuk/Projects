@@ -84,3 +84,42 @@ export async function createConversation(
 
   return response.json();
 }
+
+export async function editMessage(
+  accessToken: string,
+  messageId: number,
+  text: string
+): Promise<Message> {
+  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ text }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to edit message.");
+  }
+
+  return response.json();
+}
+
+export async function deleteMessage(
+  accessToken: string,
+  messageId: number
+): Promise<Message> {
+  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete message.");
+  }
+
+  return response.json();
+}

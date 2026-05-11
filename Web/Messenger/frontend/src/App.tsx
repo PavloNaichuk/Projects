@@ -10,6 +10,8 @@ import {
 } from "./api/auth";
 import {
   createConversation,
+  deleteMessage,
+  editMessage,
   getConversationMessages,
   getConversations,
   type Conversation,
@@ -52,6 +54,13 @@ function App() {
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [isSearchingUsers, setIsSearchingUsers] = useState(false);
   const [userSearchError, setUserSearchError] = useState("");
+
+  const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
+  const [editingMessageText, setEditingMessageText] = useState("");
+  const [isEditingMessage, setIsEditingMessage] = useState(false);
+  const [isDeletingMessageId, setIsDeletingMessageId] = useState<number | null>(
+    null
+  );
 
   async function loadMessages(token: string, conversationId: number) {
     setIsMessagesLoading(true);
@@ -117,6 +126,36 @@ function App() {
     }
 
     clearSession();
+  }
+
+  function updateMessageInState(updatedMessage: Message) {
+    setMessages((previousMessages) =>
+      previousMessages.map((message) =>
+        message.id === updatedMessage.id ? updatedMessage : message
+      )
+    );
+
+    setConversations((previousConversations) =>
+      previousConversations.map((conversation) =>
+        conversation.last_message?.id === updatedMessage.id
+          ? {
+              ...conversation,
+              last_message: updatedMessage,
+              updated_at: updatedMessage.updated_at,
+            }
+          : conversation
+      )
+    );
+
+    setSelectedConversation((previousConversation) =>
+      previousConversation?.last_message?.id === updatedMessage.id
+        ? {
+            ...previousConversation,
+            last_message: updatedMessage,
+            updated_at: updatedMessage.updated_at,
+          }
+        : previousConversation
+    );
   }
 
   useEffect(() => {
@@ -265,6 +304,8 @@ function App() {
     }
 
     setSelectedConversation(conversation);
+    setEditingMessageId(null);
+    setEditingMessageText("");
     await loadMessages(accessToken, conversation.id);
   }
 
@@ -356,17 +397,73 @@ function App() {
     setIsSending(true);
 
     try {
-      socket.send(
-        JSON.stringify({
-          text,
-        })
-      );
-
+      socket.send(JSON.stringify({ text }));
       setNewMessage("");
     } catch {
       setMessageError("Failed to send message.");
     } finally {
       setIsSending(false);
+    }
+  }
+
+  function handleStartEditMessage(message: Message) {
+    setEditingMessageId(message.id);
+    setEditingMessageText(message.text);
+    setMessageError("");
+  }
+
+  function handleCancelEditMessage() {
+    setEditingMessageId(null);
+    setEditingMessageText("");
+  }
+
+  async function handleSaveEditedMessage(messageId: number) {
+    if (!accessToken) {
+      return;
+    }
+
+    const text = editingMessageText.trim();
+
+    if (!text) {
+      setMessageError("Message text cannot be empty.");
+      return;
+    }
+
+    setIsEditingMessage(true);
+    setMessageError("");
+
+    try {
+      const updatedMessage = await editMessage(accessToken, messageId, text);
+      updateMessageInState(updatedMessage);
+      setEditingMessageId(null);
+      setEditingMessageText("");
+    } catch {
+      setMessageError("Failed to edit message.");
+    } finally {
+      setIsEditingMessage(false);
+    }
+  }
+
+  async function handleDeleteMessage(messageId: number) {
+    if (!accessToken) {
+      return;
+    }
+
+    setIsDeletingMessageId(messageId);
+    setMessageError("");
+
+    try {
+      const deletedMessage = await deleteMessage(accessToken, messageId);
+      updateMessageInState(deletedMessage);
+
+      if (editingMessageId === messageId) {
+        setEditingMessageId(null);
+        setEditingMessageText("");
+      }
+    } catch {
+      setMessageError("Failed to delete message.");
+    } finally {
+      setIsDeletingMessageId(null);
     }
   }
 
@@ -522,24 +619,85 @@ function App() {
               <div className="empty-state">No messages yet.</div>
             )}
 
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={
-                message.sender.id === currentUser.id
-                  ? "message outgoing"
-                  : "message incoming"
-              }
-            >
-              <p>
-                {message.is_deleted ? "This message was deleted" : message.text}
-              </p>
+          {messages.map((message) => {
+            const isOwnMessage = message.sender.id === currentUser.id;
+            const isEditing = editingMessageId === message.id;
 
-              {message.edited_at && !message.is_deleted && (
-                <span className="message-meta">edited</span>
-              )}
-            </div>
-          ))}
+            return (
+              <div
+                key={message.id}
+                className={
+                  message.is_deleted
+                    ? "message deleted"
+                    : isOwnMessage
+                    ? "message outgoing"
+                    : "message incoming"
+                }
+              >
+                {isEditing ? (
+                  <div className="edit-message-form">
+                    <input
+                      type="text"
+                      value={editingMessageText}
+                      onChange={(event) =>
+                        setEditingMessageText(event.target.value)
+                      }
+                      disabled={isEditingMessage}
+                    />
+
+                    <div className="message-actions">
+                      <button
+                        type="button"
+                        onClick={() => handleSaveEditedMessage(message.id)}
+                        disabled={isEditingMessage}
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancelEditMessage}
+                        disabled={isEditingMessage}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <p>
+                      {message.is_deleted
+                        ? "This message was deleted"
+                        : message.text}
+                    </p>
+
+                    {message.edited_at && !message.is_deleted && (
+                      <span className="message-meta">edited</span>
+                    )}
+
+                    {isOwnMessage && !message.is_deleted && (
+                      <div className="message-actions">
+                        <button
+                          type="button"
+                          onClick={() => handleStartEditMessage(message)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteMessage(message.id)}
+                          disabled={isDeletingMessageId === message.id}
+                        >
+                          {isDeletingMessageId === message.id
+                            ? "Deleting..."
+                            : "Delete"}
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })}
         </section>
 
         {messageError && <div className="message-error">{messageError}</div>}
