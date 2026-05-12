@@ -45,6 +45,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([]);
 
   const socketRef = useRef<WebSocket | null>(null);
+  const notificationSocketRef = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const typingTimeoutRef = useRef<number | null>(null);
 
@@ -164,6 +165,11 @@ function App() {
     if (socketRef.current) {
       socketRef.current.close();
       socketRef.current = null;
+    }
+
+    if (notificationSocketRef.current) {
+      notificationSocketRef.current.close();
+      notificationSocketRef.current = null;
     }
 
     setCurrentUser(null);
@@ -301,18 +307,36 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!accessToken || !currentUser) {
-      return;
-    }
+      if (!accessToken || !currentUser) {
+        return;
+      }
 
-    const intervalId = window.setInterval(() => {
-      refreshConversations(accessToken);
-    }, 5000);
+      const notificationSocket = new WebSocket(
+        `${WS_BASE_URL}/notifications/?token=${accessToken}`
+      );
 
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, [accessToken, currentUser?.id]);
+      notificationSocketRef.current = notificationSocket;
+
+      notificationSocket.onmessage = async (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === "sidebar_message") {
+          await refreshConversations(accessToken);
+        }
+      };
+
+      notificationSocket.onerror = () => {
+        console.error("Notification WebSocket connection error.");
+      };
+
+      return () => {
+        notificationSocket.close();
+
+        if (notificationSocketRef.current === notificationSocket) {
+          notificationSocketRef.current = null;
+        }
+      };
+    }, [accessToken, currentUser?.id]);
 
   useEffect(() => {
     if (!accessToken || !selectedConversation) {

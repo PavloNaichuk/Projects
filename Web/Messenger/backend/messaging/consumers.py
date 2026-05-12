@@ -3,10 +3,11 @@ import json
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+from .models import ConversationParticipant
 
 from .models import Conversation, Message
 from .serializers import MessageSerializer
-from .models import Message
+from .models import Message, ConversationParticipant
 
 @database_sync_to_async
 def is_conversation_participant(conversation_id, user):
@@ -144,6 +145,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "message": message_data,
             },
         )
+        
+        participant_ids = await self.get_conversation_participant_ids()
+
+        for user_id in participant_ids:
+            await self.channel_layer.group_send(
+                f"user_{user_id}_notifications",
+                {
+                    "type": "sidebar_message",
+                    "message": message_data,
+                },
+            )
 
     async def chat_message(self, event):
         await self.send(
@@ -182,3 +194,46 @@ class ChatConsumer(AsyncWebsocketConsumer):
             conversation_id=self.conversation_id,
             is_read=False,
         ).exclude(sender=self.user).update(is_read=True)
+        
+    
+    @database_sync_to_async
+    def get_conversation_participant_ids(self):
+        return list(
+            ConversationParticipant.objects.filter(
+                conversation_id=self.conversation_id
+            ).values_list("user_id", flat=True)
+        )
+        
+class NotificationConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.user = self.scope["user"]
+
+        if not self.user or self.user.is_anonymous:
+            await self.close()
+            return
+
+        self.user_group_name = f"user_{self.user.id}_notifications"
+
+        await self.channel_layer.group_add(
+            self.user_group_name,
+            self.channel_name,
+        )
+
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        if hasattr(self, "user_group_name"):
+            await self.channel_layer.group_discard(
+                self.user_group_name,
+                self.channel_name,
+            )
+
+    async def sidebar_message(self, event):
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "sidebar_message",
+                    "message": event["message"],
+                }
+            )
+        )
