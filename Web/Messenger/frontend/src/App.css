@@ -541,3 +541,8 @@
   font-size: 14px;
   font-style: italic;
 }
+
+.message-read-status {
+  font-size: 11px;
+  opacity: 0.85;
+}

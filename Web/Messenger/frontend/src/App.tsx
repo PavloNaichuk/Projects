@@ -246,6 +246,20 @@ function App() {
     );
   }
 
+  function sendReadStatus() {
+    const socket = socketRef.current;
+
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      return;
+    }
+
+    socket.send(
+      JSON.stringify({
+        type: "read",
+      })
+    );
+  }
+
   useEffect(() => {
     async function restoreSession() {
       const savedAccessToken = localStorage.getItem("accessToken");
@@ -297,12 +311,17 @@ function App() {
     const socket = new WebSocket(websocketUrl);
 
     socketRef.current = socket;
+    socket.onopen = () => {
+      sendReadStatus();
+    };
 
     socket.onmessage = async (event) => {
       const data = JSON.parse(event.data);
 
       if (data.type === "message") {
         const receivedMessage = data.message as Message;
+
+        console.log("receivedMessage:", receivedMessage);
 
         setMessages((previousMessages) => {
           const alreadyExists = previousMessages.some(
@@ -349,15 +368,36 @@ function App() {
           try {
             await markConversationAsRead(accessToken, selectedConversation.id);
             markConversationReadInState(selectedConversation.id);
+            sendReadStatus();
           } catch {
             console.error("Failed to mark WebSocket message as read.");
           }
         }
+
+        return;
       }
 
-      if (data.type === "error") {
-        setMessageError(data.detail);
+      if (data.type === "read") {
+        const reader = data.user as User;
+
+        if (reader.id === currentUser?.id) {
+          return;
+        }
+
+        setMessages((previousMessages) =>
+          previousMessages.map((message) =>
+            message.sender.id === currentUser?.id && !message.is_deleted
+              ? {
+                  ...message,
+                  is_read: true,
+                }
+              : message
+          )
+        );
+
+        return;
       }
+
       if (data.type === "typing") {
         const receivedTypingUser = data.user as User;
 
@@ -370,9 +410,15 @@ function App() {
         } else {
           setTypingUser(null);
         }
+
+        return;
+      }
+
+      if (data.type === "error") {
+        setMessageError(data.detail);
       }
     };
-
+    
     socket.onerror = () => {
       setMessageError("WebSocket connection error.");
     };
@@ -996,6 +1042,12 @@ function App() {
                         <span className="message-time">
                           {formatMessageTime(message.created_at)}
                         </span>
+
+                        {isOwnMessage && !message.is_deleted && (
+                          <span className="message-read-status">
+                            {message.is_read ? "Read" : "Sent"}
+                          </span>
+                        )}
                       </div>
 
                       {isOwnMessage && !message.is_deleted && (

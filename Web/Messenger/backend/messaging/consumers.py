@@ -2,10 +2,11 @@ import json
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
 
 from .models import Conversation, Message
 from .serializers import MessageSerializer
-
+from .models import Message
 
 @database_sync_to_async
 def is_conversation_participant(conversation_id, user):
@@ -100,6 +101,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
             return
         
+        if data.get("type") == "read":
+            updated_count = await self.mark_messages_as_read()
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "read_event",
+                    "user": {
+                        "id": self.user.id,
+                        "username": self.user.username,
+                        "email": self.user.email,
+                    },
+                    "updated_count": updated_count,
+                },
+            )
+            return
+        
         text = data.get("text", "")
 
         message_data, error = await create_message(
@@ -147,3 +165,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+    async def read_event(self, event):
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "read",
+                    "user": event["user"],
+                    "updated_count": event["updated_count"],
+                }
+            )
+        )
+    
+    @database_sync_to_async
+    def mark_messages_as_read(self):
+        return Message.objects.filter(
+            conversation_id=self.conversation_id,
+            is_read=False,
+        ).exclude(sender=self.user).update(is_read=True)
