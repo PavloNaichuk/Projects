@@ -29,6 +29,12 @@ export type Conversation = {
   updated_at: string;
 };
 
+export type MessagesPage = {
+  results: Message[];
+  has_more: boolean;
+  next_before: number | null;
+};
+
 export async function getConversations(
   accessToken: string
 ): Promise<Conversation[]> {
@@ -51,6 +57,36 @@ export async function getConversationMessages(
 ): Promise<Message[]> {
   const response = await fetch(
     `${API_BASE_URL}/conversations/${conversationId}/messages/`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load messages.");
+  }
+
+  return response.json();
+}
+
+export async function getConversationMessagesPage(
+  accessToken: string,
+  conversationId: number,
+  beforeMessageId?: number,
+  limit = 20
+): Promise<MessagesPage> {
+  const searchParams = new URLSearchParams({
+    limit: String(limit),
+  });
+
+  if (beforeMessageId) {
+    searchParams.set("before", String(beforeMessageId));
+  }
+
+  const response = await fetch(
+    `${API_BASE_URL}/conversations/${conversationId}/messages/?${searchParams.toString()}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type FormEvent,
@@ -19,7 +20,7 @@ import {
   createConversation,
   deleteMessage,
   editMessage,
-  getConversationMessages,
+  getConversationMessagesPage,
   getConversations,
   markConversationAsRead,
   type Conversation,
@@ -35,6 +36,10 @@ import {
   sortConversationsByUpdatedAt,
 } from "./utils/chat";
 
+const MESSAGE_PAGE_SIZE = 20;
+
+type ScrollBehavior = "bottom" | "preserve";
+
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -46,8 +51,12 @@ function App() {
 
   const socketRef = useRef<WebSocket | null>(null);
   const notificationSocketRef = useRef<WebSocket | null>(null);
+  const messagesContainerRef = useRef<HTMLElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const typingTimeoutRef = useRef<number | null>(null);
+  const scrollBehaviorRef = useRef<ScrollBehavior>("bottom");
+  const previousScrollHeightRef = useRef(0);
+  const previousScrollTopRef = useRef(0);
 
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
@@ -59,6 +68,8 @@ function App() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
+  const [isOlderMessagesLoading, setIsOlderMessagesLoading] = useState(false);
+  const [hasMoreMessages, setHasMoreMessages] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   const [newMessage, setNewMessage] = useState("");
@@ -107,10 +118,20 @@ function App() {
     shouldMarkAsRead = true
   ) {
     setIsMessagesLoading(true);
+    setIsOlderMessagesLoading(false);
+    setHasMoreMessages(false);
+    scrollBehaviorRef.current = "bottom";
 
     try {
-      const messagesData = await getConversationMessages(token, conversationId);
-      setMessages(messagesData);
+      const messagesPage = await getConversationMessagesPage(
+        token,
+        conversationId,
+        undefined,
+        MESSAGE_PAGE_SIZE
+      );
+
+      setMessages(messagesPage.results);
+      setHasMoreMessages(messagesPage.has_more);
 
       if (shouldMarkAsRead) {
         await markConversationAsRead(token, conversationId);
@@ -118,8 +139,59 @@ function App() {
       }
     } catch {
       setMessages([]);
+      setHasMoreMessages(false);
     } finally {
       setIsMessagesLoading(false);
+    }
+  }
+
+  async function loadOlderMessages() {
+    if (
+      !accessToken ||
+      !selectedConversation ||
+      !hasMoreMessages ||
+      isOlderMessagesLoading ||
+      messages.length === 0
+    ) {
+      return;
+    }
+
+    const container = messagesContainerRef.current;
+
+    if (container) {
+      previousScrollHeightRef.current = container.scrollHeight;
+      previousScrollTopRef.current = container.scrollTop;
+      scrollBehaviorRef.current = "preserve";
+    }
+
+    setIsOlderMessagesLoading(true);
+
+    try {
+      const oldestMessageId = messages[0].id;
+      const messagesPage = await getConversationMessagesPage(
+        accessToken,
+        selectedConversation.id,
+        oldestMessageId,
+        MESSAGE_PAGE_SIZE
+      );
+
+      setMessages((previousMessages) => {
+        const existingMessageIds = new Set(
+          previousMessages.map((message) => message.id)
+        );
+
+        const olderMessages = messagesPage.results.filter(
+          (message) => !existingMessageIds.has(message.id)
+        );
+
+        return [...olderMessages, ...previousMessages];
+      });
+      setHasMoreMessages(messagesPage.has_more);
+    } catch {
+      scrollBehaviorRef.current = "bottom";
+      console.error("Failed to load older messages.");
+    } finally {
+      setIsOlderMessagesLoading(false);
     }
   }
 
@@ -157,6 +229,7 @@ function App() {
 
     setSelectedConversation(null);
     setMessages([]);
+    setHasMoreMessages(false);
   }
 
   function clearSession() {
@@ -178,6 +251,8 @@ function App() {
     setConversations([]);
     setSelectedConversation(null);
     setMessages([]);
+    setHasMoreMessages(false);
+    setIsOlderMessagesLoading(false);
     setSearchResults([]);
     setUserSearchQuery("");
     setNewMessage("");
@@ -503,7 +578,19 @@ function App() {
     };
   }, [accessToken, selectedConversation?.id, currentUser?.id]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const messagesContainer = messagesContainerRef.current;
+
+    if (scrollBehaviorRef.current === "preserve" && messagesContainer) {
+      const newScrollHeight = messagesContainer.scrollHeight;
+      messagesContainer.scrollTop =
+        newScrollHeight -
+        previousScrollHeightRef.current +
+        previousScrollTopRef.current;
+      scrollBehaviorRef.current = "bottom";
+      return;
+    }
+
     messagesEndRef.current?.scrollIntoView({
       behavior: "smooth",
     });
@@ -653,6 +740,18 @@ function App() {
       setSearchResults([]);
     } catch {
       setUserSearchError("Failed to create conversation.");
+    }
+  }
+
+  function handleMessagesScroll() {
+    const messagesContainer = messagesContainerRef.current;
+
+    if (!messagesContainer) {
+      return;
+    }
+
+    if (messagesContainer.scrollTop <= 32) {
+      loadOlderMessages();
     }
   }
 
@@ -859,6 +958,8 @@ function App() {
         selectedConversationUserIsOnline={selectedConversationUserIsOnline}
         messages={messages}
         isMessagesLoading={isMessagesLoading}
+        isOlderMessagesLoading={isOlderMessagesLoading}
+        hasMoreMessages={hasMoreMessages}
         typingUser={typingUser}
         messageError={messageError}
         newMessage={newMessage}
@@ -868,7 +969,9 @@ function App() {
         setEditingMessageText={setEditingMessageText}
         isEditingMessage={isEditingMessage}
         isDeletingMessageId={isDeletingMessageId}
+        messagesContainerRef={messagesContainerRef}
         messagesEndRef={messagesEndRef}
+        handleMessagesScroll={handleMessagesScroll}
         handleNewMessageChange={handleNewMessageChange}
         handleMessageKeyDown={handleMessageKeyDown}
         handleSendMessage={handleSendMessage}

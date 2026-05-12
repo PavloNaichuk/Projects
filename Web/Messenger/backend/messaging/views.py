@@ -104,13 +104,65 @@ class ConversationMessagesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, conversation_id):
-        messages = Message.objects.filter(
+        base_messages = Message.objects.filter(
             conversation_id=conversation_id,
-            conversation__participants__user=request.user
+            conversation__participants__user=request.user,
         ).select_related("sender")
 
-        serializer = MessageSerializer(messages, many=True)
-        return Response(serializer.data)
+        limit_param = request.query_params.get("limit")
+        before_param = request.query_params.get("before")
+
+        if not limit_param and not before_param:
+            serializer = MessageSerializer(base_messages, many=True)
+            return Response(serializer.data)
+
+        try:
+            limit = int(limit_param or 20)
+        except ValueError:
+            return Response(
+                {"limit": ["Limit must be a number."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if limit < 1:
+            return Response(
+                {"limit": ["Limit must be greater than 0."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        limit = min(limit, 50)
+
+        if before_param:
+            try:
+                before_id = int(before_param)
+            except ValueError:
+                return Response(
+                    {"before": ["Before must be a message id."]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            base_messages = base_messages.filter(id__lt=before_id)
+
+        newest_first_messages = list(
+            base_messages.order_by("-id")[: limit + 1]
+        )
+        has_more = len(newest_first_messages) > limit
+        page_messages = newest_first_messages[:limit]
+        page_messages.reverse()
+
+        serializer = MessageSerializer(page_messages, many=True)
+
+        next_before = None
+        if has_more and page_messages:
+            next_before = page_messages[0].id
+
+        return Response(
+            {
+                "results": serializer.data,
+                "has_more": has_more,
+                "next_before": next_before,
+            }
+        )
 
     def post(self, request, conversation_id):
         conversation = Conversation.objects.filter(

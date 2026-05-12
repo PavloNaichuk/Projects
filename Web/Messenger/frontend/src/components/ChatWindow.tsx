@@ -13,6 +13,8 @@ type ChatWindowProps = {
 
   messages: Message[];
   isMessagesLoading: boolean;
+  isOlderMessagesLoading: boolean;
+  hasMoreMessages: boolean;
 
   typingUser: User | null;
   messageError: string;
@@ -27,8 +29,10 @@ type ChatWindowProps = {
   isEditingMessage: boolean;
   isDeletingMessageId: number | null;
 
+  messagesContainerRef: RefObject<HTMLElement | null>;
   messagesEndRef: RefObject<HTMLDivElement | null>;
 
+  handleMessagesScroll: () => void;
   handleNewMessageChange: (value: string) => void;
   handleMessageKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   handleSendMessage: (event: FormEvent<HTMLFormElement>) => Promise<void>;
@@ -47,6 +51,8 @@ function ChatWindow({
   selectedConversationUserIsOnline,
   messages,
   isMessagesLoading,
+  isOlderMessagesLoading,
+  hasMoreMessages,
   typingUser,
   messageError,
   newMessage,
@@ -56,7 +62,9 @@ function ChatWindow({
   setEditingMessageText,
   isEditingMessage,
   isDeletingMessageId,
+  messagesContainerRef,
   messagesEndRef,
+  handleMessagesScroll,
   handleNewMessageChange,
   handleMessageKeyDown,
   handleSendMessage,
@@ -88,7 +96,11 @@ function ChatWindow({
         </div>
       </header>
 
-      <section className="messages">
+      <section
+        className="messages"
+        ref={messagesContainerRef}
+        onScroll={handleMessagesScroll}
+      >
         {!selectedConversation && (
           <div className="empty-state">Select a conversation.</div>
         )}
@@ -99,6 +111,10 @@ function ChatWindow({
 
         {selectedConversation && !isMessagesLoading && messages.length === 0 && (
           <div className="empty-state">No messages yet.</div>
+        )}
+
+        {selectedConversation && hasMoreMessages && isOlderMessagesLoading && (
+          <div className="older-messages-loader">Loading older messages...</div>
         )}
 
         {messages.map((message, index) => (
