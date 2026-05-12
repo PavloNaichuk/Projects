@@ -26,64 +26,14 @@ import {
   type Message,
 } from "./api/conversations";
 import { searchUsers } from "./api/users";
-
-function getConversationName(conversation: Conversation, currentUser: User) {
-  const otherParticipant = conversation.participants.find(
-    (participant) => participant.user.id !== currentUser.id
-  );
-
-  return otherParticipant?.user.username ?? "Unknown user";
-}
-
-function getOtherParticipant(conversation: Conversation, currentUser: User) {
-  return conversation.participants.find(
-    (participant) => participant.user.id !== currentUser.id
-  )?.user;
-}
-
-function formatMessageTime(dateString: string) {
-  return new Date(dateString).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function formatShortTime(dateString: string) {
-  return new Date(dateString).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function formatMessageDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString([], {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-}
-
-function isSameMessageDate(firstDate: string, secondDate: string) {
-  return (
-    new Date(firstDate).toDateString() === new Date(secondDate).toDateString()
-  );
-}
-
-function getConversationSortTime(conversation: Conversation) {
-  if (conversation.last_message) {
-    return new Date(conversation.last_message.created_at).getTime();
-  }
-
-  return 0;
-}
-
-function sortConversationsByUpdatedAt(conversations: Conversation[]) {
-  return [...conversations].sort(
-    (firstConversation, secondConversation) =>
-      getConversationSortTime(secondConversation) -
-      getConversationSortTime(firstConversation)
-  );
-}
+import AuthPage from "./components/AuthPage";
+import ChatWindow from "./components/ChatWindow";
+import Sidebar from "./components/Sidebar";
+import {
+  getConversationName,
+  getOtherParticipant,
+  sortConversationsByUpdatedAt,
+} from "./utils/chat";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -174,7 +124,8 @@ function App() {
   async function refreshConversations(token: string) {
     try {
       const conversationsData = await getConversations(token);
-      const sortedConversations = sortConversationsByUpdatedAt(conversationsData);
+      const sortedConversations =
+        sortConversationsByUpdatedAt(conversationsData);
 
       setConversations(sortedConversations);
 
@@ -193,7 +144,7 @@ function App() {
       console.error("Failed to refresh conversations.");
     }
   }
-  
+
   async function loadUserData(token: string) {
     const user = await getCurrentUser(token);
     setCurrentUser(user);
@@ -224,6 +175,7 @@ function App() {
     setUserSearchQuery("");
     setNewMessage("");
     setMessageError("");
+    setTypingUser(null);
   }
 
   async function handleLogout() {
@@ -287,6 +239,21 @@ function App() {
     socket.send(
       JSON.stringify({
         type: "read",
+      })
+    );
+  }
+
+  function sendTypingStatus(isTyping: boolean) {
+    const socket = socketRef.current;
+
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      return;
+    }
+
+    socket.send(
+      JSON.stringify({
+        type: "typing",
+        is_typing: isTyping,
       })
     );
   }
@@ -356,6 +323,7 @@ function App() {
     const socket = new WebSocket(websocketUrl);
 
     socketRef.current = socket;
+
     socket.onopen = () => {
       sendReadStatus();
     };
@@ -365,8 +333,6 @@ function App() {
 
       if (data.type === "message") {
         const receivedMessage = data.message as Message;
-
-        console.log("receivedMessage:", receivedMessage);
 
         setMessages((previousMessages) => {
           const alreadyExists = previousMessages.some(
@@ -463,7 +429,7 @@ function App() {
         setMessageError(data.detail);
       }
     };
-    
+
     socket.onerror = () => {
       setMessageError("WebSocket connection error.");
     };
@@ -637,22 +603,6 @@ function App() {
     }
   }
 
-
-  function sendTypingStatus(isTyping: boolean) {
-    const socket = socketRef.current;
-
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-      return;
-    }
-
-    socket.send(
-      JSON.stringify({
-        type: "typing",
-        is_typing: isTyping,
-      })
-    );
-  }
-
   function handleNewMessageChange(value: string) {
     setNewMessage(value);
 
@@ -797,101 +747,24 @@ function App() {
   }
 
   if (!currentUser || !accessToken) {
-    const isRegisterMode = authMode === "register";
-
     return (
-      <div className="auth-page">
-        <form
-          className="auth-card"
-          onSubmit={isRegisterMode ? handleRegister : handleLogin}
-        >
-          <h1>Messenger</h1>
-          <p>{isRegisterMode ? "Create your account" : "Sign in to continue"}</p>
-
-          <label>
-            Username
-            <input
-              type="text"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-              placeholder="Username"
-            />
-          </label>
-
-          {isRegisterMode && (
-            <label>
-              Email
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="Email"
-              />
-            </label>
-          )}
-
-          <label>
-            Password
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="Password"
-            />
-          </label>
-
-          {isRegisterMode && (
-            <label>
-              Confirm password
-              <input
-                type="password"
-                value={passwordConfirm}
-                onChange={(event) => setPasswordConfirm(event.target.value)}
-                placeholder="Confirm password"
-              />
-            </label>
-          )}
-
-          {error && (
-            <div className="auth-error" role="alert">
-              <strong>
-                {authMode === "register"
-                  ? "Please check the form:"
-                  : "Sign in failed:"}
-              </strong>
-
-              <ul>
-                {error.split("\n").map((message) => (
-                  <li key={message}>{message}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <button type="submit" disabled={isLoading}>
-            {isLoading
-              ? isRegisterMode
-                ? "Creating account..."
-                : "Signing in..."
-              : isRegisterMode
-              ? "Create account"
-              : "Sign in"}
-          </button>
-
-          <button
-            type="button"
-            className="auth-switch-button"
-            onClick={() => {
-              setError("");
-              setAuthMode(isRegisterMode ? "login" : "register");
-            }}
-          >
-            {isRegisterMode
-              ? "Already have an account? Sign in"
-              : "No account? Create one"}
-          </button>
-        </form>
-      </div>
+      <AuthPage
+        authMode={authMode}
+        setAuthMode={setAuthMode}
+        username={username}
+        setUsername={setUsername}
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        passwordConfirm={passwordConfirm}
+        setPasswordConfirm={setPasswordConfirm}
+        error={error}
+        setError={setError}
+        isLoading={isLoading}
+        handleLogin={handleLogin}
+        handleRegister={handleRegister}
+      />
     );
   }
 
@@ -900,251 +773,51 @@ function App() {
     : "No conversation selected";
 
   const selectedConversationUser = selectedConversation
-    ? getOtherParticipant(selectedConversation, currentUser)
+    ? getOtherParticipant(selectedConversation, currentUser) ?? null
     : null;
 
   return (
     <div className="app">
-      <aside className="sidebar">
-        <div className="sidebar-header">
-          <h1>Messenger</h1>
-          <p>Logged in as {currentUser.username}</p>
-          <button className="logout-button" type="button" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
+      <Sidebar
+        currentUser={currentUser}
+        conversations={conversations}
+        selectedConversation={selectedConversation}
+        userSearchQuery={userSearchQuery}
+        setUserSearchQuery={setUserSearchQuery}
+        searchResults={searchResults}
+        isSearchingUsers={isSearchingUsers}
+        userSearchError={userSearchError}
+        handleLogout={handleLogout}
+        handleSearchUsers={handleSearchUsers}
+        handleStartConversation={handleStartConversation}
+        handleSelectConversation={handleSelectConversation}
+      />
 
-        <form className="search-box" onSubmit={handleSearchUsers}>
-          <input
-            type="text"
-            value={userSearchQuery}
-            onChange={(event) => setUserSearchQuery(event.target.value)}
-            placeholder="Search users..."
-          />
-          <button type="submit" disabled={isSearchingUsers}>
-            {isSearchingUsers ? "Searching..." : "Search"}
-          </button>
-        </form>
-
-        {userSearchError && (
-          <div className="sidebar-error">{userSearchError}</div>
-        )}
-
-        {searchResults.length > 0 && (
-          <div className="user-search-results">
-            <div className="user-search-title">Users</div>
-
-            {searchResults.map((user) => (
-              <button
-                key={user.id}
-                type="button"
-                className="user-search-item"
-                onClick={() => handleStartConversation(user)}
-              >
-                <span className="user-search-name">{user.username}</span>
-                <span className="user-search-email">{user.email}</span>
-              </button>
-            ))}
-          </div>
-        )}
-
-        <div className="conversation-list">
-          {conversations.length === 0 && (
-            <div className="empty-state">No conversations yet.</div>
-          )}
-
-          {conversations.map((conversation) => (
-            <button
-              key={conversation.id}
-              type="button"
-              className={
-                selectedConversation?.id === conversation.id
-                  ? "conversation-item active"
-                  : "conversation-item"
-              }
-              onClick={() => handleSelectConversation(conversation)}
-            >
-              <div className="conversation-name">
-                {getConversationName(conversation, currentUser)}
-              </div>
-
-              <div className="conversation-preview">
-                <span className="conversation-last-message">
-                  {conversation.last_message?.is_deleted
-                    ? "This message was deleted"
-                    : conversation.last_message?.text || "No messages yet"}
-                </span>
-
-                {conversation.last_message && (
-                  <span className="conversation-time">
-                    {formatShortTime(conversation.last_message.created_at)}
-                  </span>
-                )}
-              </div>
-
-              {conversation.unread_count > 0 && (
-                <span className="unread-badge">{conversation.unread_count}</span>
-              )}
-            </button>
-          ))}
-        </div>
-      </aside>
-
-      <main className="chat">
-        <header className="chat-header">
-          <div>
-            <h2>{selectedConversationName}</h2>
-            {selectedConversationUser && (
-              <p className="chat-user-email">{selectedConversationUser.email}</p>
-            )}
-          </div>
-        </header>
-
-        <section className="messages">
-          {!selectedConversation && (
-            <div className="empty-state">Select a conversation.</div>
-          )}
-
-          {selectedConversation && isMessagesLoading && (
-            <div className="empty-state">Loading messages...</div>
-          )}
-
-          {selectedConversation &&
-            !isMessagesLoading &&
-            messages.length === 0 && (
-              <div className="empty-state">No messages yet.</div>
-            )}
-
-          {messages.map((message, index) => {
-            const previousMessage = messages[index - 1];
-            const shouldShowDateSeparator =
-              !previousMessage ||
-              !isSameMessageDate(
-                previousMessage.created_at,
-                message.created_at
-              );
-
-            const isOwnMessage = message.sender.id === currentUser.id;
-            const isEditing = editingMessageId === message.id;
-
-            return (
-              <div key={message.id} className="message-row">
-                {shouldShowDateSeparator && (
-                  <div className="date-separator">
-                    {formatMessageDate(message.created_at)}
-                  </div>
-                )}
-
-                <div
-                  className={
-                    message.is_deleted
-                      ? "message deleted"
-                      : isOwnMessage
-                      ? "message outgoing"
-                      : "message incoming"
-                  }
-                >
-                  {isEditing ? (
-                    <div className="edit-message-form">
-                      <input
-                        type="text"
-                        value={editingMessageText}
-                        onChange={(event) =>
-                          setEditingMessageText(event.target.value)
-                        }
-                        disabled={isEditingMessage}
-                      />
-
-                      <div className="message-actions">
-                        <button
-                          type="button"
-                          onClick={() => handleSaveEditedMessage(message.id)}
-                          disabled={isEditingMessage}
-                        >
-                          Save
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleCancelEditMessage}
-                          disabled={isEditingMessage}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <p>
-                        {message.is_deleted
-                          ? "This message was deleted"
-                          : message.text}
-                      </p>
-
-                      <div className="message-footer">
-                        {message.edited_at && !message.is_deleted && (
-                          <span className="message-meta">edited</span>
-                        )}
-
-                        <span className="message-time">
-                          {formatMessageTime(message.created_at)}
-                        </span>
-
-                        {isOwnMessage && !message.is_deleted && (
-                          <span className="message-read-status">
-                            {message.is_read ? "Read" : "Sent"}
-                          </span>
-                        )}
-                      </div>
-
-                      {isOwnMessage && !message.is_deleted && (
-                        <div className="message-actions">
-                          <button
-                            type="button"
-                            onClick={() => handleStartEditMessage(message)}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteMessage(message.id)}
-                            disabled={isDeletingMessageId === message.id}
-                          >
-                            {isDeletingMessageId === message.id
-                              ? "Deleting..."
-                              : "Delete"}
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-
-          <div ref={messagesEndRef} />
-        </section>
-        {typingUser && (
-          <div className="typing-indicator">
-            {typingUser.username} is typing...
-          </div>
-        )}
-        {messageError && <div className="message-error">{messageError}</div>}
-
-        <form className="message-form" onSubmit={handleSendMessage}>
-          <textarea
-            value={newMessage}
-            onChange={(event) => handleNewMessageChange(event.target.value)}
-            onKeyDown={handleMessageKeyDown}
-            placeholder="Type a message..."
-            disabled={!selectedConversation || isSending}
-            rows={1}
-          />
-          <button type="submit" disabled={!selectedConversation || isSending}>
-            {isSending ? "Sending..." : "Send"}
-          </button>
-        </form>
-      </main>
+      <ChatWindow
+        currentUser={currentUser}
+        selectedConversation={selectedConversation}
+        selectedConversationName={selectedConversationName}
+        selectedConversationUser={selectedConversationUser}
+        messages={messages}
+        isMessagesLoading={isMessagesLoading}
+        typingUser={typingUser}
+        messageError={messageError}
+        newMessage={newMessage}
+        isSending={isSending}
+        editingMessageId={editingMessageId}
+        editingMessageText={editingMessageText}
+        setEditingMessageText={setEditingMessageText}
+        isEditingMessage={isEditingMessage}
+        isDeletingMessageId={isDeletingMessageId}
+        messagesEndRef={messagesEndRef}
+        handleNewMessageChange={handleNewMessageChange}
+        handleMessageKeyDown={handleMessageKeyDown}
+        handleSendMessage={handleSendMessage}
+        handleStartEditMessage={handleStartEditMessage}
+        handleCancelEditMessage={handleCancelEditMessage}
+        handleSaveEditedMessage={handleSaveEditedMessage}
+        handleDeleteMessage={handleDeleteMessage}
+      />
     </div>
   );
 }
