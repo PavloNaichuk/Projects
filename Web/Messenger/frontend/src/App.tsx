@@ -69,11 +69,19 @@ function isSameMessageDate(firstDate: string, secondDate: string) {
   );
 }
 
+function getConversationSortTime(conversation: Conversation) {
+  if (conversation.last_message) {
+    return new Date(conversation.last_message.created_at).getTime();
+  }
+
+  return 0;
+}
+
 function sortConversationsByUpdatedAt(conversations: Conversation[]) {
   return [...conversations].sort(
     (firstConversation, secondConversation) =>
-      new Date(secondConversation.updated_at).getTime() -
-      new Date(firstConversation.updated_at).getTime()
+      getConversationSortTime(secondConversation) -
+      getConversationSortTime(firstConversation)
   );
 }
 
@@ -163,6 +171,29 @@ function App() {
     }
   }
 
+  async function refreshConversations(token: string) {
+    try {
+      const conversationsData = await getConversations(token);
+      const sortedConversations = sortConversationsByUpdatedAt(conversationsData);
+
+      setConversations(sortedConversations);
+
+      setSelectedConversation((previousConversation) => {
+        if (!previousConversation) {
+          return previousConversation;
+        }
+
+        return (
+          sortedConversations.find(
+            (conversation) => conversation.id === previousConversation.id
+          ) ?? previousConversation
+        );
+      });
+    } catch {
+      console.error("Failed to refresh conversations.");
+    }
+  }
+  
   async function loadUserData(token: string) {
     const user = await getCurrentUser(token);
     setCurrentUser(user);
@@ -301,6 +332,20 @@ function App() {
 
     restoreSession();
   }, []);
+
+  useEffect(() => {
+    if (!accessToken || !currentUser) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      refreshConversations(accessToken);
+    }, 5000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [accessToken, currentUser?.id]);
 
   useEffect(() => {
     if (!accessToken || !selectedConversation) {
@@ -521,6 +566,7 @@ function App() {
     setMessageError("");
 
     await loadMessages(accessToken, conversation.id);
+    await refreshConversations(accessToken);
   }
 
   async function handleSearchUsers(event: FormEvent<HTMLFormElement>) {
