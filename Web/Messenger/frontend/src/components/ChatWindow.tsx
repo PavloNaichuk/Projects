@@ -9,6 +9,7 @@ type ChatWindowProps = {
   selectedConversation: Conversation | null;
   selectedConversationName: string;
   selectedConversationUser: User | null;
+  selectedConversationUserIsOnline: boolean;
 
   messages: Message[];
   isMessagesLoading: boolean;
@@ -43,6 +44,7 @@ function ChatWindow({
   selectedConversation,
   selectedConversationName,
   selectedConversationUser,
+  selectedConversationUserIsOnline,
   messages,
   isMessagesLoading,
   typingUser,
@@ -68,8 +70,20 @@ function ChatWindow({
       <header className="chat-header">
         <div>
           <h2>{selectedConversationName}</h2>
+
           {selectedConversationUser && (
-            <p className="chat-user-email">{selectedConversationUser.email}</p>
+            <>
+              <p className="chat-user-email">{selectedConversationUser.email}</p>
+              <p
+                className={
+                  selectedConversationUserIsOnline
+                    ? "chat-user-status online"
+                    : "chat-user-status offline"
+                }
+              >
+                {selectedConversationUserIsOnline ? "Online" : "Offline"}
+              </p>
+            </>
           )}
         </div>
       </header>

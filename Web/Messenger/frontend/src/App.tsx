@@ -65,6 +65,7 @@ function App() {
   const [messageError, setMessageError] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [typingUser, setTypingUser] = useState<User | null>(null);
+  const [onlineUserIds, setOnlineUserIds] = useState<number[]>([]);
 
   const [userSearchQuery, setUserSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
@@ -182,6 +183,7 @@ function App() {
     setNewMessage("");
     setMessageError("");
     setTypingUser(null);
+    setOnlineUserIds([]);
   }
 
   async function handleLogout() {
@@ -190,6 +192,11 @@ function App() {
     if (socketRef.current) {
       socketRef.current.close();
       socketRef.current = null;
+    }
+
+    if (notificationSocketRef.current) {
+      notificationSocketRef.current.close();
+      notificationSocketRef.current = null;
     }
 
     if (accessToken && savedRefreshToken) {
@@ -307,36 +314,58 @@ function App() {
   }, []);
 
   useEffect(() => {
-      if (!accessToken || !currentUser) {
+    if (!accessToken || !currentUser) {
+      return;
+    }
+
+    const notificationSocket = new WebSocket(
+      `${WS_BASE_URL}/notifications/?token=${accessToken}`
+    );
+
+    notificationSocketRef.current = notificationSocket;
+
+    notificationSocket.onmessage = async (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === "sidebar_message") {
+        await refreshConversations(accessToken);
         return;
       }
 
-      const notificationSocket = new WebSocket(
-        `${WS_BASE_URL}/notifications/?token=${accessToken}`
-      );
+      if (data.type === "online_users") {
+        setOnlineUserIds(data.user_ids);
+        return;
+      }
 
-      notificationSocketRef.current = notificationSocket;
+      if (data.type === "online_status") {
+        const user = data.user as User;
 
-      notificationSocket.onmessage = async (event) => {
-        const data = JSON.parse(event.data);
+        setOnlineUserIds((previousOnlineUserIds) => {
+          if (data.is_online) {
+            if (previousOnlineUserIds.includes(user.id)) {
+              return previousOnlineUserIds;
+            }
 
-        if (data.type === "sidebar_message") {
-          await refreshConversations(accessToken);
-        }
-      };
+            return [...previousOnlineUserIds, user.id];
+          }
 
-      notificationSocket.onerror = () => {
-        console.error("Notification WebSocket connection error.");
-      };
+          return previousOnlineUserIds.filter((userId) => userId !== user.id);
+        });
+      }
+    };
 
-      return () => {
-        notificationSocket.close();
+    notificationSocket.onerror = () => {
+      console.error("Notification WebSocket connection error.");
+    };
 
-        if (notificationSocketRef.current === notificationSocket) {
-          notificationSocketRef.current = null;
-        }
-      };
-    }, [accessToken, currentUser?.id]);
+    return () => {
+      notificationSocket.close();
+
+      if (notificationSocketRef.current === notificationSocket) {
+        notificationSocketRef.current = null;
+      }
+    };
+  }, [accessToken, currentUser?.id]);
 
   useEffect(() => {
     if (!accessToken || !selectedConversation) {
@@ -800,10 +829,15 @@ function App() {
     ? getOtherParticipant(selectedConversation, currentUser) ?? null
     : null;
 
+  const selectedConversationUserIsOnline = selectedConversationUser
+    ? onlineUserIds.includes(selectedConversationUser.id)
+    : false;
+
   return (
     <div className="app">
       <Sidebar
         currentUser={currentUser}
+        onlineUserIds={onlineUserIds}
         conversations={conversations}
         selectedConversation={selectedConversation}
         userSearchQuery={userSearchQuery}
@@ -822,6 +856,7 @@ function App() {
         selectedConversation={selectedConversation}
         selectedConversationName={selectedConversationName}
         selectedConversationUser={selectedConversationUser}
+        selectedConversationUserIsOnline={selectedConversationUserIsOnline}
         messages={messages}
         isMessagesLoading={isMessagesLoading}
         typingUser={typingUser}

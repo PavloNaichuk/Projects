@@ -5,6 +5,7 @@ import { formatShortTime, getConversationName } from "../utils/chat";
 
 type SidebarProps = {
   currentUser: User;
+  onlineUserIds: number[];
 
   conversations: Conversation[];
   selectedConversation: Conversation | null;
@@ -24,6 +25,7 @@ type SidebarProps = {
 
 function Sidebar({
   currentUser,
+  onlineUserIds,
   conversations,
   selectedConversation,
   userSearchQuery,
@@ -83,40 +85,51 @@ function Sidebar({
           <div className="empty-state">No conversations yet.</div>
         )}
 
-        {conversations.map((conversation) => (
-          <button
-            key={conversation.id}
-            type="button"
-            className={
-              selectedConversation?.id === conversation.id
-                ? "conversation-item active"
-                : "conversation-item"
-            }
-            onClick={() => handleSelectConversation(conversation)}
-          >
-            <div className="conversation-name">
-              {getConversationName(conversation, currentUser)}
-            </div>
+        {conversations.map((conversation) => {
+          const otherParticipant = conversation.participants.find(
+            (participant) => participant.user.id !== currentUser.id
+          );
 
-            <div className="conversation-preview">
-              <span className="conversation-last-message">
-                {conversation.last_message?.is_deleted
-                  ? "This message was deleted"
-                  : conversation.last_message?.text || "No messages yet"}
-              </span>
+          const isOnline = otherParticipant
+            ? onlineUserIds.includes(otherParticipant.user.id)
+            : false;
 
-              {conversation.last_message && (
-                <span className="conversation-time">
-                  {formatShortTime(conversation.last_message.created_at)}
+          return (
+            <button
+              key={conversation.id}
+              type="button"
+              className={
+                selectedConversation?.id === conversation.id
+                  ? "conversation-item active"
+                  : "conversation-item"
+              }
+              onClick={() => handleSelectConversation(conversation)}
+            >
+              <div className="conversation-name">
+                <span>{getConversationName(conversation, currentUser)}</span>
+                {isOnline && <span className="online-dot" title="Online" />}
+              </div>
+
+              <div className="conversation-preview">
+                <span className="conversation-last-message">
+                  {conversation.last_message?.is_deleted
+                    ? "This message was deleted"
+                    : conversation.last_message?.text || "No messages yet"}
                 </span>
-              )}
-            </div>
 
-            {conversation.unread_count > 0 && (
-              <span className="unread-badge">{conversation.unread_count}</span>
-            )}
-          </button>
-        ))}
+                {conversation.last_message && (
+                  <span className="conversation-time">
+                    {formatShortTime(conversation.last_message.created_at)}
+                  </span>
+                )}
+              </div>
+
+              {conversation.unread_count > 0 && (
+                <span className="unread-badge">{conversation.unread_count}</span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </aside>
   );

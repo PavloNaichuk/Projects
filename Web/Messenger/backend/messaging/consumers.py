@@ -2,12 +2,11 @@ import json
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.db import database_sync_to_async
-from .models import ConversationParticipant
 
-from .models import Conversation, Message
+from .models import Conversation, ConversationParticipant, Message
 from .serializers import MessageSerializer
-from .models import Message, ConversationParticipant
+
+ACTIVE_USER_CONNECTIONS = {}
 
 @database_sync_to_async
 def is_conversation_participant(conversation_id, user):
@@ -221,11 +220,74 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
+        partner_ids = await self.get_conversation_partner_ids()
+        online_partner_ids = [
+            partner_id
+            for partner_id in partner_ids
+            if ACTIVE_USER_CONNECTIONS.get(partner_id, 0) > 0
+        ]
+
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "online_users",
+                    "user_ids": online_partner_ids,
+                }
+            )
+        )
+
+        previous_connection_count = ACTIVE_USER_CONNECTIONS.get(self.user.id, 0)
+        ACTIVE_USER_CONNECTIONS[self.user.id] = previous_connection_count + 1
+
+        if previous_connection_count == 0:
+            await self.broadcast_online_status_to_partners(True)
+
     async def disconnect(self, close_code):
         if hasattr(self, "user_group_name"):
             await self.channel_layer.group_discard(
                 self.user_group_name,
                 self.channel_name,
+            )
+
+        if hasattr(self, "user") and self.user and not self.user.is_anonymous:
+            current_connection_count = ACTIVE_USER_CONNECTIONS.get(self.user.id, 0)
+
+            if current_connection_count <= 1:
+                ACTIVE_USER_CONNECTIONS.pop(self.user.id, None)
+                await self.broadcast_online_status_to_partners(False)
+            else:
+                ACTIVE_USER_CONNECTIONS[self.user.id] = current_connection_count - 1
+
+    @database_sync_to_async
+    def get_conversation_partner_ids(self):
+        conversation_ids = ConversationParticipant.objects.filter(
+            user=self.user
+        ).values_list("conversation_id", flat=True)
+
+        return list(
+            ConversationParticipant.objects.filter(
+                conversation_id__in=conversation_ids
+            )
+            .exclude(user=self.user)
+            .values_list("user_id", flat=True)
+            .distinct()
+        )
+
+    async def broadcast_online_status_to_partners(self, is_online):
+        partner_ids = await self.get_conversation_partner_ids()
+
+        for partner_id in partner_ids:
+            await self.channel_layer.group_send(
+                f"user_{partner_id}_notifications",
+                {
+                    "type": "online_status",
+                    "user": {
+                        "id": self.user.id,
+                        "username": self.user.username,
+                        "email": self.user.email,
+                    },
+                    "is_online": is_online,
+                },
             )
 
     async def sidebar_message(self, event):
@@ -234,6 +296,17 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 {
                     "type": "sidebar_message",
                     "message": event["message"],
+                }
+            )
+        )
+
+    async def online_status(self, event):
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "online_status",
+                    "user": event["user"],
+                    "is_online": event["is_online"],
                 }
             )
         )
