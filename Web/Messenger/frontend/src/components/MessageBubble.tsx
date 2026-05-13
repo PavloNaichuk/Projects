@@ -26,6 +26,7 @@ type MessageBubbleProps = {
   handleCancelEditMessage: () => void;
   handleSaveEditedMessage: (messageId: number) => Promise<void>;
   handleDeleteMessage: (messageId: number) => Promise<void>;
+  handleRemoveMessageAttachment: (messageId: number) => Promise<void>;
 };
 
 function renderHighlightedText(text: string, searchQuery: string) {
@@ -93,6 +94,7 @@ function MessageBubble({
   handleCancelEditMessage,
   handleSaveEditedMessage,
   handleDeleteMessage,
+  handleRemoveMessageAttachment,
 }: MessageBubbleProps) {
   const shouldShowDateSeparator =
     !previousMessage ||
@@ -217,6 +219,18 @@ function MessageBubble({
                     onClick={() => handleStartEditMessage(message)}
                   >
                     Edit
+                  </button>
+                )}
+
+                {hasAttachment && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveMessageAttachment(message.id)}
+                    disabled={isDeletingMessageId === message.id}
+                  >
+                    {isDeletingMessageId === message.id
+                      ? "Deleting..."
+                      : "Delete file"}
                   </button>
                 )}
 

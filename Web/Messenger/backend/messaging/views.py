@@ -424,6 +424,45 @@ class MessageDetailView(APIView):
                 {"detail": "Deleted message cannot be edited."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+            
+        remove_attachment = request.data.get("remove_attachment")
+
+        if remove_attachment is True or str(remove_attachment).lower() == "true":
+            if not message.attachment:
+                return Response(
+                    {"detail": "Attachment not found."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            message.attachment.delete(save=False)
+
+            message.attachment = None
+            message.attachment_name = ""
+            message.attachment_content_type = ""
+            message.attachment_size = None
+
+            update_fields = [
+                "attachment",
+                "attachment_name",
+                "attachment_content_type",
+                "attachment_size",
+                "updated_at",
+            ]
+
+            if not message.text.strip():
+                message.text = ""
+                message.is_deleted = True
+                message.deleted_at = timezone.now()
+                update_fields.extend(["text", "is_deleted", "deleted_at"])
+
+            message.save(update_fields=update_fields)
+
+            serializer = MessageSerializer(
+                message,
+                context={"request": request},
+            )
+
+            return Response(serializer.data)
 
         if "text" not in request.data:
             return Response(

@@ -56,6 +56,7 @@ type ChatWindowProps = {
   handleCancelEditMessage: () => void;
   handleSaveEditedMessage: (messageId: number) => Promise<void>;
   handleDeleteMessage: (messageId: number) => Promise<void>;
+  handleRemoveMessageAttachment: (messageId: number) => Promise<void>;
 };
 
 function ChatWindow({
@@ -96,6 +97,7 @@ function ChatWindow({
   handleCancelEditMessage,
   handleSaveEditedMessage,
   handleDeleteMessage,
+  handleRemoveMessageAttachment,
 }: ChatWindowProps) {
   return (
     <main className="chat">
@@ -195,6 +197,7 @@ function ChatWindow({
             handleCancelEditMessage={handleCancelEditMessage}
             handleSaveEditedMessage={handleSaveEditedMessage}
             handleDeleteMessage={handleDeleteMessage}
+            handleRemoveMessageAttachment={handleRemoveMessageAttachment}
           />
         ))}
 

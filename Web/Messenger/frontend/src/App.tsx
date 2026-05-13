@@ -23,6 +23,7 @@ import {
   deleteConversation,
   deleteMessage,
   editMessage,
+  removeMessageAttachment,
   getConversationMessagesPage,
   getConversations,
   markConversationAsRead,
@@ -1061,6 +1062,29 @@ function App() {
     }
   }
 
+  async function handleRemoveMessageAttachment(messageId: number) {
+    if (!accessToken) {
+      return;
+    }
+
+    setIsDeletingMessageId(messageId);
+    setMessageError("");
+
+    try {
+      const updatedMessage = await removeMessageAttachment(accessToken, messageId);
+      updateMessageInState(updatedMessage);
+
+      if (editingMessageId === messageId && updatedMessage.is_deleted) {
+        setEditingMessageId(null);
+        setEditingMessageText("");
+      }
+    } catch {
+      setMessageError("Failed to delete attachment.");
+    } finally {
+      setIsDeletingMessageId(null);
+    }
+  }
+
   if (isAuthChecking) {
     return (
       <div className="auth-page">
@@ -1164,6 +1188,7 @@ function App() {
         handleCancelEditMessage={handleCancelEditMessage}
         handleSaveEditedMessage={handleSaveEditedMessage}
         handleDeleteMessage={handleDeleteMessage}
+        handleRemoveMessageAttachment={handleRemoveMessageAttachment}
       />
     </div>
   );

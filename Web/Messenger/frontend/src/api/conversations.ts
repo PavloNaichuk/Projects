@@ -262,3 +262,23 @@ export async function markConversationAsRead(
 
   return response.json();
 }
+
+export async function removeMessageAttachment(
+  accessToken: string,
+  messageId: number
+): Promise<Message> {
+  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ remove_attachment: true }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete attachment.");
+  }
+
+  return response.json();
+}
