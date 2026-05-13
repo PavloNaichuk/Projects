@@ -811,17 +811,6 @@ function App() {
       return;
     }
 
-    const deleteText =
-      mode === "for_everyone"
-        ? "Delete this conversation for everyone? This will remove all messages for both users."
-        : "Delete this conversation only for you? The other user will still see it.";
-
-    const confirmed = window.confirm(deleteText);
-
-    if (!confirmed) {
-      return;
-    }
-
     setIsDeletingConversationId(conversation.id);
     setUserSearchError("");
 

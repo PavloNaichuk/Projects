@@ -1,10 +1,15 @@
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import type { User } from "../api/auth";
 import type {
   Conversation,
   DeleteConversationMode,
 } from "../api/conversations";
 import { formatShortTime, getConversationName } from "../utils/chat";
+
+type PendingDelete = {
+  conversation: Conversation;
+  mode: DeleteConversationMode;
+};
 
 type SidebarProps = {
   currentUser: User;
@@ -48,6 +53,45 @@ function Sidebar({
   handleSelectConversation,
   handleDeleteConversation,
 }: SidebarProps) {
+  const [openedMenuConversationId, setOpenedMenuConversationId] = useState<
+    number | null
+  >(null);
+  const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
+
+  function toggleConversationMenu(conversationId: number) {
+    setOpenedMenuConversationId((previousConversationId) =>
+      previousConversationId === conversationId ? null : conversationId
+    );
+  }
+
+  function openDeleteConfirm(
+    conversation: Conversation,
+    mode: DeleteConversationMode
+  ) {
+    setOpenedMenuConversationId(null);
+    setPendingDelete({
+      conversation,
+      mode,
+    });
+  }
+
+  async function confirmDeleteConversation() {
+    if (!pendingDelete) {
+      return;
+    }
+
+    await handleDeleteConversation(
+      pendingDelete.conversation,
+      pendingDelete.mode
+    );
+
+    setPendingDelete(null);
+  }
+
+  function closeDeleteConfirm() {
+    setPendingDelete(null);
+  }
+
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -105,6 +149,7 @@ function Sidebar({
             : false;
 
           const isDeleting = isDeletingConversationId === conversation.id;
+          const isMenuOpen = openedMenuConversationId === conversation.id;
 
           return (
             <div
@@ -118,7 +163,10 @@ function Sidebar({
               <button
                 type="button"
                 className="conversation-main"
-                onClick={() => handleSelectConversation(conversation)}
+                onClick={() => {
+                  setOpenedMenuConversationId(null);
+                  handleSelectConversation(conversation);
+                }}
               >
                 <div className="conversation-name">
                   <span>{getConversationName(conversation, currentUser)}</span>
@@ -146,31 +194,92 @@ function Sidebar({
                 )}
               </button>
 
-              <div className="conversation-delete-actions">
+              <div className="conversation-menu-wrapper">
                 <button
                   type="button"
-                  className="conversation-delete-button"
-                  onClick={() => handleDeleteConversation(conversation, "for_me")}
+                  className="conversation-menu-button"
+                  onClick={() => toggleConversationMenu(conversation.id)}
                   disabled={isDeleting}
+                  title="Conversation actions"
                 >
-                  {isDeleting ? "Deleting..." : "Delete for me"}
+                  ⋯
                 </button>
 
-                <button
-                  type="button"
-                  className="conversation-delete-button danger"
-                  onClick={() =>
-                    handleDeleteConversation(conversation, "for_everyone")
-                  }
-                  disabled={isDeleting}
-                >
-                  Delete for everyone
-                </button>
+                {isMenuOpen && (
+                  <div className="conversation-menu">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        openDeleteConfirm(conversation, "for_me")
+                      }
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? "Deleting..." : "Delete for me"}
+                    </button>
+
+                    <button
+                      type="button"
+                      className="danger"
+                      onClick={() =>
+                        openDeleteConfirm(conversation, "for_everyone")
+                      }
+                      disabled={isDeleting}
+                    >
+                      Delete for everyone
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           );
         })}
       </div>
+
+      {pendingDelete && (
+        <div className="modal-backdrop">
+          <div className="confirm-modal" role="dialog" aria-modal="true">
+            <h3>
+              {pendingDelete.mode === "for_everyone"
+                ? "Delete conversation for everyone?"
+                : "Delete conversation for you?"}
+            </h3>
+
+            <p>
+              {pendingDelete.mode === "for_everyone"
+                ? "This will remove the conversation and all messages for both users."
+                : "This will hide the conversation only for you. The other user will still see it."}
+            </p>
+
+            <div className="confirm-modal-actions">
+              <button
+                type="button"
+                className="confirm-modal-cancel"
+                onClick={closeDeleteConfirm}
+                disabled={isDeletingConversationId !== null}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className={
+                  pendingDelete.mode === "for_everyone"
+                    ? "confirm-modal-delete danger"
+                    : "confirm-modal-delete"
+                }
+                onClick={confirmDeleteConversation}
+                disabled={isDeletingConversationId !== null}
+              >
+                {isDeletingConversationId !== null
+                  ? "Deleting..."
+                  : pendingDelete.mode === "for_everyone"
+                  ? "Delete for everyone"
+                  : "Delete for me"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }
