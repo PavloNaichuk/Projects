@@ -16,6 +16,11 @@ type ChatWindowProps = {
   isOlderMessagesLoading: boolean;
   hasMoreMessages: boolean;
 
+  messageSearchQuery: string;
+  setMessageSearchQuery: (value: string) => void;
+  isMessageSearchActive: boolean;
+  isSearchingMessages: boolean;
+
   typingUser: User | null;
   messageError: string;
 
@@ -33,6 +38,8 @@ type ChatWindowProps = {
   messagesEndRef: RefObject<HTMLDivElement | null>;
 
   handleMessagesScroll: () => void;
+  handleSearchMessages: (event: FormEvent<HTMLFormElement>) => Promise<void>;
+  handleClearMessageSearch: () => Promise<void>;
   handleNewMessageChange: (value: string) => void;
   handleMessageKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   handleSendMessage: (event: FormEvent<HTMLFormElement>) => Promise<void>;
@@ -53,6 +60,10 @@ function ChatWindow({
   isMessagesLoading,
   isOlderMessagesLoading,
   hasMoreMessages,
+  messageSearchQuery,
+  setMessageSearchQuery,
+  isMessageSearchActive,
+  isSearchingMessages,
   typingUser,
   messageError,
   newMessage,
@@ -65,6 +76,8 @@ function ChatWindow({
   messagesContainerRef,
   messagesEndRef,
   handleMessagesScroll,
+  handleSearchMessages,
+  handleClearMessageSearch,
   handleNewMessageChange,
   handleMessageKeyDown,
   handleSendMessage,
@@ -94,6 +107,33 @@ function ChatWindow({
             </>
           )}
         </div>
+
+        <form className="message-search-form" onSubmit={handleSearchMessages}>
+          <input
+            type="text"
+            value={messageSearchQuery}
+            onChange={(event) => setMessageSearchQuery(event.target.value)}
+            placeholder="Search messages..."
+            disabled={!selectedConversation || isSearchingMessages}
+          />
+
+          {messageSearchQuery && (
+            <button
+              type="button"
+              onClick={handleClearMessageSearch}
+              disabled={isSearchingMessages}
+            >
+              Clear
+            </button>
+          )}
+
+          <button
+            type="submit"
+            disabled={!selectedConversation || isSearchingMessages}
+          >
+            {isSearchingMessages ? "Searching..." : "Search"}
+          </button>
+        </form>
       </header>
 
       <section
@@ -110,11 +150,22 @@ function ChatWindow({
         )}
 
         {selectedConversation && !isMessagesLoading && messages.length === 0 && (
-          <div className="empty-state">No messages yet.</div>
+          <div className="empty-state">
+            {isMessageSearchActive ? "No messages found." : "No messages yet."}
+          </div>
         )}
 
-        {selectedConversation && hasMoreMessages && isOlderMessagesLoading && (
-          <div className="older-messages-loader">Loading older messages...</div>
+        {selectedConversation &&
+          !isMessageSearchActive &&
+          hasMoreMessages &&
+          isOlderMessagesLoading && (
+            <div className="older-messages-loader">
+              Loading older messages...
+            </div>
+          )}
+
+        {isMessageSearchActive && messages.length > 0 && (
+          <div className="search-mode-label">Search results</div>
         )}
 
         {messages.map((message, index) => (

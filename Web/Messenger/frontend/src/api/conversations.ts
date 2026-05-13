@@ -75,7 +75,8 @@ export async function getConversationMessagesPage(
   accessToken: string,
   conversationId: number,
   beforeMessageId?: number,
-  limit = 20
+  limit = 20,
+  searchQuery = ""
 ): Promise<MessagesPage> {
   const searchParams = new URLSearchParams({
     limit: String(limit),
@@ -83,6 +84,10 @@ export async function getConversationMessagesPage(
 
   if (beforeMessageId) {
     searchParams.set("before", String(beforeMessageId));
+  }
+
+  if (searchQuery.trim()) {
+    searchParams.set("search", searchQuery.trim());
   }
 
   const response = await fetch(

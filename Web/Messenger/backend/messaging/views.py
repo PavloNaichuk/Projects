@@ -111,6 +111,26 @@ class ConversationMessagesView(APIView):
 
         limit_param = request.query_params.get("limit")
         before_param = request.query_params.get("before")
+        search_param = request.query_params.get("search", "").strip()
+
+        if search_param:
+            search_messages = base_messages.filter(
+                text__icontains=search_param,
+                is_deleted=False,
+            ).order_by("-id")[:50]
+
+            page_messages = list(search_messages)
+            page_messages.reverse()
+
+            serializer = MessageSerializer(page_messages, many=True)
+
+            return Response(
+                {
+                    "results": serializer.data,
+                    "has_more": False,
+                    "next_before": None,
+                }
+            )
 
         if not limit_param and not before_param:
             serializer = MessageSerializer(base_messages, many=True)

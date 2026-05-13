@@ -83,6 +83,10 @@ function App() {
   const [isSearchingUsers, setIsSearchingUsers] = useState(false);
   const [userSearchError, setUserSearchError] = useState("");
 
+  const [messageSearchQuery, setMessageSearchQuery] = useState("");
+  const [isMessageSearchActive, setIsMessageSearchActive] = useState(false);
+  const [isSearchingMessages, setIsSearchingMessages] = useState(false);
+
   const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
   const [editingMessageText, setEditingMessageText] = useState("");
   const [isEditingMessage, setIsEditingMessage] = useState(false);
@@ -151,6 +155,7 @@ function App() {
       !selectedConversation ||
       !hasMoreMessages ||
       isOlderMessagesLoading ||
+      isMessageSearchActive ||
       messages.length === 0
     ) {
       return;
@@ -168,6 +173,7 @@ function App() {
 
     try {
       const oldestMessageId = messages[0].id;
+
       const messagesPage = await getConversationMessagesPage(
         accessToken,
         selectedConversation.id,
@@ -186,6 +192,7 @@ function App() {
 
         return [...olderMessages, ...previousMessages];
       });
+
       setHasMoreMessages(messagesPage.has_more);
     } catch {
       scrollBehaviorRef.current = "bottom";
@@ -253,8 +260,14 @@ function App() {
     setMessages([]);
     setHasMoreMessages(false);
     setIsOlderMessagesLoading(false);
+
     setSearchResults([]);
     setUserSearchQuery("");
+
+    setMessageSearchQuery("");
+    setIsMessageSearchActive(false);
+    setIsSearchingMessages(false);
+
     setNewMessage("");
     setMessageError("");
     setTypingUser(null);
@@ -671,6 +684,10 @@ function App() {
     setTypingUser(null);
     setMessageError("");
 
+    setMessageSearchQuery("");
+    setIsMessageSearchActive(false);
+    setIsSearchingMessages(false);
+
     await loadMessages(accessToken, conversation.id);
     await refreshConversations(accessToken);
   }
@@ -734,6 +751,11 @@ function App() {
       });
 
       setSelectedConversation(conversation);
+
+      setMessageSearchQuery("");
+      setIsMessageSearchActive(false);
+      setIsSearchingMessages(false);
+
       await loadMessages(accessToken, conversation.id);
 
       setUserSearchQuery("");
@@ -741,6 +763,58 @@ function App() {
     } catch {
       setUserSearchError("Failed to create conversation.");
     }
+  }
+
+  async function handleSearchMessages(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!accessToken || !selectedConversation) {
+      return;
+    }
+
+    const searchQuery = messageSearchQuery.trim();
+
+    if (!searchQuery) {
+      await handleClearMessageSearch();
+      return;
+    }
+
+    setIsSearchingMessages(true);
+    setIsMessageSearchActive(true);
+    setMessageError("");
+    setHasMoreMessages(false);
+    scrollBehaviorRef.current = "bottom";
+
+    try {
+      const messagesPage = await getConversationMessagesPage(
+        accessToken,
+        selectedConversation.id,
+        undefined,
+        50,
+        searchQuery
+      );
+
+      setMessages(messagesPage.results);
+      setHasMoreMessages(false);
+    } catch {
+      setMessageError("Failed to search messages.");
+    } finally {
+      setIsSearchingMessages(false);
+    }
+  }
+
+  async function handleClearMessageSearch() {
+    if (!accessToken || !selectedConversation) {
+      setMessageSearchQuery("");
+      setIsMessageSearchActive(false);
+      return;
+    }
+
+    setMessageSearchQuery("");
+    setIsMessageSearchActive(false);
+    setIsSearchingMessages(false);
+
+    await loadMessages(accessToken, selectedConversation.id);
   }
 
   function handleMessagesScroll() {
@@ -960,6 +1034,10 @@ function App() {
         isMessagesLoading={isMessagesLoading}
         isOlderMessagesLoading={isOlderMessagesLoading}
         hasMoreMessages={hasMoreMessages}
+        messageSearchQuery={messageSearchQuery}
+        setMessageSearchQuery={setMessageSearchQuery}
+        isMessageSearchActive={isMessageSearchActive}
+        isSearchingMessages={isSearchingMessages}
         typingUser={typingUser}
         messageError={messageError}
         newMessage={newMessage}
@@ -972,6 +1050,8 @@ function App() {
         messagesContainerRef={messagesContainerRef}
         messagesEndRef={messagesEndRef}
         handleMessagesScroll={handleMessagesScroll}
+        handleSearchMessages={handleSearchMessages}
+        handleClearMessageSearch={handleClearMessageSearch}
         handleNewMessageChange={handleNewMessageChange}
         handleMessageKeyDown={handleMessageKeyDown}
         handleSendMessage={handleSendMessage}
