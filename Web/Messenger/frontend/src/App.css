@@ -629,3 +629,11 @@
   font-size: 12px;
   font-weight: 600;
 }
+
+.message mark {
+  padding: 0 3px;
+  border-radius: 4px;
+  background: #bfdbfe;
+  color: #1e3a8a;
+  font-weight: 700;
+}

@@ -174,6 +174,7 @@ function ChatWindow({
             message={message}
             previousMessage={messages[index - 1]}
             currentUser={currentUser}
+            searchQuery={isMessageSearchActive ? messageSearchQuery : ""}
             editingMessageId={editingMessageId}
             editingMessageText={editingMessageText}
             setEditingMessageText={setEditingMessageText}

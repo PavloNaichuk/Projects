@@ -12,6 +12,8 @@ type MessageBubbleProps = {
 
   currentUser: User;
 
+  searchQuery?: string;
+
   editingMessageId: number | null;
   editingMessageText: string;
   setEditingMessageText: (value: string) => void;
@@ -25,10 +27,48 @@ type MessageBubbleProps = {
   handleDeleteMessage: (messageId: number) => Promise<void>;
 };
 
+function renderHighlightedText(text: string, searchQuery: string) {
+  const query = searchQuery.trim();
+
+  if (!query) {
+    return text;
+  }
+
+  const lowerText = text.toLowerCase();
+  const lowerQuery = query.toLowerCase();
+
+  const parts: React.ReactNode[] = [];
+  let currentIndex = 0;
+
+  while (currentIndex < text.length) {
+    const matchIndex = lowerText.indexOf(lowerQuery, currentIndex);
+
+    if (matchIndex === -1) {
+      parts.push(text.slice(currentIndex));
+      break;
+    }
+
+    if (matchIndex > currentIndex) {
+      parts.push(text.slice(currentIndex, matchIndex));
+    }
+
+    const matchedText = text.slice(matchIndex, matchIndex + query.length);
+
+    parts.push(
+      <mark key={`${matchIndex}-${matchedText}`}>{matchedText}</mark>
+    );
+
+    currentIndex = matchIndex + query.length;
+  }
+
+  return parts;
+}
+
 function MessageBubble({
   message,
   previousMessage,
   currentUser,
+  searchQuery = "",
   editingMessageId,
   editingMessageText,
   setEditingMessageText,
@@ -91,7 +131,11 @@ function MessageBubble({
           </div>
         ) : (
           <>
-            <p>{message.is_deleted ? "This message was deleted" : message.text}</p>
+            <p>
+              {message.is_deleted
+                ? "This message was deleted"
+                : renderHighlightedText(message.text, searchQuery)}
+            </p>
 
             <div className="message-footer">
               {message.edited_at && !message.is_deleted && (
