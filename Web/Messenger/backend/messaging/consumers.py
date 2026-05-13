@@ -8,6 +8,7 @@ from .serializers import MessageSerializer
 
 ACTIVE_USER_CONNECTIONS = {}
 
+
 @database_sync_to_async
 def is_conversation_participant(conversation_id, user):
     if user.is_anonymous:
@@ -102,7 +103,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 },
             )
             return
-        
+
         if data.get("type") == "read":
             updated_count = await self.mark_messages_as_read()
 
@@ -119,7 +120,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 },
             )
             return
-        
+
         text = data.get("text", "")
 
         message_data, error = await create_message(
@@ -146,7 +147,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "message": message_data,
             },
         )
-        
+
         participant_ids = await self.get_conversation_participant_ids()
 
         for user_id in participant_ids:
@@ -167,7 +168,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
-    
+
     async def typing_event(self, event):
         await self.send(
             text_data=json.dumps(
@@ -178,6 +179,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+
     async def read_event(self, event):
         await self.send(
             text_data=json.dumps(
@@ -188,15 +190,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
-    
+
     @database_sync_to_async
     def mark_messages_as_read(self):
         return Message.objects.filter(
             conversation_id=self.conversation_id,
             is_read=False,
         ).exclude(sender=self.user).update(is_read=True)
-        
-    
+
     @database_sync_to_async
     def get_conversation_participant_ids(self):
         return list(
@@ -204,7 +205,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 conversation_id=self.conversation_id
             ).values_list("user_id", flat=True)
         )
-        
+
+
 class NotificationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope["user"]

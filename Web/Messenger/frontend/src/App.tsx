@@ -3,6 +3,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type ChangeEvent,
   type FormEvent,
   type KeyboardEvent,
 } from "react";
@@ -18,6 +19,7 @@ import {
 } from "./api/auth";
 import {
   createConversation,
+  createMessageWithAttachment,
   deleteConversation,
   deleteMessage,
   editMessage,
@@ -75,6 +77,9 @@ function App() {
   const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   const [newMessage, setNewMessage] = useState("");
+  const [selectedAttachment, setSelectedAttachment] = useState<File | null>(
+    null
+  );
   const [messageError, setMessageError] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [typingUser, setTypingUser] = useState<User | null>(null);
@@ -121,6 +126,45 @@ function App() {
     );
   }
 
+  function addMessageToState(receivedMessage: Message) {
+    setMessages((previousMessages) => {
+      const alreadyExists = previousMessages.some(
+        (message) => message.id === receivedMessage.id
+      );
+
+      if (alreadyExists) {
+        return previousMessages;
+      }
+
+      return [...previousMessages, receivedMessage];
+    });
+
+    setConversations((previousConversations) =>
+      sortConversationsByUpdatedAt(
+        previousConversations.map((conversation) =>
+          conversation.id === receivedMessage.conversation
+            ? {
+                ...conversation,
+                last_message: receivedMessage,
+                updated_at: receivedMessage.created_at,
+              }
+            : conversation
+        )
+      )
+    );
+
+    setSelectedConversation((previousConversation) =>
+      previousConversation?.id === receivedMessage.conversation
+        ? {
+            ...previousConversation,
+            last_message: receivedMessage,
+            updated_at: receivedMessage.created_at,
+            unread_count: 0,
+          }
+        : previousConversation
+    );
+  }
+
   function removeConversationFromState(conversationId: number) {
     setConversations((previousConversations) =>
       previousConversations.filter(
@@ -143,6 +187,7 @@ function App() {
       setMessageSearchQuery("");
       setIsMessageSearchActive(false);
       setIsSearchingMessages(false);
+      setSelectedAttachment(null);
 
       return null;
     });
@@ -302,6 +347,7 @@ function App() {
     setIsSearchingMessages(false);
 
     setNewMessage("");
+    setSelectedAttachment(null);
     setMessageError("");
     setTypingUser(null);
     setOnlineUserIds([]);
@@ -513,42 +559,7 @@ function App() {
       if (data.type === "message") {
         const receivedMessage = data.message as Message;
 
-        setMessages((previousMessages) => {
-          const alreadyExists = previousMessages.some(
-            (message) => message.id === receivedMessage.id
-          );
-
-          if (alreadyExists) {
-            return previousMessages;
-          }
-
-          return [...previousMessages, receivedMessage];
-        });
-
-        setConversations((previousConversations) =>
-          sortConversationsByUpdatedAt(
-            previousConversations.map((conversation) =>
-              conversation.id === receivedMessage.conversation
-                ? {
-                    ...conversation,
-                    last_message: receivedMessage,
-                    updated_at: receivedMessage.created_at,
-                  }
-                : conversation
-            )
-          )
-        );
-
-        setSelectedConversation((previousConversation) =>
-          previousConversation?.id === receivedMessage.conversation
-            ? {
-                ...previousConversation,
-                last_message: receivedMessage,
-                updated_at: receivedMessage.created_at,
-                unread_count: 0,
-              }
-            : previousConversation
-        );
+        addMessageToState(receivedMessage);
 
         if (
           accessToken &&
@@ -725,6 +736,7 @@ function App() {
     setMessageSearchQuery("");
     setIsMessageSearchActive(false);
     setIsSearchingMessages(false);
+    setSelectedAttachment(null);
 
     await loadMessages(accessToken, conversation.id);
     await refreshConversations(accessToken);
@@ -793,6 +805,7 @@ function App() {
       setMessageSearchQuery("");
       setIsMessageSearchActive(false);
       setIsSearchingMessages(false);
+      setSelectedAttachment(null);
 
       await loadMessages(accessToken, conversation.id);
 
@@ -906,23 +919,38 @@ function App() {
     }, 1200);
   }
 
+  function handleAttachmentChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setSelectedAttachment(file);
+    setMessageError("");
+  }
+
+  function handleRemoveAttachment() {
+    setSelectedAttachment(null);
+  }
+
   async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!selectedConversation) {
+    if (!accessToken || !selectedConversation) {
       return;
     }
 
     const text = newMessage.trim();
 
-    if (!text) {
-      setMessageError("Message text cannot be empty.");
+    if (!text && !selectedAttachment) {
+      setMessageError("Message text or attachment is required.");
       return;
     }
 
     const socket = socketRef.current;
 
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
+    if (!selectedAttachment && (!socket || socket.readyState !== WebSocket.OPEN)) {
       setMessageError("WebSocket is not connected.");
       return;
     }
@@ -931,7 +959,19 @@ function App() {
     setIsSending(true);
 
     try {
-      socket.send(JSON.stringify({ text }));
+      if (selectedAttachment) {
+        const createdMessage = await createMessageWithAttachment(
+          accessToken,
+          selectedConversation.id,
+          text,
+          selectedAttachment
+        );
+
+        addMessageToState(createdMessage);
+      } else if (socket) {
+        socket.send(JSON.stringify({ text }));
+      }
+
       sendTypingStatus(false);
 
       if (typingTimeoutRef.current) {
@@ -940,6 +980,7 @@ function App() {
       }
 
       setNewMessage("");
+      setSelectedAttachment(null);
     } catch {
       setMessageError("Failed to send message.");
     } finally {
@@ -1102,6 +1143,7 @@ function App() {
         typingUser={typingUser}
         messageError={messageError}
         newMessage={newMessage}
+        selectedAttachment={selectedAttachment}
         isSending={isSending}
         editingMessageId={editingMessageId}
         editingMessageText={editingMessageText}
@@ -1114,6 +1156,8 @@ function App() {
         handleSearchMessages={handleSearchMessages}
         handleClearMessageSearch={handleClearMessageSearch}
         handleNewMessageChange={handleNewMessageChange}
+        handleAttachmentChange={handleAttachmentChange}
+        handleRemoveAttachment={handleRemoveAttachment}
         handleMessageKeyDown={handleMessageKeyDown}
         handleSendMessage={handleSendMessage}
         handleStartEditMessage={handleStartEditMessage}

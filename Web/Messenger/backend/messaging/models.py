@@ -19,12 +19,12 @@ class ConversationParticipant(models.Model):
     conversation = models.ForeignKey(
         Conversation,
         on_delete=models.CASCADE,
-        related_name="participants"
+        related_name="participants",
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="conversation_participants"
+        related_name="conversation_participants",
     )
     joined_at = models.DateTimeField(auto_now_add=True)
 
@@ -39,19 +39,31 @@ class Message(models.Model):
     conversation = models.ForeignKey(
         Conversation,
         on_delete=models.CASCADE,
-        related_name="messages"
+        related_name="messages",
     )
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="sent_messages"
+        related_name="sent_messages",
     )
-    text = models.TextField()
+    text = models.TextField(blank=True)
+
+    attachment = models.FileField(
+        upload_to="messages/attachments/",
+        null=True,
+        blank=True,
+    )
+    attachment_name = models.CharField(max_length=255, blank=True)
+    attachment_content_type = models.CharField(max_length=100, blank=True)
+    attachment_size = models.PositiveIntegerField(null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     edited_at = models.DateTimeField(null=True, blank=True)
+
     is_deleted = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(null=True, blank=True)
+
     is_read = models.BooleanField(default=False)
 
     class Meta:

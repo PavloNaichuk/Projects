@@ -32,6 +32,46 @@ def notify_conversation_deleted(conversation_id, participant_ids):
             },
         )
 
+def notify_message_created(conversation_id, participant_ids, message_data):
+    channel_layer = get_channel_layer()
+
+    if not channel_layer:
+        return
+
+    async_to_sync(channel_layer.group_send)(
+        f"conversation_{conversation_id}",
+        {
+            "type": "chat_message",
+            "message": message_data,
+        },
+    )
+
+    for user_id in participant_ids:
+        async_to_sync(channel_layer.group_send)(
+            f"user_{user_id}_notifications",
+            {
+                "type": "sidebar_message",
+                "message": message_data,
+            },
+        )
+
+
+def save_attachment_metadata(message, uploaded_file):
+    if not uploaded_file:
+        return
+
+    message.attachment_name = uploaded_file.name
+    message.attachment_content_type = uploaded_file.content_type or ""
+    message.attachment_size = uploaded_file.size
+    message.save(
+        update_fields=[
+            "attachment_name",
+            "attachment_content_type",
+            "attachment_size",
+            "updated_at",
+        ]
+    )
+
 
 class ConversationListView(APIView):
     permission_classes = [IsAuthenticated]
@@ -59,7 +99,7 @@ class ConversationListView(APIView):
     def post(self, request):
         serializer = ConversationCreateSerializer(
             data=request.data,
-            context={"request": request}
+            context={"request": request},
         )
 
         if not serializer.is_valid():
@@ -201,7 +241,11 @@ class ConversationMessagesView(APIView):
             page_messages = list(search_messages)
             page_messages.reverse()
 
-            serializer = MessageSerializer(page_messages, many=True)
+            serializer = MessageSerializer(
+                page_messages,
+                many=True,
+                context={"request": request},
+            )
 
             return Response(
                 {
@@ -212,7 +256,11 @@ class ConversationMessagesView(APIView):
             )
 
         if not limit_param and not before_param:
-            serializer = MessageSerializer(base_messages, many=True)
+            serializer = MessageSerializer(
+                base_messages,
+                many=True,
+                context={"request": request},
+            )
             return Response(serializer.data)
 
         try:
@@ -249,7 +297,11 @@ class ConversationMessagesView(APIView):
         page_messages = newest_first_messages[:limit]
         page_messages.reverse()
 
-        serializer = MessageSerializer(page_messages, many=True)
+        serializer = MessageSerializer(
+            page_messages,
+            many=True,
+            context={"request": request},
+        )
 
         next_before = None
         if has_more and page_messages:
@@ -264,27 +316,54 @@ class ConversationMessagesView(APIView):
         )
 
     def post(self, request, conversation_id):
-        conversation = Conversation.objects.filter(
-            id=conversation_id,
-            participants__user=request.user
-        ).first()
+        conversation = (
+            Conversation.objects.filter(
+                id=conversation_id,
+                participants__user=request.user,
+            )
+            .prefetch_related("participants")
+            .first()
+        )
 
         if not conversation:
             return Response(
                 {"detail": "Conversation not found."},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         conversation.hidden_for.clear()
 
-        serializer = MessageSerializer(data=request.data)
+        serializer = MessageSerializer(
+            data=request.data,
+            context={"request": request},
+        )
 
         if serializer.is_valid():
-            serializer.save(
+            message = serializer.save(
                 conversation=conversation,
-                sender=request.user
+                sender=request.user,
             )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            uploaded_file = request.FILES.get("attachment")
+            save_attachment_metadata(message, uploaded_file)
+
+            response_serializer = MessageSerializer(
+                message,
+                context={"request": request},
+            )
+            message_data = response_serializer.data
+
+            participant_ids = list(
+                conversation.participants.values_list("user_id", flat=True)
+            )
+
+            notify_message_created(
+                conversation_id=conversation.id,
+                participant_ids=participant_ids,
+                message_data=message_data,
+            )
+
+            return Response(message_data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -356,11 +435,18 @@ class MessageDetailView(APIView):
             message,
             data=request.data,
             partial=True,
+            context={"request": request},
         )
 
         if serializer.is_valid():
             serializer.save(edited_at=timezone.now())
-            return Response(serializer.data)
+
+            response_serializer = MessageSerializer(
+                message,
+                context={"request": request},
+            )
+
+            return Response(response_serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -379,10 +465,31 @@ class MessageDetailView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        if message.attachment:
+            message.attachment.delete(save=False)
+
         message.text = ""
+        message.attachment = None
+        message.attachment_name = ""
+        message.attachment_content_type = ""
+        message.attachment_size = None
         message.is_deleted = True
         message.deleted_at = timezone.now()
-        message.save(update_fields=["text", "is_deleted", "deleted_at", "updated_at"])
+        message.save(
+            update_fields=[
+                "text",
+                "attachment",
+                "attachment_name",
+                "attachment_content_type",
+                "attachment_size",
+                "is_deleted",
+                "deleted_at",
+                "updated_at",
+            ]
+        )
 
-        serializer = MessageSerializer(message)
+        serializer = MessageSerializer(
+            message,
+            context={"request": request},
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)

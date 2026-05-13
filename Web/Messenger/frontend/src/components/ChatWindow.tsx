@@ -1,4 +1,9 @@
-import type { FormEvent, KeyboardEvent, RefObject } from "react";
+import type {
+  ChangeEvent,
+  FormEvent,
+  KeyboardEvent,
+  RefObject,
+} from "react";
 import type { User } from "../api/auth";
 import type { Conversation, Message } from "../api/conversations";
 import MessageBubble from "./MessageBubble";
@@ -25,6 +30,7 @@ type ChatWindowProps = {
   messageError: string;
 
   newMessage: string;
+  selectedAttachment: File | null;
   isSending: boolean;
 
   editingMessageId: number | null;
@@ -41,6 +47,8 @@ type ChatWindowProps = {
   handleSearchMessages: (event: FormEvent<HTMLFormElement>) => Promise<void>;
   handleClearMessageSearch: () => Promise<void>;
   handleNewMessageChange: (value: string) => void;
+  handleAttachmentChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleRemoveAttachment: () => void;
   handleMessageKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   handleSendMessage: (event: FormEvent<HTMLFormElement>) => Promise<void>;
 
@@ -67,6 +75,7 @@ function ChatWindow({
   typingUser,
   messageError,
   newMessage,
+  selectedAttachment,
   isSending,
   editingMessageId,
   editingMessageText,
@@ -79,6 +88,8 @@ function ChatWindow({
   handleSearchMessages,
   handleClearMessageSearch,
   handleNewMessageChange,
+  handleAttachmentChange,
+  handleRemoveAttachment,
   handleMessageKeyDown,
   handleSendMessage,
   handleStartEditMessage,
@@ -197,14 +208,39 @@ function ChatWindow({
       {messageError && <div className="message-error">{messageError}</div>}
 
       <form className="message-form" onSubmit={handleSendMessage}>
-        <textarea
-          value={newMessage}
-          onChange={(event) => handleNewMessageChange(event.target.value)}
-          onKeyDown={handleMessageKeyDown}
-          placeholder="Type a message..."
-          disabled={!selectedConversation || isSending}
-          rows={1}
-        />
+        <label className="attachment-button">
+          +
+          <input
+            type="file"
+            onChange={handleAttachmentChange}
+            disabled={!selectedConversation || isSending}
+          />
+        </label>
+
+        <div className="message-input-area">
+          {selectedAttachment && (
+            <div className="selected-attachment">
+              <span>{selectedAttachment.name}</span>
+              <button
+                type="button"
+                onClick={handleRemoveAttachment}
+                disabled={isSending}
+              >
+                Remove
+              </button>
+            </div>
+          )}
+
+          <textarea
+            value={newMessage}
+            onChange={(event) => handleNewMessageChange(event.target.value)}
+            onKeyDown={handleMessageKeyDown}
+            placeholder="Type a message..."
+            disabled={!selectedConversation || isSending}
+            rows={1}
+          />
+        </div>
+
         <button type="submit" disabled={!selectedConversation || isSending}>
           {isSending ? "Sending..." : "Send"}
         </button>

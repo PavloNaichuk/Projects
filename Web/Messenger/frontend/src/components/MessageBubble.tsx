@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { User } from "../api/auth";
 import type { Message } from "../api/conversations";
 import {
@@ -37,7 +38,7 @@ function renderHighlightedText(text: string, searchQuery: string) {
   const lowerText = text.toLowerCase();
   const lowerQuery = query.toLowerCase();
 
-  const parts: React.ReactNode[] = [];
+  const parts: ReactNode[] = [];
   let currentIndex = 0;
 
   while (currentIndex < text.length) {
@@ -54,14 +55,28 @@ function renderHighlightedText(text: string, searchQuery: string) {
 
     const matchedText = text.slice(matchIndex, matchIndex + query.length);
 
-    parts.push(
-      <mark key={`${matchIndex}-${matchedText}`}>{matchedText}</mark>
-    );
+    parts.push(<mark key={`${matchIndex}-${matchedText}`}>{matchedText}</mark>);
 
     currentIndex = matchIndex + query.length;
   }
 
   return parts;
+}
+
+function formatFileSize(size: number | null) {
+  if (!size) {
+    return "";
+  }
+
+  if (size < 1024) {
+    return `${size} B`;
+  }
+
+  if (size < 1024 * 1024) {
+    return `${(size / 1024).toFixed(1)} KB`;
+  }
+
+  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function MessageBubble({
@@ -85,6 +100,8 @@ function MessageBubble({
 
   const isOwnMessage = message.sender.id === currentUser.id;
   const isEditing = editingMessageId === message.id;
+  const hasText = Boolean(message.text.trim());
+  const hasAttachment = Boolean(message.attachment_url);
 
   return (
     <div className="message-row">
@@ -131,11 +148,50 @@ function MessageBubble({
           </div>
         ) : (
           <>
-            <p>
-              {message.is_deleted
-                ? "This message was deleted"
-                : renderHighlightedText(message.text, searchQuery)}
-            </p>
+            {message.is_deleted ? (
+              <p>This message was deleted</p>
+            ) : (
+              <>
+                {hasAttachment && message.attachment_url && (
+                  <div className="message-attachment">
+                    {message.attachment_is_image ? (
+                      <a
+                        href={message.attachment_url}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <img
+                          src={message.attachment_url}
+                          alt={message.attachment_name || "Attached image"}
+                          className="message-image"
+                        />
+                      </a>
+                    ) : (
+                      <a
+                        href={message.attachment_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="message-file"
+                      >
+                        <span className="message-file-icon">📎</span>
+                        <span className="message-file-info">
+                          <span className="message-file-name">
+                            {message.attachment_name || "Attached file"}
+                          </span>
+                          <span className="message-file-size">
+                            {formatFileSize(message.attachment_size)}
+                          </span>
+                        </span>
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                {hasText && (
+                  <p>{renderHighlightedText(message.text, searchQuery)}</p>
+                )}
+              </>
+            )}
 
             <div className="message-footer">
               {message.edited_at && !message.is_deleted && (
@@ -155,12 +211,15 @@ function MessageBubble({
 
             {isOwnMessage && !message.is_deleted && (
               <div className="message-actions">
-                <button
-                  type="button"
-                  onClick={() => handleStartEditMessage(message)}
-                >
-                  Edit
-                </button>
+                {hasText && (
+                  <button
+                    type="button"
+                    onClick={() => handleStartEditMessage(message)}
+                  >
+                    Edit
+                  </button>
+                )}
+
                 <button
                   type="button"
                   onClick={() => handleDeleteMessage(message.id)}

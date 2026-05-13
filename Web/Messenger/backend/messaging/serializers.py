@@ -13,13 +13,20 @@ class UserShortSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserShortSerializer(read_only=True)
     conversation = serializers.PrimaryKeyRelatedField(read_only=True)
+
     text = serializers.CharField(
         trim_whitespace=True,
-        error_messages={
-            "blank": "Message text cannot be empty.",
-            "required": "Message text is required.",
-        },
+        required=False,
+        allow_blank=True,
     )
+
+    attachment = serializers.FileField(
+        required=False,
+        write_only=True,
+        allow_empty_file=False,
+    )
+    attachment_url = serializers.SerializerMethodField()
+    attachment_is_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
@@ -28,6 +35,12 @@ class MessageSerializer(serializers.ModelSerializer):
             "conversation",
             "sender",
             "text",
+            "attachment",
+            "attachment_url",
+            "attachment_name",
+            "attachment_content_type",
+            "attachment_size",
+            "attachment_is_image",
             "created_at",
             "updated_at",
             "edited_at",
@@ -39,6 +52,11 @@ class MessageSerializer(serializers.ModelSerializer):
             "id",
             "conversation",
             "sender",
+            "attachment_url",
+            "attachment_name",
+            "attachment_content_type",
+            "attachment_size",
+            "attachment_is_image",
             "created_at",
             "updated_at",
             "edited_at",
@@ -47,13 +65,48 @@ class MessageSerializer(serializers.ModelSerializer):
             "is_read",
         )
 
-    def validate_text(self, value):
-        value = value.strip()
+    def get_attachment_url(self, obj):
+        if not obj.attachment:
+            return None
 
-        if not value:
-            raise serializers.ValidationError("Message text cannot be empty.")
+        request = self.context.get("request")
 
-        return value
+        if request:
+            return request.build_absolute_uri(obj.attachment.url)
+
+        return obj.attachment.url
+
+    def get_attachment_is_image(self, obj):
+        if not obj.attachment_content_type:
+            return False
+
+        return obj.attachment_content_type.startswith("image/")
+
+    def validate(self, attrs):
+        text = attrs.get("text", "")
+        attachment = attrs.get("attachment")
+
+        if "text" in attrs:
+            attrs["text"] = text.strip()
+
+        # Editing existing message
+        if self.instance:
+            if "text" in attrs and not attrs["text"]:
+                raise serializers.ValidationError(
+                    {"text": ["Message text cannot be empty."]}
+                )
+
+            return attrs
+
+        # Creating new message
+        if not attrs.get("text") and not attachment:
+            raise serializers.ValidationError(
+                {"text": ["Message text cannot be empty."]}
+            )
+
+        return attrs
+
+
 class ConversationParticipantSerializer(serializers.ModelSerializer):
     user = UserShortSerializer(read_only=True)
 
@@ -89,7 +142,10 @@ class ConversationSerializer(serializers.ModelSerializer):
         if not message:
             return None
 
-        return MessageSerializer(message).data
+        return MessageSerializer(
+            message,
+            context=self.context,
+        ).data
 
     def get_unread_count(self, obj):
         request = self.context.get("request")
@@ -103,6 +159,7 @@ class ConversationSerializer(serializers.ModelSerializer):
         ).exclude(
             sender=request.user
         ).count()
+
 
 class ConversationCreateSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()

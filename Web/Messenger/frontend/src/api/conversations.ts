@@ -6,6 +6,13 @@ export type Message = {
   conversation: number;
   sender: User;
   text: string;
+
+  attachment_url: string | null;
+  attachment_name: string;
+  attachment_content_type: string;
+  attachment_size: number | null;
+  attachment_is_image: boolean;
+
   created_at: string;
   updated_at: string;
   edited_at: string | null;
@@ -106,6 +113,40 @@ export async function getConversationMessagesPage(
   return response.json();
 }
 
+export async function createMessageWithAttachment(
+  accessToken: string,
+  conversationId: number,
+  text: string,
+  attachment: File | null
+): Promise<Message> {
+  const formData = new FormData();
+
+  if (text.trim()) {
+    formData.append("text", text.trim());
+  }
+
+  if (attachment) {
+    formData.append("attachment", attachment);
+  }
+
+  const response = await fetch(
+    `${API_BASE_URL}/conversations/${conversationId}/messages/`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: formData,
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to send message.");
+  }
+
+  return response.json();
+}
+
 export async function createConversation(
   accessToken: string,
   userId: number
@@ -125,7 +166,6 @@ export async function createConversation(
 
   return response.json();
 }
-
 
 export type DeleteConversationMode = "for_me" | "for_everyone";
 
