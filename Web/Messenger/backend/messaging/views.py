@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
 from django.db.models import F, Max
 from django.utils import timezone
@@ -15,18 +17,36 @@ from .serializers import (
 )
 
 
+def notify_conversation_deleted(conversation_id, participant_ids):
+    channel_layer = get_channel_layer()
+
+    if not channel_layer:
+        return
+
+    for user_id in participant_ids:
+        async_to_sync(channel_layer.group_send)(
+            f"user_{user_id}_notifications",
+            {
+                "type": "conversation_deleted",
+                "conversation_id": conversation_id,
+            },
+        )
+
+
 class ConversationListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         conversations = (
             Conversation.objects.filter(participants__user=request.user)
+            .exclude(hidden_for=request.user)
             .prefetch_related("participants__user")
             .annotate(last_message_at=Max("messages__created_at"))
             .order_by(
                 F("last_message_at").desc(nulls_last=True),
                 "-updated_at",
             )
+            .distinct()
         )
 
         serializer = ConversationSerializer(
@@ -35,7 +55,7 @@ class ConversationListView(APIView):
             context={"request": request},
         )
         return Response(serializer.data)
-    
+
     def post(self, request):
         serializer = ConversationCreateSerializer(
             data=request.data,
@@ -58,6 +78,8 @@ class ConversationListView(APIView):
         )
 
         if existing_conversation:
+            existing_conversation.hidden_for.remove(request.user)
+
             response_serializer = ConversationSerializer(
                 existing_conversation,
                 context={"request": request},
@@ -75,18 +97,23 @@ class ConversationListView(APIView):
         )
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
+
 class ConversationDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get_conversation(self, request, conversation_id, include_hidden=False):
+        queryset = Conversation.objects.filter(
+            id=conversation_id,
+            participants__user=request.user,
+        ).prefetch_related("participants__user")
+
+        if not include_hidden:
+            queryset = queryset.exclude(hidden_for=request.user)
+
+        return queryset.first()
+
     def get(self, request, conversation_id):
-        conversation = (
-            Conversation.objects.filter(
-                id=conversation_id,
-                participants__user=request.user,
-            )
-            .prefetch_related("participants__user")
-            .first()
-        )
+        conversation = self.get_conversation(request, conversation_id)
 
         if not conversation:
             return Response(
@@ -100,6 +127,56 @@ class ConversationDetailView(APIView):
         )
         return Response(serializer.data)
 
+    def delete(self, request, conversation_id):
+        delete_mode = request.query_params.get("mode", "for_me")
+
+        if delete_mode not in ("for_me", "for_everyone"):
+            return Response(
+                {"mode": ["Mode must be 'for_me' or 'for_everyone'."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        conversation = self.get_conversation(
+            request,
+            conversation_id,
+            include_hidden=True,
+        )
+
+        if not conversation:
+            return Response(
+                {"detail": "Conversation not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if delete_mode == "for_me":
+            conversation.hidden_for.add(request.user)
+
+            return Response(
+                {
+                    "detail": "Conversation deleted for you.",
+                    "conversation_id": conversation_id,
+                    "mode": "for_me",
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        participant_ids = list(
+            conversation.participants.values_list("user_id", flat=True)
+        )
+
+        conversation.delete()
+        notify_conversation_deleted(conversation_id, participant_ids)
+
+        return Response(
+            {
+                "detail": "Conversation deleted for everyone.",
+                "conversation_id": conversation_id,
+                "mode": "for_everyone",
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
 class ConversationMessagesView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -107,6 +184,8 @@ class ConversationMessagesView(APIView):
         base_messages = Message.objects.filter(
             conversation_id=conversation_id,
             conversation__participants__user=request.user,
+        ).exclude(
+            conversation__hidden_for=request.user,
         ).select_related("sender")
 
         limit_param = request.query_params.get("limit")
@@ -196,6 +275,8 @@ class ConversationMessagesView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+        conversation.hidden_for.clear()
+
         serializer = MessageSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -206,7 +287,8 @@ class ConversationMessagesView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class ConversationMarkReadView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -214,6 +296,8 @@ class ConversationMarkReadView(APIView):
         conversation = Conversation.objects.filter(
             id=conversation_id,
             participants__user=request.user,
+        ).exclude(
+            hidden_for=request.user,
         ).first()
 
         if not conversation:
@@ -237,6 +321,7 @@ class ConversationMarkReadView(APIView):
             }
         )
 
+
 class MessageDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -244,6 +329,9 @@ class MessageDetailView(APIView):
         message = Message.objects.filter(
             id=message_id,
             sender=request.user,
+            conversation__participants__user=request.user,
+        ).exclude(
+            conversation__hidden_for=request.user,
         ).select_related("sender").first()
 
         if not message:
@@ -280,6 +368,9 @@ class MessageDetailView(APIView):
         message = Message.objects.filter(
             id=message_id,
             sender=request.user,
+            conversation__participants__user=request.user,
+        ).exclude(
+            conversation__hidden_for=request.user,
         ).first()
 
         if not message:

@@ -3,6 +3,11 @@ from django.db import models
 
 
 class Conversation(models.Model):
+    hidden_for = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="hidden_conversations",
+        blank=True,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

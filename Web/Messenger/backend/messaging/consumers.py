@@ -34,6 +34,8 @@ def create_message(conversation_id, user, text):
     if not conversation:
         return None, "Conversation not found."
 
+    conversation.hidden_for.clear()
+
     message = Message.objects.create(
         conversation=conversation,
         sender=user,
@@ -307,6 +309,16 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     "type": "online_status",
                     "user": event["user"],
                     "is_online": event["is_online"],
+                }
+            )
+        )
+
+    async def conversation_deleted(self, event):
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "conversation_deleted",
+                    "conversation_id": event["conversation_id"],
                 }
             )
         )

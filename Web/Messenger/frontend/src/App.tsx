@@ -18,12 +18,14 @@ import {
 } from "./api/auth";
 import {
   createConversation,
+  deleteConversation,
   deleteMessage,
   editMessage,
   getConversationMessagesPage,
   getConversations,
   markConversationAsRead,
   type Conversation,
+  type DeleteConversationMode,
   type Message,
 } from "./api/conversations";
 import { searchUsers } from "./api/users";
@@ -93,6 +95,9 @@ function App() {
   const [isDeletingMessageId, setIsDeletingMessageId] = useState<number | null>(
     null
   );
+  const [isDeletingConversationId, setIsDeletingConversationId] = useState<
+    number | null
+  >(null);
 
   function markConversationReadInState(conversationId: number) {
     setConversations((previousConversations) =>
@@ -114,6 +119,33 @@ function App() {
           }
         : previousConversation
     );
+  }
+
+  function removeConversationFromState(conversationId: number) {
+    setConversations((previousConversations) =>
+      previousConversations.filter(
+        (conversation) => conversation.id !== conversationId
+      )
+    );
+
+    setSelectedConversation((previousConversation) => {
+      if (previousConversation?.id !== conversationId) {
+        return previousConversation;
+      }
+
+      setMessages([]);
+      setHasMoreMessages(false);
+      setIsOlderMessagesLoading(false);
+      setEditingMessageId(null);
+      setEditingMessageText("");
+      setTypingUser(null);
+      setMessageError("");
+      setMessageSearchQuery("");
+      setIsMessageSearchActive(false);
+      setIsSearchingMessages(false);
+
+      return null;
+    });
   }
 
   async function loadMessages(
@@ -260,6 +292,7 @@ function App() {
     setMessages([]);
     setHasMoreMessages(false);
     setIsOlderMessagesLoading(false);
+    setIsDeletingConversationId(null);
 
     setSearchResults([]);
     setUserSearchQuery("");
@@ -417,6 +450,11 @@ function App() {
 
       if (data.type === "sidebar_message") {
         await refreshConversations(accessToken);
+        return;
+      }
+
+      if (data.type === "conversation_deleted") {
+        removeConversationFromState(data.conversation_id);
         return;
       }
 
@@ -765,6 +803,38 @@ function App() {
     }
   }
 
+  async function handleDeleteConversation(
+    conversation: Conversation,
+    mode: DeleteConversationMode
+  ) {
+    if (!accessToken) {
+      return;
+    }
+
+    const deleteText =
+      mode === "for_everyone"
+        ? "Delete this conversation for everyone? This will remove all messages for both users."
+        : "Delete this conversation only for you? The other user will still see it.";
+
+    const confirmed = window.confirm(deleteText);
+
+    if (!confirmed) {
+      return;
+    }
+
+    setIsDeletingConversationId(conversation.id);
+    setUserSearchError("");
+
+    try {
+      await deleteConversation(accessToken, conversation.id, mode);
+      removeConversationFromState(conversation.id);
+    } catch {
+      setUserSearchError("Failed to delete conversation.");
+    } finally {
+      setIsDeletingConversationId(null);
+    }
+  }
+
   async function handleSearchMessages(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -1018,10 +1088,12 @@ function App() {
         searchResults={searchResults}
         isSearchingUsers={isSearchingUsers}
         userSearchError={userSearchError}
+        isDeletingConversationId={isDeletingConversationId}
         handleLogout={handleLogout}
         handleSearchUsers={handleSearchUsers}
         handleStartConversation={handleStartConversation}
         handleSelectConversation={handleSelectConversation}
+        handleDeleteConversation={handleDeleteConversation}
       />
 
       <ChatWindow

@@ -637,3 +637,56 @@
   color: #1e3a8a;
   font-weight: 700;
 }
+
+/* Delete conversation actions */
+.conversation-item {
+  padding: 0;
+  cursor: default;
+}
+
+.conversation-main {
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+
+.conversation-item:hover,
+.conversation-item.active {
+  background: #eef2ff;
+}
+
+.conversation-delete-actions {
+  display: flex;
+  gap: 6px;
+  padding: 0 16px 12px;
+}
+
+.conversation-delete-button {
+  padding: 5px 8px;
+  border: none;
+  border-radius: 6px;
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.conversation-delete-button.danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.conversation-delete-button:hover {
+  opacity: 0.85;
+}
+
+.conversation-delete-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

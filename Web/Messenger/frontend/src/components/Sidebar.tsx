@@ -1,6 +1,9 @@
 import type { FormEvent } from "react";
 import type { User } from "../api/auth";
-import type { Conversation } from "../api/conversations";
+import type {
+  Conversation,
+  DeleteConversationMode,
+} from "../api/conversations";
 import { formatShortTime, getConversationName } from "../utils/chat";
 
 type SidebarProps = {
@@ -16,11 +19,16 @@ type SidebarProps = {
   searchResults: User[];
   isSearchingUsers: boolean;
   userSearchError: string;
+  isDeletingConversationId: number | null;
 
   handleLogout: () => Promise<void>;
   handleSearchUsers: (event: FormEvent<HTMLFormElement>) => Promise<void>;
   handleStartConversation: (user: User) => Promise<void>;
   handleSelectConversation: (conversation: Conversation) => Promise<void>;
+  handleDeleteConversation: (
+    conversation: Conversation,
+    mode: DeleteConversationMode
+  ) => Promise<void>;
 };
 
 function Sidebar({
@@ -33,10 +41,12 @@ function Sidebar({
   searchResults,
   isSearchingUsers,
   userSearchError,
+  isDeletingConversationId,
   handleLogout,
   handleSearchUsers,
   handleStartConversation,
   handleSelectConversation,
+  handleDeleteConversation,
 }: SidebarProps) {
   return (
     <aside className="sidebar">
@@ -94,40 +104,70 @@ function Sidebar({
             ? onlineUserIds.includes(otherParticipant.user.id)
             : false;
 
+          const isDeleting = isDeletingConversationId === conversation.id;
+
           return (
-            <button
+            <div
               key={conversation.id}
-              type="button"
               className={
                 selectedConversation?.id === conversation.id
                   ? "conversation-item active"
                   : "conversation-item"
               }
-              onClick={() => handleSelectConversation(conversation)}
             >
-              <div className="conversation-name">
-                <span>{getConversationName(conversation, currentUser)}</span>
-                {isOnline && <span className="online-dot" title="Online" />}
-              </div>
+              <button
+                type="button"
+                className="conversation-main"
+                onClick={() => handleSelectConversation(conversation)}
+              >
+                <div className="conversation-name">
+                  <span>{getConversationName(conversation, currentUser)}</span>
+                  {isOnline && <span className="online-dot" title="Online" />}
+                </div>
 
-              <div className="conversation-preview">
-                <span className="conversation-last-message">
-                  {conversation.last_message?.is_deleted
-                    ? "This message was deleted"
-                    : conversation.last_message?.text || "No messages yet"}
-                </span>
+                <div className="conversation-preview">
+                  <span className="conversation-last-message">
+                    {conversation.last_message?.is_deleted
+                      ? "This message was deleted"
+                      : conversation.last_message?.text || "No messages yet"}
+                  </span>
 
-                {conversation.last_message && (
-                  <span className="conversation-time">
-                    {formatShortTime(conversation.last_message.created_at)}
+                  {conversation.last_message && (
+                    <span className="conversation-time">
+                      {formatShortTime(conversation.last_message.created_at)}
+                    </span>
+                  )}
+                </div>
+
+                {conversation.unread_count > 0 && (
+                  <span className="unread-badge">
+                    {conversation.unread_count}
                   </span>
                 )}
-              </div>
+              </button>
 
-              {conversation.unread_count > 0 && (
-                <span className="unread-badge">{conversation.unread_count}</span>
-              )}
-            </button>
+              <div className="conversation-delete-actions">
+                <button
+                  type="button"
+                  className="conversation-delete-button"
+                  onClick={() => handleDeleteConversation(conversation, "for_me")}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? "Deleting..." : "Delete for me"}
+                </button>
+
+                <button
+                  type="button"
+                  className="conversation-delete-button danger"
+                  onClick={() =>
+                    handleDeleteConversation(conversation, "for_everyone")
+                  }
+                  disabled={isDeleting}
+                >
+                  Delete for everyone
+                </button>
+              </div>
+            </div>
           );
         })}
       </div>
