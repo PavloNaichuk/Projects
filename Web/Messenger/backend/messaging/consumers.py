@@ -21,7 +21,7 @@ def is_conversation_participant(conversation_id, user):
 
 
 @database_sync_to_async
-def create_message(conversation_id, user, text):
+def create_message(conversation_id, user, text, reply_to_id=None):
     text = text.strip()
 
     if not text:
@@ -35,13 +35,32 @@ def create_message(conversation_id, user, text):
     if not conversation:
         return None, "Conversation not found."
 
+    reply_to_message = None
+
+    if reply_to_id:
+        reply_to_message = Message.objects.filter(
+            id=reply_to_id,
+            conversation=conversation,
+            conversation__participants__user=user,
+        ).select_related("sender").first()
+
+        if not reply_to_message:
+            return None, "Reply message not found."
+
     conversation.hidden_for.clear()
 
     message = Message.objects.create(
         conversation=conversation,
         sender=user,
         text=text,
+        reply_to=reply_to_message,
     )
+
+    message = Message.objects.select_related(
+        "sender",
+        "reply_to",
+        "reply_to__sender",
+    ).get(id=message.id)
 
     return MessageSerializer(message).data, None
 
@@ -122,11 +141,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return
 
         text = data.get("text", "")
+        reply_to_id = data.get("reply_to")
 
         message_data, error = await create_message(
             self.conversation_id,
             self.user,
             text,
+            reply_to_id,
         )
 
         if error:

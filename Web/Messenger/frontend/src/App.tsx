@@ -81,6 +81,7 @@ function App() {
   const [selectedAttachment, setSelectedAttachment] = useState<File | null>(
     null
   );
+  const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
   const [messageError, setMessageError] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [typingUser, setTypingUser] = useState<User | null>(null);
@@ -191,6 +192,7 @@ function App() {
       setIsMessageSearchActive(false);
       setIsSearchingMessages(false);
       setSelectedAttachment(null);
+      setReplyToMessage(null);
 
       return null;
     });
@@ -351,6 +353,7 @@ function App() {
 
     setNewMessage("");
     setSelectedAttachment(null);
+    setReplyToMessage(null);
     setMessageError("");
     setTypingUser(null);
     setOnlineUserIds([]);
@@ -740,6 +743,7 @@ function App() {
     setIsMessageSearchActive(false);
     setIsSearchingMessages(false);
     setSelectedAttachment(null);
+    setReplyToMessage(null);
 
     await loadMessages(accessToken, conversation.id);
     await refreshConversations(accessToken);
@@ -937,6 +941,19 @@ function App() {
     setSelectedAttachment(null);
   }
 
+  function handleStartReplyMessage(message: Message) {
+    if (message.is_deleted) {
+      return;
+    }
+
+    setReplyToMessage(message);
+    setMessageError("");
+  }
+
+  function handleCancelReplyMessage() {
+    setReplyToMessage(null);
+  }
+
   async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -952,6 +969,7 @@ function App() {
     }
 
     const socket = socketRef.current;
+    const replyToMessageId = replyToMessage?.id ?? null;
 
     if (!selectedAttachment && (!socket || socket.readyState !== WebSocket.OPEN)) {
       setMessageError("WebSocket is not connected.");
@@ -967,12 +985,18 @@ function App() {
           accessToken,
           selectedConversation.id,
           text,
-          selectedAttachment
+          selectedAttachment,
+          replyToMessageId
         );
 
         addMessageToState(createdMessage);
       } else if (socket) {
-        socket.send(JSON.stringify({ text }));
+        socket.send(
+          JSON.stringify({
+            text,
+            reply_to: replyToMessageId,
+          })
+        );
       }
 
       sendTypingStatus(false);
@@ -984,6 +1008,7 @@ function App() {
 
       setNewMessage("");
       setSelectedAttachment(null);
+      setReplyToMessage(null);
     } catch {
       setMessageError("Failed to send message.");
     } finally {
@@ -1170,6 +1195,7 @@ function App() {
         messageError={messageError}
         newMessage={newMessage}
         selectedAttachment={selectedAttachment}
+        replyToMessage={replyToMessage}
         isSending={isSending}
         editingMessageId={editingMessageId}
         editingMessageText={editingMessageText}
@@ -1184,6 +1210,8 @@ function App() {
         handleNewMessageChange={handleNewMessageChange}
         handleAttachmentChange={handleAttachmentChange}
         handleRemoveAttachment={handleRemoveAttachment}
+        handleStartReplyMessage={handleStartReplyMessage}
+        handleCancelReplyMessage={handleCancelReplyMessage}
         handleMessageKeyDown={handleMessageKeyDown}
         handleSendMessage={handleSendMessage}
         handleStartEditMessage={handleStartEditMessage}

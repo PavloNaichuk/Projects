@@ -226,7 +226,7 @@ class ConversationMessagesView(APIView):
             conversation__participants__user=request.user,
         ).exclude(
             conversation__hidden_for=request.user,
-        ).select_related("sender")
+        ).select_related("sender", "reply_to", "reply_to__sender")
 
         limit_param = request.query_params.get("limit")
         before_param = request.query_params.get("before")
@@ -335,7 +335,10 @@ class ConversationMessagesView(APIView):
 
         serializer = MessageSerializer(
             data=request.data,
-            context={"request": request},
+            context={
+                "request": request,
+                "conversation": conversation,
+            },
         )
 
         if serializer.is_valid():
@@ -349,7 +352,10 @@ class ConversationMessagesView(APIView):
 
             response_serializer = MessageSerializer(
                 message,
-                context={"request": request},
+                context={
+                    "request": request,
+                    "conversation": conversation,
+                },
             )
             message_data = response_serializer.data
 

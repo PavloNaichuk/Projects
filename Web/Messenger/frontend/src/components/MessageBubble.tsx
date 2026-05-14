@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { User } from "../api/auth";
-import type { Message } from "../api/conversations";
+import type { Message, MessageReply } from "../api/conversations";
 import {
   formatMessageDate,
   formatMessageTime,
@@ -22,6 +22,7 @@ type MessageBubbleProps = {
   isEditingMessage: boolean;
   isDeletingMessageId: number | null;
 
+  handleStartReplyMessage: (message: Message) => void;
   handleStartEditMessage: (message: Message) => void;
   handleCancelEditMessage: () => void;
   handleSaveEditedMessage: (messageId: number) => Promise<void>;
@@ -80,6 +81,24 @@ function formatFileSize(size: number | null) {
   return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+function getReplyPreviewText(reply: MessageReply) {
+  if (reply.is_deleted) {
+    return "This message was deleted";
+  }
+
+  if (reply.text.trim()) {
+    return reply.text;
+  }
+
+  if (reply.attachment_name) {
+    return reply.attachment_is_image
+      ? `Image: ${reply.attachment_name}`
+      : `File: ${reply.attachment_name}`;
+  }
+
+  return "Message";
+}
+
 function MessageBubble({
   message,
   previousMessage,
@@ -90,6 +109,7 @@ function MessageBubble({
   setEditingMessageText,
   isEditingMessage,
   isDeletingMessageId,
+  handleStartReplyMessage,
   handleStartEditMessage,
   handleCancelEditMessage,
   handleSaveEditedMessage,
@@ -154,6 +174,17 @@ function MessageBubble({
               <p>This message was deleted</p>
             ) : (
               <>
+                {message.reply_to_message && (
+                  <div className="reply-preview-message">
+                    <span className="reply-preview-title">
+                      Reply to {message.reply_to_message.sender.username}
+                    </span>
+                    <span className="reply-preview-text">
+                      {getReplyPreviewText(message.reply_to_message)}
+                    </span>
+                  </div>
+                )}
+
                 {hasAttachment && message.attachment_url && (
                   <div className="message-attachment">
                     {message.attachment_is_image ? (
@@ -211,9 +242,16 @@ function MessageBubble({
               )}
             </div>
 
-            {isOwnMessage && !message.is_deleted && (
+            {!message.is_deleted && (
               <div className="message-actions">
-                {hasText && (
+                <button
+                  type="button"
+                  onClick={() => handleStartReplyMessage(message)}
+                >
+                  Reply
+                </button>
+
+                {isOwnMessage && hasText && (
                   <button
                     type="button"
                     onClick={() => handleStartEditMessage(message)}
@@ -222,7 +260,7 @@ function MessageBubble({
                   </button>
                 )}
 
-                {hasAttachment && (
+                {isOwnMessage && hasAttachment && hasText && (
                   <button
                     type="button"
                     onClick={() => handleRemoveMessageAttachment(message.id)}
@@ -234,13 +272,17 @@ function MessageBubble({
                   </button>
                 )}
 
-                <button
-                  type="button"
-                  onClick={() => handleDeleteMessage(message.id)}
-                  disabled={isDeletingMessageId === message.id}
-                >
-                  {isDeletingMessageId === message.id ? "Deleting..." : "Delete"}
-                </button>
+                {isOwnMessage && (
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteMessage(message.id)}
+                    disabled={isDeletingMessageId === message.id}
+                  >
+                    {isDeletingMessageId === message.id
+                      ? "Deleting..."
+                      : "Delete"}
+                  </button>
+                )}
               </div>
             )}
           </>

@@ -31,6 +31,7 @@ type ChatWindowProps = {
 
   newMessage: string;
   selectedAttachment: File | null;
+  replyToMessage: Message | null;
   isSending: boolean;
 
   editingMessageId: number | null;
@@ -49,6 +50,8 @@ type ChatWindowProps = {
   handleNewMessageChange: (value: string) => void;
   handleAttachmentChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleRemoveAttachment: () => void;
+  handleStartReplyMessage: (message: Message) => void;
+  handleCancelReplyMessage: () => void;
   handleMessageKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   handleSendMessage: (event: FormEvent<HTMLFormElement>) => Promise<void>;
 
@@ -58,6 +61,24 @@ type ChatWindowProps = {
   handleDeleteMessage: (messageId: number) => Promise<void>;
   handleRemoveMessageAttachment: (messageId: number) => Promise<void>;
 };
+
+function getReplyPreviewText(message: Message) {
+  if (message.is_deleted) {
+    return "This message was deleted";
+  }
+
+  if (message.text.trim()) {
+    return message.text;
+  }
+
+  if (message.attachment_name) {
+    return message.attachment_is_image
+      ? `Image: ${message.attachment_name}`
+      : `File: ${message.attachment_name}`;
+  }
+
+  return "Message";
+}
 
 function ChatWindow({
   currentUser,
@@ -77,6 +98,7 @@ function ChatWindow({
   messageError,
   newMessage,
   selectedAttachment,
+  replyToMessage,
   isSending,
   editingMessageId,
   editingMessageText,
@@ -91,6 +113,8 @@ function ChatWindow({
   handleNewMessageChange,
   handleAttachmentChange,
   handleRemoveAttachment,
+  handleStartReplyMessage,
+  handleCancelReplyMessage,
   handleMessageKeyDown,
   handleSendMessage,
   handleStartEditMessage,
@@ -193,6 +217,7 @@ function ChatWindow({
             setEditingMessageText={setEditingMessageText}
             isEditingMessage={isEditingMessage}
             isDeletingMessageId={isDeletingMessageId}
+            handleStartReplyMessage={handleStartReplyMessage}
             handleStartEditMessage={handleStartEditMessage}
             handleCancelEditMessage={handleCancelEditMessage}
             handleSaveEditedMessage={handleSaveEditedMessage}
@@ -221,6 +246,27 @@ function ChatWindow({
         </label>
 
         <div className="message-input-area">
+          {replyToMessage && (
+            <div className="reply-preview-input">
+              <div>
+                <span className="reply-preview-title">
+                  Replying to {replyToMessage.sender.username}
+                </span>
+                <span className="reply-preview-text">
+                  {getReplyPreviewText(replyToMessage)}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleCancelReplyMessage}
+                disabled={isSending}
+              >
+                ×
+              </button>
+            </div>
+          )}
+
           {selectedAttachment && (
             <div className="selected-attachment">
               <span>{selectedAttachment.name}</span>

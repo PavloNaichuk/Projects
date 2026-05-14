@@ -10,9 +10,44 @@ class UserShortSerializer(serializers.ModelSerializer):
         fields = ("id", "username", "email")
 
 
+class MessageReplySerializer(serializers.ModelSerializer):
+    sender = UserShortSerializer(read_only=True)
+    attachment_is_image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Message
+        fields = (
+            "id",
+            "sender",
+            "text",
+            "attachment_name",
+            "attachment_content_type",
+            "attachment_is_image",
+            "is_deleted",
+            "created_at",
+        )
+
+    def get_attachment_is_image(self, obj):
+        if not obj.attachment_content_type:
+            return False
+
+        return obj.attachment_content_type.startswith("image/")
+
+
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserShortSerializer(read_only=True)
     conversation = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    reply_to = serializers.PrimaryKeyRelatedField(
+        queryset=Message.objects.all(),
+        required=False,
+        allow_null=True,
+        write_only=True,
+    )
+    reply_to_message = MessageReplySerializer(
+        source="reply_to",
+        read_only=True,
+    )
 
     text = serializers.CharField(
         trim_whitespace=True,
@@ -34,6 +69,8 @@ class MessageSerializer(serializers.ModelSerializer):
             "id",
             "conversation",
             "sender",
+            "reply_to",
+            "reply_to_message",
             "text",
             "attachment",
             "attachment_url",
@@ -52,6 +89,7 @@ class MessageSerializer(serializers.ModelSerializer):
             "id",
             "conversation",
             "sender",
+            "reply_to_message",
             "attachment_url",
             "attachment_name",
             "attachment_content_type",
@@ -86,8 +124,29 @@ class MessageSerializer(serializers.ModelSerializer):
         text = attrs.get("text", "")
         attachment = attrs.get("attachment")
 
+        if not attachment and hasattr(self, "initial_data"):
+            attachment = self.initial_data.get("attachment")
+
+        reply_to = attrs.get("reply_to")
+        request = self.context.get("request")
+        conversation = self.context.get("conversation")
+
         if "text" in attrs:
             attrs["text"] = text.strip()
+
+        if reply_to:
+            if conversation and reply_to.conversation_id != conversation.id:
+                raise serializers.ValidationError(
+                    {"reply_to": ["Reply message must be from the same conversation."]}
+                )
+
+            if request and not Message.objects.filter(
+                id=reply_to.id,
+                conversation__participants__user=request.user,
+            ).exists():
+                raise serializers.ValidationError(
+                    {"reply_to": ["Reply message not found."]}
+                )
 
         # Editing existing message
         if self.instance:
@@ -134,7 +193,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     def get_last_message(self, obj):
         message = (
             obj.messages
-            .select_related("sender")
+            .select_related("sender", "reply_to", "reply_to__sender")
             .order_by("-created_at", "-id")
             .first()
         )

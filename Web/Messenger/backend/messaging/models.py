@@ -46,6 +46,15 @@ class Message(models.Model):
         on_delete=models.CASCADE,
         related_name="sent_messages",
     )
+
+    reply_to = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        related_name="replies",
+        null=True,
+        blank=True,
+    )
+
     text = models.TextField(blank=True)
 
     attachment = models.FileField(

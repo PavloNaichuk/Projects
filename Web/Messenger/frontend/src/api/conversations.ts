@@ -1,10 +1,24 @@
 import { API_BASE_URL } from "./config";
 import type { User } from "./auth";
 
+export type MessageReply = {
+  id: number;
+  sender: User;
+  text: string;
+  attachment_name: string;
+  attachment_content_type: string;
+  attachment_is_image: boolean;
+  is_deleted: boolean;
+  created_at: string;
+};
+
 export type Message = {
   id: number;
   conversation: number;
   sender: User;
+
+  reply_to_message: MessageReply | null;
+
   text: string;
 
   attachment_url: string | null;
@@ -117,7 +131,8 @@ export async function createMessageWithAttachment(
   accessToken: string,
   conversationId: number,
   text: string,
-  attachment: File | null
+  attachment: File | null,
+  replyToMessageId: number | null = null
 ): Promise<Message> {
   const formData = new FormData();
 
@@ -127,6 +142,10 @@ export async function createMessageWithAttachment(
 
   if (attachment) {
     formData.append("attachment", attachment);
+  }
+
+  if (replyToMessageId) {
+    formData.append("reply_to", String(replyToMessageId));
   }
 
   const response = await fetch(
@@ -238,6 +257,26 @@ export async function deleteMessage(
   return response.json();
 }
 
+export async function removeMessageAttachment(
+  accessToken: string,
+  messageId: number
+): Promise<Message> {
+  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ remove_attachment: true }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete attachment.");
+  }
+
+  return response.json();
+}
+
 export type MarkConversationAsReadResponse = {
   updated_count: number;
 };
@@ -258,26 +297,6 @@ export async function markConversationAsRead(
 
   if (!response.ok) {
     throw new Error("Failed to mark conversation as read.");
-  }
-
-  return response.json();
-}
-
-export async function removeMessageAttachment(
-  accessToken: string,
-  messageId: number
-): Promise<Message> {
-  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ remove_attachment: true }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to delete attachment.");
   }
 
   return response.json();
