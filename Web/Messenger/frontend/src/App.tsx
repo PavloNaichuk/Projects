@@ -104,6 +104,8 @@ function App() {
   const [isDeletingConversationId, setIsDeletingConversationId] = useState<
     number | null
   >(null);
+  const currentUserId = currentUser?.id ?? null;
+  const selectedConversationId = selectedConversation?.id ?? null;
 
   function markConversationReadInState(conversationId: number) {
     setConversations((previousConversations) =>
@@ -482,7 +484,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!accessToken || !currentUser) {
+    if (!accessToken || !currentUserId) {
       return;
     }
 
@@ -538,108 +540,108 @@ function App() {
         notificationSocketRef.current = null;
       }
     };
-  }, [accessToken, currentUser?.id]);
+  }, [accessToken, currentUserId]);
 
   useEffect(() => {
-    if (!accessToken || !selectedConversation) {
+  if (!accessToken || !selectedConversationId) {
+    return;
+  }
+
+  const websocketUrl = `${WS_BASE_URL}/conversations/${selectedConversationId}/?token=${accessToken}`;
+  const socket = new WebSocket(websocketUrl);
+
+  socketRef.current = socket;
+
+  socket.onopen = () => {
+    sendReadStatus();
+  };
+
+  socket.onmessage = async (event) => {
+    const data = JSON.parse(event.data);
+
+    if (data.type === "message") {
+      const receivedMessage = data.message as Message;
+
+      addMessageToState(receivedMessage);
+
+      if (
+        accessToken &&
+        selectedConversationId === receivedMessage.conversation &&
+        receivedMessage.sender.id !== currentUserId
+      ) {
+        try {
+          await markConversationAsRead(accessToken, selectedConversationId);
+          markConversationReadInState(selectedConversationId);
+          sendReadStatus();
+        } catch {
+          console.error("Failed to mark WebSocket message as read.");
+        }
+      }
+
       return;
     }
 
-    const websocketUrl = `${WS_BASE_URL}/conversations/${selectedConversation.id}/?token=${accessToken}`;
-    const socket = new WebSocket(websocketUrl);
+    if (data.type === "read") {
+      const reader = data.user as User;
 
-    socketRef.current = socket;
-
-    socket.onopen = () => {
-      sendReadStatus();
-    };
-
-    socket.onmessage = async (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.type === "message") {
-        const receivedMessage = data.message as Message;
-
-        addMessageToState(receivedMessage);
-
-        if (
-          accessToken &&
-          selectedConversation.id === receivedMessage.conversation &&
-          receivedMessage.sender.id !== currentUser?.id
-        ) {
-          try {
-            await markConversationAsRead(accessToken, selectedConversation.id);
-            markConversationReadInState(selectedConversation.id);
-            sendReadStatus();
-          } catch {
-            console.error("Failed to mark WebSocket message as read.");
-          }
-        }
-
+      if (reader.id === currentUserId) {
         return;
       }
 
-      if (data.type === "read") {
-        const reader = data.user as User;
+      setMessages((previousMessages) =>
+        previousMessages.map((message) =>
+          message.sender.id === currentUserId && !message.is_deleted
+            ? {
+                ...message,
+                is_read: true,
+              }
+            : message
+        )
+      );
 
-        if (reader.id === currentUser?.id) {
-          return;
-        }
+      return;
+    }
 
-        setMessages((previousMessages) =>
-          previousMessages.map((message) =>
-            message.sender.id === currentUser?.id && !message.is_deleted
-              ? {
-                  ...message,
-                  is_read: true,
-                }
-              : message
-          )
-        );
+    if (data.type === "typing") {
+      const receivedTypingUser = data.user as User;
 
+      if (receivedTypingUser.id === currentUserId) {
         return;
       }
 
-      if (data.type === "typing") {
-        const receivedTypingUser = data.user as User;
-
-        if (receivedTypingUser.id === currentUser?.id) {
-          return;
-        }
-
-        if (data.is_typing) {
-          setTypingUser(receivedTypingUser);
-        } else {
-          setTypingUser(null);
-        }
-
-        return;
+      if (data.is_typing) {
+        setTypingUser(receivedTypingUser);
+      } else {
+        setTypingUser(null);
       }
 
-      if (data.type === "error") {
-        setMessageError(data.detail);
-      }
-    };
+      return;
+    }
 
-    socket.onerror = () => {
-      setMessageError("WebSocket connection error.");
-    };
+    if (data.type === "error") {
+      setMessageError(data.detail);
+    }
+  };
 
-    return () => {
-      if (typingTimeoutRef.current) {
-        window.clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = null;
-      }
+  socket.onerror = () => {
+    setMessageError("WebSocket connection error.");
+  };
 
-      setTypingUser(null);
+  return () => {
+    if (typingTimeoutRef.current) {
+      window.clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
 
-      socket.close();
+    setTypingUser(null);
 
-      if (socketRef.current === socket) {
-        socketRef.current = null;
-      }
-    };
-  }, [accessToken, selectedConversation?.id, currentUser?.id]);
+    socket.close();
+
+    if (socketRef.current === socket) {
+      socketRef.current = null;
+    }
+  };
+}, [accessToken, selectedConversationId, currentUserId]);
 
   useLayoutEffect(() => {
     const messagesContainer = messagesContainerRef.current;
