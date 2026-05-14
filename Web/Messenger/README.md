@@ -1,23 +1,47 @@
-## Local development
-
-### Start Redis
-
-WebSocket messaging uses Redis as a Channels layer.
-
-Start Redis with Docker Compose:
-
-```bash
-docker compose up -d redis
-
 # Messenger
 
-Django + DRF + Channels backend for a real-time messenger.
+Real-time messenger built with Django, Django REST Framework, Django Channels, Redis, and React.
 
-## Local development
+## Features
+
+- User registration and login with JWT
+- Real-time messaging with WebSocket
+- Conversation list updates without refresh
+- Online / offline status
+- Typing indicator
+- Read status
+- Message edit and delete
+- Delete conversation for me / for everyone
+- Message search inside conversation
+- Message pagination / infinite scroll
+- Image and file attachments
+- Delete attachment from message
+
+## Tech Stack
+
+### Backend
+
+- Python
+- Django
+- Django REST Framework
+- Django Channels
+- Redis
+- SQLite
+- Simple JWT
+- Pytest / Django tests
+
+### Frontend
+
+- React
+- TypeScript
+- Vite
+- CSS
+
+## Local Development
 
 ### 1. Create `.env`
 
-Copy example env file:
+Copy example environment file:
 
 ```bash
 cp .env.example .env
