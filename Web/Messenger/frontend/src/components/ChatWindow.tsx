@@ -52,6 +52,7 @@ type ChatWindowProps = {
   handleRemoveAttachment: () => void;
   handleStartReplyMessage: (message: Message) => void;
   handleCancelReplyMessage: () => void;
+  handleStartForwardMessage: (message: Message) => void;
   handleMessageKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   handleSendMessage: (event: FormEvent<HTMLFormElement>) => Promise<void>;
 
@@ -119,6 +120,7 @@ function ChatWindow({
   handleRemoveAttachment,
   handleStartReplyMessage,
   handleCancelReplyMessage,
+  handleStartForwardMessage,
   handleMessageKeyDown,
   handleSendMessage,
   handleStartEditMessage,
@@ -223,6 +225,7 @@ function ChatWindow({
             isEditingMessage={isEditingMessage}
             isDeletingMessageId={isDeletingMessageId}
             handleStartReplyMessage={handleStartReplyMessage}
+            handleStartForwardMessage={handleStartForwardMessage}
             handleStartEditMessage={handleStartEditMessage}
             handleCancelEditMessage={handleCancelEditMessage}
             handleSaveEditedMessage={handleSaveEditedMessage}

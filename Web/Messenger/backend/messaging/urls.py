@@ -6,6 +6,7 @@ from .views import (
     ConversationMarkReadView,
     ConversationMessagesView,
     MessageDetailView,
+    MessageForwardView,
     MessageReactionToggleView,
 )
 
@@ -36,5 +37,10 @@ urlpatterns = [
         "messages/<int:message_id>/reactions/",
         MessageReactionToggleView.as_view(),
         name="message-reaction-toggle",
+    ),
+    path(
+        "messages/<int:message_id>/forward/",
+        MessageForwardView.as_view(),
+        name="message-forward",
     ),
 ]

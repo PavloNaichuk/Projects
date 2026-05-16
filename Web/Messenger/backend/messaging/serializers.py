@@ -47,6 +47,19 @@ class MessageReplySerializer(serializers.ModelSerializer):
         return obj.attachment_content_type.startswith("image/")
 
 
+class MessageForwardedSerializer(serializers.ModelSerializer):
+    sender = UserShortSerializer(read_only=True)
+
+    class Meta:
+        model = Message
+        fields = (
+            "id",
+            "sender",
+            "is_deleted",
+            "created_at",
+        )
+
+
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserShortSerializer(read_only=True)
     conversation = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -59,6 +72,10 @@ class MessageSerializer(serializers.ModelSerializer):
     )
     reply_to_message = MessageReplySerializer(
         source="reply_to",
+        read_only=True,
+    )
+    forwarded_from_message = MessageForwardedSerializer(
+        source="forwarded_from",
         read_only=True,
     )
 
@@ -86,6 +103,7 @@ class MessageSerializer(serializers.ModelSerializer):
             "sender",
             "reply_to",
             "reply_to_message",
+            "forwarded_from_message",
             "text",
             "attachment",
             "attachment_url",
@@ -106,6 +124,7 @@ class MessageSerializer(serializers.ModelSerializer):
             "conversation",
             "sender",
             "reply_to_message",
+            "forwarded_from_message",
             "attachment_url",
             "attachment_name",
             "attachment_content_type",
@@ -236,7 +255,13 @@ class ConversationSerializer(serializers.ModelSerializer):
     def get_last_message(self, obj):
         message = (
             obj.messages
-            .select_related("sender", "reply_to", "reply_to__sender")
+            .select_related(
+                "sender",
+                "reply_to",
+                "reply_to__sender",
+                "forwarded_from",
+                "forwarded_from__sender",
+            )
             .prefetch_related("reactions__user")
             .order_by("-created_at", "-id")
             .first()

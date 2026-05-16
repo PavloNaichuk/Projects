@@ -12,6 +12,13 @@ export type MessageReply = {
   created_at: string;
 };
 
+export type MessageForwarded = {
+  id: number;
+  sender: User;
+  is_deleted: boolean;
+  created_at: string;
+};
+
 export type MessageReaction = {
   emoji: string;
   count: number;
@@ -25,6 +32,7 @@ export type Message = {
   sender: User;
 
   reply_to_message: MessageReply | null;
+  forwarded_from_message: MessageForwarded | null;
 
   text: string;
 
@@ -296,17 +304,41 @@ export async function toggleMessageReaction(
   messageId: number,
   emoji: string
 ): Promise<ToggleMessageReactionResponse> {
-  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/reactions/`, {
+  const response = await fetch(
+    `${API_BASE_URL}/messages/${messageId}/reactions/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ emoji }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update reaction.");
+  }
+
+  return response.json();
+}
+
+export async function forwardMessage(
+  accessToken: string,
+  messageId: number,
+  conversationId: number
+): Promise<Message> {
+  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/forward/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify({ emoji }),
+    body: JSON.stringify({ conversation_id: conversationId }),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to update reaction.");
+    throw new Error("Failed to forward message.");
   }
 
   return response.json();

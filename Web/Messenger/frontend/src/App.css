@@ -1035,3 +1035,116 @@
 .message-reaction:hover {
   opacity: 0.9;
 }
+
+.forwarded-message-label {
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.message.incoming .forwarded-message-label {
+  color: #2563eb;
+}
+
+.message.outgoing .forwarded-message-label {
+  color: #dbeafe;
+}
+
+.forward-modal {
+  width: min(440px, calc(100vw - 32px));
+  max-height: min(560px, calc(100vh - 48px));
+  padding: 22px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.forward-modal h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #111827;
+}
+
+.forward-message-preview {
+  padding: 10px 12px;
+  border-left: 4px solid #2563eb;
+  border-radius: 10px;
+  background: #eef2ff;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.4;
+  max-height: 96px;
+  overflow: hidden;
+}
+
+.forward-conversation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  max-height: 320px;
+}
+
+.forward-conversation-list button {
+  width: 100%;
+  padding: 11px 12px;
+  border: none;
+  border-radius: 10px;
+  background: #f9fafb;
+  color: #111827;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.forward-conversation-list button:hover {
+  background: #eef2ff;
+}
+
+.forward-conversation-list button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.forward-conversation-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.forward-conversation-preview {
+  color: #6b7280;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.forward-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.forward-modal-actions button {
+  padding: 9px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #e5e7eb;
+  color: #374151;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.forward-modal-actions button:hover {
+  background: #d1d5db;
+}
+
+.forward-modal-actions button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

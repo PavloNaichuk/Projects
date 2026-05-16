@@ -55,6 +55,14 @@ class Message(models.Model):
         blank=True,
     )
 
+    forwarded_from = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        related_name="forwarded_messages",
+        null=True,
+        blank=True,
+    )
+
     text = models.TextField(blank=True)
 
     attachment = models.FileField(

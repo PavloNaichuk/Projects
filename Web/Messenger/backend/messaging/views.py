@@ -1,19 +1,31 @@
+import os
+
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
 from django.db.models import F, Max
 from django.utils import timezone
 
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Conversation, Message, MessageReaction
 from .serializers import (
     ConversationCreateSerializer,
     ConversationSerializer,
     MessageSerializer,
+)
+
+
+MESSAGE_SELECT_RELATED = (
+    "sender",
+    "reply_to",
+    "reply_to__sender",
+    "forwarded_from",
+    "forwarded_from__sender",
 )
 
 
@@ -87,6 +99,52 @@ def save_attachment_metadata(message, uploaded_file):
             "updated_at",
         ]
     )
+
+
+def copy_message_attachment(source_message, target_message):
+    if not source_message.attachment:
+        return
+
+    source_message.attachment.open("rb")
+    file_content = source_message.attachment.read()
+    source_message.attachment.close()
+
+    file_name = source_message.attachment_name or os.path.basename(
+        source_message.attachment.name
+    )
+
+    target_message.attachment.save(
+        file_name,
+        ContentFile(file_content),
+        save=False,
+    )
+    target_message.attachment_name = source_message.attachment_name
+    target_message.attachment_content_type = source_message.attachment_content_type
+    target_message.attachment_size = source_message.attachment_size
+    target_message.save(
+        update_fields=[
+            "attachment",
+            "attachment_name",
+            "attachment_content_type",
+            "attachment_size",
+            "updated_at",
+        ]
+    )
+
+
+def serialize_message(message, request):
+    message = (
+        Message.objects.select_related(*MESSAGE_SELECT_RELATED)
+        .prefetch_related("reactions__user")
+        .get(id=message.id)
+    )
+
+    serializer = MessageSerializer(
+        message,
+        context={"request": request},
+    )
+
+    return serializer.data
 
 
 class ConversationListView(APIView):
@@ -245,7 +303,7 @@ class ConversationMessagesView(APIView):
             .exclude(
                 conversation__hidden_for=request.user,
             )
-            .select_related("sender", "reply_to", "reply_to__sender")
+            .select_related(*MESSAGE_SELECT_RELATED)
             .prefetch_related("reactions__user")
         )
 
@@ -369,20 +427,7 @@ class ConversationMessagesView(APIView):
             uploaded_file = request.FILES.get("attachment")
             save_attachment_metadata(message, uploaded_file)
 
-            message = (
-                Message.objects.select_related("sender", "reply_to", "reply_to__sender")
-                .prefetch_related("reactions__user")
-                .get(id=message.id)
-            )
-
-            response_serializer = MessageSerializer(
-                message,
-                context={
-                    "request": request,
-                    "conversation": conversation,
-                },
-            )
-            message_data = response_serializer.data
+            message_data = serialize_message(message, request)
 
             participant_ids = list(
                 conversation.participants.values_list("user_id", flat=True)
@@ -501,18 +546,9 @@ class MessageDetailView(APIView):
 
             message.save(update_fields=update_fields)
 
-            message = (
-                Message.objects.select_related("sender", "reply_to", "reply_to__sender")
-                .prefetch_related("reactions__user")
-                .get(id=message.id)
-            )
+            message_data = serialize_message(message, request)
 
-            serializer = MessageSerializer(
-                message,
-                context={"request": request},
-            )
-
-            return Response(serializer.data)
+            return Response(message_data)
 
         if "text" not in request.data:
             return Response(
@@ -530,18 +566,9 @@ class MessageDetailView(APIView):
         if serializer.is_valid():
             serializer.save(edited_at=timezone.now())
 
-            message = (
-                Message.objects.select_related("sender", "reply_to", "reply_to__sender")
-                .prefetch_related("reactions__user")
-                .get(id=message.id)
-            )
+            message_data = serialize_message(message, request)
 
-            response_serializer = MessageSerializer(
-                message,
-                context={"request": request},
-            )
-
-            return Response(response_serializer.data)
+            return Response(message_data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -587,17 +614,9 @@ class MessageDetailView(APIView):
             ]
         )
 
-        message = (
-            Message.objects.select_related("sender", "reply_to", "reply_to__sender")
-            .prefetch_related("reactions__user")
-            .get(id=message.id)
-        )
+        message_data = serialize_message(message, request)
 
-        serializer = MessageSerializer(
-            message,
-            context={"request": request},
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(message_data, status=status.HTTP_200_OK)
 
 
 class MessageReactionToggleView(APIView):
@@ -655,17 +674,7 @@ class MessageReactionToggleView(APIView):
             )
             action = "added"
 
-        message = (
-            Message.objects.select_related("sender", "reply_to", "reply_to__sender")
-            .prefetch_related("reactions__user")
-            .get(id=message.id)
-        )
-
-        serializer = MessageSerializer(
-            message,
-            context={"request": request},
-        )
-        message_data = serializer.data
+        message_data = serialize_message(message, request)
 
         notify_message_reaction_updated(
             conversation_id=message.conversation_id,
@@ -679,3 +688,80 @@ class MessageReactionToggleView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+
+class MessageForwardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, message_id):
+        target_conversation_id = request.data.get("conversation_id")
+
+        if not target_conversation_id:
+            return Response(
+                {"conversation_id": ["Conversation id is required."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        source_message = (
+            Message.objects.filter(
+                id=message_id,
+                conversation__participants__user=request.user,
+            )
+            .exclude(
+                conversation__hidden_for=request.user,
+            )
+            .select_related("sender")
+            .first()
+        )
+
+        if not source_message:
+            return Response(
+                {"detail": "Message not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if source_message.is_deleted:
+            return Response(
+                {"detail": "Cannot forward deleted message."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        target_conversation = (
+            Conversation.objects.filter(
+                id=target_conversation_id,
+                participants__user=request.user,
+            )
+            .prefetch_related("participants")
+            .first()
+        )
+
+        if not target_conversation:
+            return Response(
+                {"detail": "Target conversation not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        target_conversation.hidden_for.clear()
+
+        forwarded_message = Message.objects.create(
+            conversation=target_conversation,
+            sender=request.user,
+            text=source_message.text,
+            forwarded_from=source_message,
+        )
+
+        copy_message_attachment(source_message, forwarded_message)
+
+        message_data = serialize_message(forwarded_message, request)
+
+        participant_ids = list(
+            target_conversation.participants.values_list("user_id", flat=True)
+        )
+
+        notify_message_created(
+            conversation_id=target_conversation.id,
+            participant_ids=participant_ids,
+            message_data=message_data,
+        )
+
+        return Response(message_data, status=status.HTTP_201_CREATED)

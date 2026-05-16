@@ -25,6 +25,7 @@ type MessageBubbleProps = {
   isDeletingMessageId: number | null;
 
   handleStartReplyMessage: (message: Message) => void;
+  handleStartForwardMessage: (message: Message) => void;
   handleStartEditMessage: (message: Message) => void;
   handleCancelEditMessage: () => void;
   handleSaveEditedMessage: (messageId: number) => Promise<void>;
@@ -116,6 +117,7 @@ function MessageBubble({
   isEditingMessage,
   isDeletingMessageId,
   handleStartReplyMessage,
+  handleStartForwardMessage,
   handleStartEditMessage,
   handleCancelEditMessage,
   handleSaveEditedMessage,
@@ -182,6 +184,13 @@ function MessageBubble({
               <p>This message was deleted</p>
             ) : (
               <>
+                {message.forwarded_from_message && (
+                  <div className="forwarded-message-label">
+                    Forwarded from{" "}
+                    {message.forwarded_from_message.sender.username}
+                  </div>
+                )}
+
                 {message.reply_to_message && (
                   <div className="reply-preview-message">
                     <span className="reply-preview-title">
@@ -292,6 +301,13 @@ function MessageBubble({
                     onClick={() => handleStartReplyMessage(message)}
                   >
                     Reply
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleStartForwardMessage(message)}
+                  >
+                    Forward
                   </button>
 
                   {isOwnMessage && hasText && (

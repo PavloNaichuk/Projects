@@ -24,6 +24,7 @@ import {
   deleteConversation,
   deleteMessage,
   editMessage,
+  forwardMessage,
   removeMessageAttachment,
   toggleMessageReaction,
   getConversationMessagesPage,
@@ -46,6 +47,24 @@ import {
 const MESSAGE_PAGE_SIZE = 20;
 
 type ScrollBehavior = "bottom" | "preserve";
+
+function getForwardPreviewText(message: Message) {
+  if (message.is_deleted) {
+    return "This message was deleted";
+  }
+
+  if (message.text.trim()) {
+    return message.text;
+  }
+
+  if (message.attachment_name) {
+    return message.attachment_is_image
+      ? `Image: ${message.attachment_name}`
+      : `File: ${message.attachment_name}`;
+  }
+
+  return "Message";
+}
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -86,7 +105,9 @@ function App() {
     null
   );
   const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
+  const [forwardingMessage, setForwardingMessage] = useState<Message | null>(null);
   const [messageError, setMessageError] = useState("");
+  const [isForwardingMessage, setIsForwardingMessage] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [typingUser, setTypingUser] = useState<User | null>(null);
   const [onlineUserIds, setOnlineUserIds] = useState<number[]>([]);
@@ -197,6 +218,7 @@ function App() {
       setIsSearchingMessages(false);
       setSelectedAttachment(null);
       setReplyToMessage(null);
+      setForwardingMessage(null);
 
       return null;
     });
@@ -358,7 +380,9 @@ function App() {
     setNewMessage("");
     setSelectedAttachment(null);
     setReplyToMessage(null);
+    setForwardingMessage(null);
     setMessageError("");
+    setIsForwardingMessage(false);
     setTypingUser(null);
     setOnlineUserIds([]);
   }
@@ -1051,6 +1075,47 @@ function App() {
     setReplyToMessage(null);
   }
 
+  function handleStartForwardMessage(message: Message) {
+    if (message.is_deleted) {
+      return;
+    }
+
+    setForwardingMessage(message);
+    setMessageError("");
+  }
+
+  function handleCancelForwardMessage() {
+    setForwardingMessage(null);
+  }
+
+  async function handleForwardMessageToConversation(conversationId: number) {
+    if (!accessToken || !forwardingMessage) {
+      return;
+    }
+
+    setIsForwardingMessage(true);
+    setMessageError("");
+
+    try {
+      const forwardedMessage = await forwardMessage(
+        accessToken,
+        forwardingMessage.id,
+        conversationId
+      );
+
+      if (selectedConversation?.id === conversationId) {
+        addMessageToState(forwardedMessage);
+      }
+
+      await refreshConversations(accessToken);
+      setForwardingMessage(null);
+    } catch {
+      setMessageError("Failed to forward message.");
+    } finally {
+      setIsForwardingMessage(false);
+    }
+  }
+
   async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -1324,6 +1389,7 @@ function App() {
         handleRemoveAttachment={handleRemoveAttachment}
         handleStartReplyMessage={handleStartReplyMessage}
         handleCancelReplyMessage={handleCancelReplyMessage}
+        handleStartForwardMessage={handleStartForwardMessage}
         handleMessageKeyDown={handleMessageKeyDown}
         handleSendMessage={handleSendMessage}
         handleStartEditMessage={handleStartEditMessage}
@@ -1333,6 +1399,53 @@ function App() {
         handleRemoveMessageAttachment={handleRemoveMessageAttachment}
         handleToggleMessageReaction={handleToggleMessageReaction}
       />
+      {forwardingMessage && (
+        <div className="modal-backdrop">
+          <div className="forward-modal">
+            <h3>Forward message</h3>
+
+            <div className="forward-message-preview">
+              {getForwardPreviewText(forwardingMessage)}
+            </div>
+
+            <div className="forward-conversation-list">
+              {conversations.map((conversation) => {
+                const lastMessage = conversation.last_message;
+                const lastMessageText =
+                  lastMessage?.text.trim() ||
+                  lastMessage?.attachment_name ||
+                  "No messages yet";
+
+                return (
+                  <button
+                    key={conversation.id}
+                    type="button"
+                    onClick={() => handleForwardMessageToConversation(conversation.id)}
+                    disabled={isForwardingMessage}
+                  >
+                    <span className="forward-conversation-name">
+                      {getConversationName(conversation, currentUser)}
+                    </span>
+                    <span className="forward-conversation-preview">
+                      {lastMessageText}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="forward-modal-actions">
+              <button
+                type="button"
+                onClick={handleCancelForwardMessage}
+                disabled={isForwardingMessage}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
