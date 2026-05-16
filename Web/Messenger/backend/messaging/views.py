@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Conversation, Message
+from .models import Conversation, Message, MessageReaction
 from .serializers import (
     ConversationCreateSerializer,
     ConversationSerializer,
@@ -31,6 +31,7 @@ def notify_conversation_deleted(conversation_id, participant_ids):
                 "conversation_id": conversation_id,
             },
         )
+
 
 def notify_message_created(conversation_id, participant_ids, message_data):
     channel_layer = get_channel_layer()
@@ -54,6 +55,21 @@ def notify_message_created(conversation_id, participant_ids, message_data):
                 "message": message_data,
             },
         )
+
+
+def notify_message_reaction_updated(conversation_id, message_data):
+    channel_layer = get_channel_layer()
+
+    if not channel_layer:
+        return
+
+    async_to_sync(channel_layer.group_send)(
+        f"conversation_{conversation_id}",
+        {
+            "type": "message_updated",
+            "message": message_data,
+        },
+    )
 
 
 def save_attachment_metadata(message, uploaded_file):
@@ -221,12 +237,17 @@ class ConversationMessagesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, conversation_id):
-        base_messages = Message.objects.filter(
-            conversation_id=conversation_id,
-            conversation__participants__user=request.user,
-        ).exclude(
-            conversation__hidden_for=request.user,
-        ).select_related("sender", "reply_to", "reply_to__sender")
+        base_messages = (
+            Message.objects.filter(
+                conversation_id=conversation_id,
+                conversation__participants__user=request.user,
+            )
+            .exclude(
+                conversation__hidden_for=request.user,
+            )
+            .select_related("sender", "reply_to", "reply_to__sender")
+            .prefetch_related("reactions__user")
+        )
 
         limit_param = request.query_params.get("limit")
         before_param = request.query_params.get("before")
@@ -290,9 +311,7 @@ class ConversationMessagesView(APIView):
 
             base_messages = base_messages.filter(id__lt=before_id)
 
-        newest_first_messages = list(
-            base_messages.order_by("-id")[: limit + 1]
-        )
+        newest_first_messages = list(base_messages.order_by("-id")[: limit + 1])
         has_more = len(newest_first_messages) > limit
         page_messages = newest_first_messages[:limit]
         page_messages.reverse()
@@ -350,6 +369,12 @@ class ConversationMessagesView(APIView):
             uploaded_file = request.FILES.get("attachment")
             save_attachment_metadata(message, uploaded_file)
 
+            message = (
+                Message.objects.select_related("sender", "reply_to", "reply_to__sender")
+                .prefetch_related("reactions__user")
+                .get(id=message.id)
+            )
+
             response_serializer = MessageSerializer(
                 message,
                 context={
@@ -378,12 +403,16 @@ class ConversationMarkReadView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, conversation_id):
-        conversation = Conversation.objects.filter(
-            id=conversation_id,
-            participants__user=request.user,
-        ).exclude(
-            hidden_for=request.user,
-        ).first()
+        conversation = (
+            Conversation.objects.filter(
+                id=conversation_id,
+                participants__user=request.user,
+            )
+            .exclude(
+                hidden_for=request.user,
+            )
+            .first()
+        )
 
         if not conversation:
             return Response(
@@ -391,13 +420,17 @@ class ConversationMarkReadView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        updated_count = Message.objects.filter(
-            conversation=conversation,
-            is_read=False,
-            is_deleted=False,
-        ).exclude(
-            sender=request.user,
-        ).update(is_read=True)
+        updated_count = (
+            Message.objects.filter(
+                conversation=conversation,
+                is_read=False,
+                is_deleted=False,
+            )
+            .exclude(
+                sender=request.user,
+            )
+            .update(is_read=True)
+        )
 
         return Response(
             {
@@ -411,13 +444,18 @@ class MessageDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, message_id):
-        message = Message.objects.filter(
-            id=message_id,
-            sender=request.user,
-            conversation__participants__user=request.user,
-        ).exclude(
-            conversation__hidden_for=request.user,
-        ).select_related("sender").first()
+        message = (
+            Message.objects.filter(
+                id=message_id,
+                sender=request.user,
+                conversation__participants__user=request.user,
+            )
+            .exclude(
+                conversation__hidden_for=request.user,
+            )
+            .select_related("sender")
+            .first()
+        )
 
         if not message:
             return Response(
@@ -430,7 +468,7 @@ class MessageDetailView(APIView):
                 {"detail": "Deleted message cannot be edited."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-            
+
         remove_attachment = request.data.get("remove_attachment")
 
         if remove_attachment is True or str(remove_attachment).lower() == "true":
@@ -463,6 +501,12 @@ class MessageDetailView(APIView):
 
             message.save(update_fields=update_fields)
 
+            message = (
+                Message.objects.select_related("sender", "reply_to", "reply_to__sender")
+                .prefetch_related("reactions__user")
+                .get(id=message.id)
+            )
+
             serializer = MessageSerializer(
                 message,
                 context={"request": request},
@@ -486,6 +530,12 @@ class MessageDetailView(APIView):
         if serializer.is_valid():
             serializer.save(edited_at=timezone.now())
 
+            message = (
+                Message.objects.select_related("sender", "reply_to", "reply_to__sender")
+                .prefetch_related("reactions__user")
+                .get(id=message.id)
+            )
+
             response_serializer = MessageSerializer(
                 message,
                 context={"request": request},
@@ -496,13 +546,17 @@ class MessageDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, message_id):
-        message = Message.objects.filter(
-            id=message_id,
-            sender=request.user,
-            conversation__participants__user=request.user,
-        ).exclude(
-            conversation__hidden_for=request.user,
-        ).first()
+        message = (
+            Message.objects.filter(
+                id=message_id,
+                sender=request.user,
+                conversation__participants__user=request.user,
+            )
+            .exclude(
+                conversation__hidden_for=request.user,
+            )
+            .first()
+        )
 
         if not message:
             return Response(
@@ -533,8 +587,95 @@ class MessageDetailView(APIView):
             ]
         )
 
+        message = (
+            Message.objects.select_related("sender", "reply_to", "reply_to__sender")
+            .prefetch_related("reactions__user")
+            .get(id=message.id)
+        )
+
         serializer = MessageSerializer(
             message,
             context={"request": request},
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class MessageReactionToggleView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    allowed_emojis = {"👍", "❤️", "😂", "😮"}
+
+    def post(self, request, message_id):
+        emoji = str(request.data.get("emoji", "")).strip()
+
+        if emoji not in self.allowed_emojis:
+            return Response(
+                {"emoji": ["Unsupported reaction."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        message = (
+            Message.objects.filter(
+                id=message_id,
+                conversation__participants__user=request.user,
+            )
+            .exclude(
+                conversation__hidden_for=request.user,
+            )
+            .select_related("conversation")
+            .first()
+        )
+
+        if not message:
+            return Response(
+                {"detail": "Message not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if message.is_deleted:
+            return Response(
+                {"detail": "Cannot react to deleted message."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        reaction = MessageReaction.objects.filter(
+            message=message,
+            user=request.user,
+            emoji=emoji,
+        ).first()
+
+        if reaction:
+            reaction.delete()
+            action = "removed"
+        else:
+            MessageReaction.objects.create(
+                message=message,
+                user=request.user,
+                emoji=emoji,
+            )
+            action = "added"
+
+        message = (
+            Message.objects.select_related("sender", "reply_to", "reply_to__sender")
+            .prefetch_related("reactions__user")
+            .get(id=message.id)
+        )
+
+        serializer = MessageSerializer(
+            message,
+            context={"request": request},
+        )
+        message_data = serializer.data
+
+        notify_message_reaction_updated(
+            conversation_id=message.conversation_id,
+            message_data=message_data,
+        )
+
+        return Response(
+            {
+                "action": action,
+                "message": message_data,
+            },
+            status=status.HTTP_200_OK,
+        )

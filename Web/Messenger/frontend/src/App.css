@@ -958,3 +958,80 @@
   font-size: 12px;
   opacity: 0.85;
 }
+
+.message-reaction-picker {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.message:hover .message-reaction-picker,
+.message:focus-within .message-reaction-picker {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.message-reaction-picker button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.message.incoming .message-reaction-picker button {
+  background: #e5e7eb;
+}
+
+.message-reaction-picker button:hover {
+  transform: scale(1.08);
+}
+
+.message-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.message-reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  color: inherit;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.message.incoming .message-reaction {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.message-reaction.active {
+  background: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.message.outgoing .message-reaction.active {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.message-reaction:hover {
+  opacity: 0.9;
+}

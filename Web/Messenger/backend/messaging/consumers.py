@@ -56,11 +56,15 @@ def create_message(conversation_id, user, text, reply_to_id=None):
         reply_to=reply_to_message,
     )
 
-    message = Message.objects.select_related(
-        "sender",
-        "reply_to",
-        "reply_to__sender",
-    ).get(id=message.id)
+    message = (
+        Message.objects.select_related(
+            "sender",
+            "reply_to",
+            "reply_to__sender",
+        )
+        .prefetch_related("reactions__user")
+        .get(id=message.id)
+    )
 
     return MessageSerializer(message).data, None
 
@@ -185,6 +189,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             text_data=json.dumps(
                 {
                     "type": "message",
+                    "message": event["message"],
+                }
+            )
+        )
+
+    async def message_updated(self, event):
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "message_updated",
                     "message": event["message"],
                 }
             )

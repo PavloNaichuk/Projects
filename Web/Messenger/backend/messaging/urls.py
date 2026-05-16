@@ -6,6 +6,7 @@ from .views import (
     ConversationMarkReadView,
     ConversationMessagesView,
     MessageDetailView,
+    MessageReactionToggleView,
 )
 
 
@@ -26,5 +27,14 @@ urlpatterns = [
         ConversationMarkReadView.as_view(),
         name="conversation-mark-read",
     ),
-    path("messages/<int:message_id>/", MessageDetailView.as_view(), name="message-detail"),
+    path(
+        "messages/<int:message_id>/",
+        MessageDetailView.as_view(),
+        name="message-detail",
+    ),
+    path(
+        "messages/<int:message_id>/reactions/",
+        MessageReactionToggleView.as_view(),
+        name="message-reaction-toggle",
+    ),
 ]

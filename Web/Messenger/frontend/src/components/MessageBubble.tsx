@@ -7,6 +7,8 @@ import {
   isSameMessageDate,
 } from "../utils/chat";
 
+const REACTION_EMOJIS = ["👍", "❤️", "😂", "😮"];
+
 type MessageBubbleProps = {
   message: Message;
   previousMessage?: Message;
@@ -28,6 +30,10 @@ type MessageBubbleProps = {
   handleSaveEditedMessage: (messageId: number) => Promise<void>;
   handleDeleteMessage: (messageId: number) => Promise<void>;
   handleRemoveMessageAttachment: (messageId: number) => Promise<void>;
+  handleToggleMessageReaction: (
+    messageId: number,
+    emoji: string
+  ) => Promise<void>;
 };
 
 function renderHighlightedText(text: string, searchQuery: string) {
@@ -115,6 +121,7 @@ function MessageBubble({
   handleSaveEditedMessage,
   handleDeleteMessage,
   handleRemoveMessageAttachment,
+  handleToggleMessageReaction,
 }: MessageBubbleProps) {
   const shouldShowDateSeparator =
     !previousMessage ||
@@ -124,6 +131,7 @@ function MessageBubble({
   const isEditing = editingMessageId === message.id;
   const hasText = Boolean(message.text.trim());
   const hasAttachment = Boolean(message.attachment_url);
+  const hasReactions = message.reactions.length > 0;
 
   return (
     <div className="message-row">
@@ -223,6 +231,28 @@ function MessageBubble({
                 {hasText && (
                   <p>{renderHighlightedText(message.text, searchQuery)}</p>
                 )}
+
+                {hasReactions && (
+                  <div className="message-reactions">
+                    {message.reactions.map((reaction) => (
+                      <button
+                        key={reaction.emoji}
+                        type="button"
+                        className={
+                          reaction.reacted_by_me
+                            ? "message-reaction active"
+                            : "message-reaction"
+                        }
+                        onClick={() =>
+                          handleToggleMessageReaction(message.id, reaction.emoji)
+                        }
+                      >
+                        <span>{reaction.emoji}</span>
+                        <span>{reaction.count}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </>
             )}
 
@@ -243,47 +273,61 @@ function MessageBubble({
             </div>
 
             {!message.is_deleted && (
-              <div className="message-actions">
-                <button
-                  type="button"
-                  onClick={() => handleStartReplyMessage(message)}
-                >
-                  Reply
-                </button>
+              <>
+                <div className="message-reaction-picker">
+                  {REACTION_EMOJIS.map((emoji) => (
+                    <button
+                      key={emoji}
+                      type="button"
+                      onClick={() => handleToggleMessageReaction(message.id, emoji)}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
 
-                {isOwnMessage && hasText && (
+                <div className="message-actions">
                   <button
                     type="button"
-                    onClick={() => handleStartEditMessage(message)}
+                    onClick={() => handleStartReplyMessage(message)}
                   >
-                    Edit
+                    Reply
                   </button>
-                )}
 
-                {isOwnMessage && hasAttachment && hasText && (
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveMessageAttachment(message.id)}
-                    disabled={isDeletingMessageId === message.id}
-                  >
-                    {isDeletingMessageId === message.id
-                      ? "Deleting..."
-                      : "Delete file"}
-                  </button>
-                )}
+                  {isOwnMessage && hasText && (
+                    <button
+                      type="button"
+                      onClick={() => handleStartEditMessage(message)}
+                    >
+                      Edit
+                    </button>
+                  )}
 
-                {isOwnMessage && (
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteMessage(message.id)}
-                    disabled={isDeletingMessageId === message.id}
-                  >
-                    {isDeletingMessageId === message.id
-                      ? "Deleting..."
-                      : "Delete"}
-                  </button>
-                )}
-              </div>
+                  {isOwnMessage && hasAttachment && hasText && (
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveMessageAttachment(message.id)}
+                      disabled={isDeletingMessageId === message.id}
+                    >
+                      {isDeletingMessageId === message.id
+                        ? "Deleting..."
+                        : "Delete file"}
+                    </button>
+                  )}
+
+                  {isOwnMessage && (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteMessage(message.id)}
+                      disabled={isDeletingMessageId === message.id}
+                    >
+                      {isDeletingMessageId === message.id
+                        ? "Deleting..."
+                        : "Delete"}
+                    </button>
+                  )}
+                </div>
+              </>
             )}
           </>
         )}

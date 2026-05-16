@@ -12,6 +12,13 @@ export type MessageReply = {
   created_at: string;
 };
 
+export type MessageReaction = {
+  emoji: string;
+  count: number;
+  reacted_by_me: boolean;
+  users: User[];
+};
+
 export type Message = {
   id: number;
   conversation: number;
@@ -26,6 +33,8 @@ export type Message = {
   attachment_content_type: string;
   attachment_size: number | null;
   attachment_is_image: boolean;
+
+  reactions: MessageReaction[];
 
   created_at: string;
   updated_at: string;
@@ -54,6 +63,11 @@ export type MessagesPage = {
   results: Message[];
   has_more: boolean;
   next_before: number | null;
+};
+
+export type ToggleMessageReactionResponse = {
+  action: "added" | "removed";
+  message: Message;
 };
 
 export async function getConversations(
@@ -272,6 +286,27 @@ export async function removeMessageAttachment(
 
   if (!response.ok) {
     throw new Error("Failed to delete attachment.");
+  }
+
+  return response.json();
+}
+
+export async function toggleMessageReaction(
+  accessToken: string,
+  messageId: number,
+  emoji: string
+): Promise<ToggleMessageReactionResponse> {
+  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/reactions/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ emoji }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update reaction.");
   }
 
   return response.json();

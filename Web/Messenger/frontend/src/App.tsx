@@ -25,6 +25,7 @@ import {
   deleteMessage,
   editMessage,
   removeMessageAttachment,
+  toggleMessageReaction,
   getConversationMessagesPage,
   getConversations,
   markConversationAsRead,
@@ -672,6 +673,14 @@ function App() {
       return;
     }
 
+    if (data.type === "message_updated") {
+      const updatedMessage = data.message as Message;
+
+      updateMessageInState(updatedMessage);
+
+      return;
+    }
+
     if (data.type === "read") {
       const reader = data.user as User;
 
@@ -1200,6 +1209,21 @@ function App() {
     }
   }
 
+  async function handleToggleMessageReaction(messageId: number, emoji: string) {
+    if (!accessToken) {
+      return;
+    }
+
+    setMessageError("");
+
+    try {
+      const response = await toggleMessageReaction(accessToken, messageId, emoji);
+      updateMessageInState(response.message);
+    } catch {
+      setMessageError("Failed to update reaction.");
+    }
+  }
+
   if (isAuthChecking) {
     return (
       <div className="auth-page">
@@ -1307,6 +1331,7 @@ function App() {
         handleSaveEditedMessage={handleSaveEditedMessage}
         handleDeleteMessage={handleDeleteMessage}
         handleRemoveMessageAttachment={handleRemoveMessageAttachment}
+        handleToggleMessageReaction={handleToggleMessageReaction}
       />
     </div>
   );

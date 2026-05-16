@@ -60,6 +60,10 @@ type ChatWindowProps = {
   handleSaveEditedMessage: (messageId: number) => Promise<void>;
   handleDeleteMessage: (messageId: number) => Promise<void>;
   handleRemoveMessageAttachment: (messageId: number) => Promise<void>;
+  handleToggleMessageReaction: (
+    messageId: number,
+    emoji: string
+  ) => Promise<void>;
 };
 
 function getReplyPreviewText(message: Message) {
@@ -122,6 +126,7 @@ function ChatWindow({
   handleSaveEditedMessage,
   handleDeleteMessage,
   handleRemoveMessageAttachment,
+  handleToggleMessageReaction,
 }: ChatWindowProps) {
   return (
     <main className="chat">
@@ -223,6 +228,7 @@ function ChatWindow({
             handleSaveEditedMessage={handleSaveEditedMessage}
             handleDeleteMessage={handleDeleteMessage}
             handleRemoveMessageAttachment={handleRemoveMessageAttachment}
+            handleToggleMessageReaction={handleToggleMessageReaction}
           />
         ))}
 

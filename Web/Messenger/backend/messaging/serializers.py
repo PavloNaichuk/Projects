@@ -1,13 +1,26 @@
 from rest_framework import serializers
 
 from accounts.models import User
-from .models import Conversation, ConversationParticipant, Message
+from .models import Conversation, ConversationParticipant, Message, MessageReaction
 
 
 class UserShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "username", "email")
+
+
+class MessageReactionSerializer(serializers.ModelSerializer):
+    user = UserShortSerializer(read_only=True)
+
+    class Meta:
+        model = MessageReaction
+        fields = (
+            "id",
+            "user",
+            "emoji",
+            "created_at",
+        )
 
 
 class MessageReplySerializer(serializers.ModelSerializer):
@@ -63,6 +76,8 @@ class MessageSerializer(serializers.ModelSerializer):
     attachment_url = serializers.SerializerMethodField()
     attachment_is_image = serializers.SerializerMethodField()
 
+    reactions = serializers.SerializerMethodField()
+
     class Meta:
         model = Message
         fields = (
@@ -78,6 +93,7 @@ class MessageSerializer(serializers.ModelSerializer):
             "attachment_content_type",
             "attachment_size",
             "attachment_is_image",
+            "reactions",
             "created_at",
             "updated_at",
             "edited_at",
@@ -95,6 +111,7 @@ class MessageSerializer(serializers.ModelSerializer):
             "attachment_content_type",
             "attachment_size",
             "attachment_is_image",
+            "reactions",
             "created_at",
             "updated_at",
             "edited_at",
@@ -119,6 +136,34 @@ class MessageSerializer(serializers.ModelSerializer):
             return False
 
         return obj.attachment_content_type.startswith("image/")
+
+    def get_reactions(self, obj):
+        request = self.context.get("request")
+        current_user_id = None
+
+        if request and request.user and request.user.is_authenticated:
+            current_user_id = request.user.id
+
+        reactions_by_emoji = {}
+
+        for reaction in obj.reactions.select_related("user").all():
+            if reaction.emoji not in reactions_by_emoji:
+                reactions_by_emoji[reaction.emoji] = {
+                    "emoji": reaction.emoji,
+                    "count": 0,
+                    "reacted_by_me": False,
+                    "users": [],
+                }
+
+            reactions_by_emoji[reaction.emoji]["count"] += 1
+            reactions_by_emoji[reaction.emoji]["users"].append(
+                UserShortSerializer(reaction.user).data
+            )
+
+            if current_user_id and reaction.user_id == current_user_id:
+                reactions_by_emoji[reaction.emoji]["reacted_by_me"] = True
+
+        return list(reactions_by_emoji.values())
 
     def validate(self, attrs):
         text = attrs.get("text", "")
@@ -148,7 +193,6 @@ class MessageSerializer(serializers.ModelSerializer):
                     {"reply_to": ["Reply message not found."]}
                 )
 
-        # Editing existing message
         if self.instance:
             if "text" in attrs and not attrs["text"]:
                 raise serializers.ValidationError(
@@ -157,7 +201,6 @@ class MessageSerializer(serializers.ModelSerializer):
 
             return attrs
 
-        # Creating new message
         if not attrs.get("text") and not attachment:
             raise serializers.ValidationError(
                 {"text": ["Message text cannot be empty."]}
@@ -194,6 +237,7 @@ class ConversationSerializer(serializers.ModelSerializer):
         message = (
             obj.messages
             .select_related("sender", "reply_to", "reply_to__sender")
+            .prefetch_related("reactions__user")
             .order_by("-created_at", "-id")
             .first()
         )
