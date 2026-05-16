@@ -11,11 +11,13 @@ import {
 import { WS_BASE_URL } from "./api/config";
 import "./App.css";
 import {
+  deleteCurrentUserAvatar,
   getCurrentUser,
   login,
   logout,
   refreshAccessToken,
   register,
+  updateCurrentUserAvatar,
   type User,
 } from "./api/auth";
 import {
@@ -64,6 +66,19 @@ function getForwardPreviewText(message: Message) {
   }
 
   return "Message";
+}
+
+function addAvatarCacheBust(user: User): User {
+  if (!user.avatar_url) {
+    return user;
+  }
+
+  const separator = user.avatar_url.includes("?") ? "&" : "?";
+
+  return {
+    ...user,
+    avatar_url: `${user.avatar_url}${separator}v=${Date.now()}`,
+  };
 }
 
 function App() {
@@ -116,6 +131,8 @@ function App() {
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [isSearchingUsers, setIsSearchingUsers] = useState(false);
   const [userSearchError, setUserSearchError] = useState("");
+  const [avatarError, setAvatarError] = useState("");
+  const [isAvatarUpdating, setIsAvatarUpdating] = useState(false);
 
   const [messageSearchQuery, setMessageSearchQuery] = useState("");
   const [isMessageSearchActive, setIsMessageSearchActive] = useState(false);
@@ -191,6 +208,90 @@ function App() {
             unread_count: 0,
           }
         : previousConversation
+    );
+  }
+
+  function updateUserInMessage(message: Message, updatedUser: User): Message {
+    return {
+      ...message,
+      sender:
+        message.sender.id === updatedUser.id ? updatedUser : message.sender,
+      reply_to_message: message.reply_to_message
+        ? {
+            ...message.reply_to_message,
+            sender:
+              message.reply_to_message.sender.id === updatedUser.id
+                ? updatedUser
+                : message.reply_to_message.sender,
+          }
+        : null,
+      forwarded_from_message: message.forwarded_from_message
+        ? {
+            ...message.forwarded_from_message,
+            sender:
+              message.forwarded_from_message.sender.id === updatedUser.id
+                ? updatedUser
+                : message.forwarded_from_message.sender,
+          }
+        : null,
+      reactions: message.reactions.map((reaction) => ({
+        ...reaction,
+        users: reaction.users.map((user) =>
+          user.id === updatedUser.id ? updatedUser : user
+        ),
+      })),
+    };
+  }
+
+  function updateUserInState(updatedUser: User) {
+    setCurrentUser((previousUser) =>
+      previousUser?.id === updatedUser.id ? updatedUser : previousUser
+    );
+
+    setConversations((previousConversations) =>
+      previousConversations.map((conversation) => ({
+        ...conversation,
+        participants: conversation.participants.map((participant) =>
+          participant.user.id === updatedUser.id
+            ? {
+                ...participant,
+                user: updatedUser,
+              }
+            : participant
+        ),
+        last_message: conversation.last_message
+          ? updateUserInMessage(conversation.last_message, updatedUser)
+          : null,
+      }))
+    );
+
+    setSelectedConversation((previousConversation) =>
+      previousConversation
+        ? {
+            ...previousConversation,
+            participants: previousConversation.participants.map((participant) =>
+              participant.user.id === updatedUser.id
+                ? {
+                    ...participant,
+                    user: updatedUser,
+                  }
+                : participant
+            ),
+            last_message: previousConversation.last_message
+              ? updateUserInMessage(previousConversation.last_message, updatedUser)
+              : null,
+          }
+        : previousConversation
+    );
+
+    setMessages((previousMessages) =>
+      previousMessages.map((message) => updateUserInMessage(message, updatedUser))
+    );
+
+    setSearchResults((previousSearchResults) =>
+      previousSearchResults.map((user) =>
+        user.id === updatedUser.id ? updatedUser : user
+      )
     );
   }
 
@@ -372,6 +473,8 @@ function App() {
 
     setSearchResults([]);
     setUserSearchQuery("");
+    setAvatarError("");
+    setIsAvatarUpdating(false);
 
     setMessageSearchQuery("");
     setIsMessageSearchActive(false);
@@ -409,6 +512,59 @@ function App() {
     }
 
     clearSession();
+  }
+
+  async function handleCurrentUserAvatarChange(
+    event: ChangeEvent<HTMLInputElement>
+  ) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file || !accessToken) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setAvatarError("Avatar must be an image.");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      setAvatarError("Avatar file size must be 2 MB or less.");
+      return;
+    }
+
+    setIsAvatarUpdating(true);
+    setAvatarError("");
+
+    try {
+      const updatedUser = await updateCurrentUserAvatar(accessToken, file);
+      updateUserInState(addAvatarCacheBust(updatedUser));
+      await refreshConversations(accessToken);
+    } catch {
+      setAvatarError("Failed to update avatar.");
+    } finally {
+      setIsAvatarUpdating(false);
+    }
+  }
+
+  async function handleDeleteCurrentUserAvatar() {
+    if (!accessToken) {
+      return;
+    }
+
+    setIsAvatarUpdating(true);
+    setAvatarError("");
+
+    try {
+      const updatedUser = await deleteCurrentUserAvatar(accessToken);
+      updateUserInState(updatedUser);
+      await refreshConversations(accessToken);
+    } catch {
+      setAvatarError("Failed to delete avatar.");
+    } finally {
+      setIsAvatarUpdating(false);
+    }
   }
 
   function updateMessageInState(updatedMessage: Message) {
@@ -619,6 +775,14 @@ function App() {
 
       if (data.type === "conversation_deleted") {
         removeConversationFromState(data.conversation_id);
+        return;
+      }
+
+      if (data.type === "user_profile_updated") {
+        const updatedUser = addAvatarCacheBust(data.user as User);
+
+        updateUserInState(updatedUser);
+
         return;
       }
 
@@ -1346,8 +1510,12 @@ function App() {
         searchResults={searchResults}
         isSearchingUsers={isSearchingUsers}
         userSearchError={userSearchError}
+        avatarError={avatarError}
+        isAvatarUpdating={isAvatarUpdating}
         isDeletingConversationId={isDeletingConversationId}
         handleLogout={handleLogout}
+        handleCurrentUserAvatarChange={handleCurrentUserAvatarChange}
+        handleDeleteCurrentUserAvatar={handleDeleteCurrentUserAvatar}
         handleSearchUsers={handleSearchUsers}
         handleStartConversation={handleStartConversation}
         handleSelectConversation={handleSelectConversation}

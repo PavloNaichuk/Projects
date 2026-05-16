@@ -359,3 +359,13 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+        
+    async def user_profile_updated(self, event):
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "user_profile_updated",
+                    "user": event["user"],
+                }
+            )
+        )

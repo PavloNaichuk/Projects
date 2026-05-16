@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import type { User } from "../api/auth";
 import type {
   Conversation,
@@ -24,9 +24,15 @@ type SidebarProps = {
   searchResults: User[];
   isSearchingUsers: boolean;
   userSearchError: string;
+  avatarError: string;
+  isAvatarUpdating: boolean;
   isDeletingConversationId: number | null;
 
   handleLogout: () => Promise<void>;
+  handleCurrentUserAvatarChange: (
+    event: ChangeEvent<HTMLInputElement>
+  ) => Promise<void>;
+  handleDeleteCurrentUserAvatar: () => Promise<void>;
   handleSearchUsers: (event: FormEvent<HTMLFormElement>) => Promise<void>;
   handleStartConversation: (user: User) => Promise<void>;
   handleSelectConversation: (conversation: Conversation) => Promise<void>;
@@ -35,6 +41,28 @@ type SidebarProps = {
     mode: DeleteConversationMode
   ) => Promise<void>;
 };
+
+type UserAvatarProps = {
+  user: User;
+  size?: "small" | "medium" | "large";
+  isOnline?: boolean;
+};
+
+function UserAvatar({ user, size = "medium", isOnline = false }: UserAvatarProps) {
+  const initial = user.username.trim().charAt(0).toUpperCase() || "?";
+
+  return (
+    <span className={`user-avatar ${size}`}>
+      {user.avatar_url ? (
+        <img src={user.avatar_url} alt={user.username} />
+      ) : (
+        <span>{initial}</span>
+      )}
+
+      {isOnline && <span className="avatar-online-dot" />}
+    </span>
+  );
+}
 
 function Sidebar({
   currentUser,
@@ -46,8 +74,12 @@ function Sidebar({
   searchResults,
   isSearchingUsers,
   userSearchError,
+  avatarError,
+  isAvatarUpdating,
   isDeletingConversationId,
   handleLogout,
+  handleCurrentUserAvatarChange,
+  handleDeleteCurrentUserAvatar,
   handleSearchUsers,
   handleStartConversation,
   handleSelectConversation,
@@ -96,7 +128,41 @@ function Sidebar({
     <aside className="sidebar">
       <div className="sidebar-header">
         <h1>Messenger</h1>
-        <p>Logged in as {currentUser.username}</p>
+
+        <div className="sidebar-profile">
+          <UserAvatar user={currentUser} size="large" />
+
+          <div className="sidebar-profile-info">
+            <p>{currentUser.username}</p>
+            <span>{currentUser.email}</span>
+          </div>
+        </div>
+
+        <div className="avatar-actions">
+          <label className="avatar-upload-button">
+            {isAvatarUpdating ? "Uploading..." : "Change avatar"}
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={handleCurrentUserAvatarChange}
+              disabled={isAvatarUpdating}
+            />
+          </label>
+
+          {currentUser.avatar_url && (
+            <button
+              type="button"
+              className="avatar-delete-button"
+              onClick={handleDeleteCurrentUserAvatar}
+              disabled={isAvatarUpdating}
+            >
+              Remove avatar
+            </button>
+          )}
+        </div>
+
+        {avatarError && <div className="sidebar-error">{avatarError}</div>}
+
         <button className="logout-button" type="button" onClick={handleLogout}>
           Logout
         </button>
@@ -127,8 +193,12 @@ function Sidebar({
               className="user-search-item"
               onClick={() => handleStartConversation(user)}
             >
-              <span className="user-search-name">{user.username}</span>
-              <span className="user-search-email">{user.email}</span>
+              <UserAvatar user={user} size="small" />
+
+              <span className="user-search-text">
+                <span className="user-search-name">{user.username}</span>
+                <span className="user-search-email">{user.email}</span>
+              </span>
             </button>
           ))}
         </div>
@@ -143,6 +213,8 @@ function Sidebar({
           const otherParticipant = conversation.participants.find(
             (participant) => participant.user.id !== currentUser.id
           );
+
+          const conversationUser = otherParticipant?.user ?? currentUser;
 
           const isOnline = otherParticipant
             ? onlineUserIds.includes(otherParticipant.user.id)
@@ -168,23 +240,32 @@ function Sidebar({
                   handleSelectConversation(conversation);
                 }}
               >
-                <div className="conversation-name">
-                  <span>{getConversationName(conversation, currentUser)}</span>
-                  {isOnline && <span className="online-dot" title="Online" />}
-                </div>
+                <UserAvatar
+                  user={conversationUser}
+                  size="medium"
+                  isOnline={isOnline}
+                />
 
-                <div className="conversation-preview">
-                  <span className="conversation-last-message">
-                    {conversation.last_message?.is_deleted
-                      ? "This message was deleted"
-                      : conversation.last_message?.text || "No messages yet"}
-                  </span>
+                <div className="conversation-content">
+                  <div className="conversation-name">
+                    <span>{getConversationName(conversation, currentUser)}</span>
+                  </div>
 
-                  {conversation.last_message && (
-                    <span className="conversation-time">
-                      {formatShortTime(conversation.last_message.created_at)}
+                  <div className="conversation-preview">
+                    <span className="conversation-last-message">
+                      {conversation.last_message?.is_deleted
+                        ? "This message was deleted"
+                        : conversation.last_message?.text ||
+                          conversation.last_message?.attachment_name ||
+                          "No messages yet"}
                     </span>
-                  )}
+
+                    {conversation.last_message && (
+                      <span className="conversation-time">
+                        {formatShortTime(conversation.last_message.created_at)}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {conversation.unread_count > 0 && (

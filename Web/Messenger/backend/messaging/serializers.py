@@ -5,9 +5,22 @@ from .models import Conversation, ConversationParticipant, Message, MessageReact
 
 
 class UserShortSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ("id", "username", "email")
+        fields = ("id", "username", "email", "avatar_url")
+
+    def get_avatar_url(self, obj):
+        if not obj.avatar:
+            return None
+
+        request = self.context.get("request")
+
+        if request:
+            return request.build_absolute_uri(obj.avatar.url)
+
+        return obj.avatar.url
 
 
 class MessageReactionSerializer(serializers.ModelSerializer):
@@ -176,7 +189,10 @@ class MessageSerializer(serializers.ModelSerializer):
 
             reactions_by_emoji[reaction.emoji]["count"] += 1
             reactions_by_emoji[reaction.emoji]["users"].append(
-                UserShortSerializer(reaction.user).data
+                UserShortSerializer(
+                    reaction.user,
+                    context=self.context,
+                ).data
             )
 
             if current_user_id and reaction.user_id == current_user_id:

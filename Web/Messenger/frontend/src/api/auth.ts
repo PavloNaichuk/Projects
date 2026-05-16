@@ -4,6 +4,7 @@ export type User = {
   id: number;
   username: string;
   email: string;
+  avatar_url: string | null;
 };
 
 export type LoginResponse = {
@@ -119,6 +120,45 @@ export async function getCurrentUser(accessToken: string): Promise<User> {
 
   if (!response.ok) {
     throw new Error("Failed to load current user.");
+  }
+
+  return response.json();
+}
+
+export async function updateCurrentUserAvatar(
+  accessToken: string,
+  avatar: File
+): Promise<User> {
+  const formData = new FormData();
+  formData.append("avatar", avatar);
+
+  const response = await fetch(`${API_BASE_URL}/auth/me/avatar/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update avatar.");
+  }
+
+  return response.json();
+}
+
+export async function deleteCurrentUserAvatar(
+  accessToken: string
+): Promise<User> {
+  const response = await fetch(`${API_BASE_URL}/auth/me/avatar/`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete avatar.");
   }
 
   return response.json();

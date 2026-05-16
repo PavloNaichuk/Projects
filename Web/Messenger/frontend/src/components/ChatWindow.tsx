@@ -67,6 +67,27 @@ type ChatWindowProps = {
   ) => Promise<void>;
 };
 
+type UserAvatarProps = {
+  user: User;
+  isOnline?: boolean;
+};
+
+function UserAvatar({ user, isOnline = false }: UserAvatarProps) {
+  const initial = user.username.trim().charAt(0).toUpperCase() || "?";
+
+  return (
+    <span className="user-avatar medium">
+      {user.avatar_url ? (
+        <img src={user.avatar_url} alt={user.username} />
+      ) : (
+        <span>{initial}</span>
+      )}
+
+      {isOnline && <span className="avatar-online-dot" />}
+    </span>
+  );
+}
+
 function getReplyPreviewText(message: Message) {
   if (message.is_deleted) {
     return "This message was deleted";
@@ -133,23 +154,34 @@ function ChatWindow({
   return (
     <main className="chat">
       <header className="chat-header">
-        <div>
-          <h2>{selectedConversationName}</h2>
-
+        <div className="chat-header-user">
           {selectedConversationUser && (
-            <>
-              <p className="chat-user-email">{selectedConversationUser.email}</p>
-              <p
-                className={
-                  selectedConversationUserIsOnline
-                    ? "chat-user-status online"
-                    : "chat-user-status offline"
-                }
-              >
-                {selectedConversationUserIsOnline ? "Online" : "Offline"}
-              </p>
-            </>
+            <UserAvatar
+              user={selectedConversationUser}
+              isOnline={selectedConversationUserIsOnline}
+            />
           )}
+
+          <div>
+            <h2>{selectedConversationName}</h2>
+
+            {selectedConversationUser && (
+              <>
+                <p className="chat-user-email">
+                  {selectedConversationUser.email}
+                </p>
+                <p
+                  className={
+                    selectedConversationUserIsOnline
+                      ? "chat-user-status online"
+                      : "chat-user-status offline"
+                  }
+                >
+                  {selectedConversationUserIsOnline ? "Online" : "Offline"}
+                </p>
+              </>
+            )}
+          </div>
         </div>
 
         <form className="message-search-form" onSubmit={handleSearchMessages}>

@@ -4,11 +4,83 @@ from .models import User
 
 
 class UserSearchSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ("id", "username", "email")
-        
+        fields = ("id", "username", "email", "avatar_url")
+
+    def get_avatar_url(self, obj):
+        if not obj.avatar:
+            return None
+
+        request = self.context.get("request")
+
+        if request:
+            return request.build_absolute_uri(obj.avatar.url)
+
+        return obj.avatar.url
+
+
+class UserSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ("id", "username", "email", "avatar_url")
+
+    def get_avatar_url(self, obj):
+        if not obj.avatar:
+            return None
+
+        request = self.context.get("request")
+
+        if request:
+            return request.build_absolute_uri(obj.avatar.url)
+
+        return obj.avatar.url
+
+
+class UserAvatarSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ("id", "username", "email", "avatar", "avatar_url")
+        read_only_fields = ("id", "username", "email", "avatar_url")
+
+    def get_avatar_url(self, obj):
+        if not obj.avatar:
+            return None
+
+        request = self.context.get("request")
+
+        if request:
+            return request.build_absolute_uri(obj.avatar.url)
+
+        return obj.avatar.url
+
+    def validate_avatar(self, value):
+        allowed_content_types = ("image/jpeg", "image/png", "image/webp")
+
+        if value.content_type not in allowed_content_types:
+            raise serializers.ValidationError(
+                "Avatar must be a JPG, PNG, or WEBP image."
+            )
+
+        max_size = 2 * 1024 * 1024
+
+        if value.size > max_size:
+            raise serializers.ValidationError(
+                "Avatar file size must be 2 MB or less."
+            )
+
+        return value
+
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
     username = serializers.CharField(
         required=True,
         error_messages={
@@ -43,8 +115,26 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "password", "password_confirm")
-        read_only_fields = ("id",)
+        fields = (
+            "id",
+            "username",
+            "email",
+            "avatar_url",
+            "password",
+            "password_confirm",
+        )
+        read_only_fields = ("id", "avatar_url")
+
+    def get_avatar_url(self, obj):
+        if not obj.avatar:
+            return None
+
+        request = self.context.get("request")
+
+        if request:
+            return request.build_absolute_uri(obj.avatar.url)
+
+        return obj.avatar.url
 
     def validate_username(self, value):
         value = value.strip()
@@ -78,10 +168,5 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             email=validated_data["email"],
             password=validated_data["password"],
         )
+
         return user
-    
-    CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-    },
-}
