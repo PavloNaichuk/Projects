@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { User } from "../api/auth";
 import type { Message, MessageReply } from "../api/conversations";
 import {
@@ -137,6 +137,10 @@ function MessageBubble({
   handleRemoveMessageAttachment,
   handleToggleMessageReaction,
 }: MessageBubbleProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const messageRowRef = useRef<HTMLDivElement | null>(null);
+
   const shouldShowDateSeparator =
     !previousMessage ||
     !isSameMessageDate(previousMessage.created_at, message.created_at);
@@ -146,9 +150,47 @@ function MessageBubble({
   const hasText = Boolean(message.text.trim());
   const hasAttachment = Boolean(message.attachment_url);
   const hasReactions = message.reactions.length > 0;
+  const isDeleting = isDeletingMessageId === message.id;
+
+  useEffect(() => {
+    if (!isMenuOpen) {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      messageRowRef.current?.scrollIntoView({
+        block: "center",
+        behavior: "smooth",
+      });
+    });
+
+    function handleDocumentClick(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleDocumentClick);
+    document.addEventListener("keydown", handleEscapeKey);
+
+    return () => {
+      document.removeEventListener("mousedown", handleDocumentClick);
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, [isMenuOpen]);
+
+  function closeMenu() {
+    setIsMenuOpen(false);
+  }
 
   return (
-    <div className="message-row">
+    <div className="message-row" ref={messageRowRef}>
       {shouldShowDateSeparator && (
         <div className="date-separator">
           {formatMessageDate(message.created_at)}
@@ -274,6 +316,98 @@ function MessageBubble({
                     ))}
                   </div>
                 )}
+
+                <div className="message-toolbar" ref={menuRef}>
+                  <div className="message-toolbar-reactions">
+                    {REACTION_EMOJIS.map((emoji) => (
+                      <button
+                        key={emoji}
+                        type="button"
+                        onClick={() =>
+                          handleToggleMessageReaction(message.id, emoji)
+                        }
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    className={
+                      isMenuOpen
+                        ? "message-menu-button active"
+                        : "message-menu-button"
+                    }
+                    onClick={() => setIsMenuOpen((value) => !value)}
+                    aria-label="Message actions"
+                  >
+                    ⋯
+                  </button>
+
+                  {isMenuOpen && (
+                    <div className="message-context-menu">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          closeMenu();
+                          handleStartReplyMessage(message);
+                        }}
+                      >
+                        Reply
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          closeMenu();
+                          handleStartForwardMessage(message);
+                        }}
+                      >
+                        Forward
+                      </button>
+
+                      {isOwnMessage && hasText && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            closeMenu();
+                            handleStartEditMessage(message);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      )}
+
+                      {isOwnMessage && hasAttachment && hasText && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            closeMenu();
+                            handleRemoveMessageAttachment(message.id);
+                          }}
+                          disabled={isDeleting}
+                        >
+                          {isDeleting ? "Deleting..." : "Delete file"}
+                        </button>
+                      )}
+
+                      {isOwnMessage && (
+                        <button
+                          type="button"
+                          className="danger"
+                          onClick={() => {
+                            closeMenu();
+                            handleDeleteMessage(message.id);
+                          }}
+                          disabled={isDeleting}
+                        >
+                          {isDeleting ? "Deleting..." : "Delete"}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </>
             )}
 
@@ -286,77 +420,12 @@ function MessageBubble({
                 {formatMessageTime(message.created_at)}
               </span>
 
-            {isOwnMessage && !message.is_deleted && (
+              {isOwnMessage && !message.is_deleted && (
                 <span className="message-read-status">
                   {getMessageStatus(message)}
                 </span>
               )}
             </div>
-
-            {!message.is_deleted && (
-              <>
-                <div className="message-reaction-picker">
-                  {REACTION_EMOJIS.map((emoji) => (
-                    <button
-                      key={emoji}
-                      type="button"
-                      onClick={() => handleToggleMessageReaction(message.id, emoji)}
-                    >
-                      {emoji}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="message-actions">
-                  <button
-                    type="button"
-                    onClick={() => handleStartReplyMessage(message)}
-                  >
-                    Reply
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleStartForwardMessage(message)}
-                  >
-                    Forward
-                  </button>
-
-                  {isOwnMessage && hasText && (
-                    <button
-                      type="button"
-                      onClick={() => handleStartEditMessage(message)}
-                    >
-                      Edit
-                    </button>
-                  )}
-
-                  {isOwnMessage && hasAttachment && hasText && (
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveMessageAttachment(message.id)}
-                      disabled={isDeletingMessageId === message.id}
-                    >
-                      {isDeletingMessageId === message.id
-                        ? "Deleting..."
-                        : "Delete file"}
-                    </button>
-                  )}
-
-                  {isOwnMessage && (
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteMessage(message.id)}
-                      disabled={isDeletingMessageId === message.id}
-                    >
-                      {isDeletingMessageId === message.id
-                        ? "Deleting..."
-                        : "Delete"}
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
           </>
         )}
       </div>

@@ -327,7 +327,7 @@ function ChatWindow({
           />
         ))}
 
-        <div ref={messagesEndRef} />
+        <div className="messages-end-spacer" ref={messagesEndRef} />
       </section>
 
       {typingUser && (
