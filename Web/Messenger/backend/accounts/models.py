@@ -9,6 +9,7 @@ class User(AbstractUser):
         null=True,
         blank=True,
     )
+    last_seen_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.username

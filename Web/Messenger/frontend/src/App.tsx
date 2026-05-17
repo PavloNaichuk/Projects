@@ -295,6 +295,127 @@ function App() {
     );
   }
 
+  function updateUserLastSeenInMessage(message: Message, updatedUser: User): Message {
+    return {
+      ...message,
+      sender:
+        message.sender.id === updatedUser.id
+          ? {
+              ...message.sender,
+              last_seen_at: updatedUser.last_seen_at,
+            }
+          : message.sender,
+      reply_to_message: message.reply_to_message
+        ? {
+            ...message.reply_to_message,
+            sender:
+              message.reply_to_message.sender.id === updatedUser.id
+                ? {
+                    ...message.reply_to_message.sender,
+                    last_seen_at: updatedUser.last_seen_at,
+                  }
+                : message.reply_to_message.sender,
+          }
+        : null,
+      forwarded_from_message: message.forwarded_from_message
+        ? {
+            ...message.forwarded_from_message,
+            sender:
+              message.forwarded_from_message.sender.id === updatedUser.id
+                ? {
+                    ...message.forwarded_from_message.sender,
+                    last_seen_at: updatedUser.last_seen_at,
+                  }
+                : message.forwarded_from_message.sender,
+          }
+        : null,
+      reactions: message.reactions.map((reaction) => ({
+        ...reaction,
+        users: reaction.users.map((user) =>
+          user.id === updatedUser.id
+            ? {
+                ...user,
+                last_seen_at: updatedUser.last_seen_at,
+              }
+            : user
+        ),
+      })),
+    };
+  }
+
+  function updateUserLastSeenInState(updatedUser: User) {
+    setCurrentUser((previousUser) =>
+      previousUser?.id === updatedUser.id
+        ? {
+            ...previousUser,
+            last_seen_at: updatedUser.last_seen_at,
+          }
+        : previousUser
+    );
+
+    setConversations((previousConversations) =>
+      previousConversations.map((conversation) => ({
+        ...conversation,
+        participants: conversation.participants.map((participant) =>
+          participant.user.id === updatedUser.id
+            ? {
+                ...participant,
+                user: {
+                  ...participant.user,
+                  last_seen_at: updatedUser.last_seen_at,
+                },
+              }
+            : participant
+        ),
+        last_message: conversation.last_message
+          ? updateUserLastSeenInMessage(conversation.last_message, updatedUser)
+          : null,
+      }))
+    );
+
+    setSelectedConversation((previousConversation) =>
+      previousConversation
+        ? {
+            ...previousConversation,
+            participants: previousConversation.participants.map((participant) =>
+              participant.user.id === updatedUser.id
+                ? {
+                    ...participant,
+                    user: {
+                      ...participant.user,
+                      last_seen_at: updatedUser.last_seen_at,
+                    },
+                  }
+                : participant
+            ),
+            last_message: previousConversation.last_message
+              ? updateUserLastSeenInMessage(
+                  previousConversation.last_message,
+                  updatedUser
+                )
+              : null,
+          }
+        : previousConversation
+    );
+
+    setMessages((previousMessages) =>
+      previousMessages.map((message) =>
+        updateUserLastSeenInMessage(message, updatedUser)
+      )
+    );
+
+    setSearchResults((previousSearchResults) =>
+      previousSearchResults.map((user) =>
+        user.id === updatedUser.id
+          ? {
+              ...user,
+              last_seen_at: updatedUser.last_seen_at,
+            }
+          : user
+      )
+    );
+  }
+
   function removeConversationFromState(conversationId: number) {
     setConversations((previousConversations) =>
       previousConversations.filter(
@@ -794,6 +915,8 @@ function App() {
       if (data.type === "online_status") {
         const user = data.user as User;
 
+        updateUserLastSeenInState(user);
+
         setOnlineUserIds((previousOnlineUserIds) => {
           if (data.is_online) {
             if (previousOnlineUserIds.includes(user.id)) {
@@ -805,6 +928,8 @@ function App() {
 
           return previousOnlineUserIds.filter((userId) => userId !== user.id);
         });
+
+        return;
       }
     };
 

@@ -5,6 +5,7 @@ export type User = {
   username: string;
   email: string;
   avatar_url: string | null;
+  last_seen_at: string | null;
 };
 
 export type LoginResponse = {

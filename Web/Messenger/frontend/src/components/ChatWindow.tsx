@@ -88,6 +88,69 @@ function UserAvatar({ user, isOnline = false }: UserAvatarProps) {
   );
 }
 
+function formatTime(date: Date) {
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${hours}:${minutes}`;
+}
+
+function isSameDate(firstDate: Date, secondDate: Date) {
+  return (
+    firstDate.getFullYear() === secondDate.getFullYear() &&
+    firstDate.getMonth() === secondDate.getMonth() &&
+    firstDate.getDate() === secondDate.getDate()
+  );
+}
+
+function formatLastSeen(lastSeenAt: string | null) {
+  if (!lastSeenAt) {
+    return "Last seen unknown";
+  }
+
+  const lastSeenDate = new Date(lastSeenAt);
+
+  if (Number.isNaN(lastSeenDate.getTime())) {
+    return "Last seen unknown";
+  }
+
+  const now = new Date();
+  const diffInMs = now.getTime() - lastSeenDate.getTime();
+  const diffInMinutes = Math.floor(diffInMs / 60000);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+
+  if (diffInMinutes < 1) {
+    return "Last seen just now";
+  }
+
+  if (diffInMinutes < 60) {
+    return `Last seen ${diffInMinutes} ${
+      diffInMinutes === 1 ? "minute" : "minutes"
+    } ago`;
+  }
+
+  if (diffInHours < 24) {
+    return `Last seen ${diffInHours} ${
+      diffInHours === 1 ? "hour" : "hours"
+    } ago`;
+  }
+
+  if (isSameDate(lastSeenDate, now)) {
+    return `Last seen today at ${formatTime(lastSeenDate)}`;
+  }
+
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+
+  if (isSameDate(lastSeenDate, yesterday)) {
+    return `Last seen yesterday at ${formatTime(lastSeenDate)}`;
+  }
+
+  return `Last seen ${lastSeenDate.toLocaleDateString()} at ${formatTime(
+    lastSeenDate
+  )}`;
+}
+
 function getReplyPreviewText(message: Message) {
   if (message.is_deleted) {
     return "This message was deleted";
@@ -177,7 +240,9 @@ function ChatWindow({
                       : "chat-user-status offline"
                   }
                 >
-                  {selectedConversationUserIsOnline ? "Online" : "Offline"}
+                  {selectedConversationUserIsOnline
+                    ? "Online"
+                    : formatLastSeen(selectedConversationUser.last_seen_at)}
                 </p>
               </>
             )}

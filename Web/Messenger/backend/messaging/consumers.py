@@ -2,11 +2,32 @@ import json
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.utils import timezone
 
 from .models import Conversation, ConversationParticipant, Message
 from .serializers import MessageSerializer
 
 ACTIVE_USER_CONNECTIONS = {}
+
+
+def serialize_user_for_status(user):
+    avatar_url = None
+
+    if user.avatar:
+        avatar_url = user.avatar.url
+
+    last_seen_at = None
+
+    if user.last_seen_at:
+        last_seen_at = user.last_seen_at.isoformat()
+
+    return {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "avatar_url": avatar_url,
+        "last_seen_at": last_seen_at,
+    }
 
 
 @database_sync_to_async
@@ -61,12 +82,21 @@ def create_message(conversation_id, user, text, reply_to_id=None):
             "sender",
             "reply_to",
             "reply_to__sender",
+            "forwarded_from",
+            "forwarded_from__sender",
         )
         .prefetch_related("reactions__user")
         .get(id=message.id)
     )
 
     return MessageSerializer(message).data, None
+
+
+@database_sync_to_async
+def update_user_last_seen(user):
+    user.last_seen_at = timezone.now()
+    user.save(update_fields=["last_seen_at"])
+    return serialize_user_for_status(user)
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -117,11 +147,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     "type": "typing_event",
-                    "user": {
-                        "id": self.user.id,
-                        "username": self.user.username,
-                        "email": self.user.email,
-                    },
+                    "user": serialize_user_for_status(self.user),
                     "is_typing": bool(data.get("is_typing", False)),
                 },
             )
@@ -134,11 +160,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     "type": "read_event",
-                    "user": {
-                        "id": self.user.id,
-                        "username": self.user.username,
-                        "email": self.user.email,
-                    },
+                    "user": serialize_user_for_status(self.user),
                     "updated_count": updated_count,
                 },
             )
@@ -293,7 +315,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
             if current_connection_count <= 1:
                 ACTIVE_USER_CONNECTIONS.pop(self.user.id, None)
-                await self.broadcast_online_status_to_partners(False)
+                user_data = await update_user_last_seen(self.user)
+                await self.broadcast_online_status_to_partners(False, user_data)
             else:
                 ACTIVE_USER_CONNECTIONS[self.user.id] = current_connection_count - 1
 
@@ -312,19 +335,18 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             .distinct()
         )
 
-    async def broadcast_online_status_to_partners(self, is_online):
+    async def broadcast_online_status_to_partners(self, is_online, user_data=None):
         partner_ids = await self.get_conversation_partner_ids()
+
+        if user_data is None:
+            user_data = serialize_user_for_status(self.user)
 
         for partner_id in partner_ids:
             await self.channel_layer.group_send(
                 f"user_{partner_id}_notifications",
                 {
                     "type": "online_status",
-                    "user": {
-                        "id": self.user.id,
-                        "username": self.user.username,
-                        "email": self.user.email,
-                    },
+                    "user": user_data,
                     "is_online": is_online,
                 },
             )
@@ -359,7 +381,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
-        
+
     async def user_profile_updated(self, event):
         await self.send(
             text_data=json.dumps(

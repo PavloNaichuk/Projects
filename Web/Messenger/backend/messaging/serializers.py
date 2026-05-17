@@ -9,7 +9,7 @@ class UserShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "avatar_url")
+        fields = ("id", "username", "email", "avatar_url", "last_seen_at")
 
     def get_avatar_url(self, obj):
         if not obj.avatar:

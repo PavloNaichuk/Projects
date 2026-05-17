@@ -8,7 +8,7 @@ class UserSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "avatar_url")
+        fields = ("id", "username", "email", "avatar_url", "last_seen_at")
 
     def get_avatar_url(self, obj):
         if not obj.avatar:
@@ -27,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "avatar_url")
+        fields = ("id", "username", "email", "avatar_url", "last_seen_at")
 
     def get_avatar_url(self, obj):
         if not obj.avatar:
@@ -46,8 +46,21 @@ class UserAvatarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "avatar", "avatar_url")
-        read_only_fields = ("id", "username", "email", "avatar_url")
+        fields = (
+            "id",
+            "username",
+            "email",
+            "avatar",
+            "avatar_url",
+            "last_seen_at",
+        )
+        read_only_fields = (
+            "id",
+            "username",
+            "email",
+            "avatar_url",
+            "last_seen_at",
+        )
 
     def get_avatar_url(self, obj):
         if not obj.avatar:
@@ -120,10 +133,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "username",
             "email",
             "avatar_url",
+            "last_seen_at",
             "password",
             "password_confirm",
         )
-        read_only_fields = ("id", "avatar_url")
+        read_only_fields = ("id", "avatar_url", "last_seen_at")
 
     def get_avatar_url(self, obj):
         if not obj.avatar:
