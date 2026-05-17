@@ -23,6 +23,37 @@ export type RefreshTokenResponse = {
   access: string;
 };
 
+export type UpdateCurrentUserProfileData = {
+  username: string;
+  email: string;
+};
+
+function getApiErrorMessage(errorData: unknown) {
+  if (!errorData || typeof errorData !== "object") {
+    return "Request failed.";
+  }
+
+  const fieldLabels: Record<string, string> = {
+    username: "Username",
+    email: "Email",
+    password: "Password",
+    password_confirm: "Confirm password",
+    non_field_errors: "Error",
+  };
+
+  return Object.entries(errorData)
+    .map(([field, value]) => {
+      const label = fieldLabels[field] ?? field;
+
+      if (Array.isArray(value)) {
+        return `${label}: ${value.join(", ")}`;
+      }
+
+      return `${label}: ${String(value)}`;
+    })
+    .join("\n");
+}
+
 export async function login(
   username: string,
   password: string
@@ -65,27 +96,7 @@ export async function register(
     const errorData = await response.json().catch(() => null);
 
     if (errorData) {
-      const fieldLabels: Record<string, string> = {
-        username: "Username",
-        email: "Email",
-        password: "Password",
-        password_confirm: "Confirm password",
-        non_field_errors: "Error",
-      };
-
-      const errorMessages = Object.entries(errorData)
-        .map(([field, value]) => {
-          const label = fieldLabels[field] ?? field;
-
-          if (Array.isArray(value)) {
-            return `${label}: ${value.join(", ")}`;
-          }
-
-          return `${label}: ${String(value)}`;
-        })
-        .join("\n");
-
-      throw new Error(errorMessages);
+      throw new Error(getApiErrorMessage(errorData));
     }
 
     throw new Error("Failed to create account.");
@@ -121,6 +132,32 @@ export async function getCurrentUser(accessToken: string): Promise<User> {
 
   if (!response.ok) {
     throw new Error("Failed to load current user.");
+  }
+
+  return response.json();
+}
+
+export async function updateCurrentUserProfile(
+  accessToken: string,
+  data: UpdateCurrentUserProfileData
+): Promise<User> {
+  const response = await fetch(`${API_BASE_URL}/auth/me/profile/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    if (errorData) {
+      throw new Error(getApiErrorMessage(errorData));
+    }
+
+    throw new Error("Failed to update profile.");
   }
 
   return response.json();

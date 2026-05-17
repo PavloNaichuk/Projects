@@ -40,7 +40,46 @@ class UserSerializer(serializers.ModelSerializer):
 
         return obj.avatar.url
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "username", "email", "avatar_url", "last_seen_at")
+        read_only_fields = ("id", "avatar_url", "last_seen_at")
 
+    avatar_url = serializers.SerializerMethodField()
+
+    def get_avatar_url(self, obj):
+        if not obj.avatar:
+            return None
+
+        request = self.context.get("request")
+
+        if request:
+            return request.build_absolute_uri(obj.avatar.url)
+
+        return obj.avatar.url
+
+    def validate_username(self, value):
+        value = value.strip()
+
+        if not value:
+            raise serializers.ValidationError("Username is required.")
+
+        if User.objects.exclude(id=self.instance.id).filter(username=value).exists():
+            raise serializers.ValidationError("User with this username already exists.")
+
+        return value
+
+    def validate_email(self, value):
+        value = value.lower().strip()
+
+        if not value:
+            raise serializers.ValidationError("Email is required.")
+
+        if User.objects.exclude(id=self.instance.id).filter(email=value).exists():
+            raise serializers.ValidationError("User with this email already exists.")
+
+        return value
 class UserAvatarSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
 

@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import type { User } from "../api/auth";
 import type {
   Conversation,
@@ -24,15 +24,10 @@ type SidebarProps = {
   searchResults: User[];
   isSearchingUsers: boolean;
   userSearchError: string;
-  avatarError: string;
-  isAvatarUpdating: boolean;
   isDeletingConversationId: number | null;
 
   handleLogout: () => Promise<void>;
-  handleCurrentUserAvatarChange: (
-    event: ChangeEvent<HTMLInputElement>
-  ) => Promise<void>;
-  handleDeleteCurrentUserAvatar: () => Promise<void>;
+  handleOpenProfileSettings: () => void;
   handleSearchUsers: (event: FormEvent<HTMLFormElement>) => Promise<void>;
   handleStartConversation: (user: User) => Promise<void>;
   handleSelectConversation: (conversation: Conversation) => Promise<void>;
@@ -74,12 +69,9 @@ function Sidebar({
   searchResults,
   isSearchingUsers,
   userSearchError,
-  avatarError,
-  isAvatarUpdating,
   isDeletingConversationId,
   handleLogout,
-  handleCurrentUserAvatarChange,
-  handleDeleteCurrentUserAvatar,
+  handleOpenProfileSettings,
   handleSearchUsers,
   handleStartConversation,
   handleSelectConversation,
@@ -129,38 +121,18 @@ function Sidebar({
       <div className="sidebar-header">
         <h1>Messenger</h1>
 
-        <div className="sidebar-profile">
+        <button
+          type="button"
+          className="sidebar-profile-button"
+          onClick={handleOpenProfileSettings}
+        >
           <UserAvatar user={currentUser} size="large" />
 
           <div className="sidebar-profile-info">
             <p>{currentUser.username}</p>
+            <span>Profile settings</span>
           </div>
-        </div>
-
-        <div className="avatar-actions">
-          <label className="avatar-upload-button">
-            {isAvatarUpdating ? "Uploading..." : "Change avatar"}
-            <input
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              onChange={handleCurrentUserAvatarChange}
-              disabled={isAvatarUpdating}
-            />
-          </label>
-
-          {currentUser.avatar_url && (
-            <button
-              type="button"
-              className="avatar-delete-button"
-              onClick={handleDeleteCurrentUserAvatar}
-              disabled={isAvatarUpdating}
-            >
-              Remove avatar
-            </button>
-          )}
-        </div>
-
-        {avatarError && <div className="sidebar-error">{avatarError}</div>}
+        </button>
 
         <button className="logout-button" type="button" onClick={handleLogout}>
           Logout
@@ -289,9 +261,7 @@ function Sidebar({
                   <div className="conversation-menu">
                     <button
                       type="button"
-                      onClick={() =>
-                        openDeleteConfirm(conversation, "for_me")
-                      }
+                      onClick={() => openDeleteConfirm(conversation, "for_me")}
                       disabled={isDeleting}
                     >
                       {isDeleting ? "Deleting..." : "Delete for me"}

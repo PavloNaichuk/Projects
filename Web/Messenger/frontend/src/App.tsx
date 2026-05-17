@@ -18,6 +18,7 @@ import {
   refreshAccessToken,
   register,
   updateCurrentUserAvatar,
+  updateCurrentUserProfile,
   type User,
 } from "./api/auth";
 import {
@@ -40,6 +41,7 @@ import { searchUsers } from "./api/users";
 import AuthPage from "./components/AuthPage";
 import ChatWindow from "./components/ChatWindow";
 import Sidebar from "./components/Sidebar";
+import ProfileSettingsModal from "./components/ProfileSettingsModal";
 import {
   getConversationName,
   getOtherParticipant,
@@ -133,6 +135,12 @@ function App() {
   const [userSearchError, setUserSearchError] = useState("");
   const [avatarError, setAvatarError] = useState("");
   const [isAvatarUpdating, setIsAvatarUpdating] = useState(false);
+  const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
+  const [profileError, setProfileError] = useState("");
+  const [isProfileUpdating, setIsProfileUpdating] = useState(false);
+  const [isNotificationSoundEnabled, setIsNotificationSoundEnabled] = useState(
+    () => localStorage.getItem("notificationSoundEnabled") !== "false"
+  );
 
   const [messageSearchQuery, setMessageSearchQuery] = useState("");
   const [isMessageSearchActive, setIsMessageSearchActive] = useState(false);
@@ -596,6 +604,9 @@ function App() {
     setUserSearchQuery("");
     setAvatarError("");
     setIsAvatarUpdating(false);
+    setIsProfileSettingsOpen(false);
+    setProfileError("");
+    setIsProfileUpdating(false);
 
     setMessageSearchQuery("");
     setIsMessageSearchActive(false);
@@ -686,6 +697,47 @@ function App() {
     } finally {
       setIsAvatarUpdating(false);
     }
+  }
+
+  async function handleUpdateCurrentUserProfile(username: string, email: string) {
+    if (!accessToken) {
+      return;
+    }
+
+    const trimmedUsername = username.trim();
+    const trimmedEmail = email.trim();
+
+    if (!trimmedUsername || !trimmedEmail) {
+      setProfileError("Username and email are required.");
+      return;
+    }
+
+    setIsProfileUpdating(true);
+    setProfileError("");
+
+    try {
+      const updatedUser = await updateCurrentUserProfile(accessToken, {
+        username: trimmedUsername,
+        email: trimmedEmail,
+      });
+
+      updateUserInState(addAvatarCacheBust(updatedUser));
+      await refreshConversations(accessToken);
+      setIsProfileSettingsOpen(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        setProfileError(error.message);
+      } else {
+        setProfileError("Failed to update profile.");
+      }
+    } finally {
+      setIsProfileUpdating(false);
+    }
+  }
+
+  function handleToggleNotificationSound(isEnabled: boolean) {
+    setIsNotificationSoundEnabled(isEnabled);
+    localStorage.setItem("notificationSoundEnabled", String(isEnabled));
   }
 
   function updateMessageInState(updatedMessage: Message) {
@@ -805,7 +857,11 @@ function App() {
 
   const playIncomingMessageSound = useCallback(
     (message: Message) => {
-      if (!currentUserId || message.sender.id === currentUserId) {
+      if (
+        !isNotificationSoundEnabled ||
+        !currentUserId ||
+        message.sender.id === currentUserId
+      ) {
         return;
       }
 
@@ -833,7 +889,7 @@ function App() {
         console.warn("Notification sound was blocked by the browser.");
       });
     },
-    [currentUserId, getNotificationAudio]
+    [currentUserId, getNotificationAudio, isNotificationSoundEnabled]
   );
 
   useEffect(() => {
@@ -1685,12 +1741,9 @@ function App() {
         searchResults={searchResults}
         isSearchingUsers={isSearchingUsers}
         userSearchError={userSearchError}
-        avatarError={avatarError}
-        isAvatarUpdating={isAvatarUpdating}
         isDeletingConversationId={isDeletingConversationId}
         handleLogout={handleLogout}
-        handleCurrentUserAvatarChange={handleCurrentUserAvatarChange}
-        handleDeleteCurrentUserAvatar={handleDeleteCurrentUserAvatar}
+        handleOpenProfileSettings={() => setIsProfileSettingsOpen(true)}
         handleSearchUsers={handleSearchUsers}
         handleStartConversation={handleStartConversation}
         handleSelectConversation={handleSelectConversation}
@@ -1742,6 +1795,25 @@ function App() {
         handleRemoveMessageAttachment={handleRemoveMessageAttachment}
         handleToggleMessageReaction={handleToggleMessageReaction}
       />
+      {isProfileSettingsOpen && (
+        <ProfileSettingsModal
+          currentUser={currentUser}
+          avatarError={avatarError}
+          profileError={profileError}
+          isAvatarUpdating={isAvatarUpdating}
+          isProfileUpdating={isProfileUpdating}
+          isNotificationSoundEnabled={isNotificationSoundEnabled}
+          handleClose={() => {
+            setIsProfileSettingsOpen(false);
+            setAvatarError("");
+            setProfileError("");
+          }}
+          handleCurrentUserAvatarChange={handleCurrentUserAvatarChange}
+          handleDeleteCurrentUserAvatar={handleDeleteCurrentUserAvatar}
+          handleUpdateCurrentUserProfile={handleUpdateCurrentUserProfile}
+          handleToggleNotificationSound={handleToggleNotificationSound}
+        />
+      )}
       {forwardingMessage && (
         <div className="modal-backdrop">
           <div className="forward-modal">

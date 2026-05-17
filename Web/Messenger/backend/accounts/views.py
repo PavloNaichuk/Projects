@@ -8,6 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 from .serializers import (
     UserAvatarSerializer,
+    UserProfileSerializer,
     UserRegistrationSerializer,
     UserSearchSerializer,
     UserSerializer,
@@ -87,6 +88,23 @@ class CurrentUserView(APIView):
         )
         return Response(serializer.data)
 
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        serializer = UserProfileSerializer(
+            request.user,
+            data=request.data,
+            partial=True,
+            context={"request": request},
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            notify_user_profile_updated(request.user, request)
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserAvatarView(APIView):
     permission_classes = [IsAuthenticated]
