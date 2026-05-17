@@ -229,22 +229,17 @@ function ChatWindow({
             <h2>{selectedConversationName}</h2>
 
             {selectedConversationUser && (
-              <>
-                <p className="chat-user-email">
-                  {selectedConversationUser.email}
-                </p>
-                <p
-                  className={
-                    selectedConversationUserIsOnline
-                      ? "chat-user-status online"
-                      : "chat-user-status offline"
-                  }
-                >
-                  {selectedConversationUserIsOnline
-                    ? "Online"
-                    : formatLastSeen(selectedConversationUser.last_seen_at)}
-                </p>
-              </>
+              <p
+                className={
+                  selectedConversationUserIsOnline
+                    ? "chat-user-status online"
+                    : "chat-user-status offline"
+                }
+              >
+                {selectedConversationUserIsOnline
+                  ? "Online"
+                  : formatLastSeen(selectedConversationUser.last_seen_at)}
+              </p>
             )}
           </div>
         </div>

@@ -134,7 +134,6 @@ function Sidebar({
 
           <div className="sidebar-profile-info">
             <p>{currentUser.username}</p>
-            <span>{currentUser.email}</span>
           </div>
         </div>
 
