@@ -106,6 +106,18 @@ function getReplyPreviewText(reply: MessageReply) {
   return "Message";
 }
 
+function getMessageStatus(message: Message) {
+  if (message.is_read) {
+    return "Read";
+  }
+
+  if (message.is_delivered) {
+    return "Delivered";
+  }
+
+  return "Sent";
+}
+
 function MessageBubble({
   message,
   previousMessage,
@@ -274,9 +286,9 @@ function MessageBubble({
                 {formatMessageTime(message.created_at)}
               </span>
 
-              {isOwnMessage && !message.is_deleted && (
+            {isOwnMessage && !message.is_deleted && (
                 <span className="message-read-status">
-                  {message.is_read ? "Read" : "Sent"}
+                  {getMessageStatus(message)}
                 </span>
               )}
             </div>

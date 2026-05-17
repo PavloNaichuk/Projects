@@ -49,6 +49,8 @@ export type Message = {
   edited_at: string | null;
   is_deleted: boolean;
   deleted_at: string | null;
+  is_delivered: boolean;
+  delivered_at: string | null;
   is_read: boolean;
 };
 

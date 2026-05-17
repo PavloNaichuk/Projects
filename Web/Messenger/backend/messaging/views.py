@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .consumers import ACTIVE_USER_CONNECTIONS
 from .models import Conversation, Message, MessageReaction
 from .serializers import (
     ConversationCreateSerializer,
@@ -67,6 +68,22 @@ def notify_message_created(conversation_id, participant_ids, message_data):
                 "message": message_data,
             },
         )
+
+
+def notify_message_delivered(conversation_id, message_ids, user_id):
+    channel_layer = get_channel_layer()
+
+    if not channel_layer:
+        return
+
+    async_to_sync(channel_layer.group_send)(
+        f"conversation_{conversation_id}",
+        {
+            "type": "delivery_event",
+            "message_ids": message_ids,
+            "user_id": user_id,
+        },
+    )
 
 
 def notify_message_reaction_updated(conversation_id, message_data):
@@ -129,6 +146,34 @@ def copy_message_attachment(source_message, target_message):
             "attachment_size",
             "updated_at",
         ]
+    )
+
+
+def mark_message_as_delivered_for_online_participants(message, participant_ids):
+    if message.is_delivered or message.is_deleted:
+        return
+
+    delivered_user_id = None
+
+    for user_id in participant_ids:
+        if user_id == message.sender_id:
+            continue
+
+        if ACTIVE_USER_CONNECTIONS.get(user_id, 0) > 0:
+            delivered_user_id = user_id
+            break
+
+    if not delivered_user_id:
+        return
+
+    message.is_delivered = True
+    message.delivered_at = timezone.now()
+    message.save(update_fields=["is_delivered", "delivered_at", "updated_at"])
+
+    notify_message_delivered(
+        conversation_id=message.conversation_id,
+        message_ids=[message.id],
+        user_id=delivered_user_id,
     )
 
 
@@ -439,6 +484,11 @@ class ConversationMessagesView(APIView):
                 message_data=message_data,
             )
 
+            mark_message_as_delivered_for_online_participants(
+                message=message,
+                participant_ids=participant_ids,
+            )
+
             return Response(message_data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -465,17 +515,22 @@ class ConversationMarkReadView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        updated_count = (
-            Message.objects.filter(
-                conversation=conversation,
-                is_read=False,
-                is_deleted=False,
-            )
-            .exclude(
-                sender=request.user,
-            )
-            .update(is_read=True)
+        messages = Message.objects.filter(
+            conversation=conversation,
+            is_read=False,
+            is_deleted=False,
+        ).exclude(
+            sender=request.user,
         )
+
+        now = timezone.now()
+
+        messages.filter(is_delivered=False).update(
+            is_delivered=True,
+            delivered_at=now,
+        )
+
+        updated_count = messages.update(is_read=True)
 
         return Response(
             {
@@ -762,6 +817,11 @@ class MessageForwardView(APIView):
             conversation_id=target_conversation.id,
             participant_ids=participant_ids,
             message_data=message_data,
+        )
+
+        mark_message_as_delivered_for_online_participants(
+            message=forwarded_message,
+            participant_ids=participant_ids,
         )
 
         return Response(message_data, status=status.HTTP_201_CREATED)

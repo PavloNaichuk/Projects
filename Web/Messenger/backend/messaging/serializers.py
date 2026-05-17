@@ -130,6 +130,8 @@ class MessageSerializer(serializers.ModelSerializer):
             "edited_at",
             "is_deleted",
             "deleted_at",
+            "is_delivered",
+            "delivered_at",
             "is_read",
         )
         read_only_fields = (
@@ -149,6 +151,8 @@ class MessageSerializer(serializers.ModelSerializer):
             "edited_at",
             "is_deleted",
             "deleted_at",
+            "is_delivered",
+            "delivered_at",
             "is_read",
         )
 

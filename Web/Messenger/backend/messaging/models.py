@@ -81,6 +81,9 @@ class Message(models.Model):
     is_deleted = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
+    is_delivered = models.BooleanField(default=False)
+    delivered_at = models.DateTimeField(null=True, blank=True)
+
     is_read = models.BooleanField(default=False)
 
     class Meta:

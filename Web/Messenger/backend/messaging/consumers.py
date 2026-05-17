@@ -99,6 +99,79 @@ def update_user_last_seen(user):
     return serialize_user_for_status(user)
 
 
+@database_sync_to_async
+def mark_message_as_delivered_for_user(message_id, user_id):
+    message = (
+        Message.objects.filter(
+            id=message_id,
+            conversation__participants__user_id=user_id,
+            is_delivered=False,
+            is_deleted=False,
+        )
+        .exclude(sender_id=user_id)
+        .first()
+    )
+
+    if not message:
+        return None
+
+    message.is_delivered = True
+    message.delivered_at = timezone.now()
+    message.save(update_fields=["is_delivered", "delivered_at", "updated_at"])
+
+    return {
+        "conversation_id": message.conversation_id,
+        "message_ids": [message.id],
+        "user_id": user_id,
+    }
+
+
+@database_sync_to_async
+def mark_undelivered_messages_as_delivered_for_user(user):
+    messages = (
+        Message.objects.filter(
+            conversation__participants__user=user,
+            is_delivered=False,
+            is_deleted=False,
+        )
+        .exclude(sender=user)
+        .values("id", "conversation_id")
+    )
+
+    messages_by_conversation = {}
+
+    for message in messages:
+        conversation_id = message["conversation_id"]
+
+        if conversation_id not in messages_by_conversation:
+            messages_by_conversation[conversation_id] = []
+
+        messages_by_conversation[conversation_id].append(message["id"])
+
+    if not messages_by_conversation:
+        return []
+
+    message_ids = [
+        message_id
+        for conversation_message_ids in messages_by_conversation.values()
+        for message_id in conversation_message_ids
+    ]
+
+    Message.objects.filter(id__in=message_ids).update(
+        is_delivered=True,
+        delivered_at=timezone.now(),
+    )
+
+    return [
+        {
+            "conversation_id": conversation_id,
+            "message_ids": conversation_message_ids,
+            "user_id": user.id,
+        }
+        for conversation_id, conversation_message_ids in messages_by_conversation.items()
+    ]
+
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope["user"]
@@ -206,6 +279,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 },
             )
 
+            if user_id != self.user.id and ACTIVE_USER_CONNECTIONS.get(user_id, 0) > 0:
+                delivery_data = await mark_message_as_delivered_for_user(
+                    message_data["id"],
+                    user_id,
+                )
+
+                if delivery_data:
+                    await self.channel_layer.group_send(
+                        f"conversation_{delivery_data['conversation_id']}",
+                        {
+                            "type": "delivery_event",
+                            "message_ids": delivery_data["message_ids"],
+                            "user_id": delivery_data["user_id"],
+                        },
+                    )
+
     async def chat_message(self, event):
         await self.send(
             text_data=json.dumps(
@@ -222,6 +311,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 {
                     "type": "message_updated",
                     "message": event["message"],
+                }
+            )
+        )
+
+    async def delivery_event(self, event):
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "delivered",
+                    "message_ids": event["message_ids"],
+                    "user_id": event["user_id"],
                 }
             )
         )
@@ -250,10 +350,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def mark_messages_as_read(self):
-        return Message.objects.filter(
+        messages = Message.objects.filter(
             conversation_id=self.conversation_id,
             is_read=False,
-        ).exclude(sender=self.user).update(is_read=True)
+        ).exclude(sender=self.user)
+
+        now = timezone.now()
+
+        messages.filter(is_delivered=False).update(
+            is_delivered=True,
+            delivered_at=now,
+        )
+
+        return messages.update(is_read=True)
 
     @database_sync_to_async
     def get_conversation_participant_ids(self):
@@ -280,6 +389,20 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
+
+        delivery_events = await mark_undelivered_messages_as_delivered_for_user(
+            self.user
+        )
+
+        for delivery_event_data in delivery_events:
+            await self.channel_layer.group_send(
+                f"conversation_{delivery_event_data['conversation_id']}",
+                {
+                    "type": "delivery_event",
+                    "message_ids": delivery_event_data["message_ids"],
+                    "user_id": delivery_event_data["user_id"],
+                },
+            )
 
         partner_ids = await self.get_conversation_partner_ids()
         online_partner_ids = [

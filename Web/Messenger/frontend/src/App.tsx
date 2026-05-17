@@ -720,6 +720,46 @@ function App() {
     );
   }
 
+  function markMessagesAsDeliveredInState(messageIds: number[]) {
+    const deliveredAt = new Date().toISOString();
+
+    function markMessageAsDelivered(message: Message): Message {
+      if (!messageIds.includes(message.id)) {
+        return message;
+      }
+
+      return {
+        ...message,
+        is_delivered: true,
+        delivered_at: message.delivered_at ?? deliveredAt,
+      };
+    }
+
+    setMessages((previousMessages) =>
+      previousMessages.map((message) => markMessageAsDelivered(message))
+    );
+
+    setConversations((previousConversations) =>
+      previousConversations.map((conversation) => ({
+        ...conversation,
+        last_message: conversation.last_message
+          ? markMessageAsDelivered(conversation.last_message)
+          : null,
+      }))
+    );
+
+    setSelectedConversation((previousConversation) =>
+      previousConversation
+        ? {
+            ...previousConversation,
+            last_message: previousConversation.last_message
+              ? markMessageAsDelivered(previousConversation.last_message)
+              : null,
+          }
+        : previousConversation
+    );
+  }
+
   function sendReadStatus() {
     const socket = socketRef.current;
 
@@ -994,6 +1034,14 @@ function App() {
       return;
     }
 
+    if (data.type === "delivered") {
+      const messageIds = data.message_ids as number[];
+
+      markMessagesAsDeliveredInState(messageIds);
+
+      return;
+    }
+
     if (data.type === "read") {
       const reader = data.user as User;
 
@@ -1006,6 +1054,8 @@ function App() {
           message.sender.id === currentUserId && !message.is_deleted
             ? {
                 ...message,
+                is_delivered: true,
+                delivered_at: message.delivered_at ?? new Date().toISOString(),
                 is_read: true,
               }
             : message
