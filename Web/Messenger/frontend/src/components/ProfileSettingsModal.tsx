@@ -7,7 +7,6 @@ type ProfileSettingsModalProps = {
   profileError: string;
   isAvatarUpdating: boolean;
   isProfileUpdating: boolean;
-  isNotificationSoundEnabled: boolean;
   handleClose: () => void;
   handleCurrentUserAvatarChange: (
     event: ChangeEvent<HTMLInputElement>
@@ -17,7 +16,6 @@ type ProfileSettingsModalProps = {
     username: string,
     email: string
   ) => Promise<void>;
-  handleToggleNotificationSound: (isEnabled: boolean) => void;
 };
 
 function ProfileSettingsModal({
@@ -26,12 +24,10 @@ function ProfileSettingsModal({
   profileError,
   isAvatarUpdating,
   isProfileUpdating,
-  isNotificationSoundEnabled,
   handleClose,
   handleCurrentUserAvatarChange,
   handleDeleteCurrentUserAvatar,
   handleUpdateCurrentUserProfile,
-  handleToggleNotificationSound,
 }: ProfileSettingsModalProps) {
   const [username, setUsername] = useState(currentUser.username);
   const [email, setEmail] = useState(currentUser.email);
@@ -109,17 +105,6 @@ function ProfileSettingsModal({
               onChange={(event) => setEmail(event.target.value)}
               disabled={isProfileUpdating}
             />
-          </label>
-
-          <label className="profile-sound-toggle">
-            <input
-              type="checkbox"
-              checked={isNotificationSoundEnabled}
-              onChange={(event) =>
-                handleToggleNotificationSound(event.target.checked)
-              }
-            />
-            Notification sound
           </label>
 
           {profileError && (

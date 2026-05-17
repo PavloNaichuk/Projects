@@ -1550,19 +1550,6 @@
   border-color: #2563eb;
 }
 
-.profile-sound-toggle {
-  flex-direction: row !important;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: #f9fafb;
-}
-
-.profile-sound-toggle input {
-  width: 18px;
-  height: 18px;
-}
 
 .profile-modal-error {
   padding: 10px 12px;

@@ -138,9 +138,6 @@ function App() {
   const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
   const [profileError, setProfileError] = useState("");
   const [isProfileUpdating, setIsProfileUpdating] = useState(false);
-  const [isNotificationSoundEnabled, setIsNotificationSoundEnabled] = useState(
-    () => localStorage.getItem("notificationSoundEnabled") !== "false"
-  );
 
   const [messageSearchQuery, setMessageSearchQuery] = useState("");
   const [isMessageSearchActive, setIsMessageSearchActive] = useState(false);
@@ -857,11 +854,7 @@ function App() {
 
   const playIncomingMessageSound = useCallback(
     (message: Message) => {
-      if (
-        !isNotificationSoundEnabled ||
-        !currentUserId ||
-        message.sender.id === currentUserId
-      ) {
+      if (!currentUserId || message.sender.id === currentUserId) {
         return;
       }
 
@@ -889,7 +882,7 @@ function App() {
         console.warn("Notification sound was blocked by the browser.");
       });
     },
-    [currentUserId, getNotificationAudio, isNotificationSoundEnabled]
+    [currentUserId, getNotificationAudio]
   );
 
   useEffect(() => {
@@ -1802,7 +1795,6 @@ function App() {
           profileError={profileError}
           isAvatarUpdating={isAvatarUpdating}
           isProfileUpdating={isProfileUpdating}
-          isNotificationSoundEnabled={isNotificationSoundEnabled}
           handleClose={() => {
             setIsProfileSettingsOpen(false);
             setAvatarError("");
@@ -1811,7 +1803,6 @@ function App() {
           handleCurrentUserAvatarChange={handleCurrentUserAvatarChange}
           handleDeleteCurrentUserAvatar={handleDeleteCurrentUserAvatar}
           handleUpdateCurrentUserProfile={handleUpdateCurrentUserProfile}
-          handleToggleNotificationSound={handleToggleNotificationSound}
         />
       )}
       {forwardingMessage && (
