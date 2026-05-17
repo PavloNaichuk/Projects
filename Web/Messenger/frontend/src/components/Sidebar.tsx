@@ -252,7 +252,13 @@ function Sidebar({
                 )}
               </button>
 
-              <div className="conversation-menu-wrapper">
+              <div
+                className={
+                  isMenuOpen
+                    ? "conversation-menu-wrapper open"
+                    : "conversation-menu-wrapper"
+                }
+              >
                 <button
                   type="button"
                   className="conversation-menu-button"
