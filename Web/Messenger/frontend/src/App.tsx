@@ -732,11 +732,6 @@ function App() {
     }
   }
 
-  function handleToggleNotificationSound(isEnabled: boolean) {
-    setIsNotificationSoundEnabled(isEnabled);
-    localStorage.setItem("notificationSoundEnabled", String(isEnabled));
-  }
-
   function updateMessageInState(updatedMessage: Message) {
     setMessages((previousMessages) =>
       previousMessages.map((message) =>
