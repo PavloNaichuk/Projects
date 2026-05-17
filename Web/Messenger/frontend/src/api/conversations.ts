@@ -65,6 +65,7 @@ export type Conversation = {
   participants: ConversationParticipant[];
   last_message: Message | null;
   unread_count: number;
+  is_muted: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -218,6 +219,11 @@ export type DeleteConversationResponse = {
   mode: DeleteConversationMode;
 };
 
+export type MuteConversationResponse = {
+  detail: string;
+  conversation: Conversation;
+};
+
 export async function deleteConversation(
   accessToken: string,
   conversationId: number,
@@ -237,6 +243,30 @@ export async function deleteConversation(
 
   if (!response.ok) {
     throw new Error("Failed to delete conversation.");
+  }
+
+  return response.json();
+}
+
+export async function muteConversation(
+  accessToken: string,
+  conversationId: number,
+  isMuted: boolean
+): Promise<MuteConversationResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/conversations/${conversationId}/mute/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ is_muted: isMuted }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update conversation mute status.");
   }
 
   return response.json();

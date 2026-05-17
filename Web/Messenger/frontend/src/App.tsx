@@ -33,6 +33,7 @@ import {
   getConversationMessagesPage,
   getConversations,
   markConversationAsRead,
+  muteConversation,
   type Conversation,
   type DeleteConversationMode,
   type Message,
@@ -102,6 +103,7 @@ function App() {
   const scrollBehaviorRef = useRef<ScrollBehavior>("bottom");
   const previousScrollHeightRef = useRef(0);
   const previousScrollTopRef = useRef(0);
+  const conversationsRef = useRef<Conversation[]>([]);
 
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
@@ -154,6 +156,9 @@ function App() {
   >(null);
   const currentUserId = currentUser?.id ?? null;
   const selectedConversationId = selectedConversation?.id ?? null;
+  useEffect(() => {
+    conversationsRef.current = conversations;
+  }, [conversations]);
 
   function markConversationReadInState(conversationId: number) {
     setConversations((previousConversations) =>
@@ -449,6 +454,22 @@ function App() {
 
       return null;
     });
+  }
+
+  function updateConversationInState(updatedConversation: Conversation) {
+    setConversations((previousConversations) =>
+      previousConversations.map((conversation) =>
+        conversation.id === updatedConversation.id
+          ? updatedConversation
+          : conversation
+      )
+    );
+
+    setSelectedConversation((previousConversation) =>
+      previousConversation?.id === updatedConversation.id
+        ? updatedConversation
+        : previousConversation
+    );
   }
 
   async function loadMessages(
@@ -853,6 +874,14 @@ function App() {
         return;
       }
 
+      const messageConversation = conversationsRef.current.find(
+        (conversation) => conversation.id === message.conversation
+      );
+
+      if (messageConversation?.is_muted) {
+        return;
+      }
+
       if (playedSoundMessageIdsRef.current.has(message.id)) {
         return;
       }
@@ -1041,6 +1070,7 @@ function App() {
   socketRef.current = socket;
 
   socket.onopen = () => {
+    setMessageError("");
     sendReadStatus();
   };
 
@@ -1131,7 +1161,11 @@ function App() {
   };
 
   socket.onerror = () => {
-    setMessageError("WebSocket connection error.");
+    if (socketRef.current === socket) {
+      setMessageError("WebSocket connection error.");
+    }
+
+    console.error("Chat WebSocket connection error.");
   };
 
   return () => {
@@ -1345,6 +1379,26 @@ function App() {
       setUserSearchError("Failed to delete conversation.");
     } finally {
       setIsDeletingConversationId(null);
+    }
+  }
+
+  async function handleMuteConversation(conversation: Conversation) {
+    if (!accessToken) {
+      return;
+    }
+
+    setUserSearchError("");
+
+    try {
+      const response = await muteConversation(
+        accessToken,
+        conversation.id,
+        !conversation.is_muted
+      );
+
+      updateConversationInState(response.conversation);
+    } catch {
+      setUserSearchError("Failed to update mute status.");
     }
   }
 
@@ -1736,6 +1790,7 @@ function App() {
         handleStartConversation={handleStartConversation}
         handleSelectConversation={handleSelectConversation}
         handleDeleteConversation={handleDeleteConversation}
+        handleMuteConversation={handleMuteConversation}
       />
 
       <ChatWindow

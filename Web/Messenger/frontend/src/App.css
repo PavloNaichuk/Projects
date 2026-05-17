@@ -1590,3 +1590,8 @@
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+.muted-conversation-icon {
+  font-size: 13px;
+  opacity: 0.75;
+}

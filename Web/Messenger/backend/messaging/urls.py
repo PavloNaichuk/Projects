@@ -5,6 +5,7 @@ from .views import (
     ConversationListView,
     ConversationMarkReadView,
     ConversationMessagesView,
+    ConversationMuteView,
     MessageDetailView,
     MessageForwardView,
     MessageReactionToggleView,
@@ -27,6 +28,11 @@ urlpatterns = [
         "conversations/<int:conversation_id>/mark-read/",
         ConversationMarkReadView.as_view(),
         name="conversation-mark-read",
+    ),
+    path(
+        "conversations/<int:conversation_id>/mute/",
+        ConversationMuteView.as_view(),
+        name="conversation-mute",
     ),
     path(
         "messages/<int:message_id>/",

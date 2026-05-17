@@ -35,6 +35,7 @@ type SidebarProps = {
     conversation: Conversation,
     mode: DeleteConversationMode
   ) => Promise<void>;
+  handleMuteConversation: (conversation: Conversation) => Promise<void>;
 };
 
 type UserAvatarProps = {
@@ -76,6 +77,7 @@ function Sidebar({
   handleStartConversation,
   handleSelectConversation,
   handleDeleteConversation,
+  handleMuteConversation,
 }: SidebarProps) {
   const [openedMenuConversationId, setOpenedMenuConversationId] = useState<
     number | null
@@ -220,6 +222,10 @@ function Sidebar({
                 <div className="conversation-content">
                   <div className="conversation-name">
                     <span>{getConversationName(conversation, currentUser)}</span>
+
+                    {conversation.is_muted && (
+                      <span className="muted-conversation-icon">🔇</span>
+                    )}
                   </div>
 
                   <div className="conversation-preview">
@@ -261,6 +267,17 @@ function Sidebar({
                   <div className="conversation-menu">
                     <button
                       type="button"
+                      onClick={() => {
+                        setOpenedMenuConversationId(null);
+                        handleMuteConversation(conversation);
+                      }}
+                      disabled={isDeleting}
+                    >
+                      {conversation.is_muted ? "Unmute conversation" : "Mute conversation"}
+                    </button>
+
+                    <button
+                      type="button"
                       onClick={() => openDeleteConfirm(conversation, "for_me")}
                       disabled={isDeleting}
                     >
@@ -270,9 +287,7 @@ function Sidebar({
                     <button
                       type="button"
                       className="danger"
-                      onClick={() =>
-                        openDeleteConfirm(conversation, "for_everyone")
-                      }
+                      onClick={() => openDeleteConfirm(conversation, "for_everyone")}
                       disabled={isDeleting}
                     >
                       Delete for everyone
