@@ -6,6 +6,7 @@ import type {
 } from "react";
 import type { User } from "../api/auth";
 import type { Conversation, Message } from "../api/conversations";
+import { getUserDisplayName } from "../utils/chat";
 import MessageBubble from "./MessageBubble";
 
 type ChatWindowProps = {
@@ -72,13 +73,18 @@ type UserAvatarProps = {
   isOnline?: boolean;
 };
 
+function shouldShowRealUsername(user: User) {
+  return user.display_name !== user.username;
+}
+
 function UserAvatar({ user, isOnline = false }: UserAvatarProps) {
-  const initial = user.username.trim().charAt(0).toUpperCase() || "?";
+  const displayName = getUserDisplayName(user);
+  const initial = displayName.trim().charAt(0).toUpperCase() || "?";
 
   return (
     <span className="user-avatar medium">
       {user.avatar_url ? (
-        <img src={user.avatar_url} alt={user.username} />
+        <img src={user.avatar_url} alt={displayName} />
       ) : (
         <span>{initial}</span>
       )}
@@ -228,6 +234,13 @@ function ChatWindow({
           <div>
             <h2>{selectedConversationName}</h2>
 
+            {selectedConversationUser &&
+              shouldShowRealUsername(selectedConversationUser) && (
+                <p className="chat-header-username">
+                  @{selectedConversationUser.username}
+                </p>
+              )}
+
             {selectedConversationUser && (
               <p
                 className={
@@ -331,7 +344,9 @@ function ChatWindow({
       </section>
 
       {typingUser && (
-        <div className="typing-indicator">{typingUser.username} is typing...</div>
+        <div className="typing-indicator">
+          {getUserDisplayName(typingUser)} is typing...
+        </div>
       )}
 
       {messageError && <div className="message-error">{messageError}</div>}
@@ -351,7 +366,7 @@ function ChatWindow({
             <div className="reply-preview-input">
               <div>
                 <span className="reply-preview-title">
-                  Replying to {replyToMessage.sender.username}
+                  Replying to {getUserDisplayName(replyToMessage.sender)}
                 </span>
                 <span className="reply-preview-text">
                   {getReplyPreviewText(replyToMessage)}

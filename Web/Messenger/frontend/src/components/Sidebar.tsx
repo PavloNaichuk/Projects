@@ -45,6 +45,10 @@ type UserAvatarProps = {
   isOnline?: boolean;
 };
 
+function shouldShowRealUsername(user: User) {
+  return user.display_name !== user.username;
+}
+
 function UserAvatar({
   user,
   size = "medium",
@@ -176,6 +180,10 @@ function Sidebar({
 
               <span className="user-search-text">
                 <span className="user-search-name">{user.display_name}</span>
+
+                {shouldShowRealUsername(user) && (
+                  <span className="user-search-username">@{user.username}</span>
+                )}
               </span>
             </button>
           ))}
@@ -226,11 +234,23 @@ function Sidebar({
 
                 <div className="conversation-content">
                   <div className="conversation-name">
-                    <span>{getConversationName(conversation, currentUser)}</span>
+                    <div className="conversation-name-block">
+                      <div className="conversation-display-name-row">
+                        <span className="conversation-display-name">
+                          {getConversationName(conversation, currentUser)}
+                        </span>
 
-                    {conversation.is_muted && (
-                      <span className="muted-conversation-icon">🔇</span>
-                    )}
+                        {conversation.is_muted && (
+                          <span className="muted-conversation-icon">🔇</span>
+                        )}
+                      </div>
+
+                      {shouldShowRealUsername(conversationUser) && (
+                        <span className="conversation-real-username">
+                          @{conversationUser.username}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <div className="conversation-preview">
