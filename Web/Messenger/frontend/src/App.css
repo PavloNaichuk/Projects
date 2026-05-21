@@ -1599,3 +1599,103 @@
   font-size: 13px;
   opacity: 0.75;
 }
+
+.contact-nickname-modal {
+  width: min(420px, calc(100vw - 32px));
+  padding: 22px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-nickname-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.contact-nickname-modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #111827;
+}
+
+.contact-nickname-modal-header button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 999px;
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.contact-nickname-modal p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.contact-nickname-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-nickname-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.contact-nickname-form input {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+.contact-nickname-form input:focus {
+  border-color: #2563eb;
+}
+
+.contact-nickname-help {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.contact-nickname-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.contact-nickname-actions button {
+  padding: 9px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.contact-nickname-actions .contact-nickname-cancel {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.contact-nickname-actions button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

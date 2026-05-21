@@ -1,15 +1,46 @@
 from rest_framework import serializers
 
-from accounts.models import User
+from accounts.models import ContactNickname, User
 from .models import Conversation, ConversationParticipant, Message, MessageReaction
+
+
+def get_user_display_name(user, request):
+    if not request or not request.user or not request.user.is_authenticated:
+        return user.username
+
+    if request.user.id == user.id:
+        return user.username
+
+    nickname = (
+        ContactNickname.objects.filter(
+            owner=request.user,
+            target_user=user,
+        )
+        .values_list("nickname", flat=True)
+        .first()
+    )
+
+    return nickname or user.username
 
 
 class UserShortSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
+    display_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "avatar_url", "last_seen_at")
+        fields = (
+            "id",
+            "username",
+            "display_name",
+            "email",
+            "avatar_url",
+            "last_seen_at",
+        )
+
+    def get_display_name(self, obj):
+        request = self.context.get("request")
+        return get_user_display_name(obj, request)
 
     def get_avatar_url(self, obj):
         if not obj.avatar:
@@ -309,7 +340,7 @@ class ConversationSerializer(serializers.ModelSerializer):
         ).exclude(
             sender=request.user
         ).count()
-        
+
     def get_is_muted(self, obj):
         request = self.context.get("request")
 

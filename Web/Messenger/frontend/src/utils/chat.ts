@@ -1,6 +1,10 @@
 import type { User } from "../api/auth";
 import type { Conversation } from "../api/conversations";
 
+export function getUserDisplayName(user: User) {
+  return user.display_name || user.username;
+}
+
 export function getConversationName(
   conversation: Conversation,
   currentUser: User
@@ -9,7 +13,11 @@ export function getConversationName(
     (participant) => participant.user.id !== currentUser.id
   );
 
-  return otherParticipant?.user.username ?? "Unknown user";
+  if (!otherParticipant) {
+    return "Unknown user";
+  }
+
+  return getUserDisplayName(otherParticipant.user);
 }
 
 export function getOtherParticipant(

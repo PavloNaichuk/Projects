@@ -3,6 +3,7 @@ import { API_BASE_URL } from "./config";
 export type User = {
   id: number;
   username: string;
+  display_name: string;
   email: string;
   avatar_url: string | null;
   last_seen_at: string | null;
@@ -28,6 +29,11 @@ export type UpdateCurrentUserProfileData = {
   email: string;
 };
 
+export type UpdateContactNicknameResponse = {
+  detail: string;
+  user: User;
+};
+
 function getApiErrorMessage(errorData: unknown) {
   if (!errorData || typeof errorData !== "object") {
     return "Request failed.";
@@ -36,9 +42,11 @@ function getApiErrorMessage(errorData: unknown) {
   const fieldLabels: Record<string, string> = {
     username: "Username",
     email: "Email",
+    nickname: "Nickname",
     password: "Password",
     password_confirm: "Confirm password",
     non_field_errors: "Error",
+    detail: "Error",
   };
 
   return Object.entries(errorData)
@@ -158,6 +166,33 @@ export async function updateCurrentUserProfile(
     }
 
     throw new Error("Failed to update profile.");
+  }
+
+  return response.json();
+}
+
+export async function updateContactNickname(
+  accessToken: string,
+  userId: number,
+  nickname: string
+): Promise<UpdateContactNicknameResponse> {
+  const response = await fetch(`${API_BASE_URL}/users/${userId}/nickname/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ nickname }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    if (errorData) {
+      throw new Error(getApiErrorMessage(errorData));
+    }
+
+    throw new Error("Failed to update contact nickname.");
   }
 
   return response.json();

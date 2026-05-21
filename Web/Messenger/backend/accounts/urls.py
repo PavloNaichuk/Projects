@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    ContactNicknameView,
     CurrentUserView,
     LogoutView,
     UserAvatarView,
@@ -16,5 +17,10 @@ urlpatterns = [
     path("auth/me/", CurrentUserView.as_view(), name="current-user"),
     path("auth/me/avatar/", UserAvatarView.as_view(), name="user-avatar"),
     path("auth/me/profile/", UserProfileView.as_view(), name="user-profile"),
+    path(
+        "users/<int:user_id>/nickname/",
+        ContactNicknameView.as_view(),
+        name="contact-nickname",
+    ),
     path("users/search/", UserSearchView.as_view(), name="user-search"),
 ]

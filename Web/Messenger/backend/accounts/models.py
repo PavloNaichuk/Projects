@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -13,3 +14,26 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class ContactNickname(models.Model):
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="contact_nicknames",
+    )
+    target_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="nickname_set_by_users",
+    )
+    nickname = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("owner", "target_user")
+        ordering = ["target_user__username"]
+
+    def __str__(self):
+        return f"{self.owner} renamed {self.target_user} to {self.nickname}"

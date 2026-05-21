@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -5,7 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User
+from messaging.models import ConversationParticipant
+
+from .models import ContactNickname, User
 from .serializers import (
     UserAvatarSerializer,
     UserProfileSerializer,
@@ -13,11 +17,6 @@ from .serializers import (
     UserSearchSerializer,
     UserSerializer,
 )
-
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
-
-from messaging.models import ConversationParticipant
 
 
 def get_profile_update_recipient_ids(user):
@@ -35,27 +34,57 @@ def get_profile_update_recipient_ids(user):
     )
 
 
+def get_user_display_name_for_owner(user, owner):
+    if owner.id == user.id:
+        return user.username
+
+    nickname = (
+        ContactNickname.objects.filter(
+            owner=owner,
+            target_user=user,
+        )
+        .values_list("nickname", flat=True)
+        .first()
+    )
+
+    return nickname or user.username
+
+
+def serialize_user_for_recipient(user, recipient, request):
+    serializer = UserSerializer(
+        user,
+        context={"request": request},
+    )
+
+    data = dict(serializer.data)
+    data["display_name"] = get_user_display_name_for_owner(user, recipient)
+
+    return data
+
+
 def notify_user_profile_updated(user, request):
     channel_layer = get_channel_layer()
 
     if not channel_layer:
         return
 
-    serializer = UserSerializer(
-        user,
-        context={"request": request},
-    )
-
     recipient_ids = get_profile_update_recipient_ids(user)
 
-    for user_id in recipient_ids:
+    recipients = User.objects.filter(id__in=recipient_ids)
+
+    for recipient in recipients:
         async_to_sync(channel_layer.group_send)(
-            f"user_{user_id}_notifications",
+            f"user_{recipient.id}_notifications",
             {
                 "type": "user_profile_updated",
-                "user": serializer.data,
+                "user": serialize_user_for_recipient(
+                    user,
+                    recipient,
+                    request,
+                ),
             },
         )
+
 
 class UserSearchView(APIView):
     permission_classes = [IsAuthenticated]
@@ -88,6 +117,7 @@ class CurrentUserView(APIView):
         )
         return Response(serializer.data)
 
+
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -105,6 +135,7 @@ class UserProfileView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserAvatarView(APIView):
     permission_classes = [IsAuthenticated]
@@ -146,6 +177,71 @@ class UserAvatarView(APIView):
             context={"request": request},
         )
         return Response(serializer.data)
+
+
+class ContactNicknameView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, user_id):
+        target_user = User.objects.filter(id=user_id).first()
+
+        if not target_user:
+            return Response(
+                {"detail": "User not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if target_user.id == request.user.id:
+            return Response(
+                {"detail": "You cannot set a nickname for yourself."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        nickname = str(request.data.get("nickname", "")).strip()
+
+        if len(nickname) > 50:
+            return Response(
+                {"nickname": ["Nickname must be 50 characters or less."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not nickname:
+            ContactNickname.objects.filter(
+                owner=request.user,
+                target_user=target_user,
+            ).delete()
+
+            serializer = UserSerializer(
+                target_user,
+                context={"request": request},
+            )
+
+            return Response(
+                {
+                    "detail": "Contact nickname removed.",
+                    "user": serializer.data,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        ContactNickname.objects.update_or_create(
+            owner=request.user,
+            target_user=target_user,
+            defaults={"nickname": nickname},
+        )
+
+        serializer = UserSerializer(
+            target_user,
+            context={"request": request},
+        )
+
+        return Response(
+            {
+                "detail": "Contact nickname updated.",
+                "user": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class UserRegistrationView(APIView):

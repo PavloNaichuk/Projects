@@ -36,6 +36,7 @@ type SidebarProps = {
     mode: DeleteConversationMode
   ) => Promise<void>;
   handleMuteConversation: (conversation: Conversation) => Promise<void>;
+  handleOpenContactNicknameModal: (conversation: Conversation) => void;
 };
 
 type UserAvatarProps = {
@@ -44,13 +45,17 @@ type UserAvatarProps = {
   isOnline?: boolean;
 };
 
-function UserAvatar({ user, size = "medium", isOnline = false }: UserAvatarProps) {
-  const initial = user.username.trim().charAt(0).toUpperCase() || "?";
+function UserAvatar({
+  user,
+  size = "medium",
+  isOnline = false,
+}: UserAvatarProps) {
+  const initial = user.display_name.trim().charAt(0).toUpperCase() || "?";
 
   return (
     <span className={`user-avatar ${size}`}>
       {user.avatar_url ? (
-        <img src={user.avatar_url} alt={user.username} />
+        <img src={user.avatar_url} alt={user.display_name} />
       ) : (
         <span>{initial}</span>
       )}
@@ -78,6 +83,7 @@ function Sidebar({
   handleSelectConversation,
   handleDeleteConversation,
   handleMuteConversation,
+  handleOpenContactNicknameModal,
 }: SidebarProps) {
   const [openedMenuConversationId, setOpenedMenuConversationId] = useState<
     number | null
@@ -131,7 +137,7 @@ function Sidebar({
           <UserAvatar user={currentUser} size="large" />
 
           <div className="sidebar-profile-info">
-            <p>{currentUser.username}</p>
+            <p>{currentUser.display_name}</p>
             <span>Profile settings</span>
           </div>
         </button>
@@ -169,8 +175,7 @@ function Sidebar({
               <UserAvatar user={user} size="small" />
 
               <span className="user-search-text">
-                <span className="user-search-name">{user.username}</span>
-                <span className="user-search-email">{user.email}</span>
+                <span className="user-search-name">{user.display_name}</span>
               </span>
             </button>
           ))}
@@ -284,6 +289,17 @@ function Sidebar({
 
                     <button
                       type="button"
+                      onClick={() => {
+                        setOpenedMenuConversationId(null);
+                        handleOpenContactNicknameModal(conversation);
+                      }}
+                      disabled={isDeleting}
+                    >
+                      Rename contact
+                    </button>
+
+                    <button
+                      type="button"
                       onClick={() => openDeleteConfirm(conversation, "for_me")}
                       disabled={isDeleting}
                     >
@@ -293,7 +309,9 @@ function Sidebar({
                     <button
                       type="button"
                       className="danger"
-                      onClick={() => openDeleteConfirm(conversation, "for_everyone")}
+                      onClick={() =>
+                        openDeleteConfirm(conversation, "for_everyone")
+                      }
                       disabled={isDeleting}
                     >
                       Delete for everyone

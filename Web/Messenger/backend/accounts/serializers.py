@@ -1,14 +1,45 @@
 from rest_framework import serializers
 
-from .models import User
+from .models import ContactNickname, User
+
+
+def get_user_display_name(user, request):
+    if not request or not request.user or not request.user.is_authenticated:
+        return user.username
+
+    if request.user.id == user.id:
+        return user.username
+
+    nickname = (
+        ContactNickname.objects.filter(
+            owner=request.user,
+            target_user=user,
+        )
+        .values_list("nickname", flat=True)
+        .first()
+    )
+
+    return nickname or user.username
 
 
 class UserSearchSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
+    display_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "avatar_url", "last_seen_at")
+        fields = (
+            "id",
+            "username",
+            "display_name",
+            "email",
+            "avatar_url",
+            "last_seen_at",
+        )
+
+    def get_display_name(self, obj):
+        request = self.context.get("request")
+        return get_user_display_name(obj, request)
 
     def get_avatar_url(self, obj):
         if not obj.avatar:
@@ -24,10 +55,22 @@ class UserSearchSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
+    display_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "avatar_url", "last_seen_at")
+        fields = (
+            "id",
+            "username",
+            "display_name",
+            "email",
+            "avatar_url",
+            "last_seen_at",
+        )
+
+    def get_display_name(self, obj):
+        request = self.context.get("request")
+        return get_user_display_name(obj, request)
 
     def get_avatar_url(self, obj):
         if not obj.avatar:
@@ -40,13 +83,31 @@ class UserSerializer(serializers.ModelSerializer):
 
         return obj.avatar.url
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+    display_name = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ("id", "username", "email", "avatar_url", "last_seen_at")
-        read_only_fields = ("id", "avatar_url", "last_seen_at")
+        fields = (
+            "id",
+            "username",
+            "display_name",
+            "email",
+            "avatar_url",
+            "last_seen_at",
+        )
+        read_only_fields = (
+            "id",
+            "display_name",
+            "avatar_url",
+            "last_seen_at",
+        )
 
-    avatar_url = serializers.SerializerMethodField()
+    def get_display_name(self, obj):
+        request = self.context.get("request")
+        return get_user_display_name(obj, request)
 
     def get_avatar_url(self, obj):
         if not obj.avatar:
@@ -80,14 +141,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("User with this email already exists.")
 
         return value
+
+
 class UserAvatarSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
+    display_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = (
             "id",
             "username",
+            "display_name",
             "email",
             "avatar",
             "avatar_url",
@@ -96,10 +161,15 @@ class UserAvatarSerializer(serializers.ModelSerializer):
         read_only_fields = (
             "id",
             "username",
+            "display_name",
             "email",
             "avatar_url",
             "last_seen_at",
         )
+
+    def get_display_name(self, obj):
+        request = self.context.get("request")
+        return get_user_display_name(obj, request)
 
     def get_avatar_url(self, obj):
         if not obj.avatar:
@@ -132,6 +202,7 @@ class UserAvatarSerializer(serializers.ModelSerializer):
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
+    display_name = serializers.SerializerMethodField()
 
     username = serializers.CharField(
         required=True,
@@ -170,13 +241,23 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "username",
+            "display_name",
             "email",
             "avatar_url",
             "last_seen_at",
             "password",
             "password_confirm",
         )
-        read_only_fields = ("id", "avatar_url", "last_seen_at")
+        read_only_fields = (
+            "id",
+            "display_name",
+            "avatar_url",
+            "last_seen_at",
+        )
+
+    def get_display_name(self, obj):
+        request = self.context.get("request")
+        return get_user_display_name(obj, request)
 
     def get_avatar_url(self, obj):
         if not obj.avatar:

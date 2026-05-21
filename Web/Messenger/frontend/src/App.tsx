@@ -17,6 +17,7 @@ import {
   logout,
   refreshAccessToken,
   register,
+  updateContactNickname,
   updateCurrentUserAvatar,
   updateCurrentUserProfile,
   type User,
@@ -43,6 +44,7 @@ import AuthPage from "./components/AuthPage";
 import ChatWindow from "./components/ChatWindow";
 import Sidebar from "./components/Sidebar";
 import ProfileSettingsModal from "./components/ProfileSettingsModal";
+import ContactNicknameModal from "./components/ContactNicknameModal";
 import {
   getConversationName,
   getOtherParticipant,
@@ -140,6 +142,12 @@ function App() {
   const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
   const [profileError, setProfileError] = useState("");
   const [isProfileUpdating, setIsProfileUpdating] = useState(false);
+  const [contactNicknameUser, setContactNicknameUser] = useState<User | null>(
+    null
+  );
+  const [contactNicknameError, setContactNicknameError] = useState("");
+  const [isContactNicknameUpdating, setIsContactNicknameUpdating] =
+    useState(false);
 
   const [messageSearchQuery, setMessageSearchQuery] = useState("");
   const [isMessageSearchActive, setIsMessageSearchActive] = useState(false);
@@ -625,6 +633,9 @@ function App() {
     setIsProfileSettingsOpen(false);
     setProfileError("");
     setIsProfileUpdating(false);
+    setContactNicknameUser(null);
+    setContactNicknameError("");
+    setIsContactNicknameUpdating(false);
 
     setMessageSearchQuery("");
     setIsMessageSearchActive(false);
@@ -1402,6 +1413,50 @@ function App() {
     }
   }
 
+  function handleOpenContactNicknameModal(conversation: Conversation) {
+    if (!currentUser) {
+      return;
+    }
+
+    const user = getOtherParticipant(conversation, currentUser);
+
+    if (!user) {
+      return;
+    }
+
+    setContactNicknameUser(user);
+    setContactNicknameError("");
+  }
+
+  async function handleUpdateContactNickname(nickname: string) {
+    if (!accessToken || !contactNicknameUser) {
+      return;
+    }
+
+    setIsContactNicknameUpdating(true);
+    setContactNicknameError("");
+
+    try {
+      const response = await updateContactNickname(
+        accessToken,
+        contactNicknameUser.id,
+        nickname.trim()
+      );
+
+      updateUserInState(response.user);
+      await refreshConversations(accessToken);
+      setContactNicknameUser(null);
+    } catch (error) {
+      if (error instanceof Error) {
+        setContactNicknameError(error.message);
+      } else {
+        setContactNicknameError("Failed to update contact name.");
+      }
+    } finally {
+      setIsContactNicknameUpdating(false);
+    }
+  }
+
   async function handleSearchMessages(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -1791,6 +1846,7 @@ function App() {
         handleSelectConversation={handleSelectConversation}
         handleDeleteConversation={handleDeleteConversation}
         handleMuteConversation={handleMuteConversation}
+        handleOpenContactNicknameModal={handleOpenContactNicknameModal}
       />
 
       <ChatWindow
@@ -1853,6 +1909,18 @@ function App() {
           handleCurrentUserAvatarChange={handleCurrentUserAvatarChange}
           handleDeleteCurrentUserAvatar={handleDeleteCurrentUserAvatar}
           handleUpdateCurrentUserProfile={handleUpdateCurrentUserProfile}
+        />
+      )}
+      {contactNicknameUser && (
+        <ContactNicknameModal
+          user={contactNicknameUser}
+          isUpdating={isContactNicknameUpdating}
+          error={contactNicknameError}
+          handleClose={() => {
+            setContactNicknameUser(null);
+            setContactNicknameError("");
+          }}
+          handleSave={handleUpdateContactNickname}
         />
       )}
       {forwardingMessage && (
