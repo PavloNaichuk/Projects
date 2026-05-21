@@ -279,7 +279,7 @@ function Sidebar({
                       }}
                       disabled={isDeleting}
                     >
-                      {conversation.is_muted ? "Unmute conversation" : "Mute conversation"}
+                      {conversation.is_muted ? "Unmute sound" : "Mute sound"}
                     </button>
 
                     <button
