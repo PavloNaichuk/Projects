@@ -88,10 +88,6 @@ type UserAvatarProps = {
   isOnline?: boolean;
 };
 
-function shouldShowRealUsername(user: User) {
-  return user.display_name !== user.username;
-}
-
 function UserAvatar({ user, isOnline = false }: UserAvatarProps) {
   const displayName = getUserDisplayName(user);
   const initial = displayName.trim().charAt(0).toUpperCase() || "?";
@@ -269,13 +265,6 @@ function ChatWindow({
 
             <div>
               <h2>{selectedConversationName}</h2>
-
-              {selectedConversationUser &&
-                shouldShowRealUsername(selectedConversationUser) && (
-                  <p className="chat-header-username">
-                    @{selectedConversationUser.username}
-                  </p>
-                )}
 
               {selectedConversationUser && (
                 <p

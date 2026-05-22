@@ -46,10 +46,6 @@ type UserAvatarProps = {
   isOnline?: boolean;
 };
 
-function shouldShowRealUsername(user: User) {
-  return user.display_name !== user.username;
-}
-
 function UserAvatar({
   user,
   size = "medium",
@@ -182,10 +178,6 @@ function Sidebar({
 
               <span className="user-search-text">
                 <span className="user-search-name">{user.display_name}</span>
-
-                {shouldShowRealUsername(user) && (
-                  <span className="user-search-username">@{user.username}</span>
-                )}
               </span>
             </button>
           ))}
@@ -250,12 +242,6 @@ function Sidebar({
                           <span className="muted-conversation-icon">🔇</span>
                         )}
                       </div>
-
-                      {shouldShowRealUsername(conversationUser) && (
-                        <span className="conversation-real-username">
-                          @{conversationUser.username}
-                        </span>
-                      )}
                     </div>
                   </div>
 
@@ -310,9 +296,7 @@ function Sidebar({
                       }}
                       disabled={isDeleting}
                     >
-                      {conversation.is_pinned
-                        ? "Unpin chat"
-                        : "Pin chat"}
+                      {conversation.is_pinned ? "Unpin chat" : "Pin chat"}
                     </button>
 
                     <button
