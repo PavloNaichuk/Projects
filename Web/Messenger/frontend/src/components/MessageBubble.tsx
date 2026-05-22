@@ -4,6 +4,7 @@ import type { Message, MessageReply } from "../api/conversations";
 import {
   formatMessageDate,
   formatMessageTime,
+  getUserDisplayName,
   isSameMessageDate,
 } from "../utils/chat";
 
@@ -118,6 +119,26 @@ function getMessageStatus(message: Message) {
   return "Sent";
 }
 
+async function copyTextToClipboard(text: string) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "-9999px";
+
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  document.execCommand("copy");
+  textarea.remove();
+}
+
 function MessageBubble({
   message,
   previousMessage,
@@ -138,6 +159,7 @@ function MessageBubble({
   handleToggleMessageReaction,
 }: MessageBubbleProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const messageRowRef = useRef<HTMLDivElement | null>(null);
 
@@ -185,8 +207,31 @@ function MessageBubble({
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    if (!isCopied) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setIsCopied(false);
+    }, 1200);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [isCopied]);
+
   function closeMenu() {
     setIsMenuOpen(false);
+  }
+
+  async function handleCopyMessageText() {
+    if (!hasText) {
+      return;
+    }
+
+    await copyTextToClipboard(message.text);
+    setIsCopied(true);
   }
 
   return (
@@ -241,14 +286,14 @@ function MessageBubble({
                 {message.forwarded_from_message && (
                   <div className="forwarded-message-label">
                     Forwarded from{" "}
-                    {message.forwarded_from_message.sender.username}
+                    {getUserDisplayName(message.forwarded_from_message.sender)}
                   </div>
                 )}
 
                 {message.reply_to_message && (
                   <div className="reply-preview-message">
                     <span className="reply-preview-title">
-                      Reply to {message.reply_to_message.sender.username}
+                      Reply to {getUserDisplayName(message.reply_to_message.sender)}
                     </span>
                     <span className="reply-preview-text">
                       {getReplyPreviewText(message.reply_to_message)}
@@ -366,6 +411,18 @@ function MessageBubble({
                       >
                         Forward
                       </button>
+
+                      {hasText && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            closeMenu();
+                            handleCopyMessageText();
+                          }}
+                        >
+                          {isCopied ? "Copied!" : "Copy text"}
+                        </button>
+                      )}
 
                       {isOwnMessage && hasText && (
                         <button
