@@ -1905,6 +1905,7 @@ function App() {
         setEditingMessageText={setEditingMessageText}
         isEditingMessage={isEditingMessage}
         isDeletingMessageId={isDeletingMessageId}
+        isDeletingConversationId={isDeletingConversationId}
         messagesContainerRef={messagesContainerRef}
         messagesEndRef={messagesEndRef}
         handleMessagesScroll={handleMessagesScroll}
@@ -1924,6 +1925,10 @@ function App() {
         handleDeleteMessage={handleDeleteMessage}
         handleRemoveMessageAttachment={handleRemoveMessageAttachment}
         handleToggleMessageReaction={handleToggleMessageReaction}
+        handleMuteConversation={handleMuteConversation}
+        handlePinConversation={handlePinConversation}
+        handleOpenContactNicknameModal={handleOpenContactNicknameModal}
+        handleDeleteConversation={handleDeleteConversation}
       />
 
       {isProfileSettingsOpen && (

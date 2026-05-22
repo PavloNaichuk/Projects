@@ -1,13 +1,19 @@
-import type {
-  ChangeEvent,
-  FormEvent,
-  KeyboardEvent,
-  RefObject,
+import {
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  type RefObject,
 } from "react";
 import type { User } from "../api/auth";
-import type { Conversation, Message } from "../api/conversations";
+import type {
+  Conversation,
+  DeleteConversationMode,
+  Message,
+} from "../api/conversations";
 import { getUserDisplayName } from "../utils/chat";
 import MessageBubble from "./MessageBubble";
+import UserInfoModal from "./UserInfoModal";
 
 type ChatWindowProps = {
   currentUser: User;
@@ -41,6 +47,7 @@ type ChatWindowProps = {
 
   isEditingMessage: boolean;
   isDeletingMessageId: number | null;
+  isDeletingConversationId: number | null;
 
   messagesContainerRef: RefObject<HTMLElement | null>;
   messagesEndRef: RefObject<HTMLDivElement | null>;
@@ -65,6 +72,14 @@ type ChatWindowProps = {
   handleToggleMessageReaction: (
     messageId: number,
     emoji: string
+  ) => Promise<void>;
+
+  handleMuteConversation: (conversation: Conversation) => Promise<void>;
+  handlePinConversation: (conversation: Conversation) => Promise<void>;
+  handleOpenContactNicknameModal: (conversation: Conversation) => void;
+  handleDeleteConversation: (
+    conversation: Conversation,
+    mode: DeleteConversationMode
   ) => Promise<void>;
 };
 
@@ -200,6 +215,7 @@ function ChatWindow({
   setEditingMessageText,
   isEditingMessage,
   isDeletingMessageId,
+  isDeletingConversationId,
   messagesContainerRef,
   messagesEndRef,
   handleMessagesScroll,
@@ -219,43 +235,64 @@ function ChatWindow({
   handleDeleteMessage,
   handleRemoveMessageAttachment,
   handleToggleMessageReaction,
+  handleMuteConversation,
+  handlePinConversation,
+  handleOpenContactNicknameModal,
+  handleDeleteConversation,
 }: ChatWindowProps) {
+  const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
+
+  function handleOpenUserInfo() {
+    if (!selectedConversation || !selectedConversationUser) {
+      return;
+    }
+
+    setIsUserInfoOpen(true);
+  }
+
   return (
     <main className="chat">
       <header className="chat-header">
-        <div className="chat-header-user">
-          {selectedConversationUser && (
-            <UserAvatar
-              user={selectedConversationUser}
-              isOnline={selectedConversationUserIsOnline}
-            />
-          )}
+        <button
+          type="button"
+          className="chat-header-user-button"
+          onClick={handleOpenUserInfo}
+          disabled={!selectedConversation || !selectedConversationUser}
+        >
+          <div className="chat-header-user">
+            {selectedConversationUser && (
+              <UserAvatar
+                user={selectedConversationUser}
+                isOnline={selectedConversationUserIsOnline}
+              />
+            )}
 
-          <div>
-            <h2>{selectedConversationName}</h2>
+            <div>
+              <h2>{selectedConversationName}</h2>
 
-            {selectedConversationUser &&
-              shouldShowRealUsername(selectedConversationUser) && (
-                <p className="chat-header-username">
-                  @{selectedConversationUser.username}
+              {selectedConversationUser &&
+                shouldShowRealUsername(selectedConversationUser) && (
+                  <p className="chat-header-username">
+                    @{selectedConversationUser.username}
+                  </p>
+                )}
+
+              {selectedConversationUser && (
+                <p
+                  className={
+                    selectedConversationUserIsOnline
+                      ? "chat-user-status online"
+                      : "chat-user-status offline"
+                  }
+                >
+                  {selectedConversationUserIsOnline
+                    ? "Online"
+                    : formatLastSeen(selectedConversationUser.last_seen_at)}
                 </p>
               )}
-
-            {selectedConversationUser && (
-              <p
-                className={
-                  selectedConversationUserIsOnline
-                    ? "chat-user-status online"
-                    : "chat-user-status offline"
-                }
-              >
-                {selectedConversationUserIsOnline
-                  ? "Online"
-                  : formatLastSeen(selectedConversationUser.last_seen_at)}
-              </p>
-            )}
+            </div>
           </div>
-        </div>
+        </button>
 
         <form className="message-search-form" onSubmit={handleSearchMessages}>
           <input
@@ -410,6 +447,22 @@ function ChatWindow({
           {isSending ? "Sending..." : "Send"}
         </button>
       </form>
+
+      {isUserInfoOpen && selectedConversation && selectedConversationUser && (
+        <UserInfoModal
+          user={selectedConversationUser}
+          conversation={selectedConversation}
+          isOnline={selectedConversationUserIsOnline}
+          isDeletingConversation={
+            isDeletingConversationId === selectedConversation.id
+          }
+          handleClose={() => setIsUserInfoOpen(false)}
+          handleMuteConversation={handleMuteConversation}
+          handlePinConversation={handlePinConversation}
+          handleOpenContactNicknameModal={handleOpenContactNicknameModal}
+          handleDeleteConversation={handleDeleteConversation}
+        />
+      )}
     </main>
   );
 }

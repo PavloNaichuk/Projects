@@ -1750,3 +1750,128 @@
   font-size: 13px;
   opacity: 0.75;
 }
+
+.chat-header-user-button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.chat-header-user-button:disabled {
+  cursor: default;
+}
+
+.chat-header-user-button:hover h2 {
+  color: #2563eb;
+}
+
+.chat-header-user-button:focus {
+  outline: none;
+}
+
+.chat-header-user-button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+.user-info-modal {
+  width: min(420px, calc(100vw - 32px));
+  padding: 22px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.user-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.user-info-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #111827;
+}
+
+.user-info-header button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 999px;
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.user-info-header button:hover {
+  background: #d1d5db;
+}
+
+.user-info-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.user-info-profile-text {
+  min-width: 0;
+}
+
+.user-info-profile-text h4 {
+  margin: 0;
+  color: #111827;
+  font-size: 20px;
+}
+
+.user-info-profile-text span {
+  display: block;
+  margin-top: 3px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.user-info-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-info-actions button {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #374151;
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.user-info-actions button:hover {
+  background: #e5e7eb;
+}
+
+.user-info-actions button.danger {
+  color: #991b1b;
+}
+
+.user-info-actions button.danger:hover {
+  background: #fee2e2;
+}
+
+.user-info-actions button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
