@@ -139,6 +139,37 @@ async function copyTextToClipboard(text: string) {
   textarea.remove();
 }
 
+async function downloadAttachment(url: string, filename: string) {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Failed to download attachment.");
+    }
+
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+
+    link.remove();
+    URL.revokeObjectURL(objectUrl);
+  } catch {
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+}
+
 function MessageBubble({
   message,
   previousMessage,
@@ -234,6 +265,17 @@ function MessageBubble({
     setIsCopied(true);
   }
 
+  async function handleDownloadAttachment() {
+    if (!message.attachment_url) {
+      return;
+    }
+
+    await downloadAttachment(
+      message.attachment_url,
+      message.attachment_name || "attachment"
+    );
+  }
+
   return (
     <div className="message-row" ref={messageRowRef}>
       {shouldShowDateSeparator && (
@@ -293,7 +335,8 @@ function MessageBubble({
                 {message.reply_to_message && (
                   <div className="reply-preview-message">
                     <span className="reply-preview-title">
-                      Reply to {getUserDisplayName(message.reply_to_message.sender)}
+                      Reply to{" "}
+                      {getUserDisplayName(message.reply_to_message.sender)}
                     </span>
                     <span className="reply-preview-text">
                       {getReplyPreviewText(message.reply_to_message)}
@@ -411,6 +454,20 @@ function MessageBubble({
                       >
                         Forward
                       </button>
+
+                      {hasAttachment && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            closeMenu();
+                            handleDownloadAttachment();
+                          }}
+                        >
+                          {message.attachment_is_image
+                            ? "Download image"
+                            : "Download file"}
+                        </button>
+                      )}
 
                       {hasText && (
                         <button
