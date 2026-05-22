@@ -62,13 +62,18 @@ function getConversationSortTime(conversation: Conversation) {
     return new Date(conversation.last_message.created_at).getTime();
   }
 
-  return 0;
+  return new Date(conversation.updated_at).getTime();
 }
 
 export function sortConversationsByUpdatedAt(conversations: Conversation[]) {
-  return [...conversations].sort(
-    (firstConversation, secondConversation) =>
+  return [...conversations].sort((firstConversation, secondConversation) => {
+    if (firstConversation.is_pinned !== secondConversation.is_pinned) {
+      return firstConversation.is_pinned ? -1 : 1;
+    }
+
+    return (
       getConversationSortTime(secondConversation) -
       getConversationSortTime(firstConversation)
-  );
+    );
+  });
 }

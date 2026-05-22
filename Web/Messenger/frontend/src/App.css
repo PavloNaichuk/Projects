@@ -1745,3 +1745,8 @@
   color: #9ca3af;
   font-size: 12px;
 }
+
+.pinned-conversation-icon {
+  font-size: 13px;
+  opacity: 0.75;
+}

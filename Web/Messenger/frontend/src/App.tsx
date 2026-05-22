@@ -35,6 +35,7 @@ import {
   getConversations,
   markConversationAsRead,
   muteConversation,
+  pinConversation,
   type Conversation,
   type DeleteConversationMode,
   type Message,
@@ -126,7 +127,9 @@ function App() {
     null
   );
   const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
-  const [forwardingMessage, setForwardingMessage] = useState<Message | null>(null);
+  const [forwardingMessage, setForwardingMessage] = useState<Message | null>(
+    null
+  );
   const [messageError, setMessageError] = useState("");
   const [isForwardingMessage, setIsForwardingMessage] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -162,8 +165,10 @@ function App() {
   const [isDeletingConversationId, setIsDeletingConversationId] = useState<
     number | null
   >(null);
+
   const currentUserId = currentUser?.id ?? null;
   const selectedConversationId = selectedConversation?.id ?? null;
+
   useEffect(() => {
     conversationsRef.current = conversations;
   }, [conversations]);
@@ -313,7 +318,10 @@ function App() {
     );
   }
 
-  function updateUserLastSeenInMessage(message: Message, updatedUser: User): Message {
+  function updateUserLastSeenInMessage(
+    message: Message,
+    updatedUser: User
+  ): Message {
     return {
       ...message,
       sender:
@@ -466,10 +474,12 @@ function App() {
 
   function updateConversationInState(updatedConversation: Conversation) {
     setConversations((previousConversations) =>
-      previousConversations.map((conversation) =>
-        conversation.id === updatedConversation.id
-          ? updatedConversation
-          : conversation
+      sortConversationsByUpdatedAt(
+        previousConversations.map((conversation) =>
+          conversation.id === updatedConversation.id
+            ? updatedConversation
+            : conversation
+        )
       )
     );
 
@@ -950,7 +960,7 @@ function App() {
       window.removeEventListener("keydown", unlockNotificationAudio);
     };
   }, [getNotificationAudio]);
-  
+
   useEffect(() => {
     async function restoreSession() {
       const savedAccessToken = localStorage.getItem("accessToken");
@@ -1071,129 +1081,129 @@ function App() {
   }, [accessToken, currentUserId, playIncomingMessageSound]);
 
   useEffect(() => {
-  if (!accessToken || !selectedConversationId) {
-    return;
-  }
+    if (!accessToken || !selectedConversationId) {
+      return;
+    }
 
-  const websocketUrl = `${WS_BASE_URL}/conversations/${selectedConversationId}/?token=${accessToken}`;
-  const socket = new WebSocket(websocketUrl);
+    const websocketUrl = `${WS_BASE_URL}/conversations/${selectedConversationId}/?token=${accessToken}`;
+    const socket = new WebSocket(websocketUrl);
 
-  socketRef.current = socket;
+    socketRef.current = socket;
 
-  socket.onopen = () => {
-    setMessageError("");
-    sendReadStatus();
-  };
+    socket.onopen = () => {
+      setMessageError("");
+      sendReadStatus();
+    };
 
-  socket.onmessage = async (event) => {
-    const data = JSON.parse(event.data);
+    socket.onmessage = async (event) => {
+      const data = JSON.parse(event.data);
 
-    if (data.type === "message") {
-      const receivedMessage = data.message as Message;
+      if (data.type === "message") {
+        const receivedMessage = data.message as Message;
 
-      playIncomingMessageSound(receivedMessage);
-      addMessageToState(receivedMessage);
+        playIncomingMessageSound(receivedMessage);
+        addMessageToState(receivedMessage);
 
-      if (
-        accessToken &&
-        selectedConversationId === receivedMessage.conversation &&
-        receivedMessage.sender.id !== currentUserId
-      ) {
-        try {
-          await markConversationAsRead(accessToken, selectedConversationId);
-          markConversationReadInState(selectedConversationId);
-          sendReadStatus();
-        } catch {
-          console.error("Failed to mark WebSocket message as read.");
+        if (
+          accessToken &&
+          selectedConversationId === receivedMessage.conversation &&
+          receivedMessage.sender.id !== currentUserId
+        ) {
+          try {
+            await markConversationAsRead(accessToken, selectedConversationId);
+            markConversationReadInState(selectedConversationId);
+            sendReadStatus();
+          } catch {
+            console.error("Failed to mark WebSocket message as read.");
+          }
         }
-      }
 
-      return;
-    }
-
-    if (data.type === "message_updated") {
-      const updatedMessage = data.message as Message;
-
-      updateMessageInState(updatedMessage);
-
-      return;
-    }
-
-    if (data.type === "delivered") {
-      const messageIds = data.message_ids as number[];
-
-      markMessagesAsDeliveredInState(messageIds);
-
-      return;
-    }
-
-    if (data.type === "read") {
-      const reader = data.user as User;
-
-      if (reader.id === currentUserId) {
         return;
       }
 
-      setMessages((previousMessages) =>
-        previousMessages.map((message) =>
-          message.sender.id === currentUserId && !message.is_deleted
-            ? {
-                ...message,
-                is_delivered: true,
-                delivered_at: message.delivered_at ?? new Date().toISOString(),
-                is_read: true,
-              }
-            : message
-        )
-      );
+      if (data.type === "message_updated") {
+        const updatedMessage = data.message as Message;
 
-      return;
-    }
+        updateMessageInState(updatedMessage);
 
-    if (data.type === "typing") {
-      const receivedTypingUser = data.user as User;
-
-      if (receivedTypingUser.id === currentUserId) {
         return;
       }
 
-      if (data.is_typing) {
-        setTypingUser(receivedTypingUser);
-      } else {
-        setTypingUser(null);
+      if (data.type === "delivered") {
+        const messageIds = data.message_ids as number[];
+
+        markMessagesAsDeliveredInState(messageIds);
+
+        return;
       }
 
-      return;
-    }
+      if (data.type === "read") {
+        const reader = data.user as User;
 
-    if (data.type === "error") {
-      setMessageError(data.detail);
-    }
-  };
+        if (reader.id === currentUserId) {
+          return;
+        }
 
-  socket.onerror = () => {
-    if (socketRef.current === socket) {
-      setMessageError("WebSocket connection error.");
-    }
+        setMessages((previousMessages) =>
+          previousMessages.map((message) =>
+            message.sender.id === currentUserId && !message.is_deleted
+              ? {
+                  ...message,
+                  is_delivered: true,
+                  delivered_at: message.delivered_at ?? new Date().toISOString(),
+                  is_read: true,
+                }
+              : message
+          )
+        );
 
-    console.error("Chat WebSocket connection error.");
-  };
+        return;
+      }
 
-  return () => {
-    if (typingTimeoutRef.current) {
-      window.clearTimeout(typingTimeoutRef.current);
-      typingTimeoutRef.current = null;
-    }
+      if (data.type === "typing") {
+        const receivedTypingUser = data.user as User;
 
-    setTypingUser(null);
+        if (receivedTypingUser.id === currentUserId) {
+          return;
+        }
 
-    socket.close();
+        if (data.is_typing) {
+          setTypingUser(receivedTypingUser);
+        } else {
+          setTypingUser(null);
+        }
 
-    if (socketRef.current === socket) {
-      socketRef.current = null;
-    }
-  };
-}, [accessToken, selectedConversationId, currentUserId, playIncomingMessageSound]);
+        return;
+      }
+
+      if (data.type === "error") {
+        setMessageError(data.detail);
+      }
+    };
+
+    socket.onerror = () => {
+      if (socketRef.current === socket) {
+        setMessageError("WebSocket connection error.");
+      }
+
+      console.error("Chat WebSocket connection error.");
+    };
+
+    return () => {
+      if (typingTimeoutRef.current) {
+        window.clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
+
+      setTypingUser(null);
+
+      socket.close();
+
+      if (socketRef.current === socket) {
+        socketRef.current = null;
+      }
+    };
+  }, [accessToken, selectedConversationId, currentUserId, playIncomingMessageSound]);
 
   useLayoutEffect(() => {
     const messagesContainer = messagesContainerRef.current;
@@ -1410,6 +1420,26 @@ function App() {
       updateConversationInState(response.conversation);
     } catch {
       setUserSearchError("Failed to update mute status.");
+    }
+  }
+
+  async function handlePinConversation(conversation: Conversation) {
+    if (!accessToken) {
+      return;
+    }
+
+    setUserSearchError("");
+
+    try {
+      const response = await pinConversation(
+        accessToken,
+        conversation.id,
+        !conversation.is_pinned
+      );
+
+      updateConversationInState(response.conversation);
+    } catch {
+      setUserSearchError("Failed to update pin status.");
     }
   }
 
@@ -1846,6 +1876,7 @@ function App() {
         handleSelectConversation={handleSelectConversation}
         handleDeleteConversation={handleDeleteConversation}
         handleMuteConversation={handleMuteConversation}
+        handlePinConversation={handlePinConversation}
         handleOpenContactNicknameModal={handleOpenContactNicknameModal}
       />
 
@@ -1894,6 +1925,7 @@ function App() {
         handleRemoveMessageAttachment={handleRemoveMessageAttachment}
         handleToggleMessageReaction={handleToggleMessageReaction}
       />
+
       {isProfileSettingsOpen && (
         <ProfileSettingsModal
           currentUser={currentUser}
@@ -1911,6 +1943,7 @@ function App() {
           handleUpdateCurrentUserProfile={handleUpdateCurrentUserProfile}
         />
       )}
+
       {contactNicknameUser && (
         <ContactNicknameModal
           user={contactNicknameUser}
@@ -1923,6 +1956,7 @@ function App() {
           handleSave={handleUpdateContactNickname}
         />
       )}
+
       {forwardingMessage && (
         <div className="modal-backdrop">
           <div className="forward-modal">
@@ -1944,7 +1978,9 @@ function App() {
                   <button
                     key={conversation.id}
                     type="button"
-                    onClick={() => handleForwardMessageToConversation(conversation.id)}
+                    onClick={() =>
+                      handleForwardMessageToConversation(conversation.id)
+                    }
                     disabled={isForwardingMessage}
                   >
                     <span className="forward-conversation-name">

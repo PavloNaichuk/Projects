@@ -335,6 +335,7 @@ class ConversationDetailView(APIView):
             status=status.HTTP_200_OK,
         )
 
+
 class ConversationMuteView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -387,6 +388,61 @@ class ConversationMuteView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+
+class ConversationPinView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, conversation_id):
+        conversation = (
+            Conversation.objects.filter(
+                id=conversation_id,
+                participants__user=request.user,
+            )
+            .exclude(
+                hidden_for=request.user,
+            )
+            .prefetch_related("participants__user")
+            .first()
+        )
+
+        if not conversation:
+            return Response(
+                {"detail": "Conversation not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        requested_is_pinned = request.data.get("is_pinned")
+
+        if requested_is_pinned is None:
+            should_pin = not conversation.pinned_for.filter(
+                id=request.user.id
+            ).exists()
+        else:
+            should_pin = requested_is_pinned is True or str(
+                requested_is_pinned
+            ).lower() == "true"
+
+        if should_pin:
+            conversation.pinned_for.add(request.user)
+            detail = "Conversation pinned."
+        else:
+            conversation.pinned_for.remove(request.user)
+            detail = "Conversation unpinned."
+
+        serializer = ConversationSerializer(
+            conversation,
+            context={"request": request},
+        )
+
+        return Response(
+            {
+                "detail": detail,
+                "conversation": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
 
 class ConversationMessagesView(APIView):
     permission_classes = [IsAuthenticated]

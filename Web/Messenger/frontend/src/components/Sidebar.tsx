@@ -36,6 +36,7 @@ type SidebarProps = {
     mode: DeleteConversationMode
   ) => Promise<void>;
   handleMuteConversation: (conversation: Conversation) => Promise<void>;
+  handlePinConversation: (conversation: Conversation) => Promise<void>;
   handleOpenContactNicknameModal: (conversation: Conversation) => void;
 };
 
@@ -87,6 +88,7 @@ function Sidebar({
   handleSelectConversation,
   handleDeleteConversation,
   handleMuteConversation,
+  handlePinConversation,
   handleOpenContactNicknameModal,
 }: SidebarProps) {
   const [openedMenuConversationId, setOpenedMenuConversationId] = useState<
@@ -240,6 +242,10 @@ function Sidebar({
                           {getConversationName(conversation, currentUser)}
                         </span>
 
+                        {conversation.is_pinned && (
+                          <span className="pinned-conversation-icon">📌</span>
+                        )}
+
                         {conversation.is_muted && (
                           <span className="muted-conversation-icon">🔇</span>
                         )}
@@ -296,6 +302,19 @@ function Sidebar({
 
                 {isMenuOpen && (
                   <div className="conversation-menu">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenedMenuConversationId(null);
+                        handlePinConversation(conversation);
+                      }}
+                      disabled={isDeleting}
+                    >
+                      {conversation.is_pinned
+                        ? "Unpin chat"
+                        : "Pin chat"}
+                    </button>
+
                     <button
                       type="button"
                       onClick={() => {

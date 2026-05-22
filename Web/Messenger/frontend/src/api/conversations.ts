@@ -66,6 +66,7 @@ export type Conversation = {
   last_message: Message | null;
   unread_count: number;
   is_muted: boolean;
+  is_pinned: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -79,6 +80,28 @@ export type MessagesPage = {
 export type ToggleMessageReactionResponse = {
   action: "added" | "removed";
   message: Message;
+};
+
+export type DeleteConversationMode = "for_me" | "for_everyone";
+
+export type DeleteConversationResponse = {
+  detail: string;
+  conversation_id: number;
+  mode: DeleteConversationMode;
+};
+
+export type MuteConversationResponse = {
+  detail: string;
+  conversation: Conversation;
+};
+
+export type PinConversationResponse = {
+  detail: string;
+  conversation: Conversation;
+};
+
+export type MarkConversationAsReadResponse = {
+  updated_count: number;
 };
 
 export async function getConversations(
@@ -211,19 +234,6 @@ export async function createConversation(
   return response.json();
 }
 
-export type DeleteConversationMode = "for_me" | "for_everyone";
-
-export type DeleteConversationResponse = {
-  detail: string;
-  conversation_id: number;
-  mode: DeleteConversationMode;
-};
-
-export type MuteConversationResponse = {
-  detail: string;
-  conversation: Conversation;
-};
-
 export async function deleteConversation(
   accessToken: string,
   conversationId: number,
@@ -267,6 +277,30 @@ export async function muteConversation(
 
   if (!response.ok) {
     throw new Error("Failed to update conversation mute status.");
+  }
+
+  return response.json();
+}
+
+export async function pinConversation(
+  accessToken: string,
+  conversationId: number,
+  isPinned: boolean
+): Promise<PinConversationResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/conversations/${conversationId}/pin/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ is_pinned: isPinned }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update conversation pin status.");
   }
 
   return response.json();
@@ -375,10 +409,6 @@ export async function forwardMessage(
 
   return response.json();
 }
-
-export type MarkConversationAsReadResponse = {
-  updated_count: number;
-};
 
 export async function markConversationAsRead(
   accessToken: string,

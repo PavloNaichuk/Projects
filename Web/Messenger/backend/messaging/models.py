@@ -8,12 +8,19 @@ class Conversation(models.Model):
         related_name="hidden_conversations",
         blank=True,
     )
-    
+
     muted_for = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="muted_conversations",
         blank=True,
     )
+
+    pinned_for = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="pinned_conversations",
+        blank=True,
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

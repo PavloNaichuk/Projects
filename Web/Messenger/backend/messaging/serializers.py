@@ -292,6 +292,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     unread_count = serializers.SerializerMethodField()
     is_muted = serializers.SerializerMethodField()
+    is_pinned = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
@@ -301,6 +302,7 @@ class ConversationSerializer(serializers.ModelSerializer):
             "last_message",
             "unread_count",
             "is_muted",
+            "is_pinned",
             "created_at",
             "updated_at",
         )
@@ -348,6 +350,14 @@ class ConversationSerializer(serializers.ModelSerializer):
             return False
 
         return obj.muted_for.filter(id=request.user.id).exists()
+
+    def get_is_pinned(self, obj):
+        request = self.context.get("request")
+
+        if not request or not request.user or not request.user.is_authenticated:
+            return False
+
+        return obj.pinned_for.filter(id=request.user.id).exists()
 
 
 class ConversationCreateSerializer(serializers.Serializer):
