@@ -83,38 +83,10 @@ function formatLastSeen(lastSeenAt: string | null) {
   )}`;
 }
 
-function UserInfoModal({
-  user,
-  conversation,
-  isOnline,
-  isDeletingConversation,
-  handleClose,
-  handleMuteConversation,
-  handlePinConversation,
-  handleOpenContactNicknameModal,
-  handleDeleteConversation,
-}: UserInfoModalProps) {
+function UserInfoModal({ user, isOnline, handleClose }: UserInfoModalProps) {
   const displayName = getUserDisplayName(user);
   const initial = displayName.trim().charAt(0).toUpperCase() || "?";
   const shouldShowUsername = user.display_name !== user.username;
-
-  async function handleMuteClick() {
-    await handleMuteConversation(conversation);
-  }
-
-  async function handlePinClick() {
-    await handlePinConversation(conversation);
-  }
-
-  function handleRenameClick() {
-    handleClose();
-    handleOpenContactNicknameModal(conversation);
-  }
-
-  async function handleDeleteForMeClick() {
-    await handleDeleteConversation(conversation, "for_me");
-    handleClose();
-  }
 
   return (
     <div className="modal-backdrop">
@@ -143,33 +115,14 @@ function UserInfoModal({
 
             {shouldShowUsername && <span>@{user.username}</span>}
 
-            <p className={isOnline ? "chat-user-status online" : "chat-user-status offline"}>
+            <p
+              className={
+                isOnline ? "chat-user-status online" : "chat-user-status offline"
+              }
+            >
               {isOnline ? "Online" : formatLastSeen(user.last_seen_at)}
             </p>
           </div>
-        </div>
-
-        <div className="user-info-actions">
-          <button type="button" onClick={handleRenameClick}>
-            Rename contact
-          </button>
-
-          <button type="button" onClick={handleMuteClick}>
-            {conversation.is_muted ? "Unmute sound" : "Mute sound"}
-          </button>
-
-          <button type="button" onClick={handlePinClick}>
-            {conversation.is_pinned ? "Unpin chat" : "Pin chat"}
-          </button>
-
-          <button
-            type="button"
-            className="danger"
-            onClick={handleDeleteForMeClick}
-            disabled={isDeletingConversation}
-          >
-            {isDeletingConversation ? "Deleting..." : "Delete chat for me"}
-          </button>
         </div>
       </div>
     </div>

@@ -1751,27 +1751,6 @@
   opacity: 0.75;
 }
 
-.chat-header-user-button {
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  text-align: left;
-}
-
-.chat-header-user-button:disabled {
-  cursor: default;
-}
-
-.chat-header-user-button:hover h2 {
-  color: #2563eb;
-}
-
-.chat-header-user-button:focus {
-  outline: none;
-}
-
 .chat-header-user-button:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 4px;

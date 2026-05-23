@@ -1,9 +1,8 @@
-import {
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-  type KeyboardEvent,
-  type RefObject,
+import type {
+  ChangeEvent,
+  FormEvent,
+  KeyboardEvent,
+  RefObject,
 } from "react";
 import type { User } from "../api/auth";
 import type {
@@ -13,7 +12,6 @@ import type {
 } from "../api/conversations";
 import { getUserDisplayName } from "../utils/chat";
 import MessageBubble from "./MessageBubble";
-import UserInfoModal from "./UserInfoModal";
 
 type ChatWindowProps = {
   currentUser: User;
@@ -211,7 +209,6 @@ function ChatWindow({
   setEditingMessageText,
   isEditingMessage,
   isDeletingMessageId,
-  isDeletingConversationId,
   messagesContainerRef,
   messagesEndRef,
   handleMessagesScroll,
@@ -231,57 +228,36 @@ function ChatWindow({
   handleDeleteMessage,
   handleRemoveMessageAttachment,
   handleToggleMessageReaction,
-  handleMuteConversation,
-  handlePinConversation,
-  handleOpenContactNicknameModal,
-  handleDeleteConversation,
 }: ChatWindowProps) {
-  const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
-
-  function handleOpenUserInfo() {
-    if (!selectedConversation || !selectedConversationUser) {
-      return;
-    }
-
-    setIsUserInfoOpen(true);
-  }
-
   return (
     <main className="chat">
       <header className="chat-header">
-        <button
-          type="button"
-          className="chat-header-user-button"
-          onClick={handleOpenUserInfo}
-          disabled={!selectedConversation || !selectedConversationUser}
-        >
-          <div className="chat-header-user">
+        <div className="chat-header-user">
+          {selectedConversationUser && (
+            <UserAvatar
+              user={selectedConversationUser}
+              isOnline={selectedConversationUserIsOnline}
+            />
+          )}
+
+          <div>
+            <h2>{selectedConversationName}</h2>
+
             {selectedConversationUser && (
-              <UserAvatar
-                user={selectedConversationUser}
-                isOnline={selectedConversationUserIsOnline}
-              />
+              <p
+                className={
+                  selectedConversationUserIsOnline
+                    ? "chat-user-status online"
+                    : "chat-user-status offline"
+                }
+              >
+                {selectedConversationUserIsOnline
+                  ? "Online"
+                  : formatLastSeen(selectedConversationUser.last_seen_at)}
+              </p>
             )}
-
-            <div>
-              <h2>{selectedConversationName}</h2>
-
-              {selectedConversationUser && (
-                <p
-                  className={
-                    selectedConversationUserIsOnline
-                      ? "chat-user-status online"
-                      : "chat-user-status offline"
-                  }
-                >
-                  {selectedConversationUserIsOnline
-                    ? "Online"
-                    : formatLastSeen(selectedConversationUser.last_seen_at)}
-                </p>
-              )}
-            </div>
           </div>
-        </button>
+        </div>
 
         <form className="message-search-form" onSubmit={handleSearchMessages}>
           <input
@@ -436,22 +412,6 @@ function ChatWindow({
           {isSending ? "Sending..." : "Send"}
         </button>
       </form>
-
-      {isUserInfoOpen && selectedConversation && selectedConversationUser && (
-        <UserInfoModal
-          user={selectedConversationUser}
-          conversation={selectedConversation}
-          isOnline={selectedConversationUserIsOnline}
-          isDeletingConversation={
-            isDeletingConversationId === selectedConversation.id
-          }
-          handleClose={() => setIsUserInfoOpen(false)}
-          handleMuteConversation={handleMuteConversation}
-          handlePinConversation={handlePinConversation}
-          handleOpenContactNicknameModal={handleOpenContactNicknameModal}
-          handleDeleteConversation={handleDeleteConversation}
-        />
-      )}
     </main>
   );
 }
