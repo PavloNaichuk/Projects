@@ -499,16 +499,6 @@ function ChatWindow({
     closeTextContextMenu();
   }
 
-  async function handlePastePlainTextMenuClick() {
-    const pastedText = await readTextFromClipboard();
-
-    if (pastedText) {
-      replaceMessageInputSelection(pastedText);
-    }
-
-    closeTextContextMenu();
-  }
-
   function handleSelectAllMenuClick() {
     const textarea = messageInputRef.current;
 
@@ -756,11 +746,6 @@ function ChatWindow({
           <button type="button" onClick={handlePasteMenuClick}>
             <span>Paste</span>
             <span>Ctrl+V</span>
-          </button>
-
-          <button type="button" onClick={handlePastePlainTextMenuClick}>
-            <span>Paste as plain text</span>
-            <span>Ctrl+Shift+V</span>
           </button>
 
           <button
