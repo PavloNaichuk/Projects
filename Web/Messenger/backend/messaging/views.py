@@ -86,7 +86,7 @@ def notify_message_delivered(conversation_id, message_ids, user_id):
     )
 
 
-def notify_message_reaction_updated(conversation_id, message_data):
+def notify_message_updated(conversation_id, message_data):
     channel_layer = get_channel_layer()
 
     if not channel_layer:
@@ -456,6 +456,9 @@ class ConversationMessagesView(APIView):
             .exclude(
                 conversation__hidden_for=request.user,
             )
+            .exclude(
+                hidden_for=request.user,
+            )
             .select_related(*MESSAGE_SELECT_RELATED)
             .prefetch_related("reactions__user")
         )
@@ -623,12 +626,18 @@ class ConversationMarkReadView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        messages = Message.objects.filter(
-            conversation=conversation,
-            is_read=False,
-            is_deleted=False,
-        ).exclude(
-            sender=request.user,
+        messages = (
+            Message.objects.filter(
+                conversation=conversation,
+                is_read=False,
+                is_deleted=False,
+            )
+            .exclude(
+                sender=request.user,
+            )
+            .exclude(
+                hidden_for=request.user,
+            )
         )
 
         now = timezone.now()
@@ -660,6 +669,9 @@ class MessageDetailView(APIView):
             )
             .exclude(
                 conversation__hidden_for=request.user,
+            )
+            .exclude(
+                hidden_for=request.user,
             )
             .select_related("sender")
             .first()
@@ -711,6 +723,8 @@ class MessageDetailView(APIView):
 
             message_data = serialize_message(message, request)
 
+            notify_message_updated(message.conversation_id, message_data)
+
             return Response(message_data)
 
         if "text" not in request.data:
@@ -731,20 +745,33 @@ class MessageDetailView(APIView):
 
             message_data = serialize_message(message, request)
 
+            notify_message_updated(message.conversation_id, message_data)
+
             return Response(message_data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, message_id):
+        delete_mode = request.query_params.get("mode", "for_everyone")
+
+        if delete_mode not in ("for_me", "for_everyone"):
+            return Response(
+                {"mode": ["Mode must be 'for_me' or 'for_everyone'."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         message = (
             Message.objects.filter(
                 id=message_id,
-                sender=request.user,
                 conversation__participants__user=request.user,
             )
             .exclude(
                 conversation__hidden_for=request.user,
             )
+            .exclude(
+                hidden_for=request.user,
+            )
+            .select_related("conversation", "sender")
             .first()
         )
 
@@ -752,6 +779,25 @@ class MessageDetailView(APIView):
             return Response(
                 {"detail": "Message not found."},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if delete_mode == "for_me":
+            message.hidden_for.add(request.user)
+
+            return Response(
+                {
+                    "detail": "Message deleted for you.",
+                    "message_id": message.id,
+                    "conversation_id": message.conversation_id,
+                    "mode": "for_me",
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        if message.sender_id != request.user.id:
+            return Response(
+                {"detail": "You can delete for everyone only your own messages."},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if message.attachment:
@@ -779,7 +825,16 @@ class MessageDetailView(APIView):
 
         message_data = serialize_message(message, request)
 
-        return Response(message_data, status=status.HTTP_200_OK)
+        notify_message_updated(message.conversation_id, message_data)
+
+        return Response(
+            {
+                "detail": "Message deleted for everyone.",
+                "message": message_data,
+                "mode": "for_everyone",
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class MessageReactionToggleView(APIView):
@@ -803,6 +858,9 @@ class MessageReactionToggleView(APIView):
             )
             .exclude(
                 conversation__hidden_for=request.user,
+            )
+            .exclude(
+                hidden_for=request.user,
             )
             .select_related("conversation")
             .first()
@@ -839,7 +897,7 @@ class MessageReactionToggleView(APIView):
 
         message_data = serialize_message(message, request)
 
-        notify_message_reaction_updated(
+        notify_message_updated(
             conversation_id=message.conversation_id,
             message_data=message_data,
         )
@@ -872,6 +930,9 @@ class MessageForwardView(APIView):
             )
             .exclude(
                 conversation__hidden_for=request.user,
+            )
+            .exclude(
+                hidden_for=request.user,
             )
             .select_related("sender")
             .first()

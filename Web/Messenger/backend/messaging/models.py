@@ -60,6 +60,12 @@ class Message(models.Model):
         related_name="sent_messages",
     )
 
+    hidden_for = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="hidden_messages",
+        blank=True,
+    )
+
     reply_to = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,

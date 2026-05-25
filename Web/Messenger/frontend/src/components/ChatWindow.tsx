@@ -12,6 +12,7 @@ import type { User } from "../api/auth";
 import type {
   Conversation,
   DeleteConversationMode,
+  DeleteMessageMode,
   Message,
 } from "../api/conversations";
 import { getUserDisplayName } from "../utils/chat";
@@ -94,7 +95,10 @@ type ChatWindowProps = {
   handleStartEditMessage: (message: Message) => void;
   handleCancelEditMessage: () => void;
   handleSaveEditedMessage: (messageId: number) => Promise<void>;
-  handleDeleteMessage: (messageId: number) => Promise<void>;
+  handleDeleteMessage: (
+    messageId: number,
+    mode: DeleteMessageMode
+  ) => Promise<void>;
   handleRemoveMessageAttachment: (messageId: number) => Promise<void>;
   handleToggleMessageReaction: (
     messageId: number,

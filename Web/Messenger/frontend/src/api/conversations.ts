@@ -90,6 +90,25 @@ export type DeleteConversationResponse = {
   mode: DeleteConversationMode;
 };
 
+export type DeleteMessageMode = "for_me" | "for_everyone";
+
+export type DeleteMessageForMeResponse = {
+  detail: string;
+  message_id: number;
+  conversation_id: number;
+  mode: "for_me";
+};
+
+export type DeleteMessageForEveryoneResponse = {
+  detail: string;
+  message: Message;
+  mode: "for_everyone";
+};
+
+export type DeleteMessageResponse =
+  | DeleteMessageForMeResponse
+  | DeleteMessageForEveryoneResponse;
+
 export type MuteConversationResponse = {
   detail: string;
   conversation: Conversation;
@@ -329,14 +348,20 @@ export async function editMessage(
 
 export async function deleteMessage(
   accessToken: string,
-  messageId: number
-): Promise<Message> {
-  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  messageId: number,
+  mode: DeleteMessageMode
+): Promise<DeleteMessageResponse> {
+  const searchParams = new URLSearchParams({ mode });
+
+  const response = await fetch(
+    `${API_BASE_URL}/messages/${messageId}/?${searchParams.toString()}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to delete message.");

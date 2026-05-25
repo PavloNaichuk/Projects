@@ -255,10 +255,15 @@ class MessageSerializer(serializers.ModelSerializer):
                     {"reply_to": ["Reply message must be from the same conversation."]}
                 )
 
-            if request and not Message.objects.filter(
+            reply_query = Message.objects.filter(
                 id=reply_to.id,
                 conversation__participants__user=request.user,
-            ).exists():
+            )
+
+            if request:
+                reply_query = reply_query.exclude(hidden_for=request.user)
+
+            if request and not reply_query.exists():
                 raise serializers.ValidationError(
                     {"reply_to": ["Reply message not found."]}
                 )
@@ -308,9 +313,10 @@ class ConversationSerializer(serializers.ModelSerializer):
         )
 
     def get_last_message(self, obj):
-        message = (
-            obj.messages
-            .select_related(
+        request = self.context.get("request")
+
+        messages = (
+            obj.messages.select_related(
                 "sender",
                 "reply_to",
                 "reply_to__sender",
@@ -319,8 +325,12 @@ class ConversationSerializer(serializers.ModelSerializer):
             )
             .prefetch_related("reactions__user")
             .order_by("-created_at", "-id")
-            .first()
         )
+
+        if request and request.user and request.user.is_authenticated:
+            messages = messages.exclude(hidden_for=request.user)
+
+        message = messages.first()
 
         if not message:
             return None
@@ -336,12 +346,19 @@ class ConversationSerializer(serializers.ModelSerializer):
         if not request:
             return 0
 
-        return obj.messages.filter(
-            is_read=False,
-            is_deleted=False,
-        ).exclude(
-            sender=request.user
-        ).count()
+        return (
+            obj.messages.filter(
+                is_read=False,
+                is_deleted=False,
+            )
+            .exclude(
+                sender=request.user,
+            )
+            .exclude(
+                hidden_for=request.user,
+            )
+            .count()
+        )
 
     def get_is_muted(self, obj):
         request = self.context.get("request")

@@ -38,6 +38,7 @@ import {
   pinConversation,
   type Conversation,
   type DeleteConversationMode,
+  type DeleteMessageMode,
   type Message,
 } from "./api/conversations";
 import { searchUsers } from "./api/users";
@@ -772,6 +773,35 @@ function App() {
     } finally {
       setIsProfileUpdating(false);
     }
+  }
+
+
+  function removeMessageFromState(messageId: number) {
+    setMessages((previousMessages) =>
+      previousMessages.filter((message) => message.id !== messageId)
+    );
+
+    setEditingMessageId((previousEditingMessageId) =>
+      previousEditingMessageId === messageId ? null : previousEditingMessageId
+    );
+
+    setEditingMessageText((previousEditingMessageText) => {
+      if (editingMessageId === messageId) {
+        return "";
+      }
+
+      return previousEditingMessageText;
+    });
+
+    setReplyToMessage((previousReplyToMessage) =>
+      previousReplyToMessage?.id === messageId ? null : previousReplyToMessage
+    );
+
+    setForwardingMessage((previousForwardingMessage) =>
+      previousForwardingMessage?.id === messageId
+        ? null
+        : previousForwardingMessage
+    );
   }
 
   function updateMessageInState(updatedMessage: Message) {
@@ -1750,7 +1780,10 @@ function App() {
     }
   }
 
-  async function handleDeleteMessage(messageId: number) {
+  async function handleDeleteMessage(
+    messageId: number,
+    mode: DeleteMessageMode
+  ) {
     if (!accessToken) {
       return;
     }
@@ -1759,13 +1792,22 @@ function App() {
     setMessageError("");
 
     try {
-      const deletedMessage = await deleteMessage(accessToken, messageId);
-      updateMessageInState(deletedMessage);
+      const response = await deleteMessage(accessToken, messageId, mode);
+
+      if (response.mode === "for_me") {
+        removeMessageFromState(messageId);
+        await refreshConversations(accessToken);
+        return;
+      }
+
+      updateMessageInState(response.message);
 
       if (editingMessageId === messageId) {
         setEditingMessageId(null);
         setEditingMessageText("");
       }
+
+      await refreshConversations(accessToken);
     } catch {
       setMessageError("Failed to delete message.");
     } finally {

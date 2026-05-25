@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { User } from "../api/auth";
-import type { Message, MessageReply } from "../api/conversations";
+import type {
+  DeleteMessageMode,
+  Message,
+  MessageReply,
+} from "../api/conversations";
 import {
   formatMessageDate,
   formatMessageTime,
@@ -30,7 +34,10 @@ type MessageBubbleProps = {
   handleStartEditMessage: (message: Message) => void;
   handleCancelEditMessage: () => void;
   handleSaveEditedMessage: (messageId: number) => Promise<void>;
-  handleDeleteMessage: (messageId: number) => Promise<void>;
+  handleDeleteMessage: (
+    messageId: number,
+    mode: DeleteMessageMode
+  ) => Promise<void>;
   handleRemoveMessageAttachment: (messageId: number) => Promise<void>;
   handleToggleMessageReaction: (
     messageId: number,
@@ -506,17 +513,28 @@ function MessageBubble({
                         </button>
                       )}
 
+                      <button
+                        type="button"
+                        onClick={() => {
+                          closeMenu();
+                          handleDeleteMessage(message.id, "for_me");
+                        }}
+                        disabled={isDeleting}
+                      >
+                        {isDeleting ? "Deleting..." : "Delete for me"}
+                      </button>
+
                       {isOwnMessage && (
                         <button
                           type="button"
                           className="danger"
                           onClick={() => {
                             closeMenu();
-                            handleDeleteMessage(message.id);
+                            handleDeleteMessage(message.id, "for_everyone");
                           }}
                           disabled={isDeleting}
                         >
-                          {isDeleting ? "Deleting..." : "Delete"}
+                          {isDeleting ? "Deleting..." : "Delete for everyone"}
                         </button>
                       )}
                     </div>
