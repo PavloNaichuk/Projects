@@ -1994,3 +1994,20 @@
 .text-emoji-picker button:hover {
   background: #f3f4f6;
 }
+
+.conversation-item.marked-unread .conversation-display-name {
+  font-weight: 800;
+}
+
+.conversation-item.marked-unread .conversation-last-message {
+  color: #111827;
+  font-weight: 600;
+}
+
+.manual-unread-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #2563eb;
+  flex: 0 0 auto;
+}

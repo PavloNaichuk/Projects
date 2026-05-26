@@ -67,6 +67,7 @@ export type Conversation = {
   unread_count: number;
   is_muted: boolean;
   is_pinned: boolean;
+  is_marked_unread: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -121,6 +122,11 @@ export type PinConversationResponse = {
 
 export type MarkConversationAsReadResponse = {
   updated_count: number;
+};
+
+export type MarkConversationAsUnreadResponse = {
+  detail: string;
+  conversation: Conversation;
 };
 
 export async function getConversations(
@@ -451,6 +457,27 @@ export async function markConversationAsRead(
 
   if (!response.ok) {
     throw new Error("Failed to mark conversation as read.");
+  }
+
+  return response.json();
+}
+
+export async function markConversationAsUnread(
+  accessToken: string,
+  conversationId: number
+): Promise<MarkConversationAsUnreadResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/conversations/${conversationId}/mark-unread/`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to mark conversation as unread.");
   }
 
   return response.json();

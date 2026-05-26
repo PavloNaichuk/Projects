@@ -34,6 +34,7 @@ import {
   getConversationMessagesPage,
   getConversations,
   markConversationAsRead,
+  markConversationAsUnread,
   muteConversation,
   pinConversation,
   type Conversation,
@@ -181,6 +182,7 @@ function App() {
           ? {
               ...conversation,
               unread_count: 0,
+              is_marked_unread: false,
             }
           : conversation
       )
@@ -191,6 +193,7 @@ function App() {
         ? {
             ...previousConversation,
             unread_count: 0,
+            is_marked_unread: false,
           }
         : previousConversation
     );
@@ -230,6 +233,7 @@ function App() {
             last_message: receivedMessage,
             updated_at: receivedMessage.created_at,
             unread_count: 0,
+            is_marked_unread: false,
           }
         : previousConversation
     );
@@ -1473,6 +1477,25 @@ function App() {
     }
   }
 
+  async function handleMarkConversationAsUnread(conversation: Conversation) {
+    if (!accessToken) {
+      return;
+    }
+
+    setUserSearchError("");
+
+    try {
+      const response = await markConversationAsUnread(
+        accessToken,
+        conversation.id
+      );
+
+      updateConversationInState(response.conversation);
+    } catch {
+      setUserSearchError("Failed to mark conversation as unread.");
+    }
+  }
+
   function handleOpenContactNicknameModal(conversation: Conversation) {
     if (!currentUser) {
       return;
@@ -1919,6 +1942,7 @@ function App() {
         handleDeleteConversation={handleDeleteConversation}
         handleMuteConversation={handleMuteConversation}
         handlePinConversation={handlePinConversation}
+        handleMarkConversationAsUnread={handleMarkConversationAsUnread}
         handleOpenContactNicknameModal={handleOpenContactNicknameModal}
       />
 

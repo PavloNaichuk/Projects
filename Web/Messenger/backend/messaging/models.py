@@ -21,6 +21,12 @@ class Conversation(models.Model):
         blank=True,
     )
 
+    unread_for = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="unread_conversations",
+        blank=True,
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -37,6 +37,7 @@ type SidebarProps = {
   ) => Promise<void>;
   handleMuteConversation: (conversation: Conversation) => Promise<void>;
   handlePinConversation: (conversation: Conversation) => Promise<void>;
+  handleMarkConversationAsUnread: (conversation: Conversation) => Promise<void>;
   handleOpenContactNicknameModal: (conversation: Conversation) => void;
 };
 
@@ -85,6 +86,7 @@ function Sidebar({
   handleDeleteConversation,
   handleMuteConversation,
   handlePinConversation,
+  handleMarkConversationAsUnread,
   handleOpenContactNicknameModal,
 }: SidebarProps) {
   const [openedMenuConversationId, setOpenedMenuConversationId] = useState<
@@ -206,11 +208,15 @@ function Sidebar({
           return (
             <div
               key={conversation.id}
-              className={
-                selectedConversation?.id === conversation.id
-                  ? "conversation-item active"
-                  : "conversation-item"
-              }
+              className={[
+                "conversation-item",
+                selectedConversation?.id === conversation.id ? "active" : "",
+                conversation.is_marked_unread && conversation.unread_count === 0
+                  ? "marked-unread"
+                  : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
             >
               <button
                 type="button"
@@ -267,6 +273,11 @@ function Sidebar({
                     {conversation.unread_count}
                   </span>
                 )}
+
+                {conversation.unread_count === 0 &&
+                  conversation.is_marked_unread && (
+                    <span className="manual-unread-dot" />
+                  )}
               </button>
 
               <div
@@ -297,6 +308,19 @@ function Sidebar({
                       disabled={isDeleting}
                     >
                       {conversation.is_pinned ? "Unpin chat" : "Pin chat"}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenedMenuConversationId(null);
+                        handleMarkConversationAsUnread(conversation);
+                      }}
+                      disabled={isDeleting || conversation.is_marked_unread}
+                    >
+                      {conversation.is_marked_unread
+                        ? "Marked as unread"
+                        : "Mark as unread"}
                     </button>
 
                     <button

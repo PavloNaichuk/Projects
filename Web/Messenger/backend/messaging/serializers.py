@@ -255,15 +255,19 @@ class MessageSerializer(serializers.ModelSerializer):
                     {"reply_to": ["Reply message must be from the same conversation."]}
                 )
 
+            if not request or not request.user or not request.user.is_authenticated:
+                raise serializers.ValidationError(
+                    {"reply_to": ["Reply message not found."]}
+                )
+
             reply_query = Message.objects.filter(
                 id=reply_to.id,
                 conversation__participants__user=request.user,
+            ).exclude(
+                hidden_for=request.user,
             )
 
-            if request:
-                reply_query = reply_query.exclude(hidden_for=request.user)
-
-            if request and not reply_query.exists():
+            if not reply_query.exists():
                 raise serializers.ValidationError(
                     {"reply_to": ["Reply message not found."]}
                 )
@@ -298,6 +302,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     unread_count = serializers.SerializerMethodField()
     is_muted = serializers.SerializerMethodField()
     is_pinned = serializers.SerializerMethodField()
+    is_marked_unread = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
@@ -308,6 +313,7 @@ class ConversationSerializer(serializers.ModelSerializer):
             "unread_count",
             "is_muted",
             "is_pinned",
+            "is_marked_unread",
             "created_at",
             "updated_at",
         )
@@ -343,10 +349,10 @@ class ConversationSerializer(serializers.ModelSerializer):
     def get_unread_count(self, obj):
         request = self.context.get("request")
 
-        if not request:
+        if not request or not request.user or not request.user.is_authenticated:
             return 0
 
-        return (
+        unread_count = (
             obj.messages.filter(
                 is_read=False,
                 is_deleted=False,
@@ -359,6 +365,8 @@ class ConversationSerializer(serializers.ModelSerializer):
             )
             .count()
         )
+
+        return unread_count
 
     def get_is_muted(self, obj):
         request = self.context.get("request")
@@ -375,6 +383,14 @@ class ConversationSerializer(serializers.ModelSerializer):
             return False
 
         return obj.pinned_for.filter(id=request.user.id).exists()
+
+    def get_is_marked_unread(self, obj):
+        request = self.context.get("request")
+
+        if not request or not request.user or not request.user.is_authenticated:
+            return False
+
+        return obj.unread_for.filter(id=request.user.id).exists()
 
 
 class ConversationCreateSerializer(serializers.Serializer):

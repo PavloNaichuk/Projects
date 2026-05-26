@@ -565,6 +565,7 @@ class ConversationMessagesView(APIView):
             )
 
         conversation.hidden_for.clear()
+        conversation.unread_for.remove(request.user)
 
         serializer = MessageSerializer(
             data=request.data,
@@ -626,6 +627,8 @@ class ConversationMarkReadView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        conversation.unread_for.remove(request.user)
+
         messages = (
             Message.objects.filter(
                 conversation=conversation,
@@ -654,6 +657,44 @@ class ConversationMarkReadView(APIView):
                 "detail": "Messages marked as read.",
                 "updated_count": updated_count,
             }
+        )
+
+
+class ConversationMarkUnreadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, conversation_id):
+        conversation = (
+            Conversation.objects.filter(
+                id=conversation_id,
+                participants__user=request.user,
+            )
+            .exclude(
+                hidden_for=request.user,
+            )
+            .prefetch_related("participants__user")
+            .first()
+        )
+
+        if not conversation:
+            return Response(
+                {"detail": "Conversation not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        conversation.unread_for.add(request.user)
+
+        serializer = ConversationSerializer(
+            conversation,
+            context={"request": request},
+        )
+
+        return Response(
+            {
+                "detail": "Conversation marked as unread.",
+                "conversation": serializer.data,
+            },
+            status=status.HTTP_200_OK,
         )
 
 
