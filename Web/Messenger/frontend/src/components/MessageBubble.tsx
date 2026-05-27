@@ -96,6 +96,26 @@ function formatFileSize(size: number | null) {
   return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+function formatMessageInfoDate(dateString: string | null) {
+  if (!dateString) {
+    return "No";
+  }
+
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown";
+  }
+
+  return date.toLocaleString([], {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 function getReplyPreviewText(reply: MessageReply) {
   if (reply.is_deleted) {
     return "This message was deleted";
@@ -198,6 +218,7 @@ function MessageBubble({
 }: MessageBubbleProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const messageRowRef = useRef<HTMLDivElement | null>(null);
 
@@ -244,6 +265,24 @@ function MessageBubble({
       document.removeEventListener("keydown", handleEscapeKey);
     };
   }, [isMenuOpen]);
+
+  useEffect(() => {
+    if (!isInfoOpen) {
+      return;
+    }
+
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsInfoOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, [isInfoOpen]);
 
   useEffect(() => {
     if (!isCopied) {
@@ -462,6 +501,16 @@ function MessageBubble({
                         Forward
                       </button>
 
+                      <button
+                        type="button"
+                        onClick={() => {
+                          closeMenu();
+                          setIsInfoOpen(true);
+                        }}
+                      >
+                        Message info
+                      </button>
+
                       {hasAttachment && (
                         <button
                           type="button"
@@ -561,6 +610,65 @@ function MessageBubble({
           </>
         )}
       </div>
+
+      {isInfoOpen && (
+        <div className="modal-backdrop">
+          <div className="message-info-modal" role="dialog" aria-modal="true">
+            <div className="message-info-header">
+              <h3>Message info</h3>
+
+              <button type="button" onClick={() => setIsInfoOpen(false)}>
+                ×
+              </button>
+            </div>
+
+            <div className="message-info-list">
+              <div className="message-info-row">
+                <span>Sender</span>
+                <strong>{getUserDisplayName(message.sender)}</strong>
+              </div>
+
+              <div className="message-info-row">
+                <span>Username</span>
+                <strong>@{message.sender.username}</strong>
+              </div>
+
+              <div className="message-info-row">
+                <span>Sent at</span>
+                <strong>{formatMessageInfoDate(message.created_at)}</strong>
+              </div>
+
+              <div className="message-info-row">
+                <span>Delivered</span>
+                <strong>
+                  {message.is_delivered
+                    ? formatMessageInfoDate(message.delivered_at)
+                    : "No"}
+                </strong>
+              </div>
+
+              <div className="message-info-row">
+                <span>Read</span>
+                <strong>{message.is_read ? "Yes" : "No"}</strong>
+              </div>
+
+              <div className="message-info-row">
+                <span>Edited</span>
+                <strong>
+                  {message.edited_at
+                    ? formatMessageInfoDate(message.edited_at)
+                    : "No"}
+                </strong>
+              </div>
+
+              <div className="message-info-row">
+                <span>Attachment</span>
+                <strong>{message.attachment_name || "No"}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
