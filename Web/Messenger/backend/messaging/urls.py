@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    ConversationClearHistoryView,
     ConversationDetailView,
     ConversationListView,
     ConversationMarkReadView,
@@ -35,6 +36,11 @@ urlpatterns = [
         "conversations/<int:conversation_id>/mark-unread/",
         ConversationMarkUnreadView.as_view(),
         name="conversation-mark-unread",
+    ),
+    path(
+        "conversations/<int:conversation_id>/clear-history/",
+        ConversationClearHistoryView.as_view(),
+        name="conversation-clear-history",
     ),
     path(
         "conversations/<int:conversation_id>/mute/",

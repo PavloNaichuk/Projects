@@ -698,6 +698,56 @@ class ConversationMarkUnreadView(APIView):
         )
 
 
+class ConversationClearHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, conversation_id):
+        conversation = (
+            Conversation.objects.filter(
+                id=conversation_id,
+                participants__user=request.user,
+            )
+            .exclude(
+                hidden_for=request.user,
+            )
+            .prefetch_related("participants__user")
+            .first()
+        )
+
+        if not conversation:
+            return Response(
+                {"detail": "Conversation not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        messages = list(
+            Message.objects.filter(
+                conversation=conversation,
+                conversation__participants__user=request.user,
+            ).exclude(
+                hidden_for=request.user,
+            )
+        )
+
+        if messages:
+            request.user.hidden_messages.add(*messages)
+
+        conversation.unread_for.remove(request.user)
+
+        serializer = ConversationSerializer(
+            conversation,
+            context={"request": request},
+        )
+
+        return Response(
+            {
+                "detail": "Chat history cleared for you.",
+                "conversation": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
 class MessageDetailView(APIView):
     permission_classes = [IsAuthenticated]
 

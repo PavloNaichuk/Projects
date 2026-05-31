@@ -38,6 +38,7 @@ type SidebarProps = {
   handleMuteConversation: (conversation: Conversation) => Promise<void>;
   handlePinConversation: (conversation: Conversation) => Promise<void>;
   handleMarkConversationAsUnread: (conversation: Conversation) => Promise<void>;
+  handleClearConversationHistory: (conversation: Conversation) => Promise<void>;
   handleOpenContactNicknameModal: (conversation: Conversation) => void;
 };
 
@@ -87,12 +88,14 @@ function Sidebar({
   handleMuteConversation,
   handlePinConversation,
   handleMarkConversationAsUnread,
+  handleClearConversationHistory,
   handleOpenContactNicknameModal,
 }: SidebarProps) {
   const [openedMenuConversationId, setOpenedMenuConversationId] = useState<
     number | null
   >(null);
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
+  const [pendingClearHistory, setPendingClearHistory] = useState<Conversation | null>(null);
 
   function toggleConversationMenu(conversationId: number) {
     setOpenedMenuConversationId((previousConversationId) =>
@@ -111,6 +114,11 @@ function Sidebar({
     });
   }
 
+  function openClearHistoryConfirm(conversation: Conversation) {
+    setOpenedMenuConversationId(null);
+    setPendingClearHistory(conversation);
+  }
+
   async function confirmDeleteConversation() {
     if (!pendingDelete) {
       return;
@@ -126,6 +134,20 @@ function Sidebar({
 
   function closeDeleteConfirm() {
     setPendingDelete(null);
+  }
+
+  async function confirmClearHistory() {
+    if (!pendingClearHistory) {
+      return;
+    }
+
+    await handleClearConversationHistory(pendingClearHistory);
+
+    setPendingClearHistory(null);
+  }
+
+  function closeClearHistoryConfirm() {
+    setPendingClearHistory(null);
   }
 
   return (
@@ -347,6 +369,14 @@ function Sidebar({
 
                     <button
                       type="button"
+                      onClick={() => openClearHistoryConfirm(conversation)}
+                      disabled={isDeleting}
+                    >
+                      Clear chat history
+                    </button>
+
+                    <button
+                      type="button"
                       onClick={() => openDeleteConfirm(conversation, "for_me")}
                       disabled={isDeleting}
                     >
@@ -370,6 +400,41 @@ function Sidebar({
           );
         })}
       </div>
+
+      {pendingClearHistory && (
+        <div className="modal-backdrop">
+          <div className="confirm-modal" role="dialog" aria-modal="true">
+            <h3>Clear chat history?</h3>
+
+            <p>
+              This will remove all messages only for you. The conversation will
+              stay in your list. The other user will still see the messages.
+            </p>
+
+            <div className="confirm-modal-actions">
+              <button
+                type="button"
+                className="confirm-modal-cancel"
+                onClick={closeClearHistoryConfirm}
+                disabled={isDeletingConversationId !== null}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="confirm-modal-delete danger"
+                onClick={confirmClearHistory}
+                disabled={isDeletingConversationId !== null}
+              >
+                {isDeletingConversationId !== null
+                  ? "Clearing..."
+                  : "Clear history"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {pendingDelete && (
         <div className="modal-backdrop">

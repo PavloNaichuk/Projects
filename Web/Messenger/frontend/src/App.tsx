@@ -23,6 +23,7 @@ import {
   type User,
 } from "./api/auth";
 import {
+  clearConversationHistory,
   createConversation,
   createMessageWithAttachment,
   deleteConversation,
@@ -1496,6 +1497,46 @@ function App() {
     }
   }
 
+  async function handleClearConversationHistory(conversation: Conversation) {
+    if (!accessToken) {
+      return;
+    }
+
+    setIsDeletingConversationId(conversation.id);
+    setUserSearchError("");
+
+    try {
+      const response = await clearConversationHistory(
+        accessToken,
+        conversation.id
+      );
+
+      updateConversationInState(response.conversation);
+
+      if (selectedConversation?.id === conversation.id) {
+        setMessages([]);
+        setHasMoreMessages(false);
+        setIsOlderMessagesLoading(false);
+        setEditingMessageId(null);
+        setEditingMessageText("");
+        setTypingUser(null);
+        setMessageError("");
+        setMessageSearchQuery("");
+        setIsMessageSearchActive(false);
+        setIsSearchingMessages(false);
+        setSelectedAttachment(null);
+        setReplyToMessage(null);
+        setForwardingMessage(null);
+      }
+
+      await refreshConversations(accessToken);
+    } catch {
+      setUserSearchError("Failed to clear chat history.");
+    } finally {
+      setIsDeletingConversationId(null);
+    }
+  }
+
   function handleOpenContactNicknameModal(conversation: Conversation) {
     if (!currentUser) {
       return;
@@ -1943,6 +1984,7 @@ function App() {
         handleMuteConversation={handleMuteConversation}
         handlePinConversation={handlePinConversation}
         handleMarkConversationAsUnread={handleMarkConversationAsUnread}
+        handleClearConversationHistory={handleClearConversationHistory}
         handleOpenContactNicknameModal={handleOpenContactNicknameModal}
       />
 
