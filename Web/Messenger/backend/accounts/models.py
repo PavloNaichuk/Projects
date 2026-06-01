@@ -37,3 +37,24 @@ class ContactNickname(models.Model):
 
     def __str__(self):
         return f"{self.owner} renamed {self.target_user} to {self.nickname}"
+
+
+class BlockedUser(models.Model):
+    blocker = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="blocked_users",
+    )
+    blocked = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="blocked_by_users",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("blocker", "blocked")
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.blocker} blocked {self.blocked}"

@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from messaging.models import ConversationParticipant
 
-from .models import ContactNickname, User
+from .models import BlockedUser, ContactNickname, User
 from .serializers import (
     UserAvatarSerializer,
     UserProfileSerializer,
@@ -238,6 +238,80 @@ class ContactNicknameView(APIView):
         return Response(
             {
                 "detail": "Contact nickname updated.",
+                "user": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class UserBlockView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        target_user = User.objects.filter(id=user_id).first()
+
+        if not target_user:
+            return Response(
+                {"detail": "User not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if target_user.id == request.user.id:
+            return Response(
+                {"detail": "You cannot block yourself."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        BlockedUser.objects.get_or_create(
+            blocker=request.user,
+            blocked=target_user,
+        )
+
+        serializer = UserSerializer(
+            target_user,
+            context={"request": request},
+        )
+
+        return Response(
+            {
+                "detail": "User blocked.",
+                "user": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class UserUnblockView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        target_user = User.objects.filter(id=user_id).first()
+
+        if not target_user:
+            return Response(
+                {"detail": "User not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if target_user.id == request.user.id:
+            return Response(
+                {"detail": "You cannot unblock yourself."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        BlockedUser.objects.filter(
+            blocker=request.user,
+            blocked=target_user,
+        ).delete()
+
+        serializer = UserSerializer(
+            target_user,
+            context={"request": request},
+        )
+
+        return Response(
+            {
+                "detail": "User unblocked.",
                 "user": serializer.data,
             },
             status=status.HTTP_200_OK,

@@ -4,6 +4,8 @@ from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils import timezone
 
+from accounts.models import BlockedUser
+
 from .models import Conversation, ConversationParticipant, Message
 from .serializers import MessageSerializer
 
@@ -41,6 +43,32 @@ def is_conversation_participant(conversation_id, user):
     ).exists()
 
 
+def get_conversation_other_user(conversation, current_user):
+    participant = (
+        conversation.participants.exclude(user=current_user)
+        .select_related("user")
+        .first()
+    )
+
+    if not participant:
+        return None
+
+    return participant.user
+
+
+def get_blocking_error_detail(sender, receiver):
+    if not receiver:
+        return ""
+
+    if BlockedUser.objects.filter(blocker=sender, blocked=receiver).exists():
+        return "You blocked this user. Unblock them to send messages."
+
+    if BlockedUser.objects.filter(blocker=receiver, blocked=sender).exists():
+        return "You cannot send messages to this user."
+
+    return ""
+
+
 @database_sync_to_async
 def create_message(conversation_id, user, text, reply_to_id=None):
     text = text.strip()
@@ -55,6 +83,12 @@ def create_message(conversation_id, user, text, reply_to_id=None):
 
     if not conversation:
         return None, "Conversation not found."
+
+    other_user = get_conversation_other_user(conversation, user)
+    blocking_error = get_blocking_error_detail(user, other_user)
+
+    if blocking_error:
+        return None, blocking_error
 
     reply_to_message = None
 
@@ -216,6 +250,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return
 
         if data.get("type") == "typing":
+            is_blocked = await self.is_conversation_blocked()
+
+            if is_blocked:
+                return
+
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -347,6 +386,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+
+    @database_sync_to_async
+    def is_conversation_blocked(self):
+        conversation = (
+            Conversation.objects.filter(
+                id=self.conversation_id,
+                participants__user=self.user,
+            )
+            .prefetch_related("participants__user")
+            .first()
+        )
+
+        if not conversation:
+            return True
+
+        other_user = get_conversation_other_user(conversation, self.user)
+
+        return bool(get_blocking_error_detail(self.user, other_user))
 
     @database_sync_to_async
     def mark_messages_as_read(self):

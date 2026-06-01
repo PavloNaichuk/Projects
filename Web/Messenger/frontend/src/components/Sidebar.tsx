@@ -25,6 +25,7 @@ type SidebarProps = {
   isSearchingUsers: boolean;
   userSearchError: string;
   isDeletingConversationId: number | null;
+  isBlockingUserId: number | null;
 
   handleLogout: () => Promise<void>;
   handleOpenProfileSettings: () => void;
@@ -40,6 +41,8 @@ type SidebarProps = {
   handleMarkConversationAsUnread: (conversation: Conversation) => Promise<void>;
   handleClearConversationHistory: (conversation: Conversation) => Promise<void>;
   handleOpenContactNicknameModal: (conversation: Conversation) => void;
+  handleBlockUser: (user: User) => Promise<void>;
+  handleUnblockUser: (user: User) => Promise<void>;
 };
 
 type UserAvatarProps = {
@@ -79,6 +82,7 @@ function Sidebar({
   isSearchingUsers,
   userSearchError,
   isDeletingConversationId,
+  isBlockingUserId,
   handleLogout,
   handleOpenProfileSettings,
   handleSearchUsers,
@@ -90,6 +94,8 @@ function Sidebar({
   handleMarkConversationAsUnread,
   handleClearConversationHistory,
   handleOpenContactNicknameModal,
+  handleBlockUser,
+  handleUnblockUser,
 }: SidebarProps) {
   const [openedMenuConversationId, setOpenedMenuConversationId] = useState<
     number | null
@@ -202,6 +208,12 @@ function Sidebar({
 
               <span className="user-search-text">
                 <span className="user-search-name">{user.display_name}</span>
+
+                {(user.is_blocked_by_me || user.has_blocked_me) && (
+                  <span className="blocked-user-label">
+                    {user.is_blocked_by_me ? "Blocked by you" : "Blocked you"}
+                  </span>
+                )}
               </span>
             </button>
           ))}
@@ -268,6 +280,10 @@ function Sidebar({
 
                         {conversation.is_muted && (
                           <span className="muted-conversation-icon">🔇</span>
+                        )}
+
+                        {conversationUser.is_blocked_by_me && (
+                          <span className="blocked-conversation-icon">🚫</span>
                         )}
                       </div>
                     </div>
@@ -365,6 +381,29 @@ function Sidebar({
                       disabled={isDeleting}
                     >
                       Rename contact
+                    </button>
+
+                    <button
+                      type="button"
+                      className={conversationUser.is_blocked_by_me ? "" : "danger"}
+                      onClick={() => {
+                        setOpenedMenuConversationId(null);
+
+                        if (conversationUser.is_blocked_by_me) {
+                          handleUnblockUser(conversationUser);
+                        } else {
+                          handleBlockUser(conversationUser);
+                        }
+                      }}
+                      disabled={
+                        isDeleting || isBlockingUserId === conversationUser.id
+                      }
+                    >
+                      {isBlockingUserId === conversationUser.id
+                        ? "Updating..."
+                        : conversationUser.is_blocked_by_me
+                          ? "Unblock user"
+                          : "Block user"}
                     </button>
 
                     <button

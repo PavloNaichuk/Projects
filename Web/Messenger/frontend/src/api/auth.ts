@@ -7,6 +7,8 @@ export type User = {
   email: string;
   avatar_url: string | null;
   last_seen_at: string | null;
+  is_blocked_by_me: boolean;
+  has_blocked_me: boolean;
 };
 
 export type LoginResponse = {

@@ -2080,3 +2080,62 @@
   text-align: right;
   word-break: break-word;
 }
+
+.blocked-user-label {
+  color: #991b1b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.blocked-conversation-icon {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.chat-user-status.blocked {
+  color: #991b1b;
+}
+
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  margin-right: 12px;
+}
+
+.chat-header-actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chat-header-actions button:hover {
+  background: #e5e7eb;
+}
+
+.chat-header-actions button.danger {
+  color: #991b1b;
+}
+
+.chat-header-actions button.danger:hover {
+  background: #fee2e2;
+}
+
+.chat-header-actions button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.blocked-chat-notice {
+  padding: 10px 16px;
+  background: #fef2f2;
+  border-top: 1px solid #fecaca;
+  color: #991b1b;
+  font-size: 14px;
+  font-weight: 600;
+}

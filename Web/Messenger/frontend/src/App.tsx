@@ -43,7 +43,7 @@ import {
   type DeleteMessageMode,
   type Message,
 } from "./api/conversations";
-import { searchUsers } from "./api/users";
+import { blockUser, searchUsers, unblockUser } from "./api/users";
 import AuthPage from "./components/AuthPage";
 import ChatWindow from "./components/ChatWindow";
 import Sidebar from "./components/Sidebar";
@@ -168,9 +168,17 @@ function App() {
   const [isDeletingConversationId, setIsDeletingConversationId] = useState<
     number | null
   >(null);
+  const [isBlockingUserId, setIsBlockingUserId] = useState<number | null>(null);
 
   const currentUserId = currentUser?.id ?? null;
   const selectedConversationId = selectedConversation?.id ?? null;
+  const selectedConversationUser =
+    selectedConversation && currentUser
+      ? getOtherParticipant(selectedConversation, currentUser) ?? null
+      : null;
+  const selectedConversationUserIsOnline = selectedConversationUser
+    ? onlineUserIds.includes(selectedConversationUser.id)
+    : false;
 
   useEffect(() => {
     conversationsRef.current = conversations;
@@ -665,6 +673,7 @@ function App() {
     setIsForwardingMessage(false);
     setTypingUser(null);
     setOnlineUserIds([]);
+    setIsBlockingUserId(null);
   }
 
   async function handleLogout() {
@@ -1581,6 +1590,70 @@ function App() {
     }
   }
 
+  async function handleBlockUser(user: User) {
+    if (!accessToken) {
+      return;
+    }
+
+    setIsBlockingUserId(user.id);
+    setMessageError("");
+    setUserSearchError("");
+
+    try {
+      const response = await blockUser(accessToken, user.id);
+
+      updateUserInState(response.user);
+      await refreshConversations(accessToken);
+
+      if (selectedConversationUser?.id === user.id) {
+        setNewMessage("");
+        setSelectedAttachment(null);
+        setReplyToMessage(null);
+        setTypingUser(null);
+        sendTypingStatus(false);
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to block user.";
+
+      if (selectedConversationUser?.id === user.id) {
+        setMessageError(errorMessage);
+      } else {
+        setUserSearchError(errorMessage);
+      }
+    } finally {
+      setIsBlockingUserId(null);
+    }
+  }
+
+  async function handleUnblockUser(user: User) {
+    if (!accessToken) {
+      return;
+    }
+
+    setIsBlockingUserId(user.id);
+    setMessageError("");
+    setUserSearchError("");
+
+    try {
+      const response = await unblockUser(accessToken, user.id);
+
+      updateUserInState(response.user);
+      await refreshConversations(accessToken);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to unblock user.";
+
+      if (selectedConversationUser?.id === user.id) {
+        setMessageError(errorMessage);
+      } else {
+        setUserSearchError(errorMessage);
+      }
+    } finally {
+      setIsBlockingUserId(null);
+    }
+  }
+
   async function handleSearchMessages(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -1736,6 +1809,16 @@ function App() {
     event.preventDefault();
 
     if (!accessToken || !selectedConversation) {
+      return;
+    }
+
+    if (selectedConversationUser?.is_blocked_by_me) {
+      setMessageError("You blocked this user. Unblock them to send messages.");
+      return;
+    }
+
+    if (selectedConversationUser?.has_blocked_me) {
+      setMessageError("You cannot send messages to this user.");
       return;
     }
 
@@ -1954,14 +2037,6 @@ function App() {
     ? getConversationName(selectedConversation, currentUser)
     : "No conversation selected";
 
-  const selectedConversationUser = selectedConversation
-    ? getOtherParticipant(selectedConversation, currentUser) ?? null
-    : null;
-
-  const selectedConversationUserIsOnline = selectedConversationUser
-    ? onlineUserIds.includes(selectedConversationUser.id)
-    : false;
-
   return (
     <div className="app">
       <Sidebar
@@ -1975,6 +2050,7 @@ function App() {
         isSearchingUsers={isSearchingUsers}
         userSearchError={userSearchError}
         isDeletingConversationId={isDeletingConversationId}
+        isBlockingUserId={isBlockingUserId}
         handleLogout={handleLogout}
         handleOpenProfileSettings={() => setIsProfileSettingsOpen(true)}
         handleSearchUsers={handleSearchUsers}
@@ -1986,6 +2062,8 @@ function App() {
         handleMarkConversationAsUnread={handleMarkConversationAsUnread}
         handleClearConversationHistory={handleClearConversationHistory}
         handleOpenContactNicknameModal={handleOpenContactNicknameModal}
+        handleBlockUser={handleBlockUser}
+        handleUnblockUser={handleUnblockUser}
       />
 
       <ChatWindow
@@ -2014,6 +2092,7 @@ function App() {
         isEditingMessage={isEditingMessage}
         isDeletingMessageId={isDeletingMessageId}
         isDeletingConversationId={isDeletingConversationId}
+        isBlockingUserId={isBlockingUserId}
         messagesContainerRef={messagesContainerRef}
         messagesEndRef={messagesEndRef}
         handleMessagesScroll={handleMessagesScroll}
@@ -2037,6 +2116,8 @@ function App() {
         handlePinConversation={handlePinConversation}
         handleOpenContactNicknameModal={handleOpenContactNicknameModal}
         handleDeleteConversation={handleDeleteConversation}
+        handleBlockUser={handleBlockUser}
+        handleUnblockUser={handleUnblockUser}
       />
 
       {isProfileSettingsOpen && (

@@ -7,6 +7,8 @@ from django.core.files.base import ContentFile
 from django.db.models import F, Max
 from django.utils import timezone
 
+from accounts.models import BlockedUser
+
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -28,6 +30,44 @@ MESSAGE_SELECT_RELATED = (
     "forwarded_from",
     "forwarded_from__sender",
 )
+
+
+def get_conversation_other_user(conversation, current_user):
+    participant = (
+        conversation.participants.exclude(user=current_user)
+        .select_related("user")
+        .first()
+    )
+
+    if not participant:
+        return None
+
+    return participant.user
+
+
+def get_blocking_error_detail(sender, receiver):
+    if not receiver:
+        return ""
+
+    if BlockedUser.objects.filter(blocker=sender, blocked=receiver).exists():
+        return "You blocked this user. Unblock them to send messages."
+
+    if BlockedUser.objects.filter(blocker=receiver, blocked=sender).exists():
+        return "You cannot send messages to this user."
+
+    return ""
+
+
+def get_blocking_response(sender, receiver):
+    detail = get_blocking_error_detail(sender, receiver)
+
+    if not detail:
+        return None
+
+    return Response(
+        {"detail": detail},
+        status=status.HTTP_403_FORBIDDEN,
+    )
 
 
 def notify_conversation_deleted(conversation_id, participant_ids):
@@ -244,6 +284,11 @@ class ConversationListView(APIView):
                 context={"request": request},
             )
             return Response(response_serializer.data, status=status.HTTP_200_OK)
+
+        blocking_response = get_blocking_response(request.user, target_user)
+
+        if blocking_response:
+            return blocking_response
 
         conversation = Conversation.objects.create()
 
@@ -563,6 +608,12 @@ class ConversationMessagesView(APIView):
                 {"detail": "Conversation not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+        other_user = get_conversation_other_user(conversation, request.user)
+        blocking_response = get_blocking_response(request.user, other_user)
+
+        if blocking_response:
+            return blocking_response
 
         conversation.hidden_for.clear()
         conversation.unread_for.remove(request.user)
@@ -1055,6 +1106,12 @@ class MessageForwardView(APIView):
                 {"detail": "Target conversation not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+        other_user = get_conversation_other_user(target_conversation, request.user)
+        blocking_response = get_blocking_response(request.user, other_user)
+
+        if blocking_response:
+            return blocking_response
 
         target_conversation.hidden_for.clear()
 

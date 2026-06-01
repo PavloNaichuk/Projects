@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from accounts.models import ContactNickname, User
+from accounts.models import BlockedUser, ContactNickname, User
 from .models import Conversation, ConversationParticipant, Message, MessageReaction
 
 
@@ -23,9 +23,37 @@ def get_user_display_name(user, request):
     return nickname or user.username
 
 
+def get_is_blocked_by_me(user, request):
+    if not request or not request.user or not request.user.is_authenticated:
+        return False
+
+    if request.user.id == user.id:
+        return False
+
+    return BlockedUser.objects.filter(
+        blocker=request.user,
+        blocked=user,
+    ).exists()
+
+
+def get_has_blocked_me(user, request):
+    if not request or not request.user or not request.user.is_authenticated:
+        return False
+
+    if request.user.id == user.id:
+        return False
+
+    return BlockedUser.objects.filter(
+        blocker=user,
+        blocked=request.user,
+    ).exists()
+
+
 class UserShortSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
     display_name = serializers.SerializerMethodField()
+    is_blocked_by_me = serializers.SerializerMethodField()
+    has_blocked_me = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -36,6 +64,8 @@ class UserShortSerializer(serializers.ModelSerializer):
             "email",
             "avatar_url",
             "last_seen_at",
+            "is_blocked_by_me",
+            "has_blocked_me",
         )
 
     def get_display_name(self, obj):
@@ -52,6 +82,14 @@ class UserShortSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.avatar.url)
 
         return obj.avatar.url
+
+    def get_is_blocked_by_me(self, obj):
+        request = self.context.get("request")
+        return get_is_blocked_by_me(obj, request)
+
+    def get_has_blocked_me(self, obj):
+        request = self.context.get("request")
+        return get_has_blocked_me(obj, request)
 
 
 class MessageReactionSerializer(serializers.ModelSerializer):

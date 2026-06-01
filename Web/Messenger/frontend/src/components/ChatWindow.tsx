@@ -74,6 +74,7 @@ type ChatWindowProps = {
   isEditingMessage: boolean;
   isDeletingMessageId: number | null;
   isDeletingConversationId: number | null;
+  isBlockingUserId: number | null;
 
   messagesContainerRef: RefObject<HTMLElement | null>;
   messagesEndRef: RefObject<HTMLDivElement | null>;
@@ -112,6 +113,8 @@ type ChatWindowProps = {
     conversation: Conversation,
     mode: DeleteConversationMode
   ) => Promise<void>;
+  handleBlockUser: (user: User) => Promise<void>;
+  handleUnblockUser: (user: User) => Promise<void>;
 };
 
 type UserAvatarProps = {
@@ -281,6 +284,7 @@ function ChatWindow({
   setEditingMessageText,
   isEditingMessage,
   isDeletingMessageId,
+  isBlockingUserId,
   messagesContainerRef,
   messagesEndRef,
   handleMessagesScroll,
@@ -300,10 +304,23 @@ function ChatWindow({
   handleDeleteMessage,
   handleRemoveMessageAttachment,
   handleToggleMessageReaction,
+  handleBlockUser,
+  handleUnblockUser,
 }: ChatWindowProps) {
   const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
   const textContextMenuRef = useRef<HTMLDivElement | null>(null);
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
+
+  const isSelectedUserBlockedByMe = Boolean(
+    selectedConversationUser?.is_blocked_by_me
+  );
+  const hasSelectedUserBlockedMe = Boolean(
+    selectedConversationUser?.has_blocked_me
+  );
+  const isChatBlocked = isSelectedUserBlockedByMe || hasSelectedUserBlockedMe;
+  const isSelectedUserBlockUpdating =
+    selectedConversationUser !== null &&
+    isBlockingUserId === selectedConversationUser.id;
 
   const [textContextMenu, setTextContextMenu] =
     useState<TextContextMenuState | null>(null);
@@ -528,18 +545,47 @@ function ChatWindow({
             {selectedConversationUser && (
               <p
                 className={
-                  selectedConversationUserIsOnline
-                    ? "chat-user-status online"
-                    : "chat-user-status offline"
+                  isChatBlocked
+                    ? "chat-user-status blocked"
+                    : selectedConversationUserIsOnline
+                      ? "chat-user-status online"
+                      : "chat-user-status offline"
                 }
               >
-                {selectedConversationUserIsOnline
-                  ? "Online"
-                  : formatLastSeen(selectedConversationUser.last_seen_at)}
+                {isSelectedUserBlockedByMe
+                  ? "You blocked this user"
+                  : hasSelectedUserBlockedMe
+                    ? "This user blocked you"
+                    : selectedConversationUserIsOnline
+                      ? "Online"
+                      : formatLastSeen(selectedConversationUser.last_seen_at)}
               </p>
             )}
           </div>
         </div>
+
+        {selectedConversationUser && (
+          <div className="chat-header-actions">
+            <button
+              type="button"
+              className={isSelectedUserBlockedByMe ? "" : "danger"}
+              onClick={() => {
+                if (isSelectedUserBlockedByMe) {
+                  handleUnblockUser(selectedConversationUser);
+                } else {
+                  handleBlockUser(selectedConversationUser);
+                }
+              }}
+              disabled={isSelectedUserBlockUpdating}
+            >
+              {isSelectedUserBlockUpdating
+                ? "Updating..."
+                : isSelectedUserBlockedByMe
+                  ? "Unblock"
+                  : "Block"}
+            </button>
+          </div>
+        )}
 
         <form className="message-search-form" onSubmit={handleSearchMessages}>
           <input
@@ -633,6 +679,14 @@ function ChatWindow({
         </div>
       )}
 
+      {isChatBlocked && (
+        <div className="blocked-chat-notice">
+          {isSelectedUserBlockedByMe
+            ? "You blocked this user. Unblock them to send messages."
+            : "You cannot send messages to this user."}
+        </div>
+      )}
+
       {messageError && <div className="message-error">{messageError}</div>}
 
       <form className="message-form" onSubmit={handleSendMessage}>
@@ -641,7 +695,7 @@ function ChatWindow({
           <input
             type="file"
             onChange={handleAttachmentChange}
-            disabled={!selectedConversation || isSending}
+            disabled={!selectedConversation || isSending || isChatBlocked}
           />
         </label>
 
@@ -686,13 +740,16 @@ function ChatWindow({
             onChange={(event) => handleNewMessageChange(event.target.value)}
             onKeyDown={handleMessageKeyDown}
             onContextMenu={handleMessageInputContextMenu}
-            placeholder="Type a message..."
-            disabled={!selectedConversation || isSending}
+            placeholder={isChatBlocked ? "Messaging is blocked" : "Type a message..."}
+            disabled={!selectedConversation || isSending || isChatBlocked}
             rows={1}
           />
         </div>
 
-        <button type="submit" disabled={!selectedConversation || isSending}>
+        <button
+          type="submit"
+          disabled={!selectedConversation || isSending || isChatBlocked}
+        >
           {isSending ? "Sending..." : "Send"}
         </button>
       </form>
