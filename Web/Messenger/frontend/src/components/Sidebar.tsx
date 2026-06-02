@@ -11,6 +11,11 @@ type PendingDelete = {
   mode: DeleteConversationMode;
 };
 
+type PendingBlockAction = {
+  user: User;
+  action: "block" | "unblock";
+};
+
 type SidebarProps = {
   currentUser: User;
   onlineUserIds: number[];
@@ -102,6 +107,8 @@ function Sidebar({
   >(null);
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const [pendingClearHistory, setPendingClearHistory] = useState<Conversation | null>(null);
+  const [pendingBlockAction, setPendingBlockAction] =
+    useState<PendingBlockAction | null>(null);
 
   function toggleConversationMenu(conversationId: number) {
     setOpenedMenuConversationId((previousConversationId) =>
@@ -123,6 +130,40 @@ function Sidebar({
   function openClearHistoryConfirm(conversation: Conversation) {
     setOpenedMenuConversationId(null);
     setPendingClearHistory(conversation);
+  }
+
+  function openBlockConfirm(user: User) {
+    setOpenedMenuConversationId(null);
+    setPendingBlockAction({
+      user,
+      action: "block",
+    });
+  }
+
+  function openUnblockConfirm(user: User) {
+    setOpenedMenuConversationId(null);
+    setPendingBlockAction({
+      user,
+      action: "unblock",
+    });
+  }
+
+  async function confirmBlockAction() {
+    if (!pendingBlockAction) {
+      return;
+    }
+
+    if (pendingBlockAction.action === "block") {
+      await handleBlockUser(pendingBlockAction.user);
+    } else {
+      await handleUnblockUser(pendingBlockAction.user);
+    }
+
+    setPendingBlockAction(null);
+  }
+
+  function closeBlockConfirm() {
+    setPendingBlockAction(null);
   }
 
   async function confirmDeleteConversation() {
@@ -387,12 +428,10 @@ function Sidebar({
                       type="button"
                       className={conversationUser.is_blocked_by_me ? "" : "danger"}
                       onClick={() => {
-                        setOpenedMenuConversationId(null);
-
                         if (conversationUser.is_blocked_by_me) {
-                          handleUnblockUser(conversationUser);
+                          openUnblockConfirm(conversationUser);
                         } else {
-                          handleBlockUser(conversationUser);
+                          openBlockConfirm(conversationUser);
                         }
                       }}
                       disabled={
@@ -439,6 +478,52 @@ function Sidebar({
           );
         })}
       </div>
+
+      {pendingBlockAction && (
+        <div className="modal-backdrop">
+          <div className="confirm-modal" role="dialog" aria-modal="true">
+            <h3>
+              {pendingBlockAction.action === "block"
+                ? `Block ${pendingBlockAction.user.display_name}?`
+                : `Unblock ${pendingBlockAction.user.display_name}?`}
+            </h3>
+
+            <p>
+              {pendingBlockAction.action === "block"
+                ? "They will not be able to send you messages. You will not be able to send messages to them until you unblock this user."
+                : "You will be able to send messages to each other again."}
+            </p>
+
+            <div className="confirm-modal-actions">
+              <button
+                type="button"
+                className="confirm-modal-cancel"
+                onClick={closeBlockConfirm}
+                disabled={isBlockingUserId !== null}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className={
+                  pendingBlockAction.action === "block"
+                    ? "confirm-modal-delete danger"
+                    : "confirm-modal-delete"
+                }
+                onClick={confirmBlockAction}
+                disabled={isBlockingUserId !== null}
+              >
+                {isBlockingUserId !== null
+                  ? "Updating..."
+                  : pendingBlockAction.action === "block"
+                    ? "Block user"
+                    : "Unblock user"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {pendingClearHistory && (
         <div className="modal-backdrop">
