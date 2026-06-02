@@ -157,7 +157,7 @@ function ProfileSettingsModal({
             onClick={handleToggleBlockedUsers}
             disabled={isBlockedUsersLoading}
           >
-            {isBlockedUsersOpen ? "Hide blocked users" : "Blocked users"}
+            {isBlockedUsersOpen ? "Hide blocked users" : "Show blocked users"}
           </button>
 
           {isBlockedUsersOpen && (

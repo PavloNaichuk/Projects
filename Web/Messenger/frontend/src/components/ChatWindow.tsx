@@ -134,11 +134,6 @@ type EmojiPickerState = {
   y: number;
 };
 
-type PendingBlockAction = {
-  user: User;
-  action: "block" | "unblock";
-};
-
 function UserAvatar({ user, isOnline = false }: UserAvatarProps) {
   const displayName = getUserDisplayName(user);
   const initial = displayName.trim().charAt(0).toUpperCase() || "?";
@@ -289,7 +284,6 @@ function ChatWindow({
   setEditingMessageText,
   isEditingMessage,
   isDeletingMessageId,
-  isBlockingUserId,
   messagesContainerRef,
   messagesEndRef,
   handleMessagesScroll,
@@ -309,8 +303,6 @@ function ChatWindow({
   handleDeleteMessage,
   handleRemoveMessageAttachment,
   handleToggleMessageReaction,
-  handleBlockUser,
-  handleUnblockUser,
 }: ChatWindowProps) {
   const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
   const textContextMenuRef = useRef<HTMLDivElement | null>(null);
@@ -323,15 +315,9 @@ function ChatWindow({
     selectedConversationUser?.has_blocked_me
   );
   const isChatBlocked = isSelectedUserBlockedByMe || hasSelectedUserBlockedMe;
-  const isSelectedUserBlockUpdating =
-    selectedConversationUser !== null &&
-    isBlockingUserId === selectedConversationUser.id;
-
   const [textContextMenu, setTextContextMenu] =
     useState<TextContextMenuState | null>(null);
   const [emojiPicker, setEmojiPicker] = useState<EmojiPickerState | null>(null);
-  const [pendingBlockAction, setPendingBlockAction] =
-    useState<PendingBlockAction | null>(null);
 
   useEffect(() => {
     if (!textContextMenu && !emojiPicker) {
@@ -534,39 +520,6 @@ function ChatWindow({
     textarea.focus();
     textarea.select();
   }
-
-  function openBlockConfirm(user: User) {
-    setPendingBlockAction({
-      user,
-      action: "block",
-    });
-  }
-
-  function openUnblockConfirm(user: User) {
-    setPendingBlockAction({
-      user,
-      action: "unblock",
-    });
-  }
-
-  function closeBlockConfirm() {
-    setPendingBlockAction(null);
-  }
-
-  async function confirmBlockAction() {
-    if (!pendingBlockAction) {
-      return;
-    }
-
-    if (pendingBlockAction.action === "block") {
-      await handleBlockUser(pendingBlockAction.user);
-    } else {
-      await handleUnblockUser(pendingBlockAction.user);
-    }
-
-    setPendingBlockAction(null);
-  }
-
   return (
     <main className="chat">
       <header className="chat-header">
@@ -602,29 +555,6 @@ function ChatWindow({
             )}
           </div>
         </div>
-
-        {selectedConversationUser && (
-          <div className="chat-header-actions">
-            <button
-              type="button"
-              className={isSelectedUserBlockedByMe ? "" : "danger"}
-              onClick={() => {
-                if (isSelectedUserBlockedByMe) {
-                  openUnblockConfirm(selectedConversationUser);
-                } else {
-                  openBlockConfirm(selectedConversationUser);
-                }
-              }}
-              disabled={isSelectedUserBlockUpdating}
-            >
-              {isSelectedUserBlockUpdating
-                ? "Updating..."
-                : isSelectedUserBlockedByMe
-                  ? "Unblock"
-                  : "Block"}
-            </button>
-          </div>
-        )}
 
         <form className="message-search-form" onSubmit={handleSearchMessages}>
           <input
@@ -874,54 +804,7 @@ function ChatWindow({
             </button>
           ))}
         </div>
-      )}
-      {pendingBlockAction && (
-        <div className="modal-backdrop">
-          <div className="confirm-modal" role="dialog" aria-modal="true">
-            <h3>
-              {pendingBlockAction.action === "block"
-                ? `Block ${getUserDisplayName(pendingBlockAction.user)}?`
-                : `Unblock ${getUserDisplayName(pendingBlockAction.user)}?`}
-            </h3>
-
-            <p>
-              {pendingBlockAction.action === "block"
-                ? "They will not be able to send you messages. You will not be able to send messages to them until you unblock this user."
-                : "You will be able to send messages to each other again."}
-            </p>
-
-            <div className="confirm-modal-actions">
-              <button
-                type="button"
-                className="confirm-modal-cancel"
-                onClick={closeBlockConfirm}
-                disabled={isBlockingUserId !== null}
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                className={
-                  pendingBlockAction.action === "block"
-                    ? "confirm-modal-delete danger"
-                    : "confirm-modal-delete"
-                }
-                onClick={confirmBlockAction}
-                disabled={isBlockingUserId !== null}
-              >
-                {isBlockingUserId !== null
-                  ? "Updating..."
-                  : pendingBlockAction.action === "block"
-                    ? "Block user"
-                    : "Unblock user"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-    </main>
+      )}    </main>
   );
 }
 
