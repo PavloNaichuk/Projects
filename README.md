@@ -52,8 +52,6 @@ The project includes user authentication, private conversations, real-time messa
 
 **Status:** Work in progress — actively developing and improving backend and frontend functionality.
 
-**Project path:** `/Web/Messenger`
-
 
 ## 🔹 Desktop Projects
 
