@@ -58,6 +58,14 @@ def serialize_user_for_recipient(user, recipient, request):
 
     data = dict(serializer.data)
     data["display_name"] = get_user_display_name_for_owner(user, recipient)
+    data["is_blocked_by_me"] = BlockedUser.objects.filter(
+        blocker=recipient,
+        blocked=user,
+    ).exists()
+    data["has_blocked_me"] = BlockedUser.objects.filter(
+        blocker=user,
+        blocked=recipient,
+    ).exists()
 
     return data
 
@@ -84,6 +92,37 @@ def notify_user_profile_updated(user, request):
                 ),
             },
         )
+
+
+def notify_user_block_status_updated(blocker, blocked, request):
+    channel_layer = get_channel_layer()
+
+    if not channel_layer:
+        return
+
+    async_to_sync(channel_layer.group_send)(
+        f"user_{blocked.id}_notifications",
+        {
+            "type": "user_profile_updated",
+            "user": serialize_user_for_recipient(
+                blocker,
+                blocked,
+                request,
+            ),
+        },
+    )
+
+    async_to_sync(channel_layer.group_send)(
+        f"user_{blocker.id}_notifications",
+        {
+            "type": "user_profile_updated",
+            "user": serialize_user_for_recipient(
+                blocked,
+                blocker,
+                request,
+            ),
+        },
+    )
 
 
 class UserSearchView(APIView):
@@ -284,6 +323,8 @@ class UserBlockView(APIView):
             blocked=target_user,
         )
 
+        notify_user_block_status_updated(request.user, target_user, request)
+
         serializer = UserSerializer(
             target_user,
             context={"request": request},
@@ -320,6 +361,8 @@ class UserUnblockView(APIView):
             blocker=request.user,
             blocked=target_user,
         ).delete()
+
+        notify_user_block_status_updated(request.user, target_user, request)
 
         serializer = UserSerializer(
             target_user,
