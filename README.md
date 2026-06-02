@@ -12,13 +12,48 @@ This repository contains personal projects demonstrating experience in software 
 
 ## 🔹 Web Projects
 
-*(Work in progress — currently developing a real-time chat application)*
+### Messenger
 
-Technologies:
-- Python, Django, Django REST Framework
-- React, TypeScript
-- PostgreSQL
-- Docker
+A full-stack real-time messaging application inspired by Telegram-style communication platforms.
+
+The project includes user authentication, private conversations, real-time messaging, profile management, message actions, user blocking, file attachments, and WebSocket-based updates.
+
+**Main features:**
+
+* JWT authentication and user authorization
+* User registration, login, logout, and profile management
+* Avatar upload, update, and deletion
+* Private conversations between users
+* Real-time messaging using WebSockets
+* Online / offline status and last seen status
+* Typing indicator
+* Message editing and deletion
+* Message replies and forwarding
+* Message reactions with emoji
+* Message search and pagination
+* File and image attachments
+* User blocking and unblocking
+* Conversation pinning, muting, clearing, and deletion
+* Real-time sidebar and profile updates
+
+**Technologies:**
+
+* Python
+* Django
+* Django REST Framework
+* Django Channels
+* Redis
+* React
+* TypeScript
+* Vite
+* CSS
+* SQLite
+* Docker
+
+**Status:** Work in progress — actively developing and improving backend and frontend functionality.
+
+**Project path:** `/Web/Messenger`
+
 
 ## 🔹 Desktop Projects
 
