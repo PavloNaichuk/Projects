@@ -43,7 +43,7 @@ import {
   type DeleteMessageMode,
   type Message,
 } from "./api/conversations";
-import { blockUser, searchUsers, unblockUser } from "./api/users";
+import { blockUser, getBlockedUsers, searchUsers, unblockUser } from "./api/users";
 import AuthPage from "./components/AuthPage";
 import ChatWindow from "./components/ChatWindow";
 import Sidebar from "./components/Sidebar";
@@ -148,6 +148,12 @@ function App() {
   const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
   const [profileError, setProfileError] = useState("");
   const [isProfileUpdating, setIsProfileUpdating] = useState(false);
+  const [blockedUsers, setBlockedUsers] = useState<User[]>([]);
+  const [blockedUsersError, setBlockedUsersError] = useState("");
+  const [isBlockedUsersLoading, setIsBlockedUsersLoading] = useState(false);
+  const [isUnblockingUserId, setIsUnblockingUserId] = useState<number | null>(
+    null
+  );
   const [contactNicknameUser, setContactNicknameUser] = useState<User | null>(
     null
   );
@@ -657,6 +663,10 @@ function App() {
     setIsProfileSettingsOpen(false);
     setProfileError("");
     setIsProfileUpdating(false);
+    setBlockedUsers([]);
+    setBlockedUsersError("");
+    setIsBlockedUsersLoading(false);
+    setIsUnblockingUserId(null);
     setContactNicknameUser(null);
     setContactNicknameError("");
     setIsContactNicknameUpdating(false);
@@ -1654,6 +1664,51 @@ function App() {
     }
   }
 
+  async function handleLoadBlockedUsers() {
+    if (!accessToken) {
+      return;
+    }
+
+    setIsBlockedUsersLoading(true);
+    setBlockedUsersError("");
+
+    try {
+      const users = await getBlockedUsers(accessToken);
+      setBlockedUsers(users);
+    } catch {
+      setBlockedUsers([]);
+      setBlockedUsersError("Failed to load blocked users.");
+    } finally {
+      setIsBlockedUsersLoading(false);
+    }
+  }
+
+  async function handleUnblockBlockedUser(user: User) {
+    if (!accessToken) {
+      return;
+    }
+
+    setIsUnblockingUserId(user.id);
+    setBlockedUsersError("");
+
+    try {
+      const response = await unblockUser(accessToken, user.id);
+
+      updateUserInState(response.user);
+      setBlockedUsers((previousUsers) =>
+        previousUsers.filter((blockedUser) => blockedUser.id !== user.id)
+      );
+
+      await refreshConversations(accessToken);
+    } catch (error) {
+      setBlockedUsersError(
+        error instanceof Error ? error.message : "Failed to unblock user."
+      );
+    } finally {
+      setIsUnblockingUserId(null);
+    }
+  }
+
   async function handleSearchMessages(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -2127,14 +2182,21 @@ function App() {
           profileError={profileError}
           isAvatarUpdating={isAvatarUpdating}
           isProfileUpdating={isProfileUpdating}
+          blockedUsers={blockedUsers}
+          blockedUsersError={blockedUsersError}
+          isBlockedUsersLoading={isBlockedUsersLoading}
+          isUnblockingUserId={isUnblockingUserId}
           handleClose={() => {
             setIsProfileSettingsOpen(false);
             setAvatarError("");
             setProfileError("");
+            setBlockedUsersError("");
           }}
           handleCurrentUserAvatarChange={handleCurrentUserAvatarChange}
           handleDeleteCurrentUserAvatar={handleDeleteCurrentUserAvatar}
           handleUpdateCurrentUserProfile={handleUpdateCurrentUserProfile}
+          handleLoadBlockedUsers={handleLoadBlockedUsers}
+          handleUnblockBlockedUser={handleUnblockBlockedUser}
         />
       )}
 

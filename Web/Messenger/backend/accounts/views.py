@@ -244,6 +244,23 @@ class ContactNicknameView(APIView):
         )
 
 
+class UserBlockedListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        blocked_users = User.objects.filter(
+            blocked_by_users__blocker=request.user,
+        ).order_by("username")
+
+        serializer = UserSerializer(
+            blocked_users,
+            many=True,
+            context={"request": request},
+        )
+
+        return Response(serializer.data)
+
+
 class UserBlockView(APIView):
     permission_classes = [IsAuthenticated]
 

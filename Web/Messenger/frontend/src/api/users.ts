@@ -24,6 +24,20 @@ export async function searchUsers(
   return response.json();
 }
 
+export async function getBlockedUsers(accessToken: string): Promise<User[]> {
+  const response = await fetch(`${API_BASE_URL}/users/blocked/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to load blocked users.");
+  }
+
+  return response.json();
+}
+
 export type BlockUserResponse = {
   detail: string;
   user: User;

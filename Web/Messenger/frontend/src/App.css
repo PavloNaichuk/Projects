@@ -2139,3 +2139,140 @@
   font-size: 14px;
   font-weight: 600;
 }
+
+.profile-blocked-users {
+  padding-top: 14px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.profile-blocked-users-toggle {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #374151;
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-blocked-users-toggle:hover {
+  background: #e5e7eb;
+}
+
+.profile-blocked-users-toggle:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.profile-blocked-users-panel {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.profile-blocked-users-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.profile-blocked-users-header h4 {
+  margin: 0;
+  color: #111827;
+  font-size: 15px;
+}
+
+.profile-blocked-users-header button {
+  padding: 7px 10px;
+  border: none;
+  border-radius: 8px;
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-blocked-users-header button:hover {
+  background: #d1d5db;
+}
+
+.profile-blocked-users-header button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.profile-blocked-users-empty {
+  padding: 10px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.profile-blocked-users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.profile-blocked-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.profile-blocked-user-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-blocked-user-info strong {
+  color: #111827;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-blocked-user-info span {
+  color: #6b7280;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-blocked-user button {
+  padding: 7px 10px;
+  border: none;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-blocked-user button:hover {
+  background: #fecaca;
+}
+
+.profile-blocked-user button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

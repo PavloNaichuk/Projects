@@ -6,6 +6,7 @@ from .views import (
     LogoutView,
     UserAvatarView,
     UserBlockView,
+    UserBlockedListView,
     UserProfileView,
     UserRegistrationView,
     UserSearchView,
@@ -19,6 +20,7 @@ urlpatterns = [
     path("auth/me/", CurrentUserView.as_view(), name="current-user"),
     path("auth/me/avatar/", UserAvatarView.as_view(), name="user-avatar"),
     path("auth/me/profile/", UserProfileView.as_view(), name="user-profile"),
+    path("users/blocked/", UserBlockedListView.as_view(), name="blocked-users"),
     path(
         "users/<int:user_id>/nickname/",
         ContactNicknameView.as_view(),

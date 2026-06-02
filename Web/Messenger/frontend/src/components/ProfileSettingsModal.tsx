@@ -7,6 +7,10 @@ type ProfileSettingsModalProps = {
   profileError: string;
   isAvatarUpdating: boolean;
   isProfileUpdating: boolean;
+  blockedUsers: User[];
+  blockedUsersError: string;
+  isBlockedUsersLoading: boolean;
+  isUnblockingUserId: number | null;
   handleClose: () => void;
   handleCurrentUserAvatarChange: (
     event: ChangeEvent<HTMLInputElement>
@@ -16,6 +20,8 @@ type ProfileSettingsModalProps = {
     username: string,
     email: string
   ) => Promise<void>;
+  handleLoadBlockedUsers: () => Promise<void>;
+  handleUnblockBlockedUser: (user: User) => Promise<void>;
 };
 
 function ProfileSettingsModal({
@@ -24,18 +30,35 @@ function ProfileSettingsModal({
   profileError,
   isAvatarUpdating,
   isProfileUpdating,
+  blockedUsers,
+  blockedUsersError,
+  isBlockedUsersLoading,
+  isUnblockingUserId,
   handleClose,
   handleCurrentUserAvatarChange,
   handleDeleteCurrentUserAvatar,
   handleUpdateCurrentUserProfile,
+  handleLoadBlockedUsers,
+  handleUnblockBlockedUser,
 }: ProfileSettingsModalProps) {
   const [username, setUsername] = useState(currentUser.username);
   const [email, setEmail] = useState(currentUser.email);
+  const [isBlockedUsersOpen, setIsBlockedUsersOpen] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     await handleUpdateCurrentUserProfile(username, email);
+  }
+
+  async function handleToggleBlockedUsers() {
+    const shouldOpen = !isBlockedUsersOpen;
+
+    setIsBlockedUsersOpen(shouldOpen);
+
+    if (shouldOpen) {
+      await handleLoadBlockedUsers();
+    }
   }
 
   const initial = currentUser.username.trim().charAt(0).toUpperCase() || "?";
@@ -126,6 +149,78 @@ function ProfileSettingsModal({
             </button>
           </div>
         </form>
+
+        <div className="profile-blocked-users">
+          <button
+            type="button"
+            className="profile-blocked-users-toggle"
+            onClick={handleToggleBlockedUsers}
+            disabled={isBlockedUsersLoading}
+          >
+            {isBlockedUsersOpen ? "Hide blocked users" : "Blocked users"}
+          </button>
+
+          {isBlockedUsersOpen && (
+            <div className="profile-blocked-users-panel">
+              <div className="profile-blocked-users-header">
+                <h4>Blocked users</h4>
+
+                <button
+                  type="button"
+                  onClick={handleLoadBlockedUsers}
+                  disabled={isBlockedUsersLoading}
+                >
+                  {isBlockedUsersLoading ? "Loading..." : "Refresh"}
+                </button>
+              </div>
+
+              {blockedUsersError && (
+                <div className="profile-modal-error">{blockedUsersError}</div>
+              )}
+
+              {!isBlockedUsersLoading && blockedUsers.length === 0 && (
+                <div className="profile-blocked-users-empty">
+                  You have no blocked users.
+                </div>
+              )}
+
+              {blockedUsers.length > 0 && (
+                <div className="profile-blocked-users-list">
+                  {blockedUsers.map((user) => {
+                    const userInitial =
+                      user.display_name.trim().charAt(0).toUpperCase() || "?";
+                    const isUnblocking = isUnblockingUserId === user.id;
+
+                    return (
+                      <div key={user.id} className="profile-blocked-user">
+                        <span className="user-avatar small">
+                          {user.avatar_url ? (
+                            <img src={user.avatar_url} alt={user.display_name} />
+                          ) : (
+                            <span>{userInitial}</span>
+                          )}
+                        </span>
+
+                        <div className="profile-blocked-user-info">
+                          <strong>{user.display_name}</strong>
+                          <span>@{user.username}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleUnblockBlockedUser(user)}
+                          disabled={isUnblocking}
+                        >
+                          {isUnblocking ? "Unblocking..." : "Unblock"}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
