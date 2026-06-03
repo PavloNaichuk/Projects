@@ -28,7 +28,6 @@ The project includes user authentication, private conversations, real-time messa
 * Private conversations between users
 * Real-time messaging using WebSockets
 * Typing indicator and online/offline status
-* Typing indicator
 * Message editing, deletion, replies, forwarding, reactions, search and pagination
 * File and image attachments
 * User blocking and unblocking
