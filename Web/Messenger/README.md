@@ -47,13 +47,6 @@ cd Web/Messenger
 docker compose up -d postgres
 ```
 
-### PostgreSQL and Redis
-
-```bash
-cd Web/Messenger
-docker compose up -d postgres redis
-```
-
 ### Tests
 
 ```bash
