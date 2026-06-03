@@ -1,21 +1,7 @@
  ## Project Overview
  A full-stack real-time messaging application built with Django, Django REST Framework, Django Channels, Redis, React, TypeScript, and Vite.
 
-The project allows users to register, log in, manage their profiles, create private conversations, send and receive real-time messages, upload files, use message actions, and interact through WebSocket-based live updates.
-
-## Screenshots
-
-## Architecture
-
-* **Frontend:** React + TypeScript + Vite
-* **Backend:** Django + Django REST Framework + Django Channels
-* **Realtime:** WebSockets + Redis
-* **Database:** PostgreSQL via Docker Compose
-* **Containerization:** Docker + Docker Compose
-* **Authentication:** JWT-based authentication
-* **API:** REST API + WebSocket communication
-
-**Key features:**
+## Key features
 
 * JWT authentication and user authorization
 * User registration, login, logout, and profile management
@@ -28,6 +14,18 @@ The project allows users to register, log in, manage their profiles, create priv
 * User blocking and unblocking
 * Conversation pinning, muting, clearing, and deletion
 * Real-time sidebar and profile updates
+
+## Screenshots
+
+## Architecture
+
+* **Frontend:** React + TypeScript + Vite
+* **Backend:** Django + Django REST Framework + Django Channels
+* **Realtime:** WebSockets + Redis
+* **Database:** PostgreSQL via Docker Compose
+* **Containerization:** Docker + Docker Compose
+* **Authentication:** JWT-based authentication
+* **API:** REST API + WebSocket communication
 
 ## How to Run Locally
 
