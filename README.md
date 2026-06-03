@@ -1,6 +1,6 @@
 # Pavlo Naichuk — Personal Projects
 
-This repository contains personal projects demonstrating experience in web development (Django, React), software development and including desktop applications (C++/Qt).
+Collection of personal projects in web and desktop application development.
 
 ## Repository Structure
 
