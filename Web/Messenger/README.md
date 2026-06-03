@@ -1,3 +1,4 @@
+ ## Project Overview
  A full-stack real-time messaging application built with Django, Django REST Framework, Django Channels, Redis, React, TypeScript, and Vite.
 
 The project allows users to register, log in, manage their profiles, create private conversations, send and receive real-time messages, upload files, use message actions, and interact through WebSocket-based live updates.
