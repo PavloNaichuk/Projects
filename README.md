@@ -16,8 +16,6 @@ Collection of personal projects in web and desktop application development.
 
 A full-stack real-time messaging application inspired by Telegram-style communication platforms.
 
-The project includes user authentication, private conversations, real-time messaging, profile management, message actions, user blocking, file attachments, and WebSocket-based updates.
-
 **Technologies:** Python, Django, Django REST Framework, Django Channels, Redis, React, TypeScript, Vite, CSS, postgreSQL, Docker
   
 **Key features:**
