@@ -29,6 +29,12 @@
 
 ## How to Run Locally
 
+### Clone the repository
+```bash
+git clone <repository-url>
+cd Web/Messenger
+```
+
 ### Backend
 
 ```bash
@@ -63,14 +69,30 @@ docker compose up -d postgres
 ```
 
 ### Docker Compose
-
+Run the project
 ```bash
 cd Web/Messenger
 docker compose up --build
 ```
+This command starts:
+
+* PostgreSQL
+* Redis
+* Django backend
+* React frontend
+
+Stop the project
+```bash
+cd Web/Messenger
+docker compose down
+```
 
 ### Tests
-
+Run backend tests inside the backend container:
+```bash
+docker compose exec backend python manage.py test
+```
+Or locally, if you run the backend outside Docker:
 ```bash
 cd Web/Messenger/backend
 python manage.py test
