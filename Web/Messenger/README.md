@@ -62,6 +62,13 @@ cd Web/Messenger
 docker compose up -d postgres
 ```
 
+### Docker Compose
+
+```bash
+cd Web/Messenger
+docker compose up --build
+```
+
 ### Tests
 
 ```bash
