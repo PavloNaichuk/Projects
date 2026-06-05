@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase, TransactionTestCase
+from django.test import TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from .models import Conversation, Message
+from accounts.models import BlockedUser
+from .models import Conversation, Message, MessageReaction
 
 from asgiref.sync import async_to_sync
 from channels.testing import WebsocketCommunicator
@@ -13,6 +14,14 @@ from rest_framework_simplejwt.tokens import AccessToken
 from config.asgi import application
 
 
+TEST_CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
+
+@override_settings(CHANNEL_LAYERS=TEST_CHANNEL_LAYERS)
 class MessagingAPITests(TestCase):
     def setUp(self):
         User = get_user_model()
@@ -491,7 +500,7 @@ class MessagingAPITests(TestCase):
             kwargs={"message_id": message.id},
         )
 
-        response = self.client.delete(url)
+        response = self.client.delete(f"{url}?mode=for_everyone")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -501,11 +510,7 @@ class MessagingAPITests(TestCase):
         self.assertTrue(message.is_deleted)
         self.assertIsNotNone(message.deleted_at)
 
-        self.assertEqual(response.data["text"], "")
-        self.assertTrue(response.data["is_deleted"])
-        self.assertIsNotNone(response.data["deleted_at"])
-
-    def test_other_user_cannot_delete_message(self):
+    def test_other_user_cannot_delete_message_for_everyone(self):
         message = Message.objects.create(
             conversation=self.conversation,
             sender=self.user,
@@ -519,16 +524,398 @@ class MessagingAPITests(TestCase):
             kwargs={"message_id": message.id},
         )
 
-        response = self.client.delete(url)
+        response = self.client.delete(f"{url}?mode=for_everyone")
 
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(response.data["detail"], "Message not found.")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         message.refresh_from_db()
 
         self.assertFalse(message.is_deleted)
         self.assertEqual(message.text, "Pavlo message")
-        
+
+    def test_participant_can_delete_message_for_me(self):
+        message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Message visible to both users",
+        )
+
+        self.client.force_authenticate(user=self.other_user)
+
+        url = reverse(
+            "message-detail",
+            kwargs={"message_id": message.id},
+        )
+
+        response = self.client.delete(f"{url}?mode=for_me")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        message.refresh_from_db()
+
+        self.assertFalse(message.is_deleted)
+        self.assertEqual(message.text, "Message visible to both users")
+        self.assertTrue(message.hidden_for.filter(id=self.other_user.id).exists())
+        self.assertFalse(message.hidden_for.filter(id=self.user.id).exists())
+
+    def test_user_cannot_send_message_to_user_they_blocked(self):
+        BlockedUser.objects.create(
+            blocker=self.user,
+            blocked=self.other_user,
+        )
+
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.post(
+            url,
+            {"text": "Blocked message"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(
+            response.data["detail"],
+            "You blocked this user. Unblock them to send messages.",
+        )
+        self.assertEqual(Message.objects.count(), 0)
+
+    def test_user_cannot_send_message_to_user_who_blocked_them(self):
+        BlockedUser.objects.create(
+            blocker=self.other_user,
+            blocked=self.user,
+        )
+
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.post(
+            url,
+            {"text": "Blocked message"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(
+            response.data["detail"],
+            "You cannot send messages to this user.",
+        )
+        self.assertEqual(Message.objects.count(), 0)
+
+    def test_user_cannot_create_conversation_with_user_they_blocked(self):
+        BlockedUser.objects.create(
+            blocker=self.user,
+            blocked=self.outsider_user,
+        )
+
+        url = reverse("conversation-list")
+
+        response = self.client.post(
+            url,
+            {"user_id": self.outsider_user.id},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(
+            response.data["detail"],
+            "You blocked this user. Unblock them to send messages.",
+        )
+
+    def test_user_cannot_create_conversation_with_user_who_blocked_them(self):
+        BlockedUser.objects.create(
+            blocker=self.outsider_user,
+            blocked=self.user,
+        )
+
+        url = reverse("conversation-list")
+
+        response = self.client.post(
+            url,
+            {"user_id": self.outsider_user.id},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(
+            response.data["detail"],
+            "You cannot send messages to this user.",
+        )
+
+    def test_user_cannot_forward_message_to_user_they_blocked(self):
+        target_conversation = Conversation.objects.create()
+        target_conversation.participants.create(user=self.user)
+        target_conversation.participants.create(user=self.outsider_user)
+
+        source_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.other_user,
+            text="Message to forward",
+        )
+
+        BlockedUser.objects.create(
+            blocker=self.user,
+            blocked=self.outsider_user,
+        )
+
+        url = reverse(
+            "message-forward",
+            kwargs={"message_id": source_message.id},
+        )
+
+        response = self.client.post(
+            url,
+            {"conversation_id": target_conversation.id},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(
+            response.data["detail"],
+            "You blocked this user. Unblock them to send messages.",
+        )
+        self.assertEqual(Message.objects.count(), 1)
+
+    def test_user_cannot_forward_message_to_user_who_blocked_them(self):
+        target_conversation = Conversation.objects.create()
+        target_conversation.participants.create(user=self.user)
+        target_conversation.participants.create(user=self.outsider_user)
+
+        source_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.other_user,
+            text="Message to forward",
+        )
+
+        BlockedUser.objects.create(
+            blocker=self.outsider_user,
+            blocked=self.user,
+        )
+
+        url = reverse(
+            "message-forward",
+            kwargs={"message_id": source_message.id},
+        )
+
+        response = self.client.post(
+            url,
+            {"conversation_id": target_conversation.id},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(
+            response.data["detail"],
+            "You cannot send messages to this user.",
+        )
+        self.assertEqual(Message.objects.count(), 1)
+
+    def test_user_can_add_message_reaction(self):
+        message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.other_user,
+            text="React to me",
+        )
+
+        url = reverse(
+            "message-reaction-toggle",
+            kwargs={"message_id": message.id},
+        )
+
+        response = self.client.post(
+            url,
+            {"emoji": "👍"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["action"], "added")
+        self.assertTrue(
+            MessageReaction.objects.filter(
+                message=message,
+                user=self.user,
+                emoji="👍",
+            ).exists()
+        )
+
+    def test_user_can_remove_message_reaction(self):
+        message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.other_user,
+            text="React to me",
+        )
+
+        url = reverse(
+            "message-reaction-toggle",
+            kwargs={"message_id": message.id},
+        )
+
+        self.client.post(
+            url,
+            {"emoji": "👍"},
+            format="json",
+        )
+        response = self.client.post(
+            url,
+            {"emoji": "👍"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["action"], "removed")
+        self.assertFalse(
+            MessageReaction.objects.filter(
+                message=message,
+                user=self.user,
+                emoji="👍",
+            ).exists()
+        )
+
+    def test_user_cannot_react_with_unsupported_emoji(self):
+        message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.other_user,
+            text="React to me",
+        )
+
+        url = reverse(
+            "message-reaction-toggle",
+            kwargs={"message_id": message.id},
+        )
+
+        response = self.client.post(
+            url,
+            {"emoji": "🔥"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["emoji"][0], "Unsupported reaction.")
+        self.assertEqual(MessageReaction.objects.count(), 0)
+
+    def test_non_participant_cannot_react_to_message(self):
+        message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Private message",
+        )
+
+        self.client.force_authenticate(user=self.outsider_user)
+
+        url = reverse(
+            "message-reaction-toggle",
+            kwargs={"message_id": message.id},
+        )
+
+        response = self.client.post(
+            url,
+            {"emoji": "👍"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["detail"], "Message not found.")
+        self.assertEqual(MessageReaction.objects.count(), 0)
+
+    def test_user_cannot_react_to_deleted_message(self):
+        message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="",
+            is_deleted=True,
+        )
+
+        url = reverse(
+            "message-reaction-toggle",
+            kwargs={"message_id": message.id},
+        )
+
+        response = self.client.post(
+            url,
+            {"emoji": "👍"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["detail"], "Cannot react to deleted message.")
+        self.assertEqual(MessageReaction.objects.count(), 0)
+
+    def test_participant_can_mark_conversation_as_unread(self):
+        url = reverse(
+            "conversation-mark-unread",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["detail"], "Conversation marked as unread.")
+
+        self.conversation.refresh_from_db()
+
+        self.assertTrue(
+            self.conversation.unread_for.filter(id=self.user.id).exists()
+        )
+
+    def test_non_participant_cannot_mark_conversation_as_unread(self):
+        self.client.force_authenticate(user=self.outsider_user)
+
+        url = reverse(
+            "conversation-mark-unread",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["detail"], "Conversation not found.")
+
+    def test_participant_can_clear_history_for_self(self):
+        first_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="First message",
+        )
+        second_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.other_user,
+            text="Second message",
+        )
+
+        url = reverse(
+            "conversation-clear-history",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["detail"], "Chat history cleared for you.")
+
+        self.assertTrue(first_message.hidden_for.filter(id=self.user.id).exists())
+        self.assertTrue(second_message.hidden_for.filter(id=self.user.id).exists())
+        self.assertFalse(first_message.hidden_for.filter(id=self.other_user.id).exists())
+        self.assertFalse(second_message.hidden_for.filter(id=self.other_user.id).exists())
+
+    def test_non_participant_cannot_clear_history(self):
+        self.client.force_authenticate(user=self.outsider_user)
+
+        url = reverse(
+            "conversation-clear-history",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["detail"], "Conversation not found.")
+
+
+@override_settings(CHANNEL_LAYERS=TEST_CHANNEL_LAYERS)
 class MessagingWebSocketTests(TransactionTestCase):
     def setUp(self):
         User = get_user_model()
