@@ -125,7 +125,7 @@ docker compose exec backend python manage.py test
 ```
 Run frontend tests inside the frontend container:
 ```bash
-docker compose exec frontend npm test -- --run
+docker compose run --rm frontend npm run test:run
 ```
 ### Local backend and frontend
 
@@ -141,5 +141,5 @@ python manage.py test
 Run frontend tests locally:
 ```bash
 cd Web/Messenger/frontend
-npm test -- --run
+npm run test:run
 ```
