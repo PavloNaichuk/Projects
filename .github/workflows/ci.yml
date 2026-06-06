@@ -107,3 +107,24 @@ jobs:
 
       - name: Build frontend
         run: npm run build
+
+  docker-check:
+    name: Docker Compose check
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Web/Messenger
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare environment file
+        run: cp .env.example .env
+
+      - name: Validate Docker Compose config
+        run: docker compose config
+
+      - name: Build Docker images
+        run: docker compose build
