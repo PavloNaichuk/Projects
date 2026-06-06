@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 
 from accounts.models import BlockedUser, ContactNickname, User
@@ -273,6 +274,21 @@ class MessageSerializer(serializers.ModelSerializer):
 
         return list(reactions_by_emoji.values())
 
+    def validate_attachment(self, value):
+        allowed_content_types = settings.ALLOWED_MESSAGE_ATTACHMENT_CONTENT_TYPES
+
+        if value.content_type not in allowed_content_types:
+            raise serializers.ValidationError(
+                "Attachment must be JPG, PNG, WEBP, PDF, TXT, DOC, or DOCX."
+            )
+
+        if value.size > settings.MAX_MESSAGE_ATTACHMENT_SIZE:
+            raise serializers.ValidationError(
+                "Attachment file size must be 10 MB or less."
+            )
+
+        return value
+    
     def validate(self, attrs):
         text = attrs.get("text", "")
         attachment = attrs.get("attachment")

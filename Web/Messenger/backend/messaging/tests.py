@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 from rest_framework import status
@@ -104,6 +105,62 @@ class MessagingAPITests(TestCase):
         self.assertEqual(
             response.data["text"][0],
             "Message text cannot be empty.",
+        )
+    
+    def test_cannot_create_message_with_unsupported_attachment_type(self):
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        attachment = SimpleUploadedFile(
+            "virus.exe",
+            b"fake executable content",
+            content_type="application/x-msdownload",
+        )
+
+        response = self.client.post(
+            url,
+            {
+                "text": "File test",
+                "attachment": attachment,
+            },
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Message.objects.count(), 0)
+        self.assertEqual(
+            response.data["attachment"][0],
+            "Attachment must be JPG, PNG, WEBP, PDF, TXT, DOC, or DOCX.",
+        )
+
+    def test_cannot_create_message_with_too_large_attachment(self):
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        attachment = SimpleUploadedFile(
+            "large.txt",
+            b"x" * (10 * 1024 * 1024 + 1),
+            content_type="text/plain",
+        )
+
+        response = self.client.post(
+            url,
+            {
+                "text": "Large file test",
+                "attachment": attachment,
+            },
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Message.objects.count(), 0)
+        self.assertEqual(
+            response.data["attachment"][0],
+            "Attachment file size must be 10 MB or less.",
         )
 
     def test_participant_can_list_messages(self):

@@ -121,6 +121,27 @@ STATIC_URL = "static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+MAX_MESSAGE_ATTACHMENT_SIZE = int(
+    os.getenv("MAX_MESSAGE_ATTACHMENT_SIZE", str(10 * 1024 * 1024))
+)
+
+ALLOWED_MESSAGE_ATTACHMENT_CONTENT_TYPES = [
+    content_type.strip()
+    for content_type in os.getenv(
+        "ALLOWED_MESSAGE_ATTACHMENT_CONTENT_TYPES",
+        (
+            "image/jpeg,"
+            "image/png,"
+            "image/webp,"
+            "application/pdf,"
+            "text/plain,"
+            "application/msword,"
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ),
+    ).split(",")
+    if content_type.strip()
+]
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
