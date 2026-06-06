@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from messaging.models import ConversationParticipant
 
@@ -124,9 +125,17 @@ def notify_user_block_status_updated(blocker, blocked, request):
         },
     )
 
+class LoginView(TokenObtainPairView):
+    permission_classes = []
+    throttle_scope = "auth"
 
+
+class TokenRefreshAPIView(TokenRefreshView):
+    permission_classes = []
+    throttle_scope = "token_refresh"
 class UserSearchView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_scope = "search"
 
     def get(self, request):
         query = request.query_params.get("q", "").strip()
@@ -159,7 +168,8 @@ class CurrentUserView(APIView):
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
-
+    throttle_scope = "actions"
+    
     def patch(self, request):
         serializer = UserProfileSerializer(
             request.user,
@@ -178,6 +188,7 @@ class UserProfileView(APIView):
 
 class UserAvatarView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_scope = "uploads"
 
     def patch(self, request):
         if "avatar" not in request.FILES:
@@ -380,7 +391,8 @@ class UserUnblockView(APIView):
 
 class UserRegistrationView(APIView):
     permission_classes = []
-
+    throttle_scope = "auth"
+    
     def post(self, request):
         serializer = UserRegistrationSerializer(
             data=request.data,

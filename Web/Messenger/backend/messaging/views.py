@@ -234,6 +234,7 @@ def serialize_message(message, request):
 
 class ConversationListView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_scope = "actions"
 
     def get(self, request):
         conversations = (
@@ -491,7 +492,8 @@ class ConversationPinView(APIView):
 
 class ConversationMessagesView(APIView):
     permission_classes = [IsAuthenticated]
-
+    throttle_scope = "messages"
+    
     def get(self, request, conversation_id):
         base_messages = (
             Message.objects.filter(
@@ -801,7 +803,8 @@ class ConversationClearHistoryView(APIView):
 
 class MessageDetailView(APIView):
     permission_classes = [IsAuthenticated]
-
+    throttle_scope = "messages"
+    
     def patch(self, request, message_id):
         message = (
             Message.objects.filter(
@@ -981,7 +984,7 @@ class MessageDetailView(APIView):
 
 class MessageReactionToggleView(APIView):
     permission_classes = [IsAuthenticated]
-
+    throttle_scope = "actions"
     allowed_emojis = {"👍", "❤️", "😂", "😮"}
 
     def post(self, request, message_id):
@@ -1055,6 +1058,7 @@ class MessageReactionToggleView(APIView):
 
 class MessageForwardView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_scope = "messages"
 
     def post(self, request, message_id):
         target_conversation_id = request.data.get("conversation_id")

@@ -156,6 +156,17 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
+    "DEFAULT_THROTTLE_CLASSES": (
+        "rest_framework.throttling.ScopedRateThrottle",
+    ),
+    "DEFAULT_THROTTLE_RATES": {
+        "auth": os.getenv("THROTTLE_AUTH_RATE", "20/hour"),
+        "token_refresh": os.getenv("THROTTLE_TOKEN_REFRESH_RATE", "60/hour"),
+        "search": os.getenv("THROTTLE_SEARCH_RATE", "60/minute"),
+        "messages": os.getenv("THROTTLE_MESSAGES_RATE", "300/minute"),
+        "uploads": os.getenv("THROTTLE_UPLOADS_RATE", "30/hour"),
+        "actions": os.getenv("THROTTLE_ACTIONS_RATE", "300/minute"),
+    },
 }
 
 CORS_ALLOWED_ORIGINS = os.getenv(
