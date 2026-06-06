@@ -6,13 +6,12 @@ from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from django.db.models import F, Max
 from django.utils import timezone
-
-from accounts.models import BlockedUser
-
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from accounts.models import BlockedUser
 
 from .consumers import ACTIVE_USER_CONNECTIONS
 from .models import Conversation, Message, MessageReaction
@@ -21,7 +20,6 @@ from .serializers import (
     ConversationSerializer,
     MessageSerializer,
 )
-
 
 MESSAGE_SELECT_RELATED = (
     "sender",

@@ -14,7 +14,6 @@ from .views import (
     MessageReactionToggleView,
 )
 
-
 urlpatterns = [
     path("conversations/", ConversationListView.as_view(), name="conversation-list"),
     path(

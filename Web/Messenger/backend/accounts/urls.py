@@ -5,14 +5,13 @@ from .views import (
     CurrentUserView,
     LogoutView,
     UserAvatarView,
-    UserBlockView,
     UserBlockedListView,
+    UserBlockView,
     UserProfileView,
     UserRegistrationView,
     UserSearchView,
     UserUnblockView,
 )
-
 
 urlpatterns = [
     path("auth/register/", UserRegistrationView.as_view(), name="user-register"),

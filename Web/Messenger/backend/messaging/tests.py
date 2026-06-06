@@ -1,19 +1,17 @@
+from asgiref.sync import async_to_sync
+from channels.testing import WebsocketCommunicator
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-
-from accounts.models import BlockedUser
-from .models import Conversation, Message, MessageReaction
-
-from asgiref.sync import async_to_sync
-from channels.testing import WebsocketCommunicator
 from rest_framework_simplejwt.tokens import AccessToken
 
+from accounts.models import BlockedUser
 from config.asgi import application
 
+from .models import Conversation, Message, MessageReaction
 
 TEST_CHANNEL_LAYERS = {
     "default": {
@@ -1111,9 +1109,10 @@ class MessagingWebSocketTests(TransactionTestCase):
             sender_communicator, sender_connected = await self.connect_to_conversation(
                 self.user
             )
-            receiver_communicator, receiver_connected = await self.connect_to_conversation(
-                self.other_user
-            )
+            (
+                receiver_communicator,
+                receiver_connected,
+            ) = await self.connect_to_conversation(self.other_user)
 
             self.assertTrue(sender_connected)
             self.assertTrue(receiver_connected)

@@ -2,6 +2,7 @@ from django.conf import settings
 from rest_framework import serializers
 
 from accounts.models import BlockedUser, ContactNickname, User
+
 from .models import Conversation, ConversationParticipant, Message, MessageReaction
 
 

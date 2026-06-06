@@ -202,7 +202,9 @@ def mark_undelivered_messages_as_delivered_for_user(user):
             "message_ids": conversation_message_ids,
             "user_id": user.id,
         }
-        for conversation_id, conversation_message_ids in messages_by_conversation.items()
+        for conversation_id, conversation_message_ids in (
+            messages_by_conversation.items()
+        )
     ]
 
 
