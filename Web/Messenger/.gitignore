@@ -17,3 +17,6 @@ staticfiles/
 .env.*
 !.env.example
 websocket_test.py 
+
+.coverage
+htmlcov/
