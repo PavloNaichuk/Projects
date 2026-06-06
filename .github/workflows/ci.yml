@@ -72,12 +72,25 @@ jobs:
         run: python -m ruff check .
       
       - name: Audit Python dependencies
-        run: python -m pip_audit
+        run: python -m pip_audit -r requirements.txt
+      
+      - name: Run backend security scan
+        run: python -m bandit -r . -x "./venv,./accounts/tests.py,./messaging/tests.py,./accounts/migrations,./messaging/migrations"
 
       - name: Run Django checks
         run: python manage.py check
       
       - name: Run Django deployment checks
+        env:
+          SECRET_KEY: this-is-a-long-secure-test-secret-key-for-deploy-checks-123456
+          DEBUG: "False"
+          SECURE_SSL_REDIRECT: "True"
+          SESSION_COOKIE_SECURE: "True"
+          CSRF_COOKIE_SECURE: "True"
+          SECURE_HSTS_SECONDS: 31536000
+
+          SECURE_HSTS_INCLUDE_SUBDOMAINS: "True"
+          SECURE_HSTS_PRELOAD: "True"
         run: python manage.py check --deploy
 
       - name: Run backend tests with coverage
