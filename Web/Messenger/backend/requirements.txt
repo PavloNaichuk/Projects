@@ -16,7 +16,7 @@ django-cors-headers==4.9.0
 djangorestframework==3.17.1
 djangorestframework_simplejwt==5.5.1
 hyperlink==21.0.0
-idna==3.15
+idna==3.18
 Incremental==24.11.0
 msgpack==1.1.2
 packaging==26.2
@@ -30,14 +30,14 @@ PyJWT==2.12.1
 pyOpenSSL==26.2.0
 python-dotenv==1.2.2
 redis==7.4.0
-requests==2.33.1
+requests==2.34.2
 service-identity==24.2.0
 sqlparse==0.5.5
 tomli==2.4.1
 Twisted==26.4.0
-txaio==25.9.2
+txaio==25.12.2
 typing_extensions==4.15.0
 tzdata==2026.2
 urllib3==2.7.0
 websockets==16.0
-zope.interface==8.4
+zope.interface==8.5
