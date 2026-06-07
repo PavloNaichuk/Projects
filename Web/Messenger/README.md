@@ -27,6 +27,52 @@ A full-stack real-time messaging application built with Django, Django REST Fram
 * **Authentication:** JWT-based authentication
 * **API:** REST API + WebSocket communication
 
+## Quality and Security
+
+The project includes automated quality and security checks to keep the codebase stable, maintainable, and safer to develop:
+
+* GitHub Actions CI for backend and frontend
+* Backend linting with Ruff
+* Frontend linting with ESLint
+* Backend tests with Django test framework
+* Frontend tests with Vitest
+* Backend test coverage reporting with Coverage.py
+* Python dependency security audit with pip-audit
+* Frontend dependency security audit with npm audit
+* Python code security scanning with Bandit
+* CodeQL security scanning
+* Dependabot configuration for dependency updates
+* Docker Compose configuration validation and image build checks
+* Django deployment security checks
+
+Security-related improvements:
+
+* Environment-based configuration using `.env` and `.env.example`
+* Secret key, debug mode, allowed hosts, CORS origins, database and Redis settings loaded from environment variables
+* Message attachment validation by file type and file size
+* API rate limiting for authentication, search, messages, uploads, and user actions
+* Production security settings configurable through environment variables
+* WebSocket test credentials loaded from environment variables instead of being hardcoded
+
+## CI/CD
+
+GitHub Actions is configured for the Messenger project inside the monorepo.
+
+The pipeline checks:
+
+* backend linting
+* backend dependency audit
+* backend security scan
+* Django system checks
+* Django deployment checks
+* backend tests with coverage
+* frontend dependency audit
+* frontend linting
+* frontend tests
+* frontend production build
+* Docker Compose config validation
+* Docker image builds
+
 ## Running the Project
 
 ### Clone the repository
@@ -142,4 +188,24 @@ Run frontend tests locally:
 ```bash
 cd Web/Messenger/frontend
 npm run test:run
+```
+
+Run backend quality and security checks locally:
+
+```bash
+cd Web/Messenger/backend
+python -m ruff check .
+python -m pip_audit -r requirements.txt
+python -m bandit -r . -x ".\venv,.\accounts\tests.py,.\messaging\tests.py,.\accounts\migrations,.\messaging\migrations"
+python -m coverage run manage.py test
+python -m coverage report -m
+```
+Run frontend quality and security checks locally:
+
+```bash
+cd Web/Messenger/frontend
+npm audit --omit=dev --audit-level=high
+npm run lint
+npm run test:run
+npm run build
 ```
