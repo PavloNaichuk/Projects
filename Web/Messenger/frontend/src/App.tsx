@@ -51,44 +51,18 @@ import ProfileSettingsModal from "./components/ProfileSettingsModal";
 import ContactNicknameModal from "./components/ContactNicknameModal";
 import {
   getConversationName,
+  getForwardPreviewText,
   getOtherParticipant,
   sortConversationsByUpdatedAt,
 } from "./utils/chat";
+import { addAvatarCacheBust } from "./utils/users";
 
 const MESSAGE_PAGE_SIZE = 20;
 
 type ScrollBehavior = "bottom" | "preserve";
 
-function getForwardPreviewText(message: Message) {
-  if (message.is_deleted) {
-    return "This message was deleted";
-  }
 
-  if (message.text.trim()) {
-    return message.text;
-  }
 
-  if (message.attachment_name) {
-    return message.attachment_is_image
-      ? `Image: ${message.attachment_name}`
-      : `File: ${message.attachment_name}`;
-  }
-
-  return "Message";
-}
-
-function addAvatarCacheBust(user: User): User {
-  if (!user.avatar_url) {
-    return user;
-  }
-
-  const separator = user.avatar_url.includes("?") ? "&" : "?";
-
-  return {
-    ...user,
-    avatar_url: `${user.avatar_url}${separator}v=${Date.now()}`,
-  };
-}
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);

@@ -1,5 +1,5 @@
 import type { User } from "../api/auth";
-import type { Conversation } from "../api/conversations";
+import type { Conversation, Message } from "../api/conversations";
 
 export function getUserDisplayName(user: User) {
   return user.display_name || user.username;
@@ -76,4 +76,22 @@ export function sortConversationsByUpdatedAt(conversations: Conversation[]) {
       getConversationSortTime(firstConversation)
     );
   });
+}
+
+export function getForwardPreviewText(message: Message) {
+  if (message.is_deleted) {
+    return "This message was deleted";
+  }
+
+  if (message.text.trim()) {
+    return message.text;
+  }
+
+  if (message.attachment_name) {
+    return message.attachment_is_image
+      ? `Image: ${message.attachment_name}`
+      : `File: ${message.attachment_name}`;
+  }
+
+  return "Message";
 }
