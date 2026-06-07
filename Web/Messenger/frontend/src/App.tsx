@@ -49,9 +49,9 @@ import ChatWindow from "./components/ChatWindow";
 import Sidebar from "./components/Sidebar";
 import ProfileSettingsModal from "./components/ProfileSettingsModal";
 import ContactNicknameModal from "./components/ContactNicknameModal";
+import ForwardMessageModal from "./components/ForwardMessageModal";
 import {
   getConversationName,
-  getForwardPreviewText,
   getOtherParticipant,
   sortConversationsByUpdatedAt,
 } from "./utils/chat";
@@ -2217,53 +2217,14 @@ function App() {
       )}
 
       {forwardingMessage && (
-        <div className="modal-backdrop">
-          <div className="forward-modal">
-            <h3>Forward message</h3>
-
-            <div className="forward-message-preview">
-              {getForwardPreviewText(forwardingMessage)}
-            </div>
-
-            <div className="forward-conversation-list">
-              {conversations.map((conversation) => {
-                const lastMessage = conversation.last_message;
-                const lastMessageText =
-                  lastMessage?.text.trim() ||
-                  lastMessage?.attachment_name ||
-                  "No messages yet";
-
-                return (
-                  <button
-                    key={conversation.id}
-                    type="button"
-                    onClick={() =>
-                      handleForwardMessageToConversation(conversation.id)
-                    }
-                    disabled={isForwardingMessage}
-                  >
-                    <span className="forward-conversation-name">
-                      {getConversationName(conversation, currentUser)}
-                    </span>
-                    <span className="forward-conversation-preview">
-                      {lastMessageText}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="forward-modal-actions">
-              <button
-                type="button"
-                onClick={handleCancelForwardMessage}
-                disabled={isForwardingMessage}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <ForwardMessageModal
+          forwardingMessage={forwardingMessage}
+          conversations={conversations}
+          currentUser={currentUser}
+          isForwardingMessage={isForwardingMessage}
+          handleForwardMessageToConversation={handleForwardMessageToConversation}
+          handleCancelForwardMessage={handleCancelForwardMessage}
+        />
       )}
     </div>
   );
