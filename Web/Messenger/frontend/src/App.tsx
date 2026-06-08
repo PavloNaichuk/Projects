@@ -1,6 +1,5 @@
 import {
   useCallback,
-  useEffect,
   useState,
   type ChangeEvent,
   type FormEvent,
@@ -9,11 +8,6 @@ import {
 import "./App.css";
 import {
   deleteCurrentUserAvatar,
-  getCurrentUser,
-  login,
-  logout,
-  refreshAccessToken,
-  register,
   updateContactNickname,
   updateCurrentUserAvatar,
   updateCurrentUserProfile,
@@ -47,6 +41,7 @@ import Sidebar from "./components/Sidebar";
 import ProfileSettingsModal from "./components/ProfileSettingsModal";
 import ContactNicknameModal from "./components/ContactNicknameModal";
 import ForwardMessageModal from "./components/ForwardMessageModal";
+import { useAuthSession } from "./hooks/useAuthSession";
 import { useMessageScroll } from "./hooks/useMessageScroll";
 import { useMessengerSockets } from "./hooks/useMessengerSockets";
 import { useNotificationSound } from "./hooks/useNotificationSound";
@@ -62,28 +57,14 @@ const MESSAGE_PAGE_SIZE = 20;
 
 
 function App() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
 
-  const [authMode, setAuthMode] = useState<"login" | "register">("login");
-
-  const [username, setUsername] = useState("pavlo");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
   const [isOlderMessagesLoading, setIsOlderMessagesLoading] = useState(false);
   const [hasMoreMessages, setHasMoreMessages] = useState(false);
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
-
   const [newMessage, setNewMessage] = useState("");
   const [selectedAttachment, setSelectedAttachment] = useState<File | null>(
     null
@@ -135,6 +116,72 @@ function App() {
   >(null);
   const [isBlockingUserId, setIsBlockingUserId] = useState<number | null>(null);
 
+  const resetSessionState = useCallback(() => {
+    setConversations([]);
+    setSelectedConversation(null);
+    setMessages([]);
+    setHasMoreMessages(false);
+    setIsOlderMessagesLoading(false);
+    setIsDeletingConversationId(null);
+
+    setSearchResults([]);
+    setUserSearchQuery("");
+    setAvatarError("");
+    setIsAvatarUpdating(false);
+    setIsProfileSettingsOpen(false);
+    setProfileError("");
+    setIsProfileUpdating(false);
+    setBlockedUsers([]);
+    setBlockedUsersError("");
+    setIsBlockedUsersLoading(false);
+    setIsUnblockingUserId(null);
+    setContactNicknameUser(null);
+    setContactNicknameError("");
+    setIsContactNicknameUpdating(false);
+
+    setMessageSearchQuery("");
+    setIsMessageSearchActive(false);
+    setIsSearchingMessages(false);
+
+    setNewMessage("");
+    setSelectedAttachment(null);
+    setReplyToMessage(null);
+    setForwardingMessage(null);
+    setMessageError("");
+    setIsForwardingMessage(false);
+    setTypingUser(null);
+    setOnlineUserIds([]);
+    setIsBlockingUserId(null);
+  }, []);
+
+  const {
+    currentUser,
+    accessToken,
+    authMode,
+    setAuthMode,
+    username,
+    setUsername,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    passwordConfirm,
+    setPasswordConfirm,
+    error,
+    setError,
+    isLoading,
+    isAuthChecking,
+    handleLogin,
+    handleRegister,
+    handleLogout,
+  } = useAuthSession({
+    setConversations,
+    setSelectedConversation,
+    setMessages,
+    setHasMoreMessages,
+    resetSessionState,
+  });
+
   const currentUserId = currentUser?.id ?? null;
   const selectedConversationId = selectedConversation?.id ?? null;
   const selectedConversationUser =
@@ -174,7 +221,6 @@ function App() {
     sendTypingStatus,
     notifyTypingActivity,
     clearTypingTimeout,
-    closeSockets,
     getChatSocket,
   } = useMessengerSockets({
     accessToken,
@@ -411,78 +457,6 @@ function App() {
     }
   }
 
-  const loadUserData = useCallback(async (token: string) => {
-    const user = await getCurrentUser(token);
-    setCurrentUser(user);
-    setAccessToken(token);
-
-    const conversationsData = await getConversations(token);
-    setConversations(sortConversationsByUpdatedAt(conversationsData));
-
-    setSelectedConversation(null);
-    setMessages([]);
-    setHasMoreMessages(false);
-  }, []);
-
-  const clearSession = useCallback(() => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-
-    closeSockets();
-
-    setCurrentUser(null);
-    setAccessToken(null);
-    setConversations([]);
-    setSelectedConversation(null);
-    setMessages([]);
-    setHasMoreMessages(false);
-    setIsOlderMessagesLoading(false);
-    setIsDeletingConversationId(null);
-
-    setSearchResults([]);
-    setUserSearchQuery("");
-    setAvatarError("");
-    setIsAvatarUpdating(false);
-    setIsProfileSettingsOpen(false);
-    setProfileError("");
-    setIsProfileUpdating(false);
-    setBlockedUsers([]);
-    setBlockedUsersError("");
-    setIsBlockedUsersLoading(false);
-    setIsUnblockingUserId(null);
-    setContactNicknameUser(null);
-    setContactNicknameError("");
-    setIsContactNicknameUpdating(false);
-
-    setMessageSearchQuery("");
-    setIsMessageSearchActive(false);
-    setIsSearchingMessages(false);
-
-    setNewMessage("");
-    setSelectedAttachment(null);
-    setReplyToMessage(null);
-    setForwardingMessage(null);
-    setMessageError("");
-    setIsForwardingMessage(false);
-    setTypingUser(null);
-    setOnlineUserIds([]);
-    setIsBlockingUserId(null);
-  }, [closeSockets]);
-
-  async function handleLogout() {
-    const savedRefreshToken = localStorage.getItem("refreshToken");
-
-    if (accessToken && savedRefreshToken) {
-      try {
-        await logout(accessToken, savedRefreshToken);
-      } catch {
-        console.error("Logout request failed.");
-      }
-    }
-
-    clearSession();
-  }
-
   async function handleCurrentUserAvatarChange(
     event: ChangeEvent<HTMLInputElement>
   ) {
@@ -670,112 +644,6 @@ function App() {
           }
         : previousConversation
     );
-  }
-
-  useEffect(() => {
-    async function restoreSession() {
-      const savedAccessToken = localStorage.getItem("accessToken");
-      const savedRefreshToken = localStorage.getItem("refreshToken");
-
-      if (!savedAccessToken && !savedRefreshToken) {
-        setIsAuthChecking(false);
-        return;
-      }
-
-      try {
-        if (savedAccessToken) {
-          await loadUserData(savedAccessToken);
-          return;
-        }
-
-        if (savedRefreshToken) {
-          const refreshedToken = await refreshAccessToken(savedRefreshToken);
-          localStorage.setItem("accessToken", refreshedToken.access);
-          await loadUserData(refreshedToken.access);
-        }
-      } catch {
-        if (!savedRefreshToken) {
-          clearSession();
-          return;
-        }
-
-        try {
-          const refreshedToken = await refreshAccessToken(savedRefreshToken);
-          localStorage.setItem("accessToken", refreshedToken.access);
-          await loadUserData(refreshedToken.access);
-        } catch {
-          clearSession();
-        }
-      } finally {
-        setIsAuthChecking(false);
-      }
-    }
-
-    restoreSession();
-  }, [clearSession, loadUserData]);
-
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const tokens = await login(username, password);
-
-      localStorage.setItem("accessToken", tokens.access);
-      localStorage.setItem("refreshToken", tokens.refresh);
-
-      await loadUserData(tokens.access);
-    } catch {
-      setError("Invalid username or password.");
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function handleRegister(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const trimmedUsername = username.trim();
-    const trimmedEmail = email.trim();
-    const trimmedPassword = password.trim();
-    const trimmedPasswordConfirm = passwordConfirm.trim();
-
-    if (!trimmedUsername || !trimmedEmail || !trimmedPassword) {
-      setError("Username, email and password are required.");
-      return;
-    }
-
-    if (trimmedPassword !== trimmedPasswordConfirm) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const tokens = await register(
-        trimmedUsername,
-        trimmedEmail,
-        trimmedPassword,
-        trimmedPasswordConfirm
-      );
-
-      localStorage.setItem("accessToken", tokens.access);
-      localStorage.setItem("refreshToken", tokens.refresh);
-
-      await loadUserData(tokens.access);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("Failed to create account.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
   }
 
   async function handleSelectConversation(conversation: Conversation) {
