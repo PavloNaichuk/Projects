@@ -12,6 +12,7 @@ import {
 } from "../utils/chat";
 import MessageAttachment from "./MessageAttachment";
 import MessageInfoModal from "./MessageInfoModal";
+import MessageReactions from "./MessageReactions";
 import MessageReplyPreview from "./MessageReplyPreview";
 
 const REACTION_EMOJIS = ["👍", "❤️", "😂", "😮"];
@@ -319,25 +320,10 @@ function MessageBubble({
                 )}
 
                 {hasReactions && (
-                  <div className="message-reactions">
-                    {message.reactions.map((reaction) => (
-                      <button
-                        key={reaction.emoji}
-                        type="button"
-                        className={
-                          reaction.reacted_by_me
-                            ? "message-reaction active"
-                            : "message-reaction"
-                        }
-                        onClick={() =>
-                          handleToggleMessageReaction(message.id, reaction.emoji)
-                        }
-                      >
-                        <span>{reaction.emoji}</span>
-                        <span>{reaction.count}</span>
-                      </button>
-                    ))}
-                  </div>
+                  <MessageReactions
+                    message={message}
+                    handleToggleMessageReaction={handleToggleMessageReaction}
+                  />
                 )}
 
                 <div className="message-toolbar" ref={menuRef}>
