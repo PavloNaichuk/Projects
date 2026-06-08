@@ -8,23 +8,15 @@ import {
 import "./App.css";
 import { type User } from "./api/auth";
 import {
-  clearConversationHistory,
-  createConversation,
   createMessageWithAttachment,
-  deleteConversation,
   deleteMessage,
   editMessage,
   forwardMessage,
   removeMessageAttachment,
   toggleMessageReaction,
   getConversationMessagesPage,
-  getConversations,
   markConversationAsRead,
-  markConversationAsUnread,
-  muteConversation,
-  pinConversation,
   type Conversation,
-  type DeleteConversationMode,
   type DeleteMessageMode,
   type Message,
 } from "./api/conversations";
@@ -35,6 +27,7 @@ import ProfileSettingsModal from "./components/ProfileSettingsModal";
 import ContactNicknameModal from "./components/ContactNicknameModal";
 import ForwardMessageModal from "./components/ForwardMessageModal";
 import { useAuthSession } from "./hooks/useAuthSession";
+import { useConversationActions } from "./hooks/useConversationActions";
 import { useMessageScroll } from "./hooks/useMessageScroll";
 import { useMessengerStateUpdates } from "./hooks/useMessengerStateUpdates";
 import { useMessengerSockets } from "./hooks/useMessengerSockets";
@@ -45,7 +38,6 @@ import { useUserStateUpdates } from "./hooks/useUserStateUpdates";
 import {
   getConversationName,
   getOtherParticipant,
-  sortConversationsByUpdatedAt,
 } from "./utils/chat";
 
 const MESSAGE_PAGE_SIZE = 20;
@@ -241,6 +233,42 @@ function App() {
   });
 
   const {
+    refreshConversations,
+    handleSelectConversation,
+    handleStartConversation,
+    handleDeleteConversation,
+    handleMuteConversation,
+    handlePinConversation,
+    handleMarkConversationAsUnread,
+    handleClearConversationHistory,
+  } = useConversationActions({
+    accessToken,
+    selectedConversation,
+    loadMessages,
+    removeConversationFromState,
+    updateConversationInState,
+    setConversations,
+    setSelectedConversation,
+    setMessages,
+    setHasMoreMessages,
+    setIsOlderMessagesLoading,
+    setEditingMessageId,
+    setEditingMessageText,
+    setTypingUser,
+    setMessageError,
+    setMessageSearchQuery,
+    setIsMessageSearchActive,
+    setIsSearchingMessages,
+    setSelectedAttachment,
+    setReplyToMessage,
+    setForwardingMessage,
+    setUserSearchQuery,
+    setSearchResults,
+    setUserSearchError,
+    setIsDeletingConversationId,
+  });
+
+  const {
     sendTypingStatus,
     notifyTypingActivity,
     clearTypingTimeout,
@@ -389,216 +417,6 @@ function App() {
       console.error("Failed to load older messages.");
     } finally {
       setIsOlderMessagesLoading(false);
-    }
-  }
-
-  async function refreshConversations(token: string) {
-    try {
-      const conversationsData = await getConversations(token);
-      const sortedConversations =
-        sortConversationsByUpdatedAt(conversationsData);
-
-      setConversations(sortedConversations);
-
-      setSelectedConversation((previousConversation) => {
-        if (!previousConversation) {
-          return previousConversation;
-        }
-
-        return (
-          sortedConversations.find(
-            (conversation) => conversation.id === previousConversation.id
-          ) ?? previousConversation
-        );
-      });
-    } catch {
-      console.error("Failed to refresh conversations.");
-    }
-  }
-
-  async function handleSelectConversation(conversation: Conversation) {
-    if (!accessToken) {
-      return;
-    }
-
-    setSelectedConversation(conversation);
-    setEditingMessageId(null);
-    setEditingMessageText("");
-    setTypingUser(null);
-    setMessageError("");
-
-    setMessageSearchQuery("");
-    setIsMessageSearchActive(false);
-    setIsSearchingMessages(false);
-    setSelectedAttachment(null);
-    setReplyToMessage(null);
-
-    await loadMessages(accessToken, conversation.id);
-    await refreshConversations(accessToken);
-  }
-
-  async function handleStartConversation(user: User) {
-    if (!accessToken) {
-      return;
-    }
-
-    setUserSearchError("");
-
-    try {
-      const conversation = await createConversation(accessToken, user.id);
-
-      setConversations((previousConversations) => {
-        const alreadyExists = previousConversations.some(
-          (item) => item.id === conversation.id
-        );
-
-        if (alreadyExists) {
-          return sortConversationsByUpdatedAt(
-            previousConversations.map((item) =>
-              item.id === conversation.id ? conversation : item
-            )
-          );
-        }
-
-        return sortConversationsByUpdatedAt([
-          conversation,
-          ...previousConversations,
-        ]);
-      });
-
-      setSelectedConversation(conversation);
-
-      setMessageSearchQuery("");
-      setIsMessageSearchActive(false);
-      setIsSearchingMessages(false);
-      setSelectedAttachment(null);
-
-      await loadMessages(accessToken, conversation.id);
-
-      setUserSearchQuery("");
-      setSearchResults([]);
-    } catch {
-      setUserSearchError("Failed to create conversation.");
-    }
-  }
-
-  async function handleDeleteConversation(
-    conversation: Conversation,
-    mode: DeleteConversationMode
-  ) {
-    if (!accessToken) {
-      return;
-    }
-
-    setIsDeletingConversationId(conversation.id);
-    setUserSearchError("");
-
-    try {
-      await deleteConversation(accessToken, conversation.id, mode);
-      removeConversationFromState(conversation.id);
-    } catch {
-      setUserSearchError("Failed to delete conversation.");
-    } finally {
-      setIsDeletingConversationId(null);
-    }
-  }
-
-  async function handleMuteConversation(conversation: Conversation) {
-    if (!accessToken) {
-      return;
-    }
-
-    setUserSearchError("");
-
-    try {
-      const response = await muteConversation(
-        accessToken,
-        conversation.id,
-        !conversation.is_muted
-      );
-
-      updateConversationInState(response.conversation);
-    } catch {
-      setUserSearchError("Failed to update mute status.");
-    }
-  }
-
-  async function handlePinConversation(conversation: Conversation) {
-    if (!accessToken) {
-      return;
-    }
-
-    setUserSearchError("");
-
-    try {
-      const response = await pinConversation(
-        accessToken,
-        conversation.id,
-        !conversation.is_pinned
-      );
-
-      updateConversationInState(response.conversation);
-    } catch {
-      setUserSearchError("Failed to update pin status.");
-    }
-  }
-
-  async function handleMarkConversationAsUnread(conversation: Conversation) {
-    if (!accessToken) {
-      return;
-    }
-
-    setUserSearchError("");
-
-    try {
-      const response = await markConversationAsUnread(
-        accessToken,
-        conversation.id
-      );
-
-      updateConversationInState(response.conversation);
-    } catch {
-      setUserSearchError("Failed to mark conversation as unread.");
-    }
-  }
-
-  async function handleClearConversationHistory(conversation: Conversation) {
-    if (!accessToken) {
-      return;
-    }
-
-    setIsDeletingConversationId(conversation.id);
-    setUserSearchError("");
-
-    try {
-      const response = await clearConversationHistory(
-        accessToken,
-        conversation.id
-      );
-
-      updateConversationInState(response.conversation);
-
-      if (selectedConversation?.id === conversation.id) {
-        setMessages([]);
-        setHasMoreMessages(false);
-        setIsOlderMessagesLoading(false);
-        setEditingMessageId(null);
-        setEditingMessageText("");
-        setTypingUser(null);
-        setMessageError("");
-        setMessageSearchQuery("");
-        setIsMessageSearchActive(false);
-        setIsSearchingMessages(false);
-        setSelectedAttachment(null);
-        setReplyToMessage(null);
-        setForwardingMessage(null);
-      }
-
-      await refreshConversations(accessToken);
-    } catch {
-      setUserSearchError("Failed to clear chat history.");
-    } finally {
-      setIsDeletingConversationId(null);
     }
   }
 
