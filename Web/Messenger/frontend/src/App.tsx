@@ -1,23 +1,10 @@
-import {
-  useCallback,
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-  type KeyboardEvent,
-} from "react";
+import { useCallback, useState } from "react";
 import "./App.css";
 import { type User } from "./api/auth";
 import {
-  createMessageWithAttachment,
-  deleteMessage,
-  editMessage,
-  forwardMessage,
-  removeMessageAttachment,
-  toggleMessageReaction,
   getConversationMessagesPage,
   markConversationAsRead,
   type Conversation,
-  type DeleteMessageMode,
   type Message,
 } from "./api/conversations";
 import AuthPage from "./components/AuthPage";
@@ -28,6 +15,7 @@ import ContactNicknameModal from "./components/ContactNicknameModal";
 import ForwardMessageModal from "./components/ForwardMessageModal";
 import { useAuthSession } from "./hooks/useAuthSession";
 import { useConversationActions } from "./hooks/useConversationActions";
+import { useMessageActions } from "./hooks/useMessageActions";
 import { useMessageScroll } from "./hooks/useMessageScroll";
 import { useMessengerStateUpdates } from "./hooks/useMessengerStateUpdates";
 import { useMessengerSockets } from "./hooks/useMessengerSockets";
@@ -340,6 +328,64 @@ function App() {
       setTypingUser,
     });
 
+  const {
+    handleSearchMessages,
+    handleClearMessageSearch,
+    handleNewMessageChange,
+    handleAttachmentChange,
+    handleRemoveAttachment,
+    handleStartReplyMessage,
+    handleCancelReplyMessage,
+    handleStartForwardMessage,
+    handleCancelForwardMessage,
+    handleForwardMessageToConversation,
+    handleSendMessage,
+    handleMessageKeyDown,
+    handleStartEditMessage,
+    handleCancelEditMessage,
+    handleSaveEditedMessage,
+    handleDeleteMessage,
+    handleRemoveMessageAttachment,
+    handleToggleMessageReaction,
+  } = useMessageActions({
+    accessToken,
+    selectedConversation,
+    selectedConversationUser,
+    messageSearchQuery,
+    newMessage,
+    selectedAttachment,
+    replyToMessage,
+    forwardingMessage,
+    editingMessageId,
+    editingMessageText,
+    loadMessages,
+    refreshConversations,
+    addMessageToState,
+    removeMessageFromState,
+    updateMessageInState,
+    getChatSocket,
+    sendTypingStatus,
+    clearTypingTimeout,
+    notifyTypingActivity,
+    scrollToBottomOnNextRender,
+    setMessages,
+    setHasMoreMessages,
+    setNewMessage,
+    setSelectedAttachment,
+    setReplyToMessage,
+    setForwardingMessage,
+    setMessageError,
+    setIsForwardingMessage,
+    setIsSending,
+    setMessageSearchQuery,
+    setIsMessageSearchActive,
+    setIsSearchingMessages,
+    setEditingMessageId,
+    setEditingMessageText,
+    setIsEditingMessage,
+    setIsDeletingMessageId,
+  });
+
   async function loadMessages(
     token: string,
     conversationId: number,
@@ -417,329 +463,6 @@ function App() {
       console.error("Failed to load older messages.");
     } finally {
       setIsOlderMessagesLoading(false);
-    }
-  }
-
-  async function handleSearchMessages(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (!accessToken || !selectedConversation) {
-      return;
-    }
-
-    const searchQuery = messageSearchQuery.trim();
-
-    if (!searchQuery) {
-      await handleClearMessageSearch();
-      return;
-    }
-
-    setIsSearchingMessages(true);
-    setIsMessageSearchActive(true);
-    setMessageError("");
-    setHasMoreMessages(false);
-    scrollToBottomOnNextRender();
-
-    try {
-      const messagesPage = await getConversationMessagesPage(
-        accessToken,
-        selectedConversation.id,
-        undefined,
-        50,
-        searchQuery
-      );
-
-      setMessages(messagesPage.results);
-      setHasMoreMessages(false);
-    } catch {
-      setMessageError("Failed to search messages.");
-    } finally {
-      setIsSearchingMessages(false);
-    }
-  }
-
-  async function handleClearMessageSearch() {
-    if (!accessToken || !selectedConversation) {
-      setMessageSearchQuery("");
-      setIsMessageSearchActive(false);
-      return;
-    }
-
-    setMessageSearchQuery("");
-    setIsMessageSearchActive(false);
-    setIsSearchingMessages(false);
-
-    await loadMessages(accessToken, selectedConversation.id);
-  }
-
-  function handleNewMessageChange(value: string) {
-    setNewMessage(value);
-
-    if (!selectedConversation) {
-      return;
-    }
-
-    notifyTypingActivity();
-  }
-
-  function handleAttachmentChange(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-
-    if (!file) {
-      return;
-    }
-
-    setSelectedAttachment(file);
-    setMessageError("");
-  }
-
-  function handleRemoveAttachment() {
-    setSelectedAttachment(null);
-  }
-
-  function handleStartReplyMessage(message: Message) {
-    if (message.is_deleted) {
-      return;
-    }
-
-    setReplyToMessage(message);
-    setMessageError("");
-  }
-
-  function handleCancelReplyMessage() {
-    setReplyToMessage(null);
-  }
-
-  function handleStartForwardMessage(message: Message) {
-    if (message.is_deleted) {
-      return;
-    }
-
-    setForwardingMessage(message);
-    setMessageError("");
-  }
-
-  function handleCancelForwardMessage() {
-    setForwardingMessage(null);
-  }
-
-  async function handleForwardMessageToConversation(conversationId: number) {
-    if (!accessToken || !forwardingMessage) {
-      return;
-    }
-
-    setIsForwardingMessage(true);
-    setMessageError("");
-
-    try {
-      const forwardedMessage = await forwardMessage(
-        accessToken,
-        forwardingMessage.id,
-        conversationId
-      );
-
-      if (selectedConversation?.id === conversationId) {
-        addMessageToState(forwardedMessage);
-      }
-
-      await refreshConversations(accessToken);
-      setForwardingMessage(null);
-    } catch {
-      setMessageError("Failed to forward message.");
-    } finally {
-      setIsForwardingMessage(false);
-    }
-  }
-
-  async function handleSendMessage(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (!accessToken || !selectedConversation) {
-      return;
-    }
-
-    if (selectedConversationUser?.is_blocked_by_me) {
-      setMessageError("You blocked this user. Unblock them to send messages.");
-      return;
-    }
-
-    if (selectedConversationUser?.has_blocked_me) {
-      setMessageError("You cannot send messages to this user.");
-      return;
-    }
-
-    const text = newMessage.trim();
-
-    if (!text && !selectedAttachment) {
-      setMessageError("Message text or attachment is required.");
-      return;
-    }
-
-    const socket = getChatSocket();
-    const replyToMessageId = replyToMessage?.id ?? null;
-
-    if (!selectedAttachment && (!socket || socket.readyState !== WebSocket.OPEN)) {
-      setMessageError("WebSocket is not connected.");
-      return;
-    }
-
-    setMessageError("");
-    setIsSending(true);
-
-    try {
-      if (selectedAttachment) {
-        const createdMessage = await createMessageWithAttachment(
-          accessToken,
-          selectedConversation.id,
-          text,
-          selectedAttachment,
-          replyToMessageId
-        );
-
-        addMessageToState(createdMessage);
-      } else if (socket) {
-        socket.send(
-          JSON.stringify({
-            text,
-            reply_to: replyToMessageId,
-          })
-        );
-      }
-
-      sendTypingStatus(false);
-
-      clearTypingTimeout();
-
-      setNewMessage("");
-      setSelectedAttachment(null);
-      setReplyToMessage(null);
-    } catch {
-      setMessageError("Failed to send message.");
-    } finally {
-      setIsSending(false);
-    }
-  }
-
-  function handleMessageKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-
-      const form = event.currentTarget.form;
-
-      if (form) {
-        form.requestSubmit();
-      }
-    }
-  }
-
-  function handleStartEditMessage(message: Message) {
-    setEditingMessageId(message.id);
-    setEditingMessageText(message.text);
-    setMessageError("");
-  }
-
-  function handleCancelEditMessage() {
-    setEditingMessageId(null);
-    setEditingMessageText("");
-  }
-
-  async function handleSaveEditedMessage(messageId: number) {
-    if (!accessToken) {
-      return;
-    }
-
-    const text = editingMessageText.trim();
-
-    if (!text) {
-      setMessageError("Message text cannot be empty.");
-      return;
-    }
-
-    setIsEditingMessage(true);
-    setMessageError("");
-
-    try {
-      const updatedMessage = await editMessage(accessToken, messageId, text);
-      updateMessageInState(updatedMessage);
-      setEditingMessageId(null);
-      setEditingMessageText("");
-    } catch {
-      setMessageError("Failed to edit message.");
-    } finally {
-      setIsEditingMessage(false);
-    }
-  }
-
-  async function handleDeleteMessage(
-    messageId: number,
-    mode: DeleteMessageMode
-  ) {
-    if (!accessToken) {
-      return;
-    }
-
-    setIsDeletingMessageId(messageId);
-    setMessageError("");
-
-    try {
-      const response = await deleteMessage(accessToken, messageId, mode);
-
-      if (response.mode === "for_me") {
-        removeMessageFromState(messageId);
-        await refreshConversations(accessToken);
-        return;
-      }
-
-      updateMessageInState(response.message);
-
-      if (editingMessageId === messageId) {
-        setEditingMessageId(null);
-        setEditingMessageText("");
-      }
-
-      await refreshConversations(accessToken);
-    } catch {
-      setMessageError("Failed to delete message.");
-    } finally {
-      setIsDeletingMessageId(null);
-    }
-  }
-
-  async function handleRemoveMessageAttachment(messageId: number) {
-    if (!accessToken) {
-      return;
-    }
-
-    setIsDeletingMessageId(messageId);
-    setMessageError("");
-
-    try {
-      const updatedMessage = await removeMessageAttachment(accessToken, messageId);
-      updateMessageInState(updatedMessage);
-
-      if (editingMessageId === messageId && updatedMessage.is_deleted) {
-        setEditingMessageId(null);
-        setEditingMessageText("");
-      }
-    } catch {
-      setMessageError("Failed to delete attachment.");
-    } finally {
-      setIsDeletingMessageId(null);
-    }
-  }
-
-  async function handleToggleMessageReaction(messageId: number, emoji: string) {
-    if (!accessToken) {
-      return;
-    }
-
-    setMessageError("");
-
-    try {
-      const response = await toggleMessageReaction(accessToken, messageId, emoji);
-      updateMessageInState(response.message);
-    } catch {
-      setMessageError("Failed to update reaction.");
     }
   }
 
