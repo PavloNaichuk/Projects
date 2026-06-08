@@ -16,8 +16,8 @@ import type {
   Message,
 } from "../api/conversations";
 import { getUserDisplayName } from "../utils/chat";
-import MessageBubble from "./MessageBubble";
 import ChatHeader from "./ChatHeader";
+import MessageList from "./MessageList";
 
 const MESSAGE_INPUT_EMOJIS = [
   "😀",
@@ -450,63 +450,32 @@ function ChatWindow({
         handleClearMessageSearch={handleClearMessageSearch}
       />
 
-      <section
-        className="messages"
-        ref={messagesContainerRef}
-        onScroll={handleMessagesScroll}
-      >
-        {!selectedConversation && (
-          <div className="empty-state">Select a conversation.</div>
-        )}
-
-        {selectedConversation && isMessagesLoading && (
-          <div className="empty-state">Loading messages...</div>
-        )}
-
-        {selectedConversation && !isMessagesLoading && messages.length === 0 && (
-          <div className="empty-state">
-            {isMessageSearchActive ? "No messages found." : "No messages yet."}
-          </div>
-        )}
-
-        {selectedConversation &&
-          !isMessageSearchActive &&
-          hasMoreMessages &&
-          isOlderMessagesLoading && (
-            <div className="older-messages-loader">
-              Loading older messages...
-            </div>
-          )}
-
-        {isMessageSearchActive && messages.length > 0 && (
-          <div className="search-mode-label">Search results</div>
-        )}
-
-        {messages.map((message, index) => (
-          <MessageBubble
-            key={message.id}
-            message={message}
-            previousMessage={messages[index - 1]}
-            currentUser={currentUser}
-            searchQuery={isMessageSearchActive ? messageSearchQuery : ""}
-            editingMessageId={editingMessageId}
-            editingMessageText={editingMessageText}
-            setEditingMessageText={setEditingMessageText}
-            isEditingMessage={isEditingMessage}
-            isDeletingMessageId={isDeletingMessageId}
-            handleStartReplyMessage={handleStartReplyMessage}
-            handleStartForwardMessage={handleStartForwardMessage}
-            handleStartEditMessage={handleStartEditMessage}
-            handleCancelEditMessage={handleCancelEditMessage}
-            handleSaveEditedMessage={handleSaveEditedMessage}
-            handleDeleteMessage={handleDeleteMessage}
-            handleRemoveMessageAttachment={handleRemoveMessageAttachment}
-            handleToggleMessageReaction={handleToggleMessageReaction}
-          />
-        ))}
-
-        <div className="messages-end-spacer" ref={messagesEndRef} />
-      </section>
+      <MessageList
+        currentUser={currentUser}
+        selectedConversation={selectedConversation}
+        messages={messages}
+        isMessagesLoading={isMessagesLoading}
+        isOlderMessagesLoading={isOlderMessagesLoading}
+        hasMoreMessages={hasMoreMessages}
+        isMessageSearchActive={isMessageSearchActive}
+        messageSearchQuery={messageSearchQuery}
+        editingMessageId={editingMessageId}
+        editingMessageText={editingMessageText}
+        setEditingMessageText={setEditingMessageText}
+        isEditingMessage={isEditingMessage}
+        isDeletingMessageId={isDeletingMessageId}
+        messagesContainerRef={messagesContainerRef}
+        messagesEndRef={messagesEndRef}
+        handleMessagesScroll={handleMessagesScroll}
+        handleStartReplyMessage={handleStartReplyMessage}
+        handleStartForwardMessage={handleStartForwardMessage}
+        handleStartEditMessage={handleStartEditMessage}
+        handleCancelEditMessage={handleCancelEditMessage}
+        handleSaveEditedMessage={handleSaveEditedMessage}
+        handleDeleteMessage={handleDeleteMessage}
+        handleRemoveMessageAttachment={handleRemoveMessageAttachment}
+        handleToggleMessageReaction={handleToggleMessageReaction}
+      />
 
       {typingUser && (
         <div className="typing-indicator">
