@@ -6,11 +6,11 @@ import type {
 } from "../api/conversations";
 import {
   formatMessageDate,
-  formatMessageTime,
   getUserDisplayName,
   isSameMessageDate,
 } from "../utils/chat";
 import MessageAttachment from "./MessageAttachment";
+import MessageFooter from "./MessageFooter";
 import MessageInfoModal from "./MessageInfoModal";
 import MessageReactions from "./MessageReactions";
 import MessageReplyPreview from "./MessageReplyPreview";
@@ -81,18 +81,6 @@ function renderHighlightedText(text: string, searchQuery: string) {
   }
 
   return parts;
-}
-
-function getMessageStatus(message: Message) {
-  if (message.is_read) {
-    return "Read";
-  }
-
-  if (message.is_delivered) {
-    return "Delivered";
-  }
-
-  return "Sent";
 }
 
 async function copyTextToClipboard(text: string) {
@@ -467,21 +455,7 @@ function MessageBubble({
               </>
             )}
 
-            <div className="message-footer">
-              {message.edited_at && !message.is_deleted && (
-                <span className="message-meta">edited</span>
-              )}
-
-              <span className="message-time">
-                {formatMessageTime(message.created_at)}
-              </span>
-
-              {isOwnMessage && !message.is_deleted && (
-                <span className="message-read-status">
-                  {getMessageStatus(message)}
-                </span>
-              )}
-            </div>
+            <MessageFooter message={message} isOwnMessage={isOwnMessage} />
           </>
         )}
       </div>
