@@ -969,6 +969,276 @@ class MessagingAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data["detail"], "Conversation not found.")
 
+    def test_message_pagination_returns_latest_messages_with_has_more(self):
+        first_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="First message",
+        )
+        second_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Second message",
+        )
+        third_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Third message",
+        )
+
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.get(f"{url}?limit=2")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["has_more"], True)
+        self.assertEqual(response.data["next_before"], second_message.id)
+        self.assertEqual(len(response.data["results"]), 2)
+        self.assertEqual(response.data["results"][0]["id"], second_message.id)
+        self.assertEqual(response.data["results"][1]["id"], third_message.id)
+        self.assertNotEqual(response.data["results"][0]["id"], first_message.id)
+
+    def test_message_pagination_before_returns_older_messages(self):
+        first_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="First message",
+        )
+        second_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Second message",
+        )
+        third_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Third message",
+        )
+
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.get(f"{url}?limit=2&before={third_message.id}")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["has_more"], False)
+        self.assertIsNone(response.data["next_before"])
+        self.assertEqual(len(response.data["results"]), 2)
+        self.assertEqual(response.data["results"][0]["id"], first_message.id)
+        self.assertEqual(response.data["results"][1]["id"], second_message.id)
+
+    def test_message_pagination_rejects_invalid_limit(self):
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.get(f"{url}?limit=abc")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["limit"][0], "Limit must be a number.")
+
+    def test_message_pagination_rejects_zero_limit(self):
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.get(f"{url}?limit=0")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["limit"][0], "Limit must be greater than 0.")
+
+    def test_message_pagination_rejects_invalid_before(self):
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.get(f"{url}?limit=20&before=abc")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["before"][0], "Before must be a message id.")
+
+    def test_message_search_returns_matching_active_messages(self):
+        matching_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Hello Django",
+        )
+        Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Another message",
+        )
+        Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Hello deleted",
+            is_deleted=True,
+        )
+
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.get(f"{url}?search=hello")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["has_more"], False)
+        self.assertIsNone(response.data["next_before"])
+        self.assertEqual(len(response.data["results"]), 1)
+        self.assertEqual(response.data["results"][0]["id"], matching_message.id)
+        self.assertEqual(response.data["results"][0]["text"], "Hello Django")
+
+    def test_message_page_excludes_messages_hidden_for_current_user(self):
+        visible_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.user,
+            text="Visible message",
+        )
+        hidden_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.other_user,
+            text="Hidden message",
+        )
+        hidden_message.hidden_for.add(self.user)
+
+        url = reverse(
+            "conversation-messages",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.get(f"{url}?limit=20")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 1)
+        self.assertEqual(response.data["results"][0]["id"], visible_message.id)
+
+    def test_delete_conversation_rejects_invalid_mode(self):
+        url = reverse(
+            "conversation-detail",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.delete(f"{url}?mode=invalid")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data["mode"][0],
+            "Mode must be 'for_me' or 'for_everyone'.",
+        )
+
+    def test_delete_conversation_for_me_hides_conversation_only_for_current_user(self):
+        url = reverse(
+            "conversation-detail",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.delete(f"{url}?mode=for_me")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["mode"], "for_me")
+
+        self.conversation.refresh_from_db()
+
+        self.assertTrue(
+            self.conversation.hidden_for.filter(id=self.user.id).exists()
+        )
+        self.assertFalse(
+            self.conversation.hidden_for.filter(id=self.other_user.id).exists()
+        )
+
+    def test_delete_conversation_for_everyone_removes_conversation(self):
+        conversation_id = self.conversation.id
+
+        url = reverse(
+            "conversation-detail",
+            kwargs={"conversation_id": conversation_id},
+        )
+
+        response = self.client.delete(f"{url}?mode=for_everyone")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["mode"], "for_everyone")
+        self.assertFalse(Conversation.objects.filter(id=conversation_id).exists())
+
+    def test_participant_can_mute_and_unmute_conversation(self):
+        url = reverse(
+            "conversation-mute",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        mute_response = self.client.post(url, {"is_muted": True}, format="json")
+
+        self.assertEqual(mute_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(mute_response.data["detail"], "Conversation muted.")
+        self.assertTrue(
+            self.conversation.muted_for.filter(id=self.user.id).exists()
+        )
+
+        unmute_response = self.client.post(url, {"is_muted": False}, format="json")
+
+        self.assertEqual(unmute_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(unmute_response.data["detail"], "Conversation unmuted.")
+        self.assertFalse(
+            self.conversation.muted_for.filter(id=self.user.id).exists()
+        )
+
+    def test_non_participant_cannot_mute_conversation(self):
+        self.client.force_authenticate(user=self.outsider_user)
+
+        url = reverse(
+            "conversation-mute",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.post(url, {"is_muted": True}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["detail"], "Conversation not found.")
+
+    def test_participant_can_pin_and_unpin_conversation(self):
+        url = reverse(
+            "conversation-pin",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        pin_response = self.client.post(url, {"is_pinned": True}, format="json")
+
+        self.assertEqual(pin_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(pin_response.data["detail"], "Conversation pinned.")
+        self.assertTrue(
+            self.conversation.pinned_for.filter(id=self.user.id).exists()
+        )
+
+        unpin_response = self.client.post(url, {"is_pinned": False}, format="json")
+
+        self.assertEqual(unpin_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(unpin_response.data["detail"], "Conversation unpinned.")
+        self.assertFalse(
+            self.conversation.pinned_for.filter(id=self.user.id).exists()
+        )
+
+    def test_non_participant_cannot_pin_conversation(self):
+        self.client.force_authenticate(user=self.outsider_user)
+
+        url = reverse(
+            "conversation-pin",
+            kwargs={"conversation_id": self.conversation.id},
+        )
+
+        response = self.client.post(url, {"is_pinned": True}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["detail"], "Conversation not found.")
+
 
 @override_settings(CHANNEL_LAYERS=TEST_CHANNEL_LAYERS)
 class MessagingWebSocketTests(TransactionTestCase):
