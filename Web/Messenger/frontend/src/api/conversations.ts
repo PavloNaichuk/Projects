@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "./config";
 import type { User } from "./auth";
+import { apiRequest } from "./client";
 
 export type MessageReply = {
   id: number;
@@ -137,37 +137,23 @@ export type ClearConversationHistoryResponse = {
 export async function getConversations(
   accessToken: string
 ): Promise<Conversation[]> {
-  const response = await fetch(`${API_BASE_URL}/conversations/`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+  return apiRequest<Conversation[]>("/conversations/", {
+    accessToken,
+    errorMessage: "Failed to load conversations.",
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to load conversations.");
-  }
-
-  return response.json();
 }
 
 export async function getConversationMessages(
   accessToken: string,
   conversationId: number
 ): Promise<Message[]> {
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/messages/`,
+  return apiRequest<Message[]>(
+    `/conversations/${conversationId}/messages/`,
     {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      accessToken,
+      errorMessage: "Failed to load messages.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to load messages.");
-  }
-
-  return response.json();
 }
 
 export async function getConversationMessagesPage(
@@ -189,20 +175,13 @@ export async function getConversationMessagesPage(
     searchParams.set("search", searchQuery.trim());
   }
 
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/messages/?${searchParams.toString()}`,
+  return apiRequest<MessagesPage>(
+    `/conversations/${conversationId}/messages/?${searchParams.toString()}`,
     {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      accessToken,
+      errorMessage: "Failed to load messages.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to load messages.");
-  }
-
-  return response.json();
 }
 
 export async function createMessageWithAttachment(
@@ -226,42 +205,24 @@ export async function createMessageWithAttachment(
     formData.append("reply_to", String(replyToMessageId));
   }
 
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/messages/`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: formData,
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error("Failed to send message.");
-  }
-
-  return response.json();
+  return apiRequest<Message>(`/conversations/${conversationId}/messages/`, {
+    accessToken,
+    method: "POST",
+    body: formData,
+    errorMessage: "Failed to send message.",
+  });
 }
 
 export async function createConversation(
   accessToken: string,
   userId: number
 ): Promise<Conversation> {
-  const response = await fetch(`${API_BASE_URL}/conversations/`, {
+  return apiRequest<Conversation>("/conversations/", {
+    accessToken,
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ user_id: userId }),
+    json: { user_id: userId },
+    errorMessage: "Failed to create conversation.",
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to create conversation.");
-  }
-
-  return response.json();
 }
 
 export async function deleteConversation(
@@ -271,21 +232,14 @@ export async function deleteConversation(
 ): Promise<DeleteConversationResponse> {
   const searchParams = new URLSearchParams({ mode });
 
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/?${searchParams.toString()}`,
+  return apiRequest<DeleteConversationResponse>(
+    `/conversations/${conversationId}/?${searchParams.toString()}`,
     {
+      accessToken,
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      errorMessage: "Failed to delete conversation.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to delete conversation.");
-  }
-
-  return response.json();
 }
 
 export async function muteConversation(
@@ -293,23 +247,15 @@ export async function muteConversation(
   conversationId: number,
   isMuted: boolean
 ): Promise<MuteConversationResponse> {
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/mute/`,
+  return apiRequest<MuteConversationResponse>(
+    `/conversations/${conversationId}/mute/`,
     {
+      accessToken,
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ is_muted: isMuted }),
+      json: { is_muted: isMuted },
+      errorMessage: "Failed to update conversation mute status.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to update conversation mute status.");
-  }
-
-  return response.json();
 }
 
 export async function pinConversation(
@@ -317,23 +263,15 @@ export async function pinConversation(
   conversationId: number,
   isPinned: boolean
 ): Promise<PinConversationResponse> {
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/pin/`,
+  return apiRequest<PinConversationResponse>(
+    `/conversations/${conversationId}/pin/`,
     {
+      accessToken,
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ is_pinned: isPinned }),
+      json: { is_pinned: isPinned },
+      errorMessage: "Failed to update conversation pin status.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to update conversation pin status.");
-  }
-
-  return response.json();
 }
 
 export async function editMessage(
@@ -341,20 +279,12 @@ export async function editMessage(
   messageId: number,
   text: string
 ): Promise<Message> {
-  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/`, {
+  return apiRequest<Message>(`/messages/${messageId}/`, {
+    accessToken,
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ text }),
+    json: { text },
+    errorMessage: "Failed to edit message.",
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to edit message.");
-  }
-
-  return response.json();
 }
 
 export async function deleteMessage(
@@ -364,41 +294,26 @@ export async function deleteMessage(
 ): Promise<DeleteMessageResponse> {
   const searchParams = new URLSearchParams({ mode });
 
-  const response = await fetch(
-    `${API_BASE_URL}/messages/${messageId}/?${searchParams.toString()}`,
+  return apiRequest<DeleteMessageResponse>(
+    `/messages/${messageId}/?${searchParams.toString()}`,
     {
+      accessToken,
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      errorMessage: "Failed to delete message.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to delete message.");
-  }
-
-  return response.json();
 }
 
 export async function removeMessageAttachment(
   accessToken: string,
   messageId: number
 ): Promise<Message> {
-  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/`, {
+  return apiRequest<Message>(`/messages/${messageId}/`, {
+    accessToken,
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ remove_attachment: true }),
+    json: { remove_attachment: true },
+    errorMessage: "Failed to delete attachment.",
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to delete attachment.");
-  }
-
-  return response.json();
 }
 
 export async function toggleMessageReaction(
@@ -406,23 +321,15 @@ export async function toggleMessageReaction(
   messageId: number,
   emoji: string
 ): Promise<ToggleMessageReactionResponse> {
-  const response = await fetch(
-    `${API_BASE_URL}/messages/${messageId}/reactions/`,
+  return apiRequest<ToggleMessageReactionResponse>(
+    `/messages/${messageId}/reactions/`,
     {
+      accessToken,
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ emoji }),
+      json: { emoji },
+      errorMessage: "Failed to update reaction.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to update reaction.");
-  }
-
-  return response.json();
 }
 
 export async function forwardMessage(
@@ -430,81 +337,52 @@ export async function forwardMessage(
   messageId: number,
   conversationId: number
 ): Promise<Message> {
-  const response = await fetch(`${API_BASE_URL}/messages/${messageId}/forward/`, {
+  return apiRequest<Message>(`/messages/${messageId}/forward/`, {
+    accessToken,
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ conversation_id: conversationId }),
+    json: { conversation_id: conversationId },
+    errorMessage: "Failed to forward message.",
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to forward message.");
-  }
-
-  return response.json();
 }
 
 export async function markConversationAsRead(
   accessToken: string,
   conversationId: number
 ): Promise<MarkConversationAsReadResponse> {
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/mark-read/`,
+  return apiRequest<MarkConversationAsReadResponse>(
+    `/conversations/${conversationId}/mark-read/`,
     {
+      accessToken,
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      errorMessage: "Failed to mark conversation as read.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to mark conversation as read.");
-  }
-
-  return response.json();
 }
 
 export async function markConversationAsUnread(
   accessToken: string,
   conversationId: number
 ): Promise<MarkConversationAsUnreadResponse> {
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/mark-unread/`,
+  return apiRequest<MarkConversationAsUnreadResponse>(
+    `/conversations/${conversationId}/mark-unread/`,
     {
+      accessToken,
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      errorMessage: "Failed to mark conversation as unread.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to mark conversation as unread.");
-  }
-
-  return response.json();
 }
 
 export async function clearConversationHistory(
   accessToken: string,
   conversationId: number
 ): Promise<ClearConversationHistoryResponse> {
-  const response = await fetch(
-    `${API_BASE_URL}/conversations/${conversationId}/clear-history/`,
+  return apiRequest<ClearConversationHistoryResponse>(
+    `/conversations/${conversationId}/clear-history/`,
     {
+      accessToken,
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      errorMessage: "Failed to clear chat history.",
     }
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to clear chat history.");
-  }
-
-  return response.json();
 }
