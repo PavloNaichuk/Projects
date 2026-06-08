@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config";
+import { apiRequest } from "./client";
 
 export type User = {
   id: number;
@@ -64,23 +64,25 @@ function getApiErrorMessage(errorData: unknown) {
     .join("\n");
 }
 
+async function parseApiError(response: Response, fallbackMessage: string) {
+  const errorData = await response.json().catch(() => null);
+
+  if (errorData) {
+    return new Error(getApiErrorMessage(errorData));
+  }
+
+  return new Error(fallbackMessage);
+}
+
 export async function login(
   username: string,
   password: string
 ): Promise<LoginResponse> {
-  const response = await fetch(`${API_BASE_URL}/auth/token/`, {
+  return apiRequest<LoginResponse>("/auth/token/", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ username, password }),
+    json: { username, password },
+    errorMessage: "Invalid username or password.",
   });
-
-  if (!response.ok) {
-    throw new Error("Invalid username or password.");
-  }
-
-  return response.json();
 }
 
 export async function register(
@@ -89,88 +91,47 @@ export async function register(
   password: string,
   passwordConfirm: string
 ): Promise<RegisterResponse> {
-  const response = await fetch(`${API_BASE_URL}/auth/register/`, {
+  return apiRequest<RegisterResponse>("/auth/register/", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+    json: {
       username,
       email,
       password,
       password_confirm: passwordConfirm,
-    }),
+    },
+    errorMessage: "Failed to create account.",
+    parseError: (response) => parseApiError(response, "Failed to create account."),
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-
-    if (errorData) {
-      throw new Error(getApiErrorMessage(errorData));
-    }
-
-    throw new Error("Failed to create account.");
-  }
-
-  return response.json();
 }
 
 export async function refreshAccessToken(
   refreshToken: string
 ): Promise<RefreshTokenResponse> {
-  const response = await fetch(`${API_BASE_URL}/auth/token/refresh/`, {
+  return apiRequest<RefreshTokenResponse>("/auth/token/refresh/", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ refresh: refreshToken }),
+    json: { refresh: refreshToken },
+    errorMessage: "Failed to refresh token.",
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to refresh token.");
-  }
-
-  return response.json();
 }
 
 export async function getCurrentUser(accessToken: string): Promise<User> {
-  const response = await fetch(`${API_BASE_URL}/auth/me/`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+  return apiRequest<User>("/auth/me/", {
+    accessToken,
+    errorMessage: "Failed to load current user.",
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to load current user.");
-  }
-
-  return response.json();
 }
 
 export async function updateCurrentUserProfile(
   accessToken: string,
   data: UpdateCurrentUserProfileData
 ): Promise<User> {
-  const response = await fetch(`${API_BASE_URL}/auth/me/profile/`, {
+  return apiRequest<User>("/auth/me/profile/", {
+    accessToken,
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(data),
+    json: data,
+    errorMessage: "Failed to update profile.",
+    parseError: (response) => parseApiError(response, "Failed to update profile."),
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-
-    if (errorData) {
-      throw new Error(getApiErrorMessage(errorData));
-    }
-
-    throw new Error("Failed to update profile.");
-  }
-
-  return response.json();
 }
 
 export async function updateContactNickname(
@@ -178,26 +139,14 @@ export async function updateContactNickname(
   userId: number,
   nickname: string
 ): Promise<UpdateContactNicknameResponse> {
-  const response = await fetch(`${API_BASE_URL}/users/${userId}/nickname/`, {
+  return apiRequest<UpdateContactNicknameResponse>(`/users/${userId}/nickname/`, {
+    accessToken,
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ nickname }),
+    json: { nickname },
+    errorMessage: "Failed to update contact nickname.",
+    parseError: (response) =>
+      parseApiError(response, "Failed to update contact nickname."),
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-
-    if (errorData) {
-      throw new Error(getApiErrorMessage(errorData));
-    }
-
-    throw new Error("Failed to update contact nickname.");
-  }
-
-  return response.json();
 }
 
 export async function updateCurrentUserAvatar(
@@ -207,52 +156,33 @@ export async function updateCurrentUserAvatar(
   const formData = new FormData();
   formData.append("avatar", avatar);
 
-  const response = await fetch(`${API_BASE_URL}/auth/me/avatar/`, {
+  return apiRequest<User>("/auth/me/avatar/", {
+    accessToken,
     method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     body: formData,
+    errorMessage: "Failed to update avatar.",
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to update avatar.");
-  }
-
-  return response.json();
 }
 
 export async function deleteCurrentUserAvatar(
   accessToken: string
 ): Promise<User> {
-  const response = await fetch(`${API_BASE_URL}/auth/me/avatar/`, {
+  return apiRequest<User>("/auth/me/avatar/", {
+    accessToken,
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+    errorMessage: "Failed to delete avatar.",
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to delete avatar.");
-  }
-
-  return response.json();
 }
 
 export async function logout(
   accessToken: string,
   refreshToken: string
 ): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/auth/logout/`, {
+  return apiRequest<void>("/auth/logout/", {
+    accessToken,
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ refresh: refreshToken }),
+    json: { refresh: refreshToken },
+    errorMessage: "Failed to logout.",
+    parseJson: false,
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to logout.");
-  }
 }
