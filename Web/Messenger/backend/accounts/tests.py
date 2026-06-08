@@ -6,6 +6,8 @@ from rest_framework import serializers, status
 from rest_framework.test import APIClient, APIRequestFactory
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from messaging.models import Conversation
+
 from .models import BlockedUser, ContactNickname
 from .serializers import (
     UserAvatarSerializer,
@@ -574,3 +576,311 @@ class AccountsAPITests(TestCase):
         self.assertEqual(user.username, "newuser")
         self.assertEqual(user.email, "newuser@test.ua")
         self.assertTrue(user.check_password("testpassword123"))
+
+    def get_valid_png_file(self, name="avatar.png"):
+        valid_png = (
+            b"\x89PNG\r\n\x1a\n"
+            b"\x00\x00\x00\rIHDR"
+            b"\x00\x00\x00\x01\x00\x00\x00\x01"
+            b"\x08\x06\x00\x00\x00"
+            b"\x1f\x15\xc4\x89"
+            b"\x00\x00\x00\nIDAT"
+            b"x\x9cc\x00\x01\x00\x00\x05\x00\x01"
+            b"\r\n-\xb4"
+            b"\x00\x00\x00\x00IEND\xaeB`\x82"
+        )
+
+        return SimpleUploadedFile(
+            name,
+            valid_png,
+            content_type="image/png",
+        )
+
+    def create_other_user(self, username="user1", email="user1@test.ua"):
+        User = get_user_model()
+
+        return User.objects.create_user(
+            username=username,
+            email=email,
+            password="testpassword123",
+        )
+
+    def test_authenticated_user_can_update_profile(self):
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-profile")
+        response = self.client.patch(
+            url,
+            {
+                "username": "pavlo_new",
+                "email": "pavlo_new@test.ua",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["username"], "pavlo_new")
+        self.assertEqual(response.data["email"], "pavlo_new@test.ua")
+
+        self.user.refresh_from_db()
+
+        self.assertEqual(self.user.username, "pavlo_new")
+        self.assertEqual(self.user.email, "pavlo_new@test.ua")
+
+    def test_update_profile_returns_validation_errors(self):
+        other_user = self.create_other_user(
+            username="taken",
+            email="taken@test.ua",
+        )
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-profile")
+        response = self.client.patch(
+            url,
+            {
+                "username": other_user.username,
+                "email": other_user.email,
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("username", response.data)
+        self.assertIn("email", response.data)
+
+    def test_update_profile_notifies_conversation_participants(self):
+        other_user = self.create_other_user()
+
+        conversation = Conversation.objects.create()
+        conversation.participants.create(user=self.user)
+        conversation.participants.create(user=other_user)
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-profile")
+        response = self.client.patch(
+            url,
+            {
+                "username": "profile_update",
+                "email": "profile_update@test.ua",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_avatar_upload_requires_file(self):
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-avatar")
+        response = self.client.patch(url, {}, format="multipart")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data["avatar"][0],
+            "Avatar file is required.",
+        )
+
+    def test_authenticated_user_can_update_avatar(self):
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-avatar")
+        response = self.client.patch(
+            url,
+            {"avatar": self.get_valid_png_file()},
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsNotNone(response.data["avatar_url"])
+
+        self.user.refresh_from_db()
+
+        self.assertTrue(self.user.avatar)
+
+    def test_update_avatar_replaces_existing_avatar(self):
+        self.user.avatar.save(
+            "old_avatar.png",
+            self.get_valid_png_file("old_avatar.png"),
+            save=True,
+        )
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-avatar")
+        response = self.client.patch(
+            url,
+            {"avatar": self.get_valid_png_file("new_avatar.png")},
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.user.refresh_from_db()
+
+        self.assertIn("new_avatar", self.user.avatar.name)
+
+    def test_authenticated_user_can_delete_avatar(self):
+        self.user.avatar.save(
+            "avatar.png",
+            self.get_valid_png_file(),
+            save=True,
+        )
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-avatar")
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsNone(response.data["avatar_url"])
+
+        self.user.refresh_from_db()
+
+        self.assertFalse(self.user.avatar)
+
+    def test_delete_avatar_without_existing_avatar_returns_user(self):
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-avatar")
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsNone(response.data["avatar_url"])
+
+    def test_user_can_set_contact_nickname(self):
+        other_user = self.create_other_user()
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("contact-nickname", kwargs={"user_id": other_user.id})
+        response = self.client.patch(
+            url,
+            {"nickname": "Friend"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["detail"], "Contact nickname updated.")
+        self.assertEqual(response.data["user"]["display_name"], "Friend")
+
+        self.assertTrue(
+            ContactNickname.objects.filter(
+                owner=self.user,
+                target_user=other_user,
+                nickname="Friend",
+            ).exists()
+        )
+
+    def test_user_can_remove_contact_nickname(self):
+        other_user = self.create_other_user()
+
+        ContactNickname.objects.create(
+            owner=self.user,
+            target_user=other_user,
+            nickname="Friend",
+        )
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("contact-nickname", kwargs={"user_id": other_user.id})
+        response = self.client.patch(
+            url,
+            {"nickname": "   "},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["detail"], "Contact nickname removed.")
+        self.assertEqual(response.data["user"]["display_name"], other_user.username)
+
+        self.assertFalse(
+            ContactNickname.objects.filter(
+                owner=self.user,
+                target_user=other_user,
+            ).exists()
+        )
+
+    def test_contact_nickname_missing_user_returns_404(self):
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("contact-nickname", kwargs={"user_id": 999})
+        response = self.client.patch(
+            url,
+            {"nickname": "Friend"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["detail"], "User not found.")
+
+    def test_user_cannot_set_contact_nickname_for_self(self):
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("contact-nickname", kwargs={"user_id": self.user.id})
+        response = self.client.patch(
+            url,
+            {"nickname": "Me"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data["detail"],
+            "You cannot set a nickname for yourself.",
+        )
+
+    def test_contact_nickname_rejects_too_long_value(self):
+        other_user = self.create_other_user()
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("contact-nickname", kwargs={"user_id": other_user.id})
+        response = self.client.patch(
+            url,
+            {"nickname": "x" * 51},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data["nickname"][0],
+            "Nickname must be 50 characters or less.",
+        )
+
+    def test_logout_rejects_invalid_refresh_token(self):
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("logout")
+        response = self.client.post(
+            url,
+            {"refresh": "invalid-token"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["refresh"][0], "Invalid refresh token.")
+
+    def test_search_without_query_returns_users_except_current_user(self):
+        first_user = self.create_other_user(
+            username="user1",
+            email="user1@test.ua",
+        )
+        second_user = self.create_other_user(
+            username="user2",
+            email="user2@test.ua",
+        )
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-search")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        user_ids = [user["id"] for user in response.data]
+
+        self.assertIn(first_user.id, user_ids)
+        self.assertIn(second_user.id, user_ids)
+        self.assertNotIn(self.user.id, user_ids)
