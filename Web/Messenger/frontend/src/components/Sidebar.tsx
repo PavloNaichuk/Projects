@@ -6,6 +6,7 @@ import type {
 } from "../api/conversations";
 import { formatShortTime, getConversationName } from "../utils/chat";
 import SidebarHeader from "./SidebarHeader";
+import SidebarUserSearch from "./SidebarUserSearch";
 import UserAvatar from "./UserAvatar";
 
 type PendingDelete = {
@@ -181,46 +182,15 @@ function Sidebar({
         handleLogout={handleLogout}
       />
 
-      <form className="search-box" onSubmit={handleSearchUsers}>
-        <input
-          type="text"
-          value={userSearchQuery}
-          onChange={(event) => setUserSearchQuery(event.target.value)}
-          placeholder="Search users..."
-        />
-        <button type="submit" disabled={isSearchingUsers}>
-          {isSearchingUsers ? "Searching..." : "Search"}
-        </button>
-      </form>
-
-      {userSearchError && <div className="sidebar-error">{userSearchError}</div>}
-
-      {searchResults.length > 0 && (
-        <div className="user-search-results">
-          <div className="user-search-title">Users</div>
-
-          {searchResults.map((user) => (
-            <button
-              key={user.id}
-              type="button"
-              className="user-search-item"
-              onClick={() => handleStartConversation(user)}
-            >
-              <UserAvatar user={user} size="small" />
-
-              <span className="user-search-text">
-                <span className="user-search-name">{user.display_name}</span>
-
-                {(user.is_blocked_by_me || user.has_blocked_me) && (
-                  <span className="blocked-user-label">
-                    {user.is_blocked_by_me ? "Blocked by you" : "Blocked you"}
-                  </span>
-                )}
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
+      <SidebarUserSearch
+        userSearchQuery={userSearchQuery}
+        setUserSearchQuery={setUserSearchQuery}
+        searchResults={searchResults}
+        isSearchingUsers={isSearchingUsers}
+        userSearchError={userSearchError}
+        handleSearchUsers={handleSearchUsers}
+        handleStartConversation={handleStartConversation}
+      />
 
       <div className="conversation-list">
         {conversations.length === 0 && (
