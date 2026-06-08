@@ -1,42 +1,5 @@
-import { API_BASE_URL } from "./config";
 import type { User } from "./auth";
-
-export async function searchUsers(
-  accessToken: string,
-  query: string
-): Promise<User[]> {
-  const params = new URLSearchParams();
-
-  if (query.trim()) {
-    params.set("q", query.trim());
-  }
-
-  const response = await fetch(`${API_BASE_URL}/users/search/?${params}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to search users.");
-  }
-
-  return response.json();
-}
-
-export async function getBlockedUsers(accessToken: string): Promise<User[]> {
-  const response = await fetch(`${API_BASE_URL}/users/blocked/`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to load blocked users.");
-  }
-
-  return response.json();
-}
+import { apiRequest } from "./client";
 
 export type BlockUserResponse = {
   detail: string;
@@ -57,24 +20,46 @@ function getApiErrorMessage(errorData: unknown) {
   return "Request failed.";
 }
 
+async function parseApiError(response: Response) {
+  const errorData = await response.json().catch(() => null);
+
+  return new Error(getApiErrorMessage(errorData));
+}
+
+export async function searchUsers(
+  accessToken: string,
+  query: string
+): Promise<User[]> {
+  const params = new URLSearchParams();
+
+  if (query.trim()) {
+    params.set("q", query.trim());
+  }
+
+  return apiRequest<User[]>(`/users/search/?${params.toString()}`, {
+    accessToken,
+    errorMessage: "Failed to search users.",
+  });
+}
+
+export async function getBlockedUsers(accessToken: string): Promise<User[]> {
+  return apiRequest<User[]>("/users/blocked/", {
+    accessToken,
+    errorMessage: "Failed to load blocked users.",
+  });
+}
+
 async function updateUserBlockStatus(
   accessToken: string,
   userId: number,
   action: "block" | "unblock"
 ): Promise<BlockUserResponse> {
-  const response = await fetch(`${API_BASE_URL}/users/${userId}/${action}/`, {
+  return apiRequest<BlockUserResponse>(`/users/${userId}/${action}/`, {
+    accessToken,
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+    errorMessage: "Request failed.",
+    parseError: parseApiError,
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(getApiErrorMessage(errorData));
-  }
-
-  return response.json();
 }
 
 export function blockUser(
