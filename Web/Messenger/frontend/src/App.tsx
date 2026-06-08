@@ -1,12 +1,11 @@
 import {
+  useCallback,
   useEffect,
-  useRef,
   useState,
   type ChangeEvent,
   type FormEvent,
   type KeyboardEvent,
 } from "react";
-import { WS_BASE_URL } from "./api/config";
 import "./App.css";
 import {
   deleteCurrentUserAvatar,
@@ -49,6 +48,7 @@ import ProfileSettingsModal from "./components/ProfileSettingsModal";
 import ContactNicknameModal from "./components/ContactNicknameModal";
 import ForwardMessageModal from "./components/ForwardMessageModal";
 import { useMessageScroll } from "./hooks/useMessageScroll";
+import { useMessengerSockets } from "./hooks/useMessengerSockets";
 import { useNotificationSound } from "./hooks/useNotificationSound";
 import { useUserStateUpdates } from "./hooks/useUserStateUpdates";
 import {
@@ -69,10 +69,6 @@ function App() {
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
-
-  const socketRef = useRef<WebSocket | null>(null);
-  const notificationSocketRef = useRef<WebSocket | null>(null);
-  const typingTimeoutRef = useRef<number | null>(null);
 
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
@@ -172,6 +168,31 @@ function App() {
     setSelectedConversation,
     setMessages,
     setSearchResults,
+  });
+
+  const {
+    sendTypingStatus,
+    notifyTypingActivity,
+    clearTypingTimeout,
+    closeSockets,
+    getChatSocket,
+  } = useMessengerSockets({
+    accessToken,
+    currentUserId,
+    selectedConversationId,
+    playIncomingMessageSound,
+    refreshConversations,
+    removeConversationFromState,
+    updateUserInState,
+    updateUserLastSeenInState,
+    addMessageToState,
+    markConversationReadInState,
+    updateMessageInState,
+    markMessagesAsDeliveredInState,
+    setMessages,
+    setMessageError,
+    setOnlineUserIds,
+    setTypingUser,
   });
 
   function markConversationReadInState(conversationId: number) {
@@ -390,7 +411,7 @@ function App() {
     }
   }
 
-  async function loadUserData(token: string) {
+  const loadUserData = useCallback(async (token: string) => {
     const user = await getCurrentUser(token);
     setCurrentUser(user);
     setAccessToken(token);
@@ -401,21 +422,13 @@ function App() {
     setSelectedConversation(null);
     setMessages([]);
     setHasMoreMessages(false);
-  }
+  }, []);
 
-  function clearSession() {
+  const clearSession = useCallback(() => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
 
-    if (socketRef.current) {
-      socketRef.current.close();
-      socketRef.current = null;
-    }
-
-    if (notificationSocketRef.current) {
-      notificationSocketRef.current.close();
-      notificationSocketRef.current = null;
-    }
+    closeSockets();
 
     setCurrentUser(null);
     setAccessToken(null);
@@ -454,20 +467,10 @@ function App() {
     setTypingUser(null);
     setOnlineUserIds([]);
     setIsBlockingUserId(null);
-  }
+  }, [closeSockets]);
 
   async function handleLogout() {
     const savedRefreshToken = localStorage.getItem("refreshToken");
-
-    if (socketRef.current) {
-      socketRef.current.close();
-      socketRef.current = null;
-    }
-
-    if (notificationSocketRef.current) {
-      notificationSocketRef.current.close();
-      notificationSocketRef.current = null;
-    }
 
     if (accessToken && savedRefreshToken) {
       try {
@@ -669,35 +672,6 @@ function App() {
     );
   }
 
-  function sendReadStatus() {
-    const socket = socketRef.current;
-
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-      return;
-    }
-
-    socket.send(
-      JSON.stringify({
-        type: "read",
-      })
-    );
-  }
-
-  function sendTypingStatus(isTyping: boolean) {
-    const socket = socketRef.current;
-
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-      return;
-    }
-
-    socket.send(
-      JSON.stringify({
-        type: "typing",
-        is_typing: isTyping,
-      })
-    );
-  }
-
   useEffect(() => {
     async function restoreSession() {
       const savedAccessToken = localStorage.getItem("accessToken");
@@ -738,220 +712,7 @@ function App() {
     }
 
     restoreSession();
-  }, []);
-
-  useEffect(() => {
-    if (!accessToken || !currentUserId) {
-      return;
-    }
-
-    const notificationSocket = new WebSocket(
-      `${WS_BASE_URL}/notifications/?token=${accessToken}`
-    );
-
-    notificationSocketRef.current = notificationSocket;
-
-    notificationSocket.onmessage = async (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.type === "sidebar_message") {
-        const receivedMessage = data.message as Message | undefined;
-
-        if (receivedMessage) {
-          playIncomingMessageSound(receivedMessage);
-        }
-
-        await refreshConversations(accessToken);
-        return;
-      }
-
-      if (data.type === "conversation_deleted") {
-        removeConversationFromState(data.conversation_id);
-        return;
-      }
-
-      if (data.type === "user_profile_updated") {
-        const updatedUser = addAvatarCacheBust(data.user as User);
-
-        updateUserInState(updatedUser);
-
-        return;
-      }
-
-      if (data.type === "online_users") {
-        setOnlineUserIds(data.user_ids);
-        return;
-      }
-
-      if (data.type === "online_status") {
-        const user = data.user as User;
-
-        updateUserLastSeenInState(user);
-
-        setOnlineUserIds((previousOnlineUserIds) => {
-          if (data.is_online) {
-            if (previousOnlineUserIds.includes(user.id)) {
-              return previousOnlineUserIds;
-            }
-
-            return [...previousOnlineUserIds, user.id];
-          }
-
-          return previousOnlineUserIds.filter((userId) => userId !== user.id);
-        });
-
-        return;
-      }
-    };
-
-    notificationSocket.onerror = () => {
-      console.error("Notification WebSocket connection error.");
-    };
-
-    return () => {
-      notificationSocket.close();
-
-      if (notificationSocketRef.current === notificationSocket) {
-        notificationSocketRef.current = null;
-      }
-    };
-  }, [
-    accessToken,
-    currentUserId,
-    playIncomingMessageSound,
-    updateUserInState,
-    updateUserLastSeenInState,
-  ]);
-
-  useEffect(() => {
-    if (!accessToken || !selectedConversationId) {
-      return;
-    }
-
-    const websocketUrl = `${WS_BASE_URL}/conversations/${selectedConversationId}/?token=${accessToken}`;
-    const socket = new WebSocket(websocketUrl);
-
-    socketRef.current = socket;
-
-    socket.onopen = () => {
-      setMessageError("");
-      sendReadStatus();
-    };
-
-    socket.onmessage = async (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.type === "message") {
-        const receivedMessage = data.message as Message;
-
-        playIncomingMessageSound(receivedMessage);
-        addMessageToState(receivedMessage);
-
-        if (
-          accessToken &&
-          selectedConversationId === receivedMessage.conversation &&
-          receivedMessage.sender.id !== currentUserId
-        ) {
-          try {
-            await markConversationAsRead(accessToken, selectedConversationId);
-            markConversationReadInState(selectedConversationId);
-            sendReadStatus();
-          } catch {
-            console.error("Failed to mark WebSocket message as read.");
-          }
-        }
-
-        return;
-      }
-
-      if (data.type === "message_updated") {
-        const updatedMessage = data.message as Message;
-
-        updateMessageInState(updatedMessage);
-
-        return;
-      }
-
-      if (data.type === "delivered") {
-        const messageIds = data.message_ids as number[];
-
-        markMessagesAsDeliveredInState(messageIds);
-
-        return;
-      }
-
-      if (data.type === "read") {
-        const reader = data.user as User;
-
-        if (reader.id === currentUserId) {
-          return;
-        }
-
-        setMessages((previousMessages) =>
-          previousMessages.map((message) =>
-            message.sender.id === currentUserId && !message.is_deleted
-              ? {
-                  ...message,
-                  is_delivered: true,
-                  delivered_at: message.delivered_at ?? new Date().toISOString(),
-                  is_read: true,
-                }
-              : message
-          )
-        );
-
-        return;
-      }
-
-      if (data.type === "typing") {
-        const receivedTypingUser = data.user as User;
-
-        if (receivedTypingUser.id === currentUserId) {
-          return;
-        }
-
-        if (data.is_typing) {
-          setTypingUser(receivedTypingUser);
-        } else {
-          setTypingUser(null);
-        }
-
-        return;
-      }
-
-      if (data.type === "error") {
-        setMessageError(data.detail);
-      }
-    };
-
-    socket.onerror = () => {
-      if (socketRef.current === socket) {
-        setMessageError("WebSocket connection error.");
-      }
-
-      console.error("Chat WebSocket connection error.");
-    };
-
-    return () => {
-      if (typingTimeoutRef.current) {
-        window.clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = null;
-      }
-
-      setTypingUser(null);
-
-      socket.close();
-
-      if (socketRef.current === socket) {
-        socketRef.current = null;
-      }
-    };
-  }, [
-    accessToken,
-    selectedConversationId,
-    currentUserId,
-    playIncomingMessageSound,
-  ]);
+  }, [clearSession, loadUserData]);
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -1297,6 +1058,7 @@ function App() {
         setReplyToMessage(null);
         setTypingUser(null);
         sendTypingStatus(false);
+        clearTypingTimeout();
       }
     } catch (error) {
       const errorMessage =
@@ -1444,15 +1206,7 @@ function App() {
       return;
     }
 
-    sendTypingStatus(true);
-
-    if (typingTimeoutRef.current) {
-      window.clearTimeout(typingTimeoutRef.current);
-    }
-
-    typingTimeoutRef.current = window.setTimeout(() => {
-      sendTypingStatus(false);
-    }, 1200);
+    notifyTypingActivity();
   }
 
   function handleAttachmentChange(event: ChangeEvent<HTMLInputElement>) {
@@ -1548,7 +1302,7 @@ function App() {
       return;
     }
 
-    const socket = socketRef.current;
+    const socket = getChatSocket();
     const replyToMessageId = replyToMessage?.id ?? null;
 
     if (!selectedAttachment && (!socket || socket.readyState !== WebSocket.OPEN)) {
@@ -1581,10 +1335,7 @@ function App() {
 
       sendTypingStatus(false);
 
-      if (typingTimeoutRef.current) {
-        window.clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = null;
-      }
+      clearTypingTimeout();
 
       setNewMessage("");
       setSelectedAttachment(null);
