@@ -1,7 +1,6 @@
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
   type ChangeEvent,
@@ -50,6 +49,7 @@ import Sidebar from "./components/Sidebar";
 import ProfileSettingsModal from "./components/ProfileSettingsModal";
 import ContactNicknameModal from "./components/ContactNicknameModal";
 import ForwardMessageModal from "./components/ForwardMessageModal";
+import { useMessageScroll } from "./hooks/useMessageScroll";
 import { useNotificationSound } from "./hooks/useNotificationSound";
 import {
   getConversationName,
@@ -59,10 +59,6 @@ import {
 import { addAvatarCacheBust } from "./utils/users";
 
 const MESSAGE_PAGE_SIZE = 20;
-
-type ScrollBehavior = "bottom" | "preserve";
-
-
 
 
 function App() {
@@ -76,12 +72,7 @@ function App() {
 
   const socketRef = useRef<WebSocket | null>(null);
   const notificationSocketRef = useRef<WebSocket | null>(null);
-  const messagesContainerRef = useRef<HTMLElement | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const typingTimeoutRef = useRef<number | null>(null);
-  const scrollBehaviorRef = useRef<ScrollBehavior>("bottom");
-  const previousScrollHeightRef = useRef(0);
-  const previousScrollTopRef = useRef(0);
 
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
@@ -161,6 +152,18 @@ function App() {
   const playIncomingMessageSound = useNotificationSound({
     currentUserId,
     conversations,
+  });
+
+  const {
+    messagesContainerRef,
+    messagesEndRef,
+    preserveScrollPosition,
+    scrollToBottomOnNextRender,
+    handleMessagesScroll,
+  } = useMessageScroll({
+    messages,
+    selectedConversationId,
+    onLoadOlderMessages: loadOlderMessages,
   });
 
   function markConversationReadInState(conversationId: number) {
@@ -510,7 +513,7 @@ function App() {
     setIsMessagesLoading(true);
     setIsOlderMessagesLoading(false);
     setHasMoreMessages(false);
-    scrollBehaviorRef.current = "bottom";
+    scrollToBottomOnNextRender();
 
     try {
       const messagesPage = await getConversationMessagesPage(
@@ -547,13 +550,7 @@ function App() {
       return;
     }
 
-    const container = messagesContainerRef.current;
-
-    if (container) {
-      previousScrollHeightRef.current = container.scrollHeight;
-      previousScrollTopRef.current = container.scrollTop;
-      scrollBehaviorRef.current = "preserve";
-    }
+    preserveScrollPosition();
 
     setIsOlderMessagesLoading(true);
 
@@ -581,7 +578,7 @@ function App() {
 
       setHasMoreMessages(messagesPage.has_more);
     } catch {
-      scrollBehaviorRef.current = "bottom";
+      scrollToBottomOnNextRender();
       console.error("Failed to load older messages.");
     } finally {
       setIsOlderMessagesLoading(false);
@@ -1175,24 +1172,6 @@ function App() {
     playIncomingMessageSound,
   ]);
 
-  useLayoutEffect(() => {
-    const messagesContainer = messagesContainerRef.current;
-
-    if (scrollBehaviorRef.current === "preserve" && messagesContainer) {
-      const newScrollHeight = messagesContainer.scrollHeight;
-      messagesContainer.scrollTop =
-        newScrollHeight -
-        previousScrollHeightRef.current +
-        previousScrollTopRef.current;
-      scrollBehaviorRef.current = "bottom";
-      return;
-    }
-
-    messagesEndRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, [messages, selectedConversation?.id]);
-
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -1643,7 +1622,7 @@ function App() {
     setIsMessageSearchActive(true);
     setMessageError("");
     setHasMoreMessages(false);
-    scrollBehaviorRef.current = "bottom";
+    scrollToBottomOnNextRender();
 
     try {
       const messagesPage = await getConversationMessagesPage(
@@ -1675,18 +1654,6 @@ function App() {
     setIsSearchingMessages(false);
 
     await loadMessages(accessToken, selectedConversation.id);
-  }
-
-  function handleMessagesScroll() {
-    const messagesContainer = messagesContainerRef.current;
-
-    if (!messagesContainer) {
-      return;
-    }
-
-    if (messagesContainer.scrollTop <= 32) {
-      loadOlderMessages();
-    }
   }
 
   function handleNewMessageChange(value: string) {
