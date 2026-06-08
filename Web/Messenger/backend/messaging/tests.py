@@ -11,6 +11,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 from accounts.models import BlockedUser
 from config.asgi import application
 
+from .consumers import ACTIVE_USER_CONNECTIONS
 from .models import Conversation, Message, MessageReaction
 
 TEST_CHANNEL_LAYERS = {
@@ -104,7 +105,7 @@ class MessagingAPITests(TestCase):
             response.data["text"][0],
             "Message text cannot be empty.",
         )
-    
+
     def test_cannot_create_message_with_unsupported_attachment_type(self):
         url = reverse(
             "conversation-messages",
@@ -1354,7 +1355,7 @@ class MessagingWebSocketTests(TransactionTestCase):
         async_to_sync(test)()
 
         self.assertEqual(Message.objects.count(), 0)
-    
+
     def test_websocket_rejects_invalid_json(self):
         async def test():
             communicator, connected = await self.connect_to_conversation(self.user)
@@ -1373,7 +1374,7 @@ class MessagingWebSocketTests(TransactionTestCase):
         async_to_sync(test)()
 
         self.assertEqual(Message.objects.count(), 0)
-    
+
     def test_websocket_broadcasts_message_to_conversation_participants(self):
         async def test():
             sender_communicator, sender_connected = await self.connect_to_conversation(
@@ -1425,3 +1426,297 @@ class MessagingWebSocketTests(TransactionTestCase):
         self.assertEqual(message.text, "Broadcast message")
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.conversation, self.conversation)
+
+    def test_websocket_message_can_reply_to_existing_message(self):
+        original_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.other_user,
+            text="Original message",
+        )
+
+        async def test():
+            communicator, connected = await self.connect_to_conversation(self.user)
+
+            self.assertTrue(connected)
+
+            await communicator.send_json_to(
+                {
+                    "text": "Reply message",
+                    "reply_to": original_message.id,
+                }
+            )
+
+            response = await communicator.receive_json_from()
+
+            self.assertEqual(response["type"], "message")
+            self.assertEqual(response["message"]["text"], "Reply message")
+            self.assertEqual(
+                response["message"]["reply_to_message"]["id"],
+                original_message.id,
+            )
+            self.assertEqual(
+                response["message"]["reply_to_message"]["text"],
+                "Original message",
+            )
+
+            await communicator.disconnect()
+
+        async_to_sync(test)()
+
+        self.assertEqual(Message.objects.count(), 2)
+
+        reply_message = Message.objects.get(text="Reply message")
+
+        self.assertEqual(reply_message.reply_to_id, original_message.id)
+
+    def test_websocket_rejects_missing_reply_message(self):
+        async def test():
+            communicator, connected = await self.connect_to_conversation(self.user)
+
+            self.assertTrue(connected)
+
+            await communicator.send_json_to(
+                {
+                    "text": "Reply message",
+                    "reply_to": 999,
+                }
+            )
+
+            response = await communicator.receive_json_from()
+
+            self.assertEqual(response["type"], "error")
+            self.assertEqual(response["detail"], "Reply message not found.")
+
+            await communicator.disconnect()
+
+        async_to_sync(test)()
+
+        self.assertEqual(Message.objects.count(), 0)
+
+    def test_websocket_rejects_message_when_user_blocked_receiver(self):
+        BlockedUser.objects.create(
+            blocker=self.user,
+            blocked=self.other_user,
+        )
+
+        async def test():
+            communicator, connected = await self.connect_to_conversation(self.user)
+
+            self.assertTrue(connected)
+
+            await communicator.send_json_to(
+                {
+                    "text": "Blocked message",
+                }
+            )
+
+            response = await communicator.receive_json_from()
+
+            self.assertEqual(response["type"], "error")
+            self.assertEqual(
+                response["detail"],
+                "You blocked this user. Unblock them to send messages.",
+            )
+
+            await communicator.disconnect()
+
+        async_to_sync(test)()
+
+        self.assertEqual(Message.objects.count(), 0)
+
+    def test_websocket_rejects_message_when_receiver_blocked_user(self):
+        BlockedUser.objects.create(
+            blocker=self.other_user,
+            blocked=self.user,
+        )
+
+        async def test():
+            communicator, connected = await self.connect_to_conversation(self.user)
+
+            self.assertTrue(connected)
+
+            await communicator.send_json_to(
+                {
+                    "text": "Blocked message",
+                }
+            )
+
+            response = await communicator.receive_json_from()
+
+            self.assertEqual(response["type"], "error")
+            self.assertEqual(
+                response["detail"],
+                "You cannot send messages to this user.",
+            )
+
+            await communicator.disconnect()
+
+        async_to_sync(test)()
+
+        self.assertEqual(Message.objects.count(), 0)
+
+    def test_websocket_broadcasts_typing_event_to_participants(self):
+        async def test():
+            sender_communicator, sender_connected = await self.connect_to_conversation(
+                self.user
+            )
+            (
+                receiver_communicator,
+                receiver_connected,
+            ) = await self.connect_to_conversation(self.other_user)
+
+            self.assertTrue(sender_connected)
+            self.assertTrue(receiver_connected)
+
+            await sender_communicator.send_json_to(
+                {
+                    "type": "typing",
+                    "is_typing": True,
+                }
+            )
+
+            sender_response = await sender_communicator.receive_json_from()
+            receiver_response = await receiver_communicator.receive_json_from()
+
+            self.assertEqual(sender_response["type"], "typing")
+            self.assertEqual(receiver_response["type"], "typing")
+            self.assertTrue(sender_response["is_typing"])
+            self.assertTrue(receiver_response["is_typing"])
+            self.assertEqual(sender_response["user"]["id"], self.user.id)
+            self.assertEqual(receiver_response["user"]["id"], self.user.id)
+
+            await sender_communicator.disconnect()
+            await receiver_communicator.disconnect()
+
+        async_to_sync(test)()
+
+    def test_websocket_ignores_typing_event_when_conversation_is_blocked(self):
+        BlockedUser.objects.create(
+            blocker=self.user,
+            blocked=self.other_user,
+        )
+
+        async def test():
+            sender_communicator, sender_connected = await self.connect_to_conversation(
+                self.user
+            )
+            (
+                receiver_communicator,
+                receiver_connected,
+            ) = await self.connect_to_conversation(self.other_user)
+
+            self.assertTrue(sender_connected)
+            self.assertTrue(receiver_connected)
+
+            await sender_communicator.send_json_to(
+                {
+                    "type": "typing",
+                    "is_typing": True,
+                }
+            )
+
+            self.assertTrue(await sender_communicator.receive_nothing(timeout=0.1))
+            self.assertTrue(await receiver_communicator.receive_nothing(timeout=0.1))
+
+            await sender_communicator.disconnect()
+            await receiver_communicator.disconnect()
+
+        async_to_sync(test)()
+
+    def test_websocket_read_event_marks_messages_as_read(self):
+        unread_message = Message.objects.create(
+            conversation=self.conversation,
+            sender=self.other_user,
+            text="Unread message",
+            is_read=False,
+            is_delivered=False,
+        )
+
+        async def test():
+            sender_communicator, sender_connected = await self.connect_to_conversation(
+                self.user
+            )
+            (
+                receiver_communicator,
+                receiver_connected,
+            ) = await self.connect_to_conversation(self.other_user)
+
+            self.assertTrue(sender_connected)
+            self.assertTrue(receiver_connected)
+
+            await sender_communicator.send_json_to(
+                {
+                    "type": "read",
+                }
+            )
+
+            sender_response = await sender_communicator.receive_json_from()
+            receiver_response = await receiver_communicator.receive_json_from()
+
+            self.assertEqual(sender_response["type"], "read")
+            self.assertEqual(receiver_response["type"], "read")
+            self.assertEqual(sender_response["updated_count"], 1)
+            self.assertEqual(receiver_response["updated_count"], 1)
+            self.assertEqual(sender_response["user"]["id"], self.user.id)
+            self.assertEqual(receiver_response["user"]["id"], self.user.id)
+
+            await sender_communicator.disconnect()
+            await receiver_communicator.disconnect()
+
+        async_to_sync(test)()
+
+        unread_message.refresh_from_db()
+
+        self.assertTrue(unread_message.is_read)
+        self.assertTrue(unread_message.is_delivered)
+
+    def test_websocket_sends_delivery_event_when_receiver_is_online(self):
+        ACTIVE_USER_CONNECTIONS[self.other_user.id] = 1
+
+        async def test():
+            sender_communicator, sender_connected = await self.connect_to_conversation(
+                self.user
+            )
+            (
+                receiver_communicator,
+                receiver_connected,
+            ) = await self.connect_to_conversation(self.other_user)
+
+            self.assertTrue(sender_connected)
+            self.assertTrue(receiver_connected)
+
+            await sender_communicator.send_json_to(
+                {
+                    "text": "Delivery message",
+                }
+            )
+
+            sender_message_response = await sender_communicator.receive_json_from()
+            receiver_message_response = await receiver_communicator.receive_json_from()
+            sender_delivery_response = await sender_communicator.receive_json_from()
+            receiver_delivery_response = await receiver_communicator.receive_json_from()
+
+            self.assertEqual(sender_message_response["type"], "message")
+            self.assertEqual(receiver_message_response["type"], "message")
+            self.assertEqual(sender_delivery_response["type"], "delivered")
+            self.assertEqual(receiver_delivery_response["type"], "delivered")
+            self.assertEqual(
+                sender_delivery_response["message_ids"],
+                receiver_delivery_response["message_ids"],
+            )
+            self.assertEqual(sender_delivery_response["user_id"], self.other_user.id)
+            self.assertEqual(receiver_delivery_response["user_id"], self.other_user.id)
+
+            await sender_communicator.disconnect()
+            await receiver_communicator.disconnect()
+
+        try:
+            async_to_sync(test)()
+        finally:
+            ACTIVE_USER_CONNECTIONS.clear()
+
+        message = Message.objects.get(text="Delivery message")
+
+        self.assertTrue(message.is_delivered)
+        self.assertIsNotNone(message.delivered_at)
+
