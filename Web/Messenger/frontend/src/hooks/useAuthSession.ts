@@ -205,6 +205,7 @@ export function useAuthSession({
 
   return {
     currentUser,
+    setCurrentUser,
     accessToken,
     authMode,
     setAuthMode,

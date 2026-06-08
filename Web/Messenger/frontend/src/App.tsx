@@ -156,6 +156,7 @@ function App() {
 
   const {
     currentUser,
+    setCurrentUser,
     accessToken,
     authMode,
     setAuthMode,
