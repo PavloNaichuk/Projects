@@ -28,7 +28,6 @@ import {
   type DeleteMessageMode,
   type Message,
 } from "./api/conversations";
-import { blockUser, searchUsers, unblockUser } from "./api/users";
 import AuthPage from "./components/AuthPage";
 import ChatWindow from "./components/ChatWindow";
 import Sidebar from "./components/Sidebar";
@@ -41,6 +40,7 @@ import { useMessengerStateUpdates } from "./hooks/useMessengerStateUpdates";
 import { useMessengerSockets } from "./hooks/useMessengerSockets";
 import { useNotificationSound } from "./hooks/useNotificationSound";
 import { useProfileActions } from "./hooks/useProfileActions";
+import { useUserSearchActions } from "./hooks/useUserSearchActions";
 import { useUserStateUpdates } from "./hooks/useUserStateUpdates";
 import {
   getConversationName,
@@ -292,6 +292,26 @@ function App() {
     refreshConversations,
   });
 
+  const { handleSearchUsers, handleBlockUser, handleUnblockUser } =
+    useUserSearchActions({
+      accessToken,
+      userSearchQuery,
+      selectedConversationUser,
+      updateUserInState,
+      refreshConversations,
+      sendTypingStatus,
+      clearTypingTimeout,
+      setSearchResults,
+      setIsSearchingUsers,
+      setUserSearchError,
+      setIsBlockingUserId,
+      setMessageError,
+      setNewMessage,
+      setSelectedAttachment,
+      setReplyToMessage,
+      setTypingUser,
+    });
+
   async function loadMessages(
     token: string,
     conversationId: number,
@@ -415,35 +435,6 @@ function App() {
 
     await loadMessages(accessToken, conversation.id);
     await refreshConversations(accessToken);
-  }
-
-  async function handleSearchUsers(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (!accessToken) {
-      return;
-    }
-
-    const query = userSearchQuery.trim();
-
-    if (!query) {
-      setSearchResults([]);
-      setUserSearchError("");
-      return;
-    }
-
-    setIsSearchingUsers(true);
-    setUserSearchError("");
-
-    try {
-      const users = await searchUsers(accessToken, query);
-      setSearchResults(users);
-    } catch {
-      setSearchResults([]);
-      setUserSearchError("Failed to search users.");
-    } finally {
-      setIsSearchingUsers(false);
-    }
   }
 
   async function handleStartConversation(user: User) {
@@ -608,71 +599,6 @@ function App() {
       setUserSearchError("Failed to clear chat history.");
     } finally {
       setIsDeletingConversationId(null);
-    }
-  }
-
-  async function handleBlockUser(user: User) {
-    if (!accessToken) {
-      return;
-    }
-
-    setIsBlockingUserId(user.id);
-    setMessageError("");
-    setUserSearchError("");
-
-    try {
-      const response = await blockUser(accessToken, user.id);
-
-      updateUserInState(response.user);
-      await refreshConversations(accessToken);
-
-      if (selectedConversationUser?.id === user.id) {
-        setNewMessage("");
-        setSelectedAttachment(null);
-        setReplyToMessage(null);
-        setTypingUser(null);
-        sendTypingStatus(false);
-        clearTypingTimeout();
-      }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to block user.";
-
-      if (selectedConversationUser?.id === user.id) {
-        setMessageError(errorMessage);
-      } else {
-        setUserSearchError(errorMessage);
-      }
-    } finally {
-      setIsBlockingUserId(null);
-    }
-  }
-
-  async function handleUnblockUser(user: User) {
-    if (!accessToken) {
-      return;
-    }
-
-    setIsBlockingUserId(user.id);
-    setMessageError("");
-    setUserSearchError("");
-
-    try {
-      const response = await unblockUser(accessToken, user.id);
-
-      updateUserInState(response.user);
-      await refreshConversations(accessToken);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to unblock user.";
-
-      if (selectedConversationUser?.id === user.id) {
-        setMessageError(errorMessage);
-      } else {
-        setUserSearchError(errorMessage);
-      }
-    } finally {
-      setIsBlockingUserId(null);
     }
   }
 
