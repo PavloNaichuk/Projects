@@ -6,13 +6,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import "./App.css";
-import {
-  deleteCurrentUserAvatar,
-  updateContactNickname,
-  updateCurrentUserAvatar,
-  updateCurrentUserProfile,
-  type User,
-} from "./api/auth";
+import { type User } from "./api/auth";
 import {
   clearConversationHistory,
   createConversation,
@@ -34,7 +28,7 @@ import {
   type DeleteMessageMode,
   type Message,
 } from "./api/conversations";
-import { blockUser, getBlockedUsers, searchUsers, unblockUser } from "./api/users";
+import { blockUser, searchUsers, unblockUser } from "./api/users";
 import AuthPage from "./components/AuthPage";
 import ChatWindow from "./components/ChatWindow";
 import Sidebar from "./components/Sidebar";
@@ -46,13 +40,13 @@ import { useMessageScroll } from "./hooks/useMessageScroll";
 import { useMessengerStateUpdates } from "./hooks/useMessengerStateUpdates";
 import { useMessengerSockets } from "./hooks/useMessengerSockets";
 import { useNotificationSound } from "./hooks/useNotificationSound";
+import { useProfileActions } from "./hooks/useProfileActions";
 import { useUserStateUpdates } from "./hooks/useUserStateUpdates";
 import {
   getConversationName,
   getOtherParticipant,
   sortConversationsByUpdatedAt,
 } from "./utils/chat";
-import { addAvatarCacheBust } from "./utils/users";
 
 const MESSAGE_PAGE_SIZE = 20;
 
@@ -270,6 +264,34 @@ function App() {
     setTypingUser,
   });
 
+  const {
+    handleCurrentUserAvatarChange,
+    handleDeleteCurrentUserAvatar,
+    handleUpdateCurrentUserProfile,
+    handleLoadBlockedUsers,
+    handleUnblockBlockedUser,
+    handleOpenContactNicknameModal,
+    handleUpdateContactNickname,
+  } = useProfileActions({
+    accessToken,
+    currentUser,
+    contactNicknameUser,
+    setAvatarError,
+    setIsAvatarUpdating,
+    setIsProfileSettingsOpen,
+    setProfileError,
+    setIsProfileUpdating,
+    setBlockedUsers,
+    setBlockedUsersError,
+    setIsBlockedUsersLoading,
+    setIsUnblockingUserId,
+    setContactNicknameUser,
+    setContactNicknameError,
+    setIsContactNicknameUpdating,
+    updateUserInState,
+    refreshConversations,
+  });
+
   async function loadMessages(
     token: string,
     conversationId: number,
@@ -371,95 +393,6 @@ function App() {
       });
     } catch {
       console.error("Failed to refresh conversations.");
-    }
-  }
-
-  async function handleCurrentUserAvatarChange(
-    event: ChangeEvent<HTMLInputElement>
-  ) {
-    const file = event.target.files?.[0];
-    event.target.value = "";
-
-    if (!file || !accessToken) {
-      return;
-    }
-
-    if (!file.type.startsWith("image/")) {
-      setAvatarError("Avatar must be an image.");
-      return;
-    }
-
-    if (file.size > 2 * 1024 * 1024) {
-      setAvatarError("Avatar file size must be 2 MB or less.");
-      return;
-    }
-
-    setIsAvatarUpdating(true);
-    setAvatarError("");
-
-    try {
-      const updatedUser = await updateCurrentUserAvatar(accessToken, file);
-      updateUserInState(addAvatarCacheBust(updatedUser));
-      await refreshConversations(accessToken);
-    } catch {
-      setAvatarError("Failed to update avatar.");
-    } finally {
-      setIsAvatarUpdating(false);
-    }
-  }
-
-  async function handleDeleteCurrentUserAvatar() {
-    if (!accessToken) {
-      return;
-    }
-
-    setIsAvatarUpdating(true);
-    setAvatarError("");
-
-    try {
-      const updatedUser = await deleteCurrentUserAvatar(accessToken);
-      updateUserInState(updatedUser);
-      await refreshConversations(accessToken);
-    } catch {
-      setAvatarError("Failed to delete avatar.");
-    } finally {
-      setIsAvatarUpdating(false);
-    }
-  }
-
-  async function handleUpdateCurrentUserProfile(username: string, email: string) {
-    if (!accessToken) {
-      return;
-    }
-
-    const trimmedUsername = username.trim();
-    const trimmedEmail = email.trim();
-
-    if (!trimmedUsername || !trimmedEmail) {
-      setProfileError("Username and email are required.");
-      return;
-    }
-
-    setIsProfileUpdating(true);
-    setProfileError("");
-
-    try {
-      const updatedUser = await updateCurrentUserProfile(accessToken, {
-        username: trimmedUsername,
-        email: trimmedEmail,
-      });
-
-      updateUserInState(addAvatarCacheBust(updatedUser));
-      await refreshConversations(accessToken);
-      setIsProfileSettingsOpen(false);
-    } catch (error) {
-      if (error instanceof Error) {
-        setProfileError(error.message);
-      } else {
-        setProfileError("Failed to update profile.");
-      }
-    } finally {
-      setIsProfileUpdating(false);
     }
   }
 
@@ -678,50 +611,6 @@ function App() {
     }
   }
 
-  function handleOpenContactNicknameModal(conversation: Conversation) {
-    if (!currentUser) {
-      return;
-    }
-
-    const user = getOtherParticipant(conversation, currentUser);
-
-    if (!user) {
-      return;
-    }
-
-    setContactNicknameUser(user);
-    setContactNicknameError("");
-  }
-
-  async function handleUpdateContactNickname(nickname: string) {
-    if (!accessToken || !contactNicknameUser) {
-      return;
-    }
-
-    setIsContactNicknameUpdating(true);
-    setContactNicknameError("");
-
-    try {
-      const response = await updateContactNickname(
-        accessToken,
-        contactNicknameUser.id,
-        nickname.trim()
-      );
-
-      updateUserInState(response.user);
-      await refreshConversations(accessToken);
-      setContactNicknameUser(null);
-    } catch (error) {
-      if (error instanceof Error) {
-        setContactNicknameError(error.message);
-      } else {
-        setContactNicknameError("Failed to update contact name.");
-      }
-    } finally {
-      setIsContactNicknameUpdating(false);
-    }
-  }
-
   async function handleBlockUser(user: User) {
     if (!accessToken) {
       return;
@@ -784,51 +673,6 @@ function App() {
       }
     } finally {
       setIsBlockingUserId(null);
-    }
-  }
-
-  async function handleLoadBlockedUsers() {
-    if (!accessToken) {
-      return;
-    }
-
-    setIsBlockedUsersLoading(true);
-    setBlockedUsersError("");
-
-    try {
-      const users = await getBlockedUsers(accessToken);
-      setBlockedUsers(users);
-    } catch {
-      setBlockedUsers([]);
-      setBlockedUsersError("Failed to load blocked users.");
-    } finally {
-      setIsBlockedUsersLoading(false);
-    }
-  }
-
-  async function handleUnblockBlockedUser(user: User) {
-    if (!accessToken) {
-      return;
-    }
-
-    setIsUnblockingUserId(user.id);
-    setBlockedUsersError("");
-
-    try {
-      const response = await unblockUser(accessToken, user.id);
-
-      updateUserInState(response.user);
-      setBlockedUsers((previousUsers) =>
-        previousUsers.filter((blockedUser) => blockedUser.id !== user.id)
-      );
-
-      await refreshConversations(accessToken);
-    } catch (error) {
-      setBlockedUsersError(
-        error instanceof Error ? error.message : "Failed to unblock user."
-      );
-    } finally {
-      setIsUnblockingUserId(null);
     }
   }
 
