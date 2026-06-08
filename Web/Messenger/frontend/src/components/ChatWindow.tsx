@@ -17,6 +17,7 @@ import type {
 } from "../api/conversations";
 import { getUserDisplayName } from "../utils/chat";
 import MessageBubble from "./MessageBubble";
+import ChatHeader from "./ChatHeader";
 
 const MESSAGE_INPUT_EMOJIS = [
   "😀",
@@ -117,11 +118,6 @@ type ChatWindowProps = {
   handleUnblockUser: (user: User) => Promise<void>;
 };
 
-type UserAvatarProps = {
-  user: User;
-  isOnline?: boolean;
-};
-
 type TextContextMenuState = {
   x: number;
   y: number;
@@ -133,86 +129,6 @@ type EmojiPickerState = {
   x: number;
   y: number;
 };
-
-function UserAvatar({ user, isOnline = false }: UserAvatarProps) {
-  const displayName = getUserDisplayName(user);
-  const initial = displayName.trim().charAt(0).toUpperCase() || "?";
-
-  return (
-    <span className="user-avatar medium">
-      {user.avatar_url ? (
-        <img src={user.avatar_url} alt={displayName} />
-      ) : (
-        <span>{initial}</span>
-      )}
-
-      {isOnline && <span className="avatar-online-dot" />}
-    </span>
-  );
-}
-
-function formatTime(date: Date) {
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-
-  return `${hours}:${minutes}`;
-}
-
-function isSameDate(firstDate: Date, secondDate: Date) {
-  return (
-    firstDate.getFullYear() === secondDate.getFullYear() &&
-    firstDate.getMonth() === secondDate.getMonth() &&
-    firstDate.getDate() === secondDate.getDate()
-  );
-}
-
-function formatLastSeen(lastSeenAt: string | null) {
-  if (!lastSeenAt) {
-    return "Last seen unknown";
-  }
-
-  const lastSeenDate = new Date(lastSeenAt);
-
-  if (Number.isNaN(lastSeenDate.getTime())) {
-    return "Last seen unknown";
-  }
-
-  const now = new Date();
-  const diffInMs = now.getTime() - lastSeenDate.getTime();
-  const diffInMinutes = Math.floor(diffInMs / 60000);
-  const diffInHours = Math.floor(diffInMinutes / 60);
-
-  if (diffInMinutes < 1) {
-    return "Last seen just now";
-  }
-
-  if (diffInMinutes < 60) {
-    return `Last seen ${diffInMinutes} ${
-      diffInMinutes === 1 ? "minute" : "minutes"
-    } ago`;
-  }
-
-  if (diffInHours < 24) {
-    return `Last seen ${diffInHours} ${
-      diffInHours === 1 ? "hour" : "hours"
-    } ago`;
-  }
-
-  if (isSameDate(lastSeenDate, now)) {
-    return `Last seen today at ${formatTime(lastSeenDate)}`;
-  }
-
-  const yesterday = new Date(now);
-  yesterday.setDate(now.getDate() - 1);
-
-  if (isSameDate(lastSeenDate, yesterday)) {
-    return `Last seen yesterday at ${formatTime(lastSeenDate)}`;
-  }
-
-  return `Last seen ${lastSeenDate.toLocaleDateString()} at ${formatTime(
-    lastSeenDate
-  )}`;
-}
 
 function getReplyPreviewText(message: Message) {
   if (message.is_deleted) {
@@ -522,67 +438,17 @@ function ChatWindow({
   }
   return (
     <main className="chat">
-      <header className="chat-header">
-        <div className="chat-header-user">
-          {selectedConversationUser && (
-            <UserAvatar
-              user={selectedConversationUser}
-              isOnline={selectedConversationUserIsOnline}
-            />
-          )}
-
-          <div>
-            <h2>{selectedConversationName}</h2>
-
-            {selectedConversationUser && (
-              <p
-                className={
-                  isChatBlocked
-                    ? "chat-user-status blocked"
-                    : selectedConversationUserIsOnline
-                      ? "chat-user-status online"
-                      : "chat-user-status offline"
-                }
-              >
-                {isSelectedUserBlockedByMe
-                  ? "You blocked this user"
-                  : hasSelectedUserBlockedMe
-                    ? "This user blocked you"
-                    : selectedConversationUserIsOnline
-                      ? "Online"
-                      : formatLastSeen(selectedConversationUser.last_seen_at)}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <form className="message-search-form" onSubmit={handleSearchMessages}>
-          <input
-            type="text"
-            value={messageSearchQuery}
-            onChange={(event) => setMessageSearchQuery(event.target.value)}
-            placeholder="Search messages..."
-            disabled={!selectedConversation || isSearchingMessages}
-          />
-
-          {messageSearchQuery && (
-            <button
-              type="button"
-              onClick={handleClearMessageSearch}
-              disabled={isSearchingMessages}
-            >
-              Clear
-            </button>
-          )}
-
-          <button
-            type="submit"
-            disabled={!selectedConversation || isSearchingMessages}
-          >
-            {isSearchingMessages ? "Searching..." : "Search"}
-          </button>
-        </form>
-      </header>
+      <ChatHeader
+        selectedConversation={selectedConversation}
+        selectedConversationName={selectedConversationName}
+        selectedConversationUser={selectedConversationUser}
+        selectedConversationUserIsOnline={selectedConversationUserIsOnline}
+        messageSearchQuery={messageSearchQuery}
+        setMessageSearchQuery={setMessageSearchQuery}
+        isSearchingMessages={isSearchingMessages}
+        handleSearchMessages={handleSearchMessages}
+        handleClearMessageSearch={handleClearMessageSearch}
+      />
 
       <section
         className="messages"
@@ -804,7 +670,8 @@ function ChatWindow({
             </button>
           ))}
         </div>
-      )}    </main>
+      )}
+    </main>
   );
 }
 
