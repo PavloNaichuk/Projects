@@ -4,6 +4,7 @@ import type {
   DeleteConversationMode,
 } from "../api/conversations";
 import { formatShortTime, getConversationName } from "../utils/chat";
+import SidebarConversationMenu from "./SidebarConversationMenu";
 import UserAvatar from "./UserAvatar";
 
 type SidebarConversationItemProps = {
@@ -134,117 +135,23 @@ function SidebarConversationItem({
         )}
       </button>
 
-      <div
-        className={
-          isMenuOpen
-            ? "conversation-menu-wrapper open"
-            : "conversation-menu-wrapper"
-        }
-      >
-        <button
-          type="button"
-          className="conversation-menu-button"
-          onClick={() => toggleConversationMenu(conversation.id)}
-          disabled={isDeleting}
-          title="Conversation actions"
-        >
-          ⋯
-        </button>
-
-        {isMenuOpen && (
-          <div className="conversation-menu">
-            <button
-              type="button"
-              onClick={() => {
-                setOpenedMenuConversationId(null);
-                handlePinConversation(conversation);
-              }}
-              disabled={isDeleting}
-            >
-              {conversation.is_pinned ? "Unpin chat" : "Pin chat"}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setOpenedMenuConversationId(null);
-                handleMarkConversationAsUnread(conversation);
-              }}
-              disabled={isDeleting || conversation.is_marked_unread}
-            >
-              {conversation.is_marked_unread
-                ? "Marked as unread"
-                : "Mark as unread"}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setOpenedMenuConversationId(null);
-                handleMuteConversation(conversation);
-              }}
-              disabled={isDeleting}
-            >
-              {conversation.is_muted ? "Unmute sound" : "Mute sound"}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setOpenedMenuConversationId(null);
-                handleOpenContactNicknameModal(conversation);
-              }}
-              disabled={isDeleting}
-            >
-              Rename contact
-            </button>
-
-            <button
-              type="button"
-              className={conversationUser.is_blocked_by_me ? "" : "danger"}
-              onClick={() => {
-                if (conversationUser.is_blocked_by_me) {
-                  openUnblockConfirm(conversationUser);
-                } else {
-                  openBlockConfirm(conversationUser);
-                }
-              }}
-              disabled={isDeleting || isBlockingUserId === conversationUser.id}
-            >
-              {isBlockingUserId === conversationUser.id
-                ? "Updating..."
-                : conversationUser.is_blocked_by_me
-                  ? "Unblock user"
-                  : "Block user"}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => openClearHistoryConfirm(conversation)}
-              disabled={isDeleting}
-            >
-              Clear chat history
-            </button>
-
-            <button
-              type="button"
-              onClick={() => openDeleteConfirm(conversation, "for_me")}
-              disabled={isDeleting}
-            >
-              {isDeleting ? "Deleting..." : "Delete for me"}
-            </button>
-
-            <button
-              type="button"
-              className="danger"
-              onClick={() => openDeleteConfirm(conversation, "for_everyone")}
-              disabled={isDeleting}
-            >
-              Delete for everyone
-            </button>
-          </div>
-        )}
-      </div>
+      <SidebarConversationMenu
+        conversation={conversation}
+        conversationUser={conversationUser}
+        isMenuOpen={isMenuOpen}
+        isDeleting={isDeleting}
+        isBlockingUserId={isBlockingUserId}
+        setOpenedMenuConversationId={setOpenedMenuConversationId}
+        toggleConversationMenu={toggleConversationMenu}
+        openDeleteConfirm={openDeleteConfirm}
+        openClearHistoryConfirm={openClearHistoryConfirm}
+        openBlockConfirm={openBlockConfirm}
+        openUnblockConfirm={openUnblockConfirm}
+        handleMuteConversation={handleMuteConversation}
+        handlePinConversation={handlePinConversation}
+        handleMarkConversationAsUnread={handleMarkConversationAsUnread}
+        handleOpenContactNicknameModal={handleOpenContactNicknameModal}
+      />
     </div>
   );
 }
