@@ -1,11 +1,19 @@
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APIClient
+from rest_framework import serializers, status
+from rest_framework.test import APIClient, APIRequestFactory
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import BlockedUser
+from .models import BlockedUser, ContactNickname
+from .serializers import (
+    UserAvatarSerializer,
+    UserProfileSerializer,
+    UserRegistrationSerializer,
+    UserSearchSerializer,
+    UserSerializer,
+)
 
 TEST_CHANNEL_LAYERS = {
     "default": {
@@ -170,7 +178,7 @@ class AccountsAPITests(TestCase):
             response.data["refresh"][0],
             "Refresh token is required.",
         )
-        
+
     def test_authenticated_user_can_block_user(self):
         User = get_user_model()
 
@@ -316,3 +324,253 @@ class AccountsAPITests(TestCase):
         self.assertIn(another_blocked_user.id, blocked_user_ids)
         self.assertNotIn(not_blocked_user.id, blocked_user_ids)
         self.assertNotIn(self.user.id, blocked_user_ids)
+
+    def get_serializer_request(self, user):
+        factory = APIRequestFactory()
+        request = factory.get("/")
+        request.user = user
+        return request
+
+    def test_user_serializer_uses_contact_nickname_for_other_user(self):
+        User = get_user_model()
+
+        other_user = User.objects.create_user(
+            username="user1",
+            email="user1@test.ua",
+            password="testpassword123",
+        )
+
+        ContactNickname.objects.create(
+            owner=self.user,
+            target_user=other_user,
+            nickname="Best Friend",
+        )
+
+        request = self.get_serializer_request(self.user)
+
+        serializer = UserSerializer(
+            other_user,
+            context={"request": request},
+        )
+
+        self.assertEqual(serializer.data["display_name"], "Best Friend")
+
+    def test_user_serializer_uses_username_for_current_user(self):
+        request = self.get_serializer_request(self.user)
+
+        serializer = UserSerializer(
+            self.user,
+            context={"request": request},
+        )
+
+        self.assertEqual(serializer.data["display_name"], "pavlo")
+
+    def test_user_serializer_returns_block_flags(self):
+        User = get_user_model()
+
+        blocked_by_me = User.objects.create_user(
+            username="blockedbyme",
+            email="blockedbyme@test.ua",
+            password="testpassword123",
+        )
+        blocked_me = User.objects.create_user(
+            username="blockedme",
+            email="blockedme@test.ua",
+            password="testpassword123",
+        )
+
+        BlockedUser.objects.create(
+            blocker=self.user,
+            blocked=blocked_by_me,
+        )
+        BlockedUser.objects.create(
+            blocker=blocked_me,
+            blocked=self.user,
+        )
+
+        request = self.get_serializer_request(self.user)
+
+        blocked_by_me_serializer = UserSerializer(
+            blocked_by_me,
+            context={"request": request},
+        )
+        blocked_me_serializer = UserSerializer(
+            blocked_me,
+            context={"request": request},
+        )
+
+        self.assertTrue(blocked_by_me_serializer.data["is_blocked_by_me"])
+        self.assertFalse(blocked_by_me_serializer.data["has_blocked_me"])
+        self.assertFalse(blocked_me_serializer.data["is_blocked_by_me"])
+        self.assertTrue(blocked_me_serializer.data["has_blocked_me"])
+
+    def test_user_search_serializer_returns_avatar_url(self):
+        avatar = SimpleUploadedFile(
+            "avatar.png",
+            b"avatar content",
+            content_type="image/png",
+        )
+        self.user.avatar.save("avatar.png", avatar, save=True)
+
+        request = self.get_serializer_request(self.user)
+
+        serializer = UserSearchSerializer(
+            self.user,
+            context={"request": request},
+        )
+
+        self.assertIn("/media/", serializer.data["avatar_url"])
+        self.assertIn("avatar", serializer.data["avatar_url"])
+
+    def test_profile_serializer_normalizes_valid_username_and_email(self):
+        serializer = UserProfileSerializer(
+            self.user,
+            data={
+                "username": "  pavlo_new  ",
+                "email": "  PAVLO_NEW@TEST.UA  ",
+            },
+            partial=True,
+        )
+
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+        self.assertEqual(serializer.validated_data["username"], "pavlo_new")
+        self.assertEqual(serializer.validated_data["email"], "pavlo_new@test.ua")
+
+    def test_profile_serializer_rejects_blank_username_and_email(self):
+        serializer = UserProfileSerializer(
+            self.user,
+            data={
+                "username": "   ",
+                "email": "   ",
+            },
+            partial=True,
+        )
+
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(
+            serializer.errors["username"][0],
+            "This field may not be blank.",
+        )
+        self.assertEqual(
+            serializer.errors["email"][0],
+            "This field may not be blank.",
+        )
+
+    def test_profile_serializer_rejects_duplicate_username_and_email(self):
+        User = get_user_model()
+
+        User.objects.create_user(
+            username="taken",
+            email="taken@test.ua",
+            password="testpassword123",
+        )
+
+        serializer = UserProfileSerializer(
+            self.user,
+            data={
+                "username": "taken",
+                "email": "taken@test.ua",
+            },
+            partial=True,
+        )
+
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(
+            serializer.errors["username"][0],
+            "A user with that username already exists.",
+        )
+        self.assertEqual(
+            serializer.errors["email"][0],
+            "user with this email already exists.",
+        )
+
+    def test_avatar_serializer_accepts_valid_avatar(self):
+        valid_png = (
+            b"\x89PNG\r\n\x1a\n"
+            b"\x00\x00\x00\rIHDR"
+            b"\x00\x00\x00\x01\x00\x00\x00\x01"
+            b"\x08\x06\x00\x00\x00"
+            b"\x1f\x15\xc4\x89"
+            b"\x00\x00\x00\nIDAT"
+            b"x\x9cc\x00\x01\x00\x00\x05\x00\x01"
+            b"\r\n-\xb4"
+            b"\x00\x00\x00\x00IEND\xaeB`\x82"
+        )
+
+        avatar = SimpleUploadedFile(
+            "avatar.png",
+            valid_png,
+            content_type="image/png",
+        )
+
+        serializer = UserAvatarSerializer(
+            self.user,
+            data={"avatar": avatar},
+            partial=True,
+        )
+
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+
+    def test_avatar_serializer_rejects_unsupported_avatar_type(self):
+        avatar = SimpleUploadedFile(
+            "avatar.gif",
+            b"avatar content",
+            content_type="image/gif",
+        )
+
+        serializer = UserAvatarSerializer()
+
+        with self.assertRaisesMessage(
+            serializers.ValidationError,
+            "Avatar must be a JPG, PNG, or WEBP image.",
+        ):
+            serializer.validate_avatar(avatar)
+
+    def test_avatar_serializer_rejects_too_large_avatar(self):
+        valid_png = (
+            b"\x89PNG\r\n\x1a\n"
+            b"\x00\x00\x00\rIHDR"
+            b"\x00\x00\x00\x01\x00\x00\x00\x01"
+            b"\x08\x06\x00\x00\x00"
+            b"\x1f\x15\xc4\x89"
+            b"\x00\x00\x00\nIDAT"
+            b"x\x9cc\x00\x01\x00\x00\x05\x00\x01"
+            b"\r\n-\xb4"
+            b"\x00\x00\x00\x00IEND\xaeB`\x82"
+        )
+
+        avatar = SimpleUploadedFile(
+            "avatar.png",
+            valid_png + b"x" * (2 * 1024 * 1024 + 1),
+            content_type="image/png",
+        )
+
+        serializer = UserAvatarSerializer(
+            self.user,
+            data={"avatar": avatar},
+            partial=True,
+        )
+
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(
+            serializer.errors["avatar"][0],
+            "Avatar file size must be 2 MB or less.",
+        )
+
+    def test_registration_serializer_creates_user_with_normalized_email(self):
+        serializer = UserRegistrationSerializer(
+            data={
+                "username": "newuser",
+                "email": "  NEWUSER@TEST.UA  ",
+                "password": "testpassword123",
+                "password_confirm": "testpassword123",
+            }
+        )
+
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+
+        user = serializer.save()
+
+        self.assertEqual(user.username, "newuser")
+        self.assertEqual(user.email, "newuser@test.ua")
+        self.assertTrue(user.check_password("testpassword123"))
