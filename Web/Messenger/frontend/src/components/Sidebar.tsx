@@ -5,6 +5,7 @@ import type {
   DeleteConversationMode,
 } from "../api/conversations";
 import { formatShortTime, getConversationName } from "../utils/chat";
+import SidebarConfirmModal from "./SidebarConfirmModal";
 import SidebarHeader from "./SidebarHeader";
 import SidebarUserSearch from "./SidebarUserSearch";
 import UserAvatar from "./UserAvatar";
@@ -411,130 +412,64 @@ function Sidebar({
       </div>
 
       {pendingBlockAction && (
-        <div className="modal-backdrop">
-          <div className="confirm-modal" role="dialog" aria-modal="true">
-            <h3>
-              {pendingBlockAction.action === "block"
-                ? `Block ${pendingBlockAction.user.display_name}?`
-                : `Unblock ${pendingBlockAction.user.display_name}?`}
-            </h3>
-
-            <p>
-              {pendingBlockAction.action === "block"
-                ? "They will not be able to send you messages. You will not be able to send messages to them until you unblock this user."
-                : "You will be able to send messages to each other again."}
-            </p>
-
-            <div className="confirm-modal-actions">
-              <button
-                type="button"
-                className="confirm-modal-cancel"
-                onClick={closeBlockConfirm}
-                disabled={isBlockingUserId !== null}
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                className={
-                  pendingBlockAction.action === "block"
-                    ? "confirm-modal-delete danger"
-                    : "confirm-modal-delete"
-                }
-                onClick={confirmBlockAction}
-                disabled={isBlockingUserId !== null}
-              >
-                {isBlockingUserId !== null
-                  ? "Updating..."
-                  : pendingBlockAction.action === "block"
-                    ? "Block user"
-                    : "Unblock user"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <SidebarConfirmModal
+          title={
+            pendingBlockAction.action === "block"
+              ? `Block ${pendingBlockAction.user.display_name}?`
+              : `Unblock ${pendingBlockAction.user.display_name}?`
+          }
+          message={
+            pendingBlockAction.action === "block"
+              ? "They will not be able to send you messages. You will not be able to send messages to them until you unblock this user."
+              : "You will be able to send messages to each other again."
+          }
+          confirmLabel={
+            pendingBlockAction.action === "block" ? "Block user" : "Unblock user"
+          }
+          loadingLabel="Updating..."
+          isLoading={isBlockingUserId !== null}
+          isDanger={pendingBlockAction.action === "block"}
+          onCancel={closeBlockConfirm}
+          onConfirm={confirmBlockAction}
+        />
       )}
 
       {pendingClearHistory && (
-        <div className="modal-backdrop">
-          <div className="confirm-modal" role="dialog" aria-modal="true">
-            <h3>Clear chat history?</h3>
-
-            <p>
-              This will remove all messages only for you. The conversation will
-              stay in your list. The other user will still see the messages.
-            </p>
-
-            <div className="confirm-modal-actions">
-              <button
-                type="button"
-                className="confirm-modal-cancel"
-                onClick={closeClearHistoryConfirm}
-                disabled={isDeletingConversationId !== null}
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                className="confirm-modal-delete danger"
-                onClick={confirmClearHistory}
-                disabled={isDeletingConversationId !== null}
-              >
-                {isDeletingConversationId !== null
-                  ? "Clearing..."
-                  : "Clear history"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <SidebarConfirmModal
+          title="Clear chat history?"
+          message="This will remove all messages only for you. The conversation will stay in your list. The other user will still see the messages."
+          confirmLabel="Clear history"
+          loadingLabel="Clearing..."
+          isLoading={isDeletingConversationId !== null}
+          isDanger
+          onCancel={closeClearHistoryConfirm}
+          onConfirm={confirmClearHistory}
+        />
       )}
 
       {pendingDelete && (
-        <div className="modal-backdrop">
-          <div className="confirm-modal" role="dialog" aria-modal="true">
-            <h3>
-              {pendingDelete.mode === "for_everyone"
-                ? "Delete conversation for everyone?"
-                : "Delete conversation for you?"}
-            </h3>
-
-            <p>
-              {pendingDelete.mode === "for_everyone"
-                ? "This will remove the conversation and all messages for both users."
-                : "This will hide the conversation only for you. The other user will still see it."}
-            </p>
-
-            <div className="confirm-modal-actions">
-              <button
-                type="button"
-                className="confirm-modal-cancel"
-                onClick={closeDeleteConfirm}
-                disabled={isDeletingConversationId !== null}
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                className={
-                  pendingDelete.mode === "for_everyone"
-                    ? "confirm-modal-delete danger"
-                    : "confirm-modal-delete"
-                }
-                onClick={confirmDeleteConversation}
-                disabled={isDeletingConversationId !== null}
-              >
-                {isDeletingConversationId !== null
-                  ? "Deleting..."
-                  : pendingDelete.mode === "for_everyone"
-                  ? "Delete for everyone"
-                  : "Delete for me"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <SidebarConfirmModal
+          title={
+            pendingDelete.mode === "for_everyone"
+              ? "Delete conversation for everyone?"
+              : "Delete conversation for you?"
+          }
+          message={
+            pendingDelete.mode === "for_everyone"
+              ? "This will remove the conversation and all messages for both users."
+              : "This will hide the conversation only for you. The other user will still see it."
+          }
+          confirmLabel={
+            pendingDelete.mode === "for_everyone"
+              ? "Delete for everyone"
+              : "Delete for me"
+          }
+          loadingLabel="Deleting..."
+          isLoading={isDeletingConversationId !== null}
+          isDanger={pendingDelete.mode === "for_everyone"}
+          onCancel={closeDeleteConfirm}
+          onConfirm={confirmDeleteConversation}
+        />
       )}
     </aside>
   );
