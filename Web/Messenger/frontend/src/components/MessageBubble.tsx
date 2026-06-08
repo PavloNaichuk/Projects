@@ -3,7 +3,6 @@ import type { User } from "../api/auth";
 import type {
   DeleteMessageMode,
   Message,
-  MessageReply,
 } from "../api/conversations";
 import {
   formatMessageDate,
@@ -13,6 +12,7 @@ import {
 } from "../utils/chat";
 import MessageAttachment from "./MessageAttachment";
 import MessageInfoModal from "./MessageInfoModal";
+import MessageReplyPreview from "./MessageReplyPreview";
 
 const REACTION_EMOJIS = ["👍", "❤️", "😂", "😮"];
 
@@ -80,24 +80,6 @@ function renderHighlightedText(text: string, searchQuery: string) {
   }
 
   return parts;
-}
-
-function getReplyPreviewText(reply: MessageReply) {
-  if (reply.is_deleted) {
-    return "This message was deleted";
-  }
-
-  if (reply.text.trim()) {
-    return reply.text;
-  }
-
-  if (reply.attachment_name) {
-    return reply.attachment_is_image
-      ? `Image: ${reply.attachment_name}`
-      : `File: ${reply.attachment_name}`;
-  }
-
-  return "Message";
 }
 
 function getMessageStatus(message: Message) {
@@ -327,15 +309,7 @@ function MessageBubble({
                 )}
 
                 {message.reply_to_message && (
-                  <div className="reply-preview-message">
-                    <span className="reply-preview-title">
-                      Reply to{" "}
-                      {getUserDisplayName(message.reply_to_message.sender)}
-                    </span>
-                    <span className="reply-preview-text">
-                      {getReplyPreviewText(message.reply_to_message)}
-                    </span>
-                  </div>
+                  <MessageReplyPreview reply={message.reply_to_message} />
                 )}
 
                 {hasAttachment && <MessageAttachment message={message} />}
