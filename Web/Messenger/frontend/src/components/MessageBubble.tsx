@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { User } from "../api/auth";
 import type {
   DeleteMessageMode,
@@ -12,6 +12,7 @@ import {
 import MessageAttachment from "./MessageAttachment";
 import MessageFooter from "./MessageFooter";
 import MessageInfoModal from "./MessageInfoModal";
+import MessageText from "./MessageText";
 import MessageReactions from "./MessageReactions";
 import MessageReplyPreview from "./MessageReplyPreview";
 
@@ -47,41 +48,6 @@ type MessageBubbleProps = {
     emoji: string
   ) => Promise<void>;
 };
-
-function renderHighlightedText(text: string, searchQuery: string) {
-  const query = searchQuery.trim();
-
-  if (!query) {
-    return text;
-  }
-
-  const lowerText = text.toLowerCase();
-  const lowerQuery = query.toLowerCase();
-
-  const parts: ReactNode[] = [];
-  let currentIndex = 0;
-
-  while (currentIndex < text.length) {
-    const matchIndex = lowerText.indexOf(lowerQuery, currentIndex);
-
-    if (matchIndex === -1) {
-      parts.push(text.slice(currentIndex));
-      break;
-    }
-
-    if (matchIndex > currentIndex) {
-      parts.push(text.slice(currentIndex, matchIndex));
-    }
-
-    const matchedText = text.slice(matchIndex, matchIndex + query.length);
-
-    parts.push(<mark key={`${matchIndex}-${matchedText}`}>{matchedText}</mark>);
-
-    currentIndex = matchIndex + query.length;
-  }
-
-  return parts;
-}
 
 async function copyTextToClipboard(text: string) {
   if (navigator.clipboard && window.isSecureContext) {
@@ -304,7 +270,7 @@ function MessageBubble({
                 {hasAttachment && <MessageAttachment message={message} />}
 
                 {hasText && (
-                  <p>{renderHighlightedText(message.text, searchQuery)}</p>
+                  <MessageText text={message.text} searchQuery={searchQuery} />
                 )}
 
                 {hasReactions && (
