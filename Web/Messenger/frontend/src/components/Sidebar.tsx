@@ -5,6 +5,7 @@ import type {
   DeleteConversationMode,
 } from "../api/conversations";
 import { formatShortTime, getConversationName } from "../utils/chat";
+import SidebarHeader from "./SidebarHeader";
 import UserAvatar from "./UserAvatar";
 
 type PendingDelete = {
@@ -174,26 +175,11 @@ function Sidebar({
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-header">
-        <h1>Messenger</h1>
-
-        <button
-          type="button"
-          className="sidebar-profile-button"
-          onClick={handleOpenProfileSettings}
-        >
-          <UserAvatar user={currentUser} size="large" />
-
-          <div className="sidebar-profile-info">
-            <p>{currentUser.display_name}</p>
-            <span>Profile settings</span>
-          </div>
-        </button>
-
-        <button className="logout-button" type="button" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
+      <SidebarHeader
+        currentUser={currentUser}
+        handleOpenProfileSettings={handleOpenProfileSettings}
+        handleLogout={handleLogout}
+      />
 
       <form className="search-box" onSubmit={handleSearchUsers}>
         <input
