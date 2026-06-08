@@ -1,5 +1,4 @@
 import {
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -51,6 +50,7 @@ import ContactNicknameModal from "./components/ContactNicknameModal";
 import ForwardMessageModal from "./components/ForwardMessageModal";
 import { useMessageScroll } from "./hooks/useMessageScroll";
 import { useNotificationSound } from "./hooks/useNotificationSound";
+import { useUserStateUpdates } from "./hooks/useUserStateUpdates";
 import {
   getConversationName,
   getOtherParticipant,
@@ -166,6 +166,14 @@ function App() {
     onLoadOlderMessages: loadOlderMessages,
   });
 
+  const { updateUserInState, updateUserLastSeenInState } = useUserStateUpdates({
+    setCurrentUser,
+    setConversations,
+    setSelectedConversation,
+    setMessages,
+    setSearchResults,
+  });
+
   function markConversationReadInState(conversationId: number) {
     setConversations((previousConversations) =>
       previousConversations.map((conversation) =>
@@ -229,233 +237,6 @@ function App() {
         : previousConversation
     );
   }
-
-  const updateUserInMessage = useCallback(
-    (message: Message, updatedUser: User): Message => {
-      return {
-        ...message,
-        sender:
-          message.sender.id === updatedUser.id ? updatedUser : message.sender,
-        reply_to_message: message.reply_to_message
-          ? {
-              ...message.reply_to_message,
-              sender:
-                message.reply_to_message.sender.id === updatedUser.id
-                  ? updatedUser
-                  : message.reply_to_message.sender,
-            }
-          : null,
-        forwarded_from_message: message.forwarded_from_message
-          ? {
-              ...message.forwarded_from_message,
-              sender:
-                message.forwarded_from_message.sender.id === updatedUser.id
-                  ? updatedUser
-                  : message.forwarded_from_message.sender,
-            }
-          : null,
-        reactions: message.reactions.map((reaction) => ({
-          ...reaction,
-          users: reaction.users.map((user) =>
-            user.id === updatedUser.id ? updatedUser : user
-          ),
-        })),
-      };
-    },
-    []
-  );
-
-  const updateUserInState = useCallback(
-    (updatedUser: User) => {
-      setCurrentUser((previousUser) =>
-        previousUser?.id === updatedUser.id ? updatedUser : previousUser
-      );
-
-      setConversations((previousConversations) =>
-        previousConversations.map((conversation) => ({
-          ...conversation,
-          participants: conversation.participants.map((participant) =>
-            participant.user.id === updatedUser.id
-              ? {
-                  ...participant,
-                  user: updatedUser,
-                }
-              : participant
-          ),
-          last_message: conversation.last_message
-            ? updateUserInMessage(conversation.last_message, updatedUser)
-            : null,
-        }))
-      );
-
-      setSelectedConversation((previousConversation) =>
-        previousConversation
-          ? {
-              ...previousConversation,
-              participants: previousConversation.participants.map(
-                (participant) =>
-                  participant.user.id === updatedUser.id
-                    ? {
-                        ...participant,
-                        user: updatedUser,
-                      }
-                    : participant
-              ),
-              last_message: previousConversation.last_message
-                ? updateUserInMessage(
-                    previousConversation.last_message,
-                    updatedUser
-                  )
-                : null,
-            }
-          : previousConversation
-      );
-
-      setMessages((previousMessages) =>
-        previousMessages.map((message) =>
-          updateUserInMessage(message, updatedUser)
-        )
-      );
-
-      setSearchResults((previousSearchResults) =>
-        previousSearchResults.map((user) =>
-          user.id === updatedUser.id ? updatedUser : user
-        )
-      );
-    },
-    [updateUserInMessage]
-  );
-
-  const updateUserLastSeenInMessage = useCallback(
-    (message: Message, updatedUser: User): Message => {
-      return {
-        ...message,
-        sender:
-          message.sender.id === updatedUser.id
-            ? {
-                ...message.sender,
-                last_seen_at: updatedUser.last_seen_at,
-              }
-            : message.sender,
-        reply_to_message: message.reply_to_message
-          ? {
-              ...message.reply_to_message,
-              sender:
-                message.reply_to_message.sender.id === updatedUser.id
-                  ? {
-                      ...message.reply_to_message.sender,
-                      last_seen_at: updatedUser.last_seen_at,
-                    }
-                  : message.reply_to_message.sender,
-            }
-          : null,
-        forwarded_from_message: message.forwarded_from_message
-          ? {
-              ...message.forwarded_from_message,
-              sender:
-                message.forwarded_from_message.sender.id === updatedUser.id
-                  ? {
-                      ...message.forwarded_from_message.sender,
-                      last_seen_at: updatedUser.last_seen_at,
-                    }
-                  : message.forwarded_from_message.sender,
-            }
-          : null,
-        reactions: message.reactions.map((reaction) => ({
-          ...reaction,
-          users: reaction.users.map((user) =>
-            user.id === updatedUser.id
-              ? {
-                  ...user,
-                  last_seen_at: updatedUser.last_seen_at,
-                }
-              : user
-          ),
-        })),
-      };
-    },
-    []
-  );
-
-  const updateUserLastSeenInState = useCallback(
-    (updatedUser: User) => {
-      setCurrentUser((previousUser) =>
-        previousUser?.id === updatedUser.id
-          ? {
-              ...previousUser,
-              last_seen_at: updatedUser.last_seen_at,
-            }
-          : previousUser
-      );
-
-      setConversations((previousConversations) =>
-        previousConversations.map((conversation) => ({
-          ...conversation,
-          participants: conversation.participants.map((participant) =>
-            participant.user.id === updatedUser.id
-              ? {
-                  ...participant,
-                  user: {
-                    ...participant.user,
-                    last_seen_at: updatedUser.last_seen_at,
-                  },
-                }
-              : participant
-          ),
-          last_message: conversation.last_message
-            ? updateUserLastSeenInMessage(
-                conversation.last_message,
-                updatedUser
-              )
-            : null,
-        }))
-      );
-
-      setSelectedConversation((previousConversation) =>
-        previousConversation
-          ? {
-              ...previousConversation,
-              participants: previousConversation.participants.map(
-                (participant) =>
-                  participant.user.id === updatedUser.id
-                    ? {
-                        ...participant,
-                        user: {
-                          ...participant.user,
-                          last_seen_at: updatedUser.last_seen_at,
-                        },
-                      }
-                    : participant
-              ),
-              last_message: previousConversation.last_message
-                ? updateUserLastSeenInMessage(
-                    previousConversation.last_message,
-                    updatedUser
-                  )
-                : null,
-            }
-          : previousConversation
-      );
-
-      setMessages((previousMessages) =>
-        previousMessages.map((message) =>
-          updateUserLastSeenInMessage(message, updatedUser)
-        )
-      );
-
-      setSearchResults((previousSearchResults) =>
-        previousSearchResults.map((user) =>
-          user.id === updatedUser.id
-            ? {
-                ...user,
-                last_seen_at: updatedUser.last_seen_at,
-              }
-            : user
-        )
-      );
-    },
-    [updateUserLastSeenInMessage]
-  );
 
   function removeConversationFromState(conversationId: number) {
     setConversations((previousConversations) =>
