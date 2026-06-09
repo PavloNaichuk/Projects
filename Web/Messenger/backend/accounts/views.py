@@ -1,6 +1,9 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.conf import settings
+from django.core.mail import send_mail
 from django.db.models import Q
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,8 +13,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from messaging.models import ConversationParticipant
 
-from .models import BlockedUser, ContactNickname, User
+from .models import BlockedUser, ContactNickname, EmailVerificationToken, User
 from .serializers import (
+    EmailVerificationConfirmSerializer,
     UserAvatarSerializer,
     UserProfileSerializer,
     UserRegistrationSerializer,
@@ -125,6 +129,36 @@ def notify_user_block_status_updated(blocker, blocked, request):
         },
     )
 
+
+def send_email_verification(user):
+    verification_token = EmailVerificationToken.create_for_user(user)
+    verification_url = (
+        f"{settings.FRONTEND_URL}/verify-email?token={verification_token.token}"
+    )
+
+    send_mail(
+        subject="Verify your Messenger email",
+        message=(
+            "Welcome to Messenger!\n\n"
+            "Please verify your email address by opening this link:\n"
+            f"{verification_url}\n\n"
+            "If you did not create this account, you can ignore this email."
+        ),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
+
+    return verification_token
+
+
+def expire_unused_email_verification_tokens(user):
+    EmailVerificationToken.objects.filter(
+        user=user,
+        used_at__isnull=True,
+    ).update(used_at=timezone.now())
+
+
 class LoginView(TokenObtainPairView):
     permission_classes = []
     throttle_scope = "auth"
@@ -169,7 +203,7 @@ class CurrentUserView(APIView):
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_scope = "actions"
-    
+
     def patch(self, request):
         serializer = UserProfileSerializer(
             request.user,
@@ -392,7 +426,7 @@ class UserUnblockView(APIView):
 class UserRegistrationView(APIView):
     permission_classes = []
     throttle_scope = "auth"
-    
+
     def post(self, request):
         serializer = UserRegistrationSerializer(
             data=request.data,
@@ -401,6 +435,7 @@ class UserRegistrationView(APIView):
 
         if serializer.is_valid():
             user = serializer.save()
+            send_email_verification(user)
             refresh = RefreshToken.for_user(user)
 
             return Response(
@@ -416,6 +451,78 @@ class UserRegistrationView(APIView):
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EmailVerificationConfirmView(APIView):
+    permission_classes = []
+    throttle_scope = "auth"
+
+    def post(self, request):
+        serializer = EmailVerificationConfirmSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        verification_token = (
+            EmailVerificationToken.objects.select_related("user")
+            .filter(token=serializer.validated_data["token"])
+            .first()
+        )
+
+        if not verification_token:
+            return Response(
+                {"token": ["Invalid verification token."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if verification_token.is_used:
+            return Response(
+                {"token": ["Verification token has already been used."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if verification_token.is_expired:
+            return Response(
+                {"token": ["Verification token has expired."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user = verification_token.user
+        user.mark_email_verified()
+        verification_token.mark_used()
+
+        serializer = UserSerializer(
+            user,
+            context={"request": request},
+        )
+
+        return Response(
+            {
+                "detail": "Email verified successfully.",
+                "user": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class EmailVerificationResendView(APIView):
+    permission_classes = [IsAuthenticated]
+    throttle_scope = "auth"
+
+    def post(self, request):
+        if request.user.is_email_verified:
+            return Response(
+                {"detail": "Email is already verified."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        expire_unused_email_verification_tokens(request.user)
+        send_email_verification(request.user)
+
+        return Response(
+            {"detail": "Verification email sent."},
+            status=status.HTTP_200_OK,
+        )
 
 
 class LogoutView(APIView):

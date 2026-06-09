@@ -88,6 +88,8 @@ class UserSearchSerializer(UserRepresentationMixin, serializers.ModelSerializer)
             "email",
             "avatar_url",
             "last_seen_at",
+            "email_verified_at",
+            "is_email_verified",
             "is_blocked_by_me",
             "has_blocked_me",
         )
@@ -103,6 +105,8 @@ class UserSerializer(UserRepresentationMixin, serializers.ModelSerializer):
             "email",
             "avatar_url",
             "last_seen_at",
+            "email_verified_at",
+            "is_email_verified",
             "is_blocked_by_me",
             "has_blocked_me",
         )
@@ -118,6 +122,8 @@ class UserProfileSerializer(UserRepresentationMixin, serializers.ModelSerializer
             "email",
             "avatar_url",
             "last_seen_at",
+            "email_verified_at",
+            "is_email_verified",
             "is_blocked_by_me",
             "has_blocked_me",
         )
@@ -126,6 +132,8 @@ class UserProfileSerializer(UserRepresentationMixin, serializers.ModelSerializer
             "display_name",
             "avatar_url",
             "last_seen_at",
+            "email_verified_at",
+            "is_email_verified",
             "is_blocked_by_me",
             "has_blocked_me",
         )
@@ -164,6 +172,8 @@ class UserAvatarSerializer(UserRepresentationMixin, serializers.ModelSerializer)
             "avatar",
             "avatar_url",
             "last_seen_at",
+            "email_verified_at",
+            "is_email_verified",
             "is_blocked_by_me",
             "has_blocked_me",
         )
@@ -174,6 +184,8 @@ class UserAvatarSerializer(UserRepresentationMixin, serializers.ModelSerializer)
             "email",
             "avatar_url",
             "last_seen_at",
+            "email_verified_at",
+            "is_email_verified",
             "is_blocked_by_me",
             "has_blocked_me",
         )
@@ -238,6 +250,8 @@ class UserRegistrationSerializer(UserRepresentationMixin, serializers.ModelSeria
             "email",
             "avatar_url",
             "last_seen_at",
+            "email_verified_at",
+            "is_email_verified",
             "is_blocked_by_me",
             "has_blocked_me",
             "password",
@@ -248,6 +262,8 @@ class UserRegistrationSerializer(UserRepresentationMixin, serializers.ModelSeria
             "display_name",
             "avatar_url",
             "last_seen_at",
+            "email_verified_at",
+            "is_email_verified",
             "is_blocked_by_me",
             "has_blocked_me",
         )
@@ -286,3 +302,14 @@ class UserRegistrationSerializer(UserRepresentationMixin, serializers.ModelSeria
         )
 
         return user
+
+
+class EmailVerificationConfirmSerializer(serializers.Serializer):
+    token = serializers.CharField(
+        required=True,
+        error_messages={
+            "required": "Verification token is required.",
+            "blank": "Verification token is required.",
+        },
+    )
+
