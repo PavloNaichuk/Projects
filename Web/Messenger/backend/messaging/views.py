@@ -276,6 +276,13 @@ def get_visible_message_for_user(
     return queryset.first()
 
 
+def parse_optional_boolean(value, default):
+    if value is None:
+        return default
+
+    return value is True or str(value).lower() == "true"
+
+
 class ConversationListView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_scope = "actions"
@@ -439,16 +446,13 @@ class ConversationMuteView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        requested_is_muted = request.data.get("is_muted")
-
-        if requested_is_muted is None:
-            should_mute = not conversation.muted_for.filter(
-                id=request.user.id
-            ).exists()
-        else:
-            should_mute = requested_is_muted is True or str(
-                requested_is_muted
-            ).lower() == "true"
+        is_currently_muted = conversation.muted_for.filter(
+            id=request.user.id
+        ).exists()
+        should_mute = parse_optional_boolean(
+            request.data.get("is_muted"),
+            default=not is_currently_muted,
+        )
 
         if should_mute:
             conversation.muted_for.add(request.user)
@@ -487,16 +491,13 @@ class ConversationPinView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        requested_is_pinned = request.data.get("is_pinned")
-
-        if requested_is_pinned is None:
-            should_pin = not conversation.pinned_for.filter(
-                id=request.user.id
-            ).exists()
-        else:
-            should_pin = requested_is_pinned is True or str(
-                requested_is_pinned
-            ).lower() == "true"
+        is_currently_pinned = conversation.pinned_for.filter(
+            id=request.user.id
+        ).exists()
+        should_pin = parse_optional_boolean(
+            request.data.get("is_pinned"),
+            default=not is_currently_pinned,
+        )
 
         if should_pin:
             conversation.pinned_for.add(request.user)
