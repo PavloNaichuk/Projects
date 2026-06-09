@@ -11,6 +11,7 @@ import AuthPage from "./components/AuthPage";
 import ChatWindow from "./components/ChatWindow";
 import Sidebar from "./components/Sidebar";
 import ProfileSettingsModal from "./components/ProfileSettingsModal";
+import VerifyEmailPage from "./components/VerifyEmailPage";
 import ContactNicknameModal from "./components/ContactNicknameModal";
 import ForwardMessageModal from "./components/ForwardMessageModal";
 import { useAuthSession } from "./hooks/useAuthSession";
@@ -157,6 +158,17 @@ function App() {
     setHasMoreMessages,
     resetSessionState,
   });
+
+  const isEmailVerificationPage = window.location.pathname === "/verify-email";
+
+  const handleEmailVerified = useCallback(
+    (verifiedUser: User) => {
+      if (currentUser?.id === verifiedUser.id) {
+        setCurrentUser(verifiedUser);
+      }
+    },
+    [currentUser?.id, setCurrentUser]
+  );
 
   const currentUserId = currentUser?.id ?? null;
   const selectedConversationId = selectedConversation?.id ?? null;
@@ -475,6 +487,10 @@ function App() {
         </div>
       </div>
     );
+  }
+
+  if (isEmailVerificationPage) {
+    return <VerifyEmailPage handleVerified={handleEmailVerified} />;
   }
 
   if (!currentUser || !accessToken) {
