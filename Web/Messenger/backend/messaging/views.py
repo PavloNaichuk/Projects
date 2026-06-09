@@ -230,6 +230,27 @@ def serialize_message(message, request):
     return serializer.data
 
 
+def get_conversation_for_user(
+    conversation_id,
+    user,
+    *,
+    include_hidden=False,
+    prefetch_participants=False,
+):
+    queryset = Conversation.objects.filter(
+        id=conversation_id,
+        participants__user=user,
+    )
+
+    if not include_hidden:
+        queryset = queryset.exclude(hidden_for=user)
+
+    if prefetch_participants:
+        queryset = queryset.prefetch_related("participants__user")
+
+    return queryset.first()
+
+
 class ConversationListView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_scope = "actions"
@@ -305,15 +326,12 @@ class ConversationDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get_conversation(self, request, conversation_id, include_hidden=False):
-        queryset = Conversation.objects.filter(
-            id=conversation_id,
-            participants__user=request.user,
-        ).prefetch_related("participants__user")
-
-        if not include_hidden:
-            queryset = queryset.exclude(hidden_for=request.user)
-
-        return queryset.first()
+        return get_conversation_for_user(
+            conversation_id=conversation_id,
+            user=request.user,
+            include_hidden=include_hidden,
+            prefetch_participants=True,
+        )
 
     def get(self, request, conversation_id):
         conversation = self.get_conversation(request, conversation_id)
@@ -384,16 +402,10 @@ class ConversationMuteView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, conversation_id):
-        conversation = (
-            Conversation.objects.filter(
-                id=conversation_id,
-                participants__user=request.user,
-            )
-            .exclude(
-                hidden_for=request.user,
-            )
-            .prefetch_related("participants__user")
-            .first()
+        conversation = get_conversation_for_user(
+            conversation_id=conversation_id,
+            user=request.user,
+            prefetch_participants=True,
         )
 
         if not conversation:
@@ -438,16 +450,10 @@ class ConversationPinView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, conversation_id):
-        conversation = (
-            Conversation.objects.filter(
-                id=conversation_id,
-                participants__user=request.user,
-            )
-            .exclude(
-                hidden_for=request.user,
-            )
-            .prefetch_related("participants__user")
-            .first()
+        conversation = get_conversation_for_user(
+            conversation_id=conversation_id,
+            user=request.user,
+            prefetch_participants=True,
         )
 
         if not conversation:
@@ -491,7 +497,7 @@ class ConversationPinView(APIView):
 class ConversationMessagesView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_scope = "messages"
-    
+
     def get(self, request, conversation_id):
         base_messages = (
             Message.objects.filter(
@@ -661,15 +667,9 @@ class ConversationMarkReadView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, conversation_id):
-        conversation = (
-            Conversation.objects.filter(
-                id=conversation_id,
-                participants__user=request.user,
-            )
-            .exclude(
-                hidden_for=request.user,
-            )
-            .first()
+        conversation = get_conversation_for_user(
+            conversation_id=conversation_id,
+            user=request.user,
         )
 
         if not conversation:
@@ -715,16 +715,10 @@ class ConversationMarkUnreadView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, conversation_id):
-        conversation = (
-            Conversation.objects.filter(
-                id=conversation_id,
-                participants__user=request.user,
-            )
-            .exclude(
-                hidden_for=request.user,
-            )
-            .prefetch_related("participants__user")
-            .first()
+        conversation = get_conversation_for_user(
+            conversation_id=conversation_id,
+            user=request.user,
+            prefetch_participants=True,
         )
 
         if not conversation:
@@ -753,16 +747,10 @@ class ConversationClearHistoryView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, conversation_id):
-        conversation = (
-            Conversation.objects.filter(
-                id=conversation_id,
-                participants__user=request.user,
-            )
-            .exclude(
-                hidden_for=request.user,
-            )
-            .prefetch_related("participants__user")
-            .first()
+        conversation = get_conversation_for_user(
+            conversation_id=conversation_id,
+            user=request.user,
+            prefetch_participants=True,
         )
 
         if not conversation:
@@ -802,7 +790,7 @@ class ConversationClearHistoryView(APIView):
 class MessageDetailView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_scope = "messages"
-    
+
     def patch(self, request, message_id):
         message = (
             Message.objects.filter(
