@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import "./App.css";
-import { type User } from "./api/auth";
+import { resendEmailVerification, type User } from "./api/auth";
 import {
   getConversationMessagesPage,
   markConversationAsRead,
@@ -64,6 +64,10 @@ function App() {
   const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
   const [profileError, setProfileError] = useState("");
   const [isProfileUpdating, setIsProfileUpdating] = useState(false);
+  const [emailVerificationMessage, setEmailVerificationMessage] = useState("");
+  const [emailVerificationError, setEmailVerificationError] = useState("");
+  const [isResendingEmailVerification, setIsResendingEmailVerification] =
+    useState(false);
   const [blockedUsers, setBlockedUsers] = useState<User[]>([]);
   const [blockedUsersError, setBlockedUsersError] = useState("");
   const [isBlockedUsersLoading, setIsBlockedUsersLoading] = useState(false);
@@ -107,6 +111,9 @@ function App() {
     setIsProfileSettingsOpen(false);
     setProfileError("");
     setIsProfileUpdating(false);
+    setEmailVerificationMessage("");
+    setEmailVerificationError("");
+    setIsResendingEmailVerification(false);
     setBlockedUsers([]);
     setBlockedUsersError("");
     setIsBlockedUsersLoading(false);
@@ -166,9 +173,35 @@ function App() {
       if (currentUser?.id === verifiedUser.id) {
         setCurrentUser(verifiedUser);
       }
+
+      setEmailVerificationMessage("Email verified successfully.");
+      setEmailVerificationError("");
     },
     [currentUser?.id, setCurrentUser]
   );
+
+  const handleResendEmailVerification = useCallback(async () => {
+    if (!accessToken) {
+      return;
+    }
+
+    setIsResendingEmailVerification(true);
+    setEmailVerificationMessage("");
+    setEmailVerificationError("");
+
+    try {
+      const response = await resendEmailVerification(accessToken);
+      setEmailVerificationMessage(response.detail);
+    } catch (error) {
+      setEmailVerificationError(
+        error instanceof Error
+          ? error.message
+          : "Failed to resend verification email."
+      );
+    } finally {
+      setIsResendingEmailVerification(false);
+    }
+  }, [accessToken]);
 
   const currentUserId = currentUser?.id ?? null;
   const selectedConversationId = selectedConversation?.id ?? null;
@@ -548,59 +581,93 @@ function App() {
         handleUnblockUser={handleUnblockUser}
       />
 
-      <ChatWindow
-        currentUser={currentUser}
-        selectedConversation={selectedConversation}
-        selectedConversationName={selectedConversationName}
-        selectedConversationUser={selectedConversationUser}
-        selectedConversationUserIsOnline={selectedConversationUserIsOnline}
-        messages={messages}
-        isMessagesLoading={isMessagesLoading}
-        isOlderMessagesLoading={isOlderMessagesLoading}
-        hasMoreMessages={hasMoreMessages}
-        messageSearchQuery={messageSearchQuery}
-        setMessageSearchQuery={setMessageSearchQuery}
-        isMessageSearchActive={isMessageSearchActive}
-        isSearchingMessages={isSearchingMessages}
-        typingUser={typingUser}
-        messageError={messageError}
-        newMessage={newMessage}
-        selectedAttachment={selectedAttachment}
-        replyToMessage={replyToMessage}
-        isSending={isSending}
-        editingMessageId={editingMessageId}
-        editingMessageText={editingMessageText}
-        setEditingMessageText={setEditingMessageText}
-        isEditingMessage={isEditingMessage}
-        isDeletingMessageId={isDeletingMessageId}
-        isDeletingConversationId={isDeletingConversationId}
-        isBlockingUserId={isBlockingUserId}
-        messagesContainerRef={messagesContainerRef}
-        messagesEndRef={messagesEndRef}
-        handleMessagesScroll={handleMessagesScroll}
-        handleSearchMessages={handleSearchMessages}
-        handleClearMessageSearch={handleClearMessageSearch}
-        handleNewMessageChange={handleNewMessageChange}
-        handleAttachmentChange={handleAttachmentChange}
-        handleRemoveAttachment={handleRemoveAttachment}
-        handleStartReplyMessage={handleStartReplyMessage}
-        handleCancelReplyMessage={handleCancelReplyMessage}
-        handleStartForwardMessage={handleStartForwardMessage}
-        handleMessageKeyDown={handleMessageKeyDown}
-        handleSendMessage={handleSendMessage}
-        handleStartEditMessage={handleStartEditMessage}
-        handleCancelEditMessage={handleCancelEditMessage}
-        handleSaveEditedMessage={handleSaveEditedMessage}
-        handleDeleteMessage={handleDeleteMessage}
-        handleRemoveMessageAttachment={handleRemoveMessageAttachment}
-        handleToggleMessageReaction={handleToggleMessageReaction}
-        handleMuteConversation={handleMuteConversation}
-        handlePinConversation={handlePinConversation}
-        handleOpenContactNicknameModal={handleOpenContactNicknameModal}
-        handleDeleteConversation={handleDeleteConversation}
-        handleBlockUser={handleBlockUser}
-        handleUnblockUser={handleUnblockUser}
-      />
+      <div className="main-content">
+        {!currentUser.is_email_verified && (
+          <div className="email-verification-banner">
+            <div>
+              <strong>Your email is not verified.</strong>
+              <span>
+                {" "}
+                Check your inbox or resend the verification email.
+              </span>
+
+              {emailVerificationMessage && (
+                <p className="email-verification-success">
+                  {emailVerificationMessage}
+                </p>
+              )}
+
+              {emailVerificationError && (
+                <p className="email-verification-error">
+                  {emailVerificationError}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleResendEmailVerification}
+              disabled={isResendingEmailVerification}
+            >
+              {isResendingEmailVerification ? "Sending..." : "Resend email"}
+            </button>
+          </div>
+        )}
+
+        <ChatWindow
+          currentUser={currentUser}
+          selectedConversation={selectedConversation}
+          selectedConversationName={selectedConversationName}
+          selectedConversationUser={selectedConversationUser}
+          selectedConversationUserIsOnline={selectedConversationUserIsOnline}
+          messages={messages}
+          isMessagesLoading={isMessagesLoading}
+          isOlderMessagesLoading={isOlderMessagesLoading}
+          hasMoreMessages={hasMoreMessages}
+          messageSearchQuery={messageSearchQuery}
+          setMessageSearchQuery={setMessageSearchQuery}
+          isMessageSearchActive={isMessageSearchActive}
+          isSearchingMessages={isSearchingMessages}
+          typingUser={typingUser}
+          messageError={messageError}
+          newMessage={newMessage}
+          selectedAttachment={selectedAttachment}
+          replyToMessage={replyToMessage}
+          isSending={isSending}
+          editingMessageId={editingMessageId}
+          editingMessageText={editingMessageText}
+          setEditingMessageText={setEditingMessageText}
+          isEditingMessage={isEditingMessage}
+          isDeletingMessageId={isDeletingMessageId}
+          isDeletingConversationId={isDeletingConversationId}
+          isBlockingUserId={isBlockingUserId}
+          messagesContainerRef={messagesContainerRef}
+          messagesEndRef={messagesEndRef}
+          handleMessagesScroll={handleMessagesScroll}
+          handleSearchMessages={handleSearchMessages}
+          handleClearMessageSearch={handleClearMessageSearch}
+          handleNewMessageChange={handleNewMessageChange}
+          handleAttachmentChange={handleAttachmentChange}
+          handleRemoveAttachment={handleRemoveAttachment}
+          handleStartReplyMessage={handleStartReplyMessage}
+          handleCancelReplyMessage={handleCancelReplyMessage}
+          handleStartForwardMessage={handleStartForwardMessage}
+          handleMessageKeyDown={handleMessageKeyDown}
+          handleSendMessage={handleSendMessage}
+          handleStartEditMessage={handleStartEditMessage}
+          handleCancelEditMessage={handleCancelEditMessage}
+          handleSaveEditedMessage={handleSaveEditedMessage}
+          handleDeleteMessage={handleDeleteMessage}
+          handleRemoveMessageAttachment={handleRemoveMessageAttachment}
+          handleToggleMessageReaction={handleToggleMessageReaction}
+          handleMuteConversation={handleMuteConversation}
+          handlePinConversation={handlePinConversation}
+          handleOpenContactNicknameModal={handleOpenContactNicknameModal}
+          handleDeleteConversation={handleDeleteConversation}
+          handleBlockUser={handleBlockUser}
+          handleUnblockUser={handleUnblockUser}
+        />
+      </div>
 
       {isProfileSettingsOpen && (
         <ProfileSettingsModal
