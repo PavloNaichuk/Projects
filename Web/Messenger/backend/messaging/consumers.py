@@ -212,6 +212,9 @@ class JsonWebsocketConsumer(AsyncWebsocketConsumer):
     async def send_json_payload(self, payload):
         await self.send(text_data=json.dumps(payload))
 
+    async def send_group_event(self, group_name, payload):
+        await self.channel_layer.group_send(group_name, payload)
+
 
 class ChatConsumer(JsonWebsocketConsumer):
     async def connect(self):
@@ -260,7 +263,7 @@ class ChatConsumer(JsonWebsocketConsumer):
             if is_blocked:
                 return
 
-            await self.channel_layer.group_send(
+            await self.send_group_event(
                 self.room_group_name,
                 {
                     "type": "typing_event",
@@ -273,7 +276,7 @@ class ChatConsumer(JsonWebsocketConsumer):
         if data.get("type") == "read":
             updated_count = await self.mark_messages_as_read()
 
-            await self.channel_layer.group_send(
+            await self.send_group_event(
                 self.room_group_name,
                 {
                     "type": "read_event",
@@ -302,7 +305,7 @@ class ChatConsumer(JsonWebsocketConsumer):
             )
             return
 
-        await self.channel_layer.group_send(
+        await self.send_group_event(
             self.room_group_name,
             {
                 "type": "chat_message",
@@ -313,7 +316,7 @@ class ChatConsumer(JsonWebsocketConsumer):
         participant_ids = await self.get_conversation_participant_ids()
 
         for user_id in participant_ids:
-            await self.channel_layer.group_send(
+            await self.send_group_event(
                 f"user_{user_id}_notifications",
                 {
                     "type": "sidebar_message",
@@ -328,7 +331,7 @@ class ChatConsumer(JsonWebsocketConsumer):
                 )
 
                 if delivery_data:
-                    await self.channel_layer.group_send(
+                    await self.send_group_event(
                         f"conversation_{delivery_data['conversation_id']}",
                         {
                             "type": "delivery_event",
@@ -445,7 +448,7 @@ class NotificationConsumer(JsonWebsocketConsumer):
         )
 
         for delivery_event_data in delivery_events:
-            await self.channel_layer.group_send(
+            await self.send_group_event(
                 f"conversation_{delivery_event_data['conversation_id']}",
                 {
                     "type": "delivery_event",
@@ -513,7 +516,7 @@ class NotificationConsumer(JsonWebsocketConsumer):
             user_data = serialize_user_for_status(self.user)
 
         for partner_id in partner_ids:
-            await self.channel_layer.group_send(
+            await self.send_group_event(
                 f"user_{partner_id}_notifications",
                 {
                     "type": "online_status",
