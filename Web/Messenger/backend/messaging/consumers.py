@@ -208,7 +208,12 @@ def mark_undelivered_messages_as_delivered_for_user(user):
     ]
 
 
-class ChatConsumer(AsyncWebsocketConsumer):
+class JsonWebsocketConsumer(AsyncWebsocketConsumer):
+    async def send_json_payload(self, payload):
+        await self.send(text_data=json.dumps(payload))
+
+
+class ChatConsumer(JsonWebsocketConsumer):
     async def connect(self):
         self.user = self.scope["user"]
         self.conversation_id = self.scope["url_route"]["kwargs"]["conversation_id"]
@@ -241,13 +246,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         try:
             data = json.loads(text_data)
         except json.JSONDecodeError:
-            await self.send(
-                text_data=json.dumps(
-                    {
-                        "type": "error",
-                        "detail": "Invalid JSON.",
-                    }
-                )
+            await self.send_json_payload(
+                {
+                    "type": "error",
+                    "detail": "Invalid JSON.",
+                }
             )
             return
 
@@ -291,13 +294,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         if error:
-            await self.send(
-                text_data=json.dumps(
-                    {
-                        "type": "error",
-                        "detail": error,
-                    }
-                )
+            await self.send_json_payload(
+                {
+                    "type": "error",
+                    "detail": error,
+                }
             )
             return
 
@@ -337,56 +338,46 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     )
 
     async def chat_message(self, event):
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "message",
-                    "message": event["message"],
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "message",
+                "message": event["message"],
+            }
         )
 
     async def message_updated(self, event):
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "message_updated",
-                    "message": event["message"],
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "message_updated",
+                "message": event["message"],
+            }
         )
 
     async def delivery_event(self, event):
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "delivered",
-                    "message_ids": event["message_ids"],
-                    "user_id": event["user_id"],
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "delivered",
+                "message_ids": event["message_ids"],
+                "user_id": event["user_id"],
+            }
         )
 
     async def typing_event(self, event):
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "typing",
-                    "user": event["user"],
-                    "is_typing": event["is_typing"],
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "typing",
+                "user": event["user"],
+                "is_typing": event["is_typing"],
+            }
         )
 
     async def read_event(self, event):
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "read",
-                    "user": event["user"],
-                    "updated_count": event["updated_count"],
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "read",
+                "user": event["user"],
+                "updated_count": event["updated_count"],
+            }
         )
 
     @database_sync_to_async
@@ -432,7 +423,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
 
-class NotificationConsumer(AsyncWebsocketConsumer):
+class NotificationConsumer(JsonWebsocketConsumer):
     async def connect(self):
         self.user = self.scope["user"]
 
@@ -470,13 +461,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             if ACTIVE_USER_CONNECTIONS.get(partner_id, 0) > 0
         ]
 
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "online_users",
-                    "user_ids": online_partner_ids,
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "online_users",
+                "user_ids": online_partner_ids,
+            }
         )
 
         previous_connection_count = ACTIVE_USER_CONNECTIONS.get(self.user.id, 0)
@@ -534,42 +523,34 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             )
 
     async def sidebar_message(self, event):
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "sidebar_message",
-                    "message": event["message"],
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "sidebar_message",
+                "message": event["message"],
+            }
         )
 
     async def online_status(self, event):
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "online_status",
-                    "user": event["user"],
-                    "is_online": event["is_online"],
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "online_status",
+                "user": event["user"],
+                "is_online": event["is_online"],
+            }
         )
 
     async def conversation_deleted(self, event):
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "conversation_deleted",
-                    "conversation_id": event["conversation_id"],
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "conversation_deleted",
+                "conversation_id": event["conversation_id"],
+            }
         )
 
     async def user_profile_updated(self, event):
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "type": "user_profile_updated",
-                    "user": event["user"],
-                }
-            )
+        await self.send_json_payload(
+            {
+                "type": "user_profile_updated",
+                "user": event["user"],
+            }
         )
