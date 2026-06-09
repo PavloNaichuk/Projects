@@ -35,7 +35,7 @@ service-identity==26.1.0
 sqlparse==0.5.5
 tomli==2.4.1
 Twisted==26.4.0
-txaio==25.9.2
+txaio==25.12.2
 typing_extensions==4.15.0
 tzdata==2026.2
 urllib3==2.7.0
