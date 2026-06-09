@@ -10,7 +10,7 @@ channels_redis==4.3.0
 charset-normalizer==3.4.7
 constantly==23.10.4
 cryptography==48.0.0
-daphne==4.2.1
+daphne==4.2.2
 Django==5.2.15
 django-cors-headers==4.9.0
 djangorestframework==3.17.1
