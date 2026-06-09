@@ -33,6 +33,7 @@ Required values to change:
 SECRET_KEY=change-me-to-long-random-secret-key
 DEBUG=False
 ALLOWED_HOSTS=your-backend-domain.com
+CSRF_TRUSTED_ORIGINS=https://your-frontend-domain.com,https://your-backend-domain.com
 CORS_ALLOWED_ORIGINS=https://your-frontend-domain.com
 
 DB_PASSWORD=change-me-to-strong-production-password
@@ -45,6 +46,29 @@ Generate a strong Django secret key:
 ```bash
 python -c "import secrets; print(secrets.token_urlsafe(64))"
 ```
+
+## Logging configuration
+
+Production logging can be controlled through environment variables:
+
+```env
+LOG_LEVEL=INFO
+DJANGO_REQUEST_LOG_LEVEL=ERROR
+```
+
+Useful values:
+
+```text
+DEBUG
+INFO
+WARNING
+ERROR
+CRITICAL
+```
+
+For production, `INFO` or `WARNING` is usually enough for `LOG_LEVEL`.
+`DJANGO_REQUEST_LOG_LEVEL=ERROR` keeps expected `400`, `403`, and `404`
+responses from creating noisy logs.
 
 ## SMTP configuration
 
@@ -76,12 +100,14 @@ DEFAULT_FROM_EMAIL="Messenger <your-email@gmail.com>"
 
 The password must be an app password, not the normal Gmail account password.
 
-## HTTPS security settings
+## HTTPS and reverse proxy settings
 
 Production should use:
 
 ```env
 DEBUG=False
+USE_X_FORWARDED_HOST=True
+USE_SECURE_PROXY_SSL_HEADER=True
 SECURE_SSL_REDIRECT=True
 SESSION_COOKIE_SECURE=True
 CSRF_COOKIE_SECURE=True
@@ -90,17 +116,35 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS=True
 SECURE_HSTS_PRELOAD=True
 ```
 
+`USE_SECURE_PROXY_SSL_HEADER=True` is needed when Django runs behind nginx,
+Render, Railway, or another reverse proxy that terminates HTTPS and sends
+`X-Forwarded-Proto: https`.
+
 Before enabling HSTS in a real public deployment, make sure the site is fully
 served over HTTPS.
+
+## CORS and CSRF origins
+
+For a production frontend domain:
+
+```env
+CORS_ALLOWED_ORIGINS=https://your-frontend-domain.com
+CSRF_TRUSTED_ORIGINS=https://your-frontend-domain.com,https://your-backend-domain.com
+```
+
+`CORS_ALLOWED_ORIGINS` controls which frontend origins may call the API.
+
+`CSRF_TRUSTED_ORIGINS` tells Django which HTTPS origins are trusted for CSRF
+checks.
 
 ## Frontend API and WebSocket URLs
 
 The production nginx container proxies backend traffic:
 
 ```text
-/api/  -> backend:8000
-/ws/   -> backend:8000
-/media/ -> backend_media volume
+/api/    -> backend:8000
+/ws/     -> backend:8000
+/media/  -> backend_media volume
 ```
 
 For a single-domain Docker deployment, frontend build args can use relative URLs:
@@ -149,6 +193,9 @@ daphne -b 0.0.0.0 -p 8000 config.asgi:application
 ```
 
 The frontend runs with nginx on port `80`.
+
+The backend is available only inside the Docker network. Public traffic should go
+through the frontend nginx container.
 
 ## Check service status
 
