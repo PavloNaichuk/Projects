@@ -313,3 +313,56 @@ class EmailVerificationConfirmSerializer(serializers.Serializer):
         },
     )
 
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(
+        required=True,
+        error_messages={
+            "required": "Email is required.",
+            "blank": "Email is required.",
+            "invalid": "Enter a valid email address.",
+        },
+    )
+
+    def validate_email(self, value):
+        return value.lower().strip()
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    uid = serializers.CharField(
+        required=True,
+        error_messages={
+            "required": "Password reset user id is required.",
+            "blank": "Password reset user id is required.",
+        },
+    )
+    token = serializers.CharField(
+        required=True,
+        error_messages={
+            "required": "Password reset token is required.",
+            "blank": "Password reset token is required.",
+        },
+    )
+    password = serializers.CharField(
+        write_only=True,
+        min_length=8,
+        error_messages={
+            "required": "Password is required.",
+            "blank": "Password is required.",
+            "min_length": "Password must be at least 8 characters long.",
+        },
+    )
+    password_confirm = serializers.CharField(
+        write_only=True,
+        error_messages={
+            "required": "Password confirmation is required.",
+            "blank": "Password confirmation is required.",
+        },
+    )
+
+    def validate(self, attrs):
+        if attrs["password"] != attrs["password_confirm"]:
+            raise serializers.ValidationError(
+                {"password_confirm": "Passwords do not match."}  # nosec B105
+            )
+
+        return attrs

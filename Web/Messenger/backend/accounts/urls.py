@@ -6,6 +6,8 @@ from .views import (
     EmailVerificationConfirmView,
     EmailVerificationResendView,
     LogoutView,
+    PasswordResetConfirmView,
+    PasswordResetRequestView,
     UserAvatarView,
     UserBlockedListView,
     UserBlockView,
@@ -18,6 +20,16 @@ from .views import (
 urlpatterns = [
     path("auth/register/", UserRegistrationView.as_view(), name="user-register"),
     path("auth/logout/", LogoutView.as_view(), name="logout"),
+    path(
+        "auth/password-reset/request/",
+        PasswordResetRequestView.as_view(),
+        name="password-reset-request",
+    ),
+    path(
+        "auth/password-reset/confirm/",
+        PasswordResetConfirmView.as_view(),
+        name="password-reset-confirm",
+    ),
     path(
         "auth/email/verify/",
         EmailVerificationConfirmView.as_view(),
