@@ -211,3 +211,18 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+)
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    "Messenger <no-reply@messenger.local>",
+)
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+EMAIL_VERIFICATION_TOKEN_EXPIRES_HOURS = int(
+    os.getenv("EMAIL_VERIFICATION_TOKEN_EXPIRES_HOURS", "24")
+)
+
