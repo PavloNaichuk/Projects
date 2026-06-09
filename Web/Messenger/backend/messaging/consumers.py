@@ -12,6 +12,28 @@ from .serializers import MessageSerializer
 ACTIVE_USER_CONNECTIONS = {}
 
 
+def is_user_online(user_id):
+    return ACTIVE_USER_CONNECTIONS.get(user_id, 0) > 0
+
+
+def add_active_user_connection(user_id):
+    previous_connection_count = ACTIVE_USER_CONNECTIONS.get(user_id, 0)
+    ACTIVE_USER_CONNECTIONS[user_id] = previous_connection_count + 1
+
+    return previous_connection_count
+
+
+def remove_active_user_connection(user_id):
+    current_connection_count = ACTIVE_USER_CONNECTIONS.get(user_id, 0)
+
+    if current_connection_count <= 1:
+        ACTIVE_USER_CONNECTIONS.pop(user_id, None)
+        return 0
+
+    ACTIVE_USER_CONNECTIONS[user_id] = current_connection_count - 1
+    return ACTIVE_USER_CONNECTIONS[user_id]
+
+
 def serialize_user_for_status(user):
     avatar_url = None
 
@@ -324,7 +346,7 @@ class ChatConsumer(JsonWebsocketConsumer):
                 },
             )
 
-            if user_id != self.user.id and ACTIVE_USER_CONNECTIONS.get(user_id, 0) > 0:
+            if user_id != self.user.id and is_user_online(user_id):
                 delivery_data = await mark_message_as_delivered_for_user(
                     message_data["id"],
                     user_id,
@@ -461,7 +483,7 @@ class NotificationConsumer(JsonWebsocketConsumer):
         online_partner_ids = [
             partner_id
             for partner_id in partner_ids
-            if ACTIVE_USER_CONNECTIONS.get(partner_id, 0) > 0
+            if is_user_online(partner_id)
         ]
 
         await self.send_json_payload(
@@ -471,8 +493,7 @@ class NotificationConsumer(JsonWebsocketConsumer):
             }
         )
 
-        previous_connection_count = ACTIVE_USER_CONNECTIONS.get(self.user.id, 0)
-        ACTIVE_USER_CONNECTIONS[self.user.id] = previous_connection_count + 1
+        previous_connection_count = add_active_user_connection(self.user.id)
 
         if previous_connection_count == 0:
             await self.broadcast_online_status_to_partners(True)
@@ -485,14 +506,11 @@ class NotificationConsumer(JsonWebsocketConsumer):
             )
 
         if hasattr(self, "user") and self.user and not self.user.is_anonymous:
-            current_connection_count = ACTIVE_USER_CONNECTIONS.get(self.user.id, 0)
+            active_connection_count = remove_active_user_connection(self.user.id)
 
-            if current_connection_count <= 1:
-                ACTIVE_USER_CONNECTIONS.pop(self.user.id, None)
+            if active_connection_count == 0:
                 user_data = await update_user_last_seen(self.user)
                 await self.broadcast_online_status_to_partners(False, user_data)
-            else:
-                ACTIVE_USER_CONNECTIONS[self.user.id] = current_connection_count - 1
 
     @database_sync_to_async
     def get_conversation_partner_ids(self):
