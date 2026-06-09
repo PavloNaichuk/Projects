@@ -7,6 +7,8 @@ export type User = {
   email: string;
   avatar_url: string | null;
   last_seen_at: string | null;
+  email_verified_at: string | null;
+  is_email_verified: boolean;
   is_blocked_by_me: boolean;
   has_blocked_me: boolean;
 };
@@ -24,6 +26,15 @@ export type RegisterResponse = {
 
 export type RefreshTokenResponse = {
   access: string;
+};
+
+export type VerifyEmailResponse = {
+  detail: string;
+  user: User;
+};
+
+export type ResendEmailVerificationResponse = {
+  detail: string;
 };
 
 export type UpdateCurrentUserProfileData = {
@@ -47,6 +58,7 @@ function getApiErrorMessage(errorData: unknown) {
     nickname: "Nickname",
     password: "Password",
     password_confirm: "Confirm password",
+    token: "Token",
     non_field_errors: "Error",
     detail: "Error",
   };
@@ -101,6 +113,27 @@ export async function register(
     },
     errorMessage: "Failed to create account.",
     parseError: (response) => parseApiError(response, "Failed to create account."),
+  });
+}
+
+export async function verifyEmail(token: string): Promise<VerifyEmailResponse> {
+  return apiRequest<VerifyEmailResponse>("/auth/email/verify/", {
+    method: "POST",
+    json: { token },
+    errorMessage: "Failed to verify email.",
+    parseError: (response) => parseApiError(response, "Failed to verify email."),
+  });
+}
+
+export async function resendEmailVerification(
+  accessToken: string
+): Promise<ResendEmailVerificationResponse> {
+  return apiRequest<ResendEmailVerificationResponse>("/auth/email/resend/", {
+    accessToken,
+    method: "POST",
+    errorMessage: "Failed to resend verification email.",
+    parseError: (response) =>
+      parseApiError(response, "Failed to resend verification email."),
   });
 }
 

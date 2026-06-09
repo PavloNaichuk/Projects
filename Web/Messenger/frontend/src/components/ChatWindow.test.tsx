@@ -60,6 +60,8 @@ const currentUser = {
   avatar_url: null,
   is_online: true,
   last_seen_at: null,
+  email_verified_at: null,
+  is_email_verified: false,
   is_blocked_by_me: false,
   has_blocked_me: false,
 } as User;
@@ -72,6 +74,8 @@ const otherUser = {
   avatar_url: null,
   is_online: false,
   last_seen_at: "2026-06-05T10:00:00Z",
+  email_verified_at: null,
+  is_email_verified: false,
   is_blocked_by_me: false,
   has_blocked_me: false,
 } as User;

@@ -7,9 +7,11 @@ import {
   logout,
   refreshAccessToken,
   register,
+  resendEmailVerification,
   updateContactNickname,
   updateCurrentUserAvatar,
   updateCurrentUserProfile,
+  verifyEmail,
   type User,
 } from "./auth";
 import { API_BASE_URL } from "./config";
@@ -24,6 +26,8 @@ const user = {
   email: "pavlo@test.ua",
   avatar_url: null,
   last_seen_at: null,
+  email_verified_at: null,
+  is_email_verified: false,
   is_blocked_by_me: false,
   has_blocked_me: false,
 } as User;
@@ -119,7 +123,10 @@ describe("auth api", () => {
     await expect(
       register("pavlo", "pavlo@test.ua", "testpassword123", "wrong")
     ).rejects.toThrow(
-      "Username: User with this username already exists.\nConfirm password: Passwords do not match."
+      [
+        "Username: User with this username already exists.",
+        "Confirm password: Passwords do not match.",
+      ].join("\n")
     );
   });
 
@@ -132,6 +139,110 @@ describe("auth api", () => {
     await expect(
       register("pavlo", "pavlo@test.ua", "testpassword123", "testpassword123")
     ).rejects.toThrow("Failed to create account.");
+  });
+
+
+  it("verifies email", async () => {
+    const verifiedUser = {
+      ...user,
+      email_verified_at: "2026-06-09T10:00:00Z",
+      is_email_verified: true,
+    };
+    const responseData = {
+      detail: "Email verified successfully.",
+      user: verifiedUser,
+    };
+
+    fetchMock.mockResolvedValue(createJsonResponse(responseData));
+
+    const result = await verifyEmail("verification-token");
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `${API_BASE_URL}/auth/email/verify/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: "verification-token",
+        }),
+      }
+    );
+    expect(result).toEqual(responseData);
+  });
+
+  it("formats email verification validation errors", async () => {
+    fetchMock.mockResolvedValue(
+      createJsonResponse(
+        {
+          token: ["Verification token has expired."],
+        },
+        false
+      )
+    );
+
+    await expect(verifyEmail("expired-token")).rejects.toThrow(
+      "Token: Verification token has expired."
+    );
+  });
+
+  it("uses fallback email verification error for non-json response", async () => {
+    fetchMock.mockResolvedValue({
+      ok: false,
+      json: vi.fn().mockRejectedValue(new Error("Invalid JSON")),
+    } as unknown as Response);
+
+    await expect(verifyEmail("verification-token")).rejects.toThrow(
+      "Failed to verify email."
+    );
+  });
+
+  it("resends email verification", async () => {
+    const responseData = {
+      detail: "Verification email sent.",
+    };
+
+    fetchMock.mockResolvedValue(createJsonResponse(responseData));
+
+    const result = await resendEmailVerification(accessToken);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `${API_BASE_URL}/auth/email/resend/`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    expect(result).toEqual(responseData);
+  });
+
+  it("formats resend email verification errors", async () => {
+    fetchMock.mockResolvedValue(
+      createJsonResponse(
+        {
+          detail: "Email is already verified.",
+        },
+        false
+      )
+    );
+
+    await expect(resendEmailVerification(accessToken)).rejects.toThrow(
+      "Error: Email is already verified."
+    );
+  });
+
+  it("uses fallback resend verification error for non-json response", async () => {
+    fetchMock.mockResolvedValue({
+      ok: false,
+      json: vi.fn().mockRejectedValue(new Error("Invalid JSON")),
+    } as unknown as Response);
+
+    await expect(resendEmailVerification(accessToken)).rejects.toThrow(
+      "Failed to resend verification email."
+    );
   });
 
   it("refreshes access token", async () => {
@@ -291,7 +402,7 @@ describe("auth api", () => {
     ).rejects.toThrow("Nickname: Nickname must be 50 characters or less.");
   });
 
-  it("uses fallback nickname update error when error response is not json", async () => {
+  it("uses fallback nickname update error for non-json response", async () => {
     fetchMock.mockResolvedValue({
       ok: false,
       json: vi.fn().mockRejectedValue(new Error("Invalid JSON")),
@@ -368,7 +479,9 @@ describe("auth api", () => {
   });
 
   it("logs user out", async () => {
-    fetchMock.mockResolvedValue(createJsonResponse({ detail: "Successfully logged out." }));
+    fetchMock.mockResolvedValue(
+      createJsonResponse({ detail: "Successfully logged out." })
+    );
 
     const result = await logout(accessToken, refreshToken);
 
