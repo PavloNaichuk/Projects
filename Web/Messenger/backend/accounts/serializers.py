@@ -48,24 +48,11 @@ def get_has_blocked_me(user, request):
     ).exists()
 
 
-class UserSearchSerializer(serializers.ModelSerializer):
+class UserRepresentationMixin(serializers.Serializer):
     avatar_url = serializers.SerializerMethodField()
     display_name = serializers.SerializerMethodField()
     is_blocked_by_me = serializers.SerializerMethodField()
     has_blocked_me = serializers.SerializerMethodField()
-
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "username",
-            "display_name",
-            "email",
-            "avatar_url",
-            "last_seen_at",
-            "is_blocked_by_me",
-            "has_blocked_me",
-        )
 
     def get_display_name(self, obj):
         request = self.context.get("request")
@@ -91,12 +78,7 @@ class UserSearchSerializer(serializers.ModelSerializer):
         return get_has_blocked_me(obj, request)
 
 
-class UserSerializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
-    display_name = serializers.SerializerMethodField()
-    is_blocked_by_me = serializers.SerializerMethodField()
-    has_blocked_me = serializers.SerializerMethodField()
-
+class UserSearchSerializer(UserRepresentationMixin, serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -110,36 +92,23 @@ class UserSerializer(serializers.ModelSerializer):
             "has_blocked_me",
         )
 
-    def get_display_name(self, obj):
-        request = self.context.get("request")
-        return get_user_display_name(obj, request)
 
-    def get_avatar_url(self, obj):
-        if not obj.avatar:
-            return None
-
-        request = self.context.get("request")
-
-        if request:
-            return request.build_absolute_uri(obj.avatar.url)
-
-        return obj.avatar.url
-
-    def get_is_blocked_by_me(self, obj):
-        request = self.context.get("request")
-        return get_is_blocked_by_me(obj, request)
-
-    def get_has_blocked_me(self, obj):
-        request = self.context.get("request")
-        return get_has_blocked_me(obj, request)
+class UserSerializer(UserRepresentationMixin, serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "display_name",
+            "email",
+            "avatar_url",
+            "last_seen_at",
+            "is_blocked_by_me",
+            "has_blocked_me",
+        )
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
-    display_name = serializers.SerializerMethodField()
-    is_blocked_by_me = serializers.SerializerMethodField()
-    has_blocked_me = serializers.SerializerMethodField()
-
+class UserProfileSerializer(UserRepresentationMixin, serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -160,29 +129,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "is_blocked_by_me",
             "has_blocked_me",
         )
-
-    def get_display_name(self, obj):
-        request = self.context.get("request")
-        return get_user_display_name(obj, request)
-
-    def get_avatar_url(self, obj):
-        if not obj.avatar:
-            return None
-
-        request = self.context.get("request")
-
-        if request:
-            return request.build_absolute_uri(obj.avatar.url)
-
-        return obj.avatar.url
-
-    def get_is_blocked_by_me(self, obj):
-        request = self.context.get("request")
-        return get_is_blocked_by_me(obj, request)
-
-    def get_has_blocked_me(self, obj):
-        request = self.context.get("request")
-        return get_has_blocked_me(obj, request)
 
     def validate_username(self, value):
         value = value.strip()
@@ -207,12 +153,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return value
 
 
-class UserAvatarSerializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
-    display_name = serializers.SerializerMethodField()
-    is_blocked_by_me = serializers.SerializerMethodField()
-    has_blocked_me = serializers.SerializerMethodField()
-
+class UserAvatarSerializer(UserRepresentationMixin, serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -237,29 +178,6 @@ class UserAvatarSerializer(serializers.ModelSerializer):
             "has_blocked_me",
         )
 
-    def get_display_name(self, obj):
-        request = self.context.get("request")
-        return get_user_display_name(obj, request)
-
-    def get_avatar_url(self, obj):
-        if not obj.avatar:
-            return None
-
-        request = self.context.get("request")
-
-        if request:
-            return request.build_absolute_uri(obj.avatar.url)
-
-        return obj.avatar.url
-
-    def get_is_blocked_by_me(self, obj):
-        request = self.context.get("request")
-        return get_is_blocked_by_me(obj, request)
-
-    def get_has_blocked_me(self, obj):
-        request = self.context.get("request")
-        return get_has_blocked_me(obj, request)
-
     def validate_avatar(self, value):
         allowed_content_types = ("image/jpeg", "image/png", "image/webp")
 
@@ -278,12 +196,7 @@ class UserAvatarSerializer(serializers.ModelSerializer):
         return value
 
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
-    display_name = serializers.SerializerMethodField()
-    is_blocked_by_me = serializers.SerializerMethodField()
-    has_blocked_me = serializers.SerializerMethodField()
-
+class UserRegistrationSerializer(UserRepresentationMixin, serializers.ModelSerializer):
     username = serializers.CharField(
         required=True,
         error_messages={
@@ -338,29 +251,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "is_blocked_by_me",
             "has_blocked_me",
         )
-
-    def get_display_name(self, obj):
-        request = self.context.get("request")
-        return get_user_display_name(obj, request)
-
-    def get_avatar_url(self, obj):
-        if not obj.avatar:
-            return None
-
-        request = self.context.get("request")
-
-        if request:
-            return request.build_absolute_uri(obj.avatar.url)
-
-        return obj.avatar.url
-
-    def get_is_blocked_by_me(self, obj):
-        request = self.context.get("request")
-        return get_is_blocked_by_me(obj, request)
-
-    def get_has_blocked_me(self, obj):
-        request = self.context.get("request")
-        return get_has_blocked_me(obj, request)
 
     def validate_username(self, value):
         value = value.strip()
