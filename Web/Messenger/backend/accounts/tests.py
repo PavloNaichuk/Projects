@@ -1,14 +1,16 @@
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import serializers, status
 from rest_framework.test import APIClient, APIRequestFactory
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from messaging.models import Conversation
 
-from .models import BlockedUser, ContactNickname
+from .models import BlockedUser, ContactNickname, EmailVerificationToken
 from .serializers import (
     UserAvatarSerializer,
     UserProfileSerializer,
@@ -884,3 +886,162 @@ class AccountsAPITests(TestCase):
         self.assertIn(first_user.id, user_ids)
         self.assertIn(second_user.id, user_ids)
         self.assertNotIn(self.user.id, user_ids)
+
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        FRONTEND_URL="http://frontend.test",
+    )
+    def test_register_creates_email_verification_token_and_sends_email(self):
+        url = reverse("user-register")
+
+        response = self.client.post(
+            url,
+            {
+                "username": "emailuser",
+                "email": "emailuser@test.ua",
+                "password": "testpassword123",
+                "password_confirm": "testpassword123",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        User = get_user_model()
+        user = User.objects.get(username="emailuser")
+        verification_token = EmailVerificationToken.objects.get(user=user)
+
+        self.assertFalse(user.is_email_verified)
+        self.assertIsNone(user.email_verified_at)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["emailuser@test.ua"])
+        self.assertIn(verification_token.token, mail.outbox[0].body)
+        self.assertIn("http://frontend.test/verify-email", mail.outbox[0].body)
+
+    def test_email_verify_accepts_valid_token(self):
+        verification_token = EmailVerificationToken.create_for_user(self.user)
+
+        url = reverse("email-verify")
+        response = self.client.post(
+            url,
+            {"token": verification_token.token},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["detail"], "Email verified successfully.")
+        self.assertTrue(response.data["user"]["is_email_verified"])
+
+        self.user.refresh_from_db()
+        verification_token.refresh_from_db()
+
+        self.assertTrue(self.user.is_email_verified)
+        self.assertIsNotNone(self.user.email_verified_at)
+        self.assertTrue(verification_token.is_used)
+
+    def test_email_verify_rejects_invalid_token(self):
+        url = reverse("email-verify")
+        response = self.client.post(
+            url,
+            {"token": "invalid-token"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data["token"][0],
+            "Invalid verification token.",
+        )
+
+    def test_email_verify_rejects_missing_token(self):
+        url = reverse("email-verify")
+        response = self.client.post(url, {}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data["token"][0],
+            "Verification token is required.",
+        )
+
+    def test_email_verify_rejects_expired_token(self):
+        verification_token = EmailVerificationToken.create_for_user(self.user)
+        verification_token.expires_at = timezone.now() - timezone.timedelta(hours=1)
+        verification_token.save(update_fields=["expires_at"])
+
+        url = reverse("email-verify")
+        response = self.client.post(
+            url,
+            {"token": verification_token.token},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data["token"][0],
+            "Verification token has expired.",
+        )
+
+        self.user.refresh_from_db()
+
+        self.assertFalse(self.user.is_email_verified)
+
+    def test_email_verify_rejects_used_token(self):
+        verification_token = EmailVerificationToken.create_for_user(self.user)
+        verification_token.mark_used()
+
+        url = reverse("email-verify")
+        response = self.client.post(
+            url,
+            {"token": verification_token.token},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data["token"][0],
+            "Verification token has already been used.",
+        )
+
+        self.user.refresh_from_db()
+
+        self.assertFalse(self.user.is_email_verified)
+
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        FRONTEND_URL="http://frontend.test",
+    )
+    def test_authenticated_user_can_resend_verification_email(self):
+        old_token = EmailVerificationToken.create_for_user(self.user)
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("email-resend")
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["detail"], "Verification email sent.")
+
+        old_token.refresh_from_db()
+        new_token = (
+            EmailVerificationToken.objects.filter(user=self.user)
+            .exclude(id=old_token.id)
+            .latest("created_at")
+        )
+
+        self.assertTrue(old_token.is_used)
+        self.assertFalse(new_token.is_used)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [self.user.email])
+        self.assertIn(new_token.token, mail.outbox[0].body)
+
+    def test_resend_verification_rejects_already_verified_user(self):
+        self.user.mark_email_verified()
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("email-resend")
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["detail"], "Email is already verified.")
+
