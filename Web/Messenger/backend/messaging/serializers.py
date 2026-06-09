@@ -1,62 +1,27 @@
 from django.conf import settings
 from rest_framework import serializers
 
-from accounts.models import BlockedUser, ContactNickname, User
+from accounts.models import User
+from accounts.serializers import UserRepresentationMixin
 
 from .models import Conversation, ConversationParticipant, Message, MessageReaction
 
 
-def get_user_display_name(user, request):
-    if not request or not request.user or not request.user.is_authenticated:
-        return user.username
-
-    if request.user.id == user.id:
-        return user.username
-
-    nickname = (
-        ContactNickname.objects.filter(
-            owner=request.user,
-            target_user=user,
-        )
-        .values_list("nickname", flat=True)
-        .first()
-    )
-
-    return nickname or user.username
+def is_image_content_type(content_type):
+    return bool(content_type and content_type.startswith("image/"))
 
 
-def get_is_blocked_by_me(user, request):
-    if not request or not request.user or not request.user.is_authenticated:
-        return False
+def get_file_url(file_field, request):
+    if not file_field:
+        return None
 
-    if request.user.id == user.id:
-        return False
+    if request:
+        return request.build_absolute_uri(file_field.url)
 
-    return BlockedUser.objects.filter(
-        blocker=request.user,
-        blocked=user,
-    ).exists()
+    return file_field.url
 
 
-def get_has_blocked_me(user, request):
-    if not request or not request.user or not request.user.is_authenticated:
-        return False
-
-    if request.user.id == user.id:
-        return False
-
-    return BlockedUser.objects.filter(
-        blocker=user,
-        blocked=request.user,
-    ).exists()
-
-
-class UserShortSerializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
-    display_name = serializers.SerializerMethodField()
-    is_blocked_by_me = serializers.SerializerMethodField()
-    has_blocked_me = serializers.SerializerMethodField()
-
+class UserShortSerializer(UserRepresentationMixin, serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -69,29 +34,6 @@ class UserShortSerializer(serializers.ModelSerializer):
             "is_blocked_by_me",
             "has_blocked_me",
         )
-
-    def get_display_name(self, obj):
-        request = self.context.get("request")
-        return get_user_display_name(obj, request)
-
-    def get_avatar_url(self, obj):
-        if not obj.avatar:
-            return None
-
-        request = self.context.get("request")
-
-        if request:
-            return request.build_absolute_uri(obj.avatar.url)
-
-        return obj.avatar.url
-
-    def get_is_blocked_by_me(self, obj):
-        request = self.context.get("request")
-        return get_is_blocked_by_me(obj, request)
-
-    def get_has_blocked_me(self, obj):
-        request = self.context.get("request")
-        return get_has_blocked_me(obj, request)
 
 
 class MessageReactionSerializer(serializers.ModelSerializer):
@@ -125,10 +67,7 @@ class MessageReplySerializer(serializers.ModelSerializer):
         )
 
     def get_attachment_is_image(self, obj):
-        if not obj.attachment_content_type:
-            return False
-
-        return obj.attachment_content_type.startswith("image/")
+        return is_image_content_type(obj.attachment_content_type)
 
 
 class MessageForwardedSerializer(serializers.ModelSerializer):
@@ -228,21 +167,11 @@ class MessageSerializer(serializers.ModelSerializer):
         )
 
     def get_attachment_url(self, obj):
-        if not obj.attachment:
-            return None
-
         request = self.context.get("request")
-
-        if request:
-            return request.build_absolute_uri(obj.attachment.url)
-
-        return obj.attachment.url
+        return get_file_url(obj.attachment, request)
 
     def get_attachment_is_image(self, obj):
-        if not obj.attachment_content_type:
-            return False
-
-        return obj.attachment_content_type.startswith("image/")
+        return is_image_content_type(obj.attachment_content_type)
 
     def get_reactions(self, obj):
         request = self.context.get("request")
@@ -289,7 +218,7 @@ class MessageSerializer(serializers.ModelSerializer):
             )
 
         return value
-    
+
     def validate(self, attrs):
         text = attrs.get("text", "")
         attachment = attrs.get("attachment")
