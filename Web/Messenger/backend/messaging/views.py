@@ -251,6 +251,31 @@ def get_conversation_for_user(
     return queryset.first()
 
 
+def get_visible_message_for_user(
+    message_id,
+    user,
+    *,
+    sender_only=False,
+    select_related_fields=None,
+):
+    queryset = (
+        Message.objects.filter(
+            id=message_id,
+            conversation__participants__user=user,
+        )
+        .exclude(conversation__hidden_for=user)
+        .exclude(hidden_for=user)
+    )
+
+    if sender_only:
+        queryset = queryset.filter(sender=user)
+
+    if select_related_fields:
+        queryset = queryset.select_related(*select_related_fields)
+
+    return queryset.first()
+
+
 class ConversationListView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_scope = "actions"
@@ -792,20 +817,11 @@ class MessageDetailView(APIView):
     throttle_scope = "messages"
 
     def patch(self, request, message_id):
-        message = (
-            Message.objects.filter(
-                id=message_id,
-                sender=request.user,
-                conversation__participants__user=request.user,
-            )
-            .exclude(
-                conversation__hidden_for=request.user,
-            )
-            .exclude(
-                hidden_for=request.user,
-            )
-            .select_related("sender")
-            .first()
+        message = get_visible_message_for_user(
+            message_id=message_id,
+            user=request.user,
+            sender_only=True,
+            select_related_fields=("sender",),
         )
 
         if not message:
@@ -891,19 +907,10 @@ class MessageDetailView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        message = (
-            Message.objects.filter(
-                id=message_id,
-                conversation__participants__user=request.user,
-            )
-            .exclude(
-                conversation__hidden_for=request.user,
-            )
-            .exclude(
-                hidden_for=request.user,
-            )
-            .select_related("conversation", "sender")
-            .first()
+        message = get_visible_message_for_user(
+            message_id=message_id,
+            user=request.user,
+            select_related_fields=("conversation", "sender"),
         )
 
         if not message:
@@ -982,19 +989,10 @@ class MessageReactionToggleView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        message = (
-            Message.objects.filter(
-                id=message_id,
-                conversation__participants__user=request.user,
-            )
-            .exclude(
-                conversation__hidden_for=request.user,
-            )
-            .exclude(
-                hidden_for=request.user,
-            )
-            .select_related("conversation")
-            .first()
+        message = get_visible_message_for_user(
+            message_id=message_id,
+            user=request.user,
+            select_related_fields=("conversation",),
         )
 
         if not message:
@@ -1055,19 +1053,10 @@ class MessageForwardView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        source_message = (
-            Message.objects.filter(
-                id=message_id,
-                conversation__participants__user=request.user,
-            )
-            .exclude(
-                conversation__hidden_for=request.user,
-            )
-            .exclude(
-                hidden_for=request.user,
-            )
-            .select_related("sender")
-            .first()
+        source_message = get_visible_message_for_user(
+            message_id=message_id,
+            user=request.user,
+            select_related_fields=("sender",),
         )
 
         if not source_message:
