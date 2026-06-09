@@ -27,6 +27,8 @@ if not SECRET_KEY:
     raise RuntimeError("SECRET_KEY environment variable is required.")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+DJANGO_REQUEST_LOG_LEVEL = os.getenv("DJANGO_REQUEST_LOG_LEVEL", "ERROR")
 
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
@@ -233,4 +235,46 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 EMAIL_VERIFICATION_TOKEN_EXPIRES_HOURS = int(
     os.getenv("EMAIL_VERIFICATION_TOKEN_EXPIRES_HOURS", "24")
 )
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {
+            "format": "%(levelname)s %(asctime)s %(name)s %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "standard",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": LOG_LEVEL,
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": DJANGO_REQUEST_LOG_LEVEL,
+            "propagate": False,
+        },
+        "accounts": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        "messaging": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+    },
+}
 
