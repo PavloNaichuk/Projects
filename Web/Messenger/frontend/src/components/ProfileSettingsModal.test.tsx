@@ -68,8 +68,28 @@ describe("ProfileSettingsModal", () => {
 
     expect(screen.getByText("Profile settings")).toBeTruthy();
     expect(screen.getByLabelText("Username")).toHaveProperty("value", "pavlo");
-    expect(screen.getByLabelText("Email")).toHaveProperty("value", "pavlo@test.ua");
+    expect(screen.getByLabelText("Email")).toHaveProperty(
+      "value",
+      "pavlo@test.ua"
+    );
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Email status: Not verified ⚠️"
+    );
     expect(screen.getByText("Show blocked users")).toBeTruthy();
+  });
+
+  it("shows verified email status", () => {
+    renderProfileSettingsModal({
+      currentUser: {
+        ...currentUser,
+        email_verified_at: "2026-06-10T10:00:00Z",
+        is_email_verified: true,
+      },
+    });
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Email status: Verified ✅"
+    );
   });
 
   it("submits updated username and email", async () => {

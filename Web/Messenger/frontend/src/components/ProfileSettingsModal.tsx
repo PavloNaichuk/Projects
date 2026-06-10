@@ -130,6 +130,16 @@ function ProfileSettingsModal({
             />
           </label>
 
+          <div
+            className={`profile-email-status ${
+              currentUser.is_email_verified ? "verified" : "unverified"
+            }`}
+            role="status"
+          >
+            Email status:{" "}
+            {currentUser.is_email_verified ? "Verified ✅" : "Not verified ⚠️"}
+          </div>
+
           {profileError && (
             <div className="profile-modal-error">{profileError}</div>
           )}

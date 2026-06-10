@@ -2382,3 +2382,24 @@
 .auth-card .auth-primary-link:hover {
   background: #1d4ed8;
 }
+
+.profile-email-status {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.profile-email-status.verified {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.profile-email-status.unverified {
+  background: #fef3c7;
+  color: #92400e;
+}
