@@ -34,6 +34,20 @@ A full-stack real-time messaging application built with Django, Django REST Fram
 * **Email:** SMTP-based email verification and password reset
 * **API:** REST API + WebSocket communication
 
+## Project Diagrams
+
+#### UML Class Diagram
+
+The UML class diagram shows the main backend domain models and their relationships, including users, conversations, messages, reactions, blocking, contact nicknames, and email verification tokens.
+
+![Messenger UML Class Diagram](docs/diagrams/UMLDiagram.png)
+
+#### Database Schema
+
+The database schema diagram shows the main PostgreSQL tables, foreign keys, unique constraints, and Django many-to-many join tables used by the Messenger application.
+
+![Messenger Database Schema](docs/diagrams/DatabaseSchema.png)
+
 ## Quality and Security
 
 The project includes automated quality and security checks to keep the codebase stable, maintainable, and safer to develop:
