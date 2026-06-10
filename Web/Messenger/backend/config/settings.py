@@ -214,12 +214,29 @@ SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", "False") == "True"
 
 REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")
 REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+REDIS_DB = int(os.getenv("REDIS_DB", "0"))
+REDIS_SOCKET_CONNECT_TIMEOUT = int(
+    os.getenv("REDIS_SOCKET_CONNECT_TIMEOUT", "5")
+)
+REDIS_SOCKET_TIMEOUT = int(os.getenv("REDIS_SOCKET_TIMEOUT", "15"))
+REDIS_HEALTH_CHECK_INTERVAL = int(
+    os.getenv("REDIS_HEALTH_CHECK_INTERVAL", "30")
+)
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(REDIS_HOST, REDIS_PORT)],
+            "hosts": [
+                {
+                    "address": (
+                        f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
+                    ),
+                    "socket_connect_timeout": REDIS_SOCKET_CONNECT_TIMEOUT,
+                    "socket_timeout": REDIS_SOCKET_TIMEOUT,
+                    "health_check_interval": REDIS_HEALTH_CHECK_INTERVAL,
+                },
+            ],
         },
     },
 }
