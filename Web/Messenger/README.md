@@ -5,6 +5,12 @@ A full-stack real-time messaging application built with Django, Django REST Fram
 
 * JWT authentication and user authorization
 * User registration, login, logout, and profile management
+* Email verification with resend support
+* Email re-verification after profile email change
+* Password reset via email
+* SMTP email configuration for verification and password reset flows
+* Profile email verification status in the UI
+* Automatic frontend sync for email verification state
 * Avatar upload, update, and deletion
 * Private conversations between users
 * Real-time messaging using WebSockets
@@ -25,11 +31,14 @@ A full-stack real-time messaging application built with Django, Django REST Fram
 * **Database:** PostgreSQL via Docker Compose
 * **Containerization:** Docker + Docker Compose
 * **Authentication:** JWT-based authentication
+* **Email:** SMTP-based email verification and password reset
 * **API:** REST API + WebSocket communication
 
 ## Quality and Security
 
 The project includes automated quality and security checks to keep the codebase stable, maintainable, and safer to develop:
+
+### Quality checks
 
 * GitHub Actions CI for backend and frontend
 * Backend linting with Ruff
@@ -37,22 +46,30 @@ The project includes automated quality and security checks to keep the codebase 
 * Backend tests with Django test framework
 * Frontend tests with Vitest
 * Backend test coverage reporting with Coverage.py
+* Docker Compose configuration validation
+* Docker image build checks
+
+### Security checks
+
 * Python dependency security audit with pip-audit
 * Frontend dependency security audit with npm audit
 * Python code security scanning with Bandit
 * CodeQL security scanning
 * Dependabot configuration for dependency updates
-* Docker Compose configuration validation and image build checks
 * Django deployment security checks
 
-Security-related improvements:
+### Security-related improvements
 
-* Environment-based configuration using `.env` and `.env.example`
-* Secret key, debug mode, allowed hosts, CORS origins, database and Redis settings loaded from environment variables
+* Environment-based configuration using `.env`, `.env.example`, and `.env.production.example`
+* Secret key, debug mode, allowed hosts, CORS origins, CSRF trusted origins, database, Redis, SMTP, and security settings loaded from environment variables
+* Unique email protection at the database and API validation levels
+* Email verification is reset when a user changes their email address
 * Message attachment validation by file type and file size
-* API rate limiting for authentication, search, messages, uploads, and user actions
+* API rate limiting for authentication, token refresh, search, messages, uploads, and user actions
 * Production security settings configurable through environment variables
+* Proxy SSL settings configurable for reverse proxy deployments
 * WebSocket test credentials loaded from environment variables instead of being hardcoded
+* Redis health checks and channel layer timeout settings for more stable WebSocket behavior
 
 ## CI/CD
 
@@ -108,6 +125,47 @@ DB_PORT=5432
 REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
 ```
+### Email configuration
+
+For local development without sending real emails, use the console email backend:
+
+```env
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+```
+
+With this backend, emails are printed in backend logs.
+
+For real SMTP email delivery, use SMTP settings, for example Gmail SMTP over SSL:
+
+```env
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=465
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-gmail-app-password
+EMAIL_USE_TLS=False
+EMAIL_USE_SSL=True
+EMAIL_TIMEOUT=20
+DEFAULT_FROM_EMAIL="Messenger <your-email@gmail.com>"
+FRONTEND_URL=http://localhost:5173
+```
+
+For Gmail, `EMAIL_HOST_PASSWORD` must be a Gmail App Password, not the normal Gmail account password.
+
+`FRONTEND_URL` is used to build email verification and password reset links.
+
+For local development:
+
+```env
+FRONTEND_URL=http://localhost:5173
+```
+
+For production:
+
+```env
+FRONTEND_URL=https://your-frontend-domain.com
+```
+
 ## Docker Compose
 Run the project:
 ```bash
@@ -135,6 +193,18 @@ Backend:
 ```bash
 http://localhost:8000/
 ```
+Backend health endpoint:
+
+```bash
+http://localhost:8000/api/health/
+```
+
+Expected response:
+
+```json
+{"status": "ok"}
+```
+
 ## Local Backend and Frontend with Docker Services
 
 You can also run backend and frontend locally outside Docker. In this case, PostgreSQL and Redis can still be started with Docker Compose.
@@ -208,4 +278,49 @@ npm audit --omit=dev --audit-level=high
 npm run lint
 npm run test:run
 npm run build
+```
+## Production Deployment
+
+Production-style Docker Compose files are included:
+
+```bash
+docker-compose.prod.example.yml
+.env.production.example
+frontend/Dockerfile.prod
+frontend/nginx.conf
+DEPLOYMENT.md
+```
+
+For production deployment instructions, see:
+
+```bash
+DEPLOYMENT.md
+```
+The production setup includes:
+
+* Daphne ASGI backend
+* nginx frontend container
+* reverse proxy for `/api/`, `/ws/`, and `/media/`
+* PostgreSQL volume
+* Redis service for Django Channels
+* media volume
+* production security settings through environment variables
+* deployment config validation
+
+## Files That Must Not Be Committed
+
+Never commit real environment files:
+
+```text
+.env
+.env.production
+.env.local
+.env.development
+```
+
+Only commit example files:
+
+```text
+.env.example
+.env.production.example
 ```
