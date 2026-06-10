@@ -38,9 +38,15 @@ A full-stack real-time messaging application built with Django, Django REST Fram
 
 #### UML Class Diagram
 
-The UML class diagram shows the main backend domain models and their relationships, including users, conversations, messages, reactions, blocking, contact nicknames, and email verification tokens.
+The UML class diagrams show the main Django backend models and their high-level relationships. The database schema diagram below shows the real PostgreSQL tables, foreign keys, unique constraints, and Django many-to-many join tables.
 
-![Messenger UML Class Diagram](docs/diagrams/UMLDiagram.png)
+##### Accounts and Authentication Models
+
+![Accounts UML Class Diagram](docs/diagrams/UMLAccounts.png)
+
+##### Messaging Models
+
+![Messaging UML Class Diagram](docs/diagrams/UMLMessaging.png)
 
 #### Database Schema
 
