@@ -46,6 +46,7 @@ The UML class diagram shows the main backend domain models and their relationshi
 
 The database schema diagram shows the main PostgreSQL tables, foreign keys, unique constraints, and Django many-to-many join tables used by the Messenger application.
 
+![Messenger Database Schema](docs/diagrams/DatabaseSchema.png)
 
 ## Quality and Security
 
