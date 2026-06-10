@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import {
   getCurrentUser,
@@ -188,6 +188,65 @@ function App() {
     [currentUser?.id, setCurrentUser]
   );
 
+  const refreshCurrentUser = useCallback(async () => {
+    if (!accessToken) {
+      return null;
+    }
+
+    try {
+      const freshUser = await getCurrentUser(accessToken);
+
+      setCurrentUser(freshUser);
+      setEmailVerificationError("");
+
+      if (freshUser.is_email_verified) {
+        setEmailVerificationMessage("");
+      }
+
+      return freshUser;
+    } catch {
+      return null;
+    }
+  }, [accessToken, setCurrentUser]);
+
+  useEffect(() => {
+    if (!accessToken) {
+      return;
+    }
+
+    function handleWindowFocus() {
+      void refreshCurrentUser();
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === "visible") {
+        void refreshCurrentUser();
+      }
+    }
+
+    window.addEventListener("focus", handleWindowFocus);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("focus", handleWindowFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [accessToken, refreshCurrentUser]);
+
+  useEffect(() => {
+    if (!accessToken || currentUser?.is_email_verified) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      void refreshCurrentUser();
+    }, 5000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [accessToken, currentUser?.is_email_verified, refreshCurrentUser]);
+
   const handleResendEmailVerification = useCallback(async () => {
     if (!accessToken) {
       return;
@@ -208,9 +267,8 @@ function App() {
 
       if (errorMessage.includes("Email is already verified.")) {
         try {
-          const freshUser = await getCurrentUser(accessToken);
+          await refreshCurrentUser();
 
-          setCurrentUser(freshUser);
           setEmailVerificationMessage("Email is already verified.");
           setEmailVerificationError("");
         } catch {
@@ -224,7 +282,7 @@ function App() {
     } finally {
       setIsResendingEmailVerification(false);
     }
-  }, [accessToken, setCurrentUser]);
+  }, [accessToken, refreshCurrentUser]);
 
   const currentUserId = currentUser?.id ?? null;
   const selectedConversationId = selectedConversation?.id ?? null;
