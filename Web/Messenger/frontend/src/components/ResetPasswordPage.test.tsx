@@ -61,10 +61,13 @@ describe("ResetPasswordPage", () => {
       expect(screen.getByText("Password reset successfully.")).toBeTruthy();
     });
 
-    expect(screen.getByLabelText("New password")).toHaveProperty("value", "");
-    expect(screen.getByLabelText("Confirm new password")).toHaveProperty(
-      "value",
-      ""
+    expect(screen.queryByLabelText("New password")).toBeNull();
+    expect(screen.queryByLabelText("Confirm new password")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Reset password" })).toBeNull();
+
+    expect(screen.getByRole("link", { name: "Sign in" })).toHaveAttribute(
+      "href",
+      "/"
     );
   });
 
@@ -135,8 +138,13 @@ describe("ResetPasswordPage", () => {
     expect(screen.getByText("Password reset link is invalid.")).toBeTruthy();
     expect(screen.queryByLabelText("New password")).toBeNull();
     expect(screen.queryByLabelText("Confirm new password")).toBeNull();
+
     expect(
       screen.getByRole("button", { name: "Reset password" })
     ).toHaveAttribute("disabled");
+
+    expect(
+      screen.getByRole("link", { name: "Back to sign in" })
+    ).toHaveAttribute("href", "/");
   });
 });

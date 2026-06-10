@@ -2365,3 +2365,20 @@
   font-size: 13px;
   line-height: 1.4;
 }
+
+.auth-card .auth-primary-link {
+  display: block;
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.auth-card .auth-primary-link:hover {
+  background: #1d4ed8;
+}

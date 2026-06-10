@@ -16,6 +16,7 @@ function ResetPasswordPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isResetSuccessful = Boolean(message);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -62,27 +63,29 @@ function ResetPasswordPage() {
             <strong>Password reset link is invalid.</strong>
           </div>
         ) : (
-          <>
-            <label>
-              New password
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="New password"
-              />
-            </label>
+          !isResetSuccessful && (
+            <>
+              <label>
+                New password
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="New password"
+                />
+              </label>
 
-            <label>
-              Confirm new password
-              <input
-                type="password"
-                value={passwordConfirm}
-                onChange={(event) => setPasswordConfirm(event.target.value)}
-                placeholder="Confirm new password"
-              />
-            </label>
-          </>
+              <label>
+                Confirm new password
+                <input
+                  type="password"
+                  value={passwordConfirm}
+                  onChange={(event) => setPasswordConfirm(event.target.value)}
+                  placeholder="Confirm new password"
+                />
+              </label>
+            </>
+          )
         )}
 
         {message && (
@@ -103,12 +106,19 @@ function ResetPasswordPage() {
           </div>
         )}
 
-        <button type="submit" disabled={isSubmitting || !uid || !token}>
-          {isSubmitting ? "Saving..." : "Reset password"}
-        </button>
+        {!isResetSuccessful && (
+          <button type="submit" disabled={isSubmitting || !uid || !token}>
+            {isSubmitting ? "Saving..." : "Reset password"}
+          </button>
+        )}
 
-        <a className="auth-secondary-link" href="/">
-          Back to sign in
+        <a
+          className={
+            isResetSuccessful ? "auth-primary-link" : "auth-secondary-link"
+          }
+          href="/"
+        >
+          {isResetSuccessful ? "Sign in" : "Back to sign in"}
         </a>
       </form>
     </div>
