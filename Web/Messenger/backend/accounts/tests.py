@@ -632,6 +632,82 @@ class AccountsAPITests(TestCase):
         self.assertEqual(self.user.username, "pavlo_new")
         self.assertEqual(self.user.email, "pavlo_new@test.ua")
 
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        FRONTEND_URL="http://frontend.test",
+    )
+    def test_update_profile_resets_email_verification_when_email_changes(self):
+        self.user.mark_email_verified()
+        old_token = EmailVerificationToken.create_for_user(self.user)
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-profile")
+        response = self.client.patch(
+            url,
+            {
+                "username": "pavlo",
+                "email": "pavlo_new@test.ua",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["email"], "pavlo_new@test.ua")
+        self.assertFalse(response.data["is_email_verified"])
+        self.assertIsNone(response.data["email_verified_at"])
+
+        self.user.refresh_from_db()
+        old_token.refresh_from_db()
+
+        self.assertEqual(self.user.email, "pavlo_new@test.ua")
+        self.assertFalse(self.user.is_email_verified)
+        self.assertIsNone(self.user.email_verified_at)
+        self.assertTrue(old_token.is_used)
+
+        new_token = (
+            EmailVerificationToken.objects.filter(
+                user=self.user,
+                used_at__isnull=True,
+            )
+            .exclude(id=old_token.id)
+            .latest("created_at")
+        )
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["pavlo_new@test.ua"])
+        self.assertIn(new_token.token, mail.outbox[0].body)
+        self.assertIn("http://frontend.test/verify-email", mail.outbox[0].body)
+
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_update_profile_keeps_verification_when_email_is_unchanged(self):
+        self.user.mark_email_verified()
+        verified_at = self.user.email_verified_at
+
+        self.client.force_authenticate(user=self.user)
+
+        url = reverse("user-profile")
+        response = self.client.patch(
+            url,
+            {
+                "username": "pavlo_new",
+                "email": "  PAVLO@TEST.UA  ",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["email"], "pavlo@test.ua")
+        self.assertTrue(response.data["is_email_verified"])
+
+        self.user.refresh_from_db()
+
+        self.assertEqual(self.user.username, "pavlo_new")
+        self.assertEqual(self.user.email, "pavlo@test.ua")
+        self.assertTrue(self.user.is_email_verified)
+        self.assertEqual(self.user.email_verified_at, verified_at)
+        self.assertEqual(len(mail.outbox), 0)
+
     def test_update_profile_returns_validation_errors(self):
         other_user = self.create_other_user(
             username="taken",

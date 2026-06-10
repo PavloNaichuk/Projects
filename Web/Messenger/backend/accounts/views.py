@@ -240,6 +240,8 @@ class UserProfileView(APIView):
     throttle_scope = "actions"
 
     def patch(self, request):
+        old_email = request.user.email
+
         serializer = UserProfileSerializer(
             request.user,
             data=request.data,
@@ -248,9 +250,24 @@ class UserProfileView(APIView):
         )
 
         if serializer.is_valid():
-            serializer.save()
-            notify_user_profile_updated(request.user, request)
-            return Response(serializer.data)
+            user = serializer.save()
+            email_changed = (
+                "email" in serializer.validated_data and user.email != old_email
+            )
+
+            if email_changed:
+                expire_unused_email_verification_tokens(user)
+                user.email_verified_at = None
+                user.save(update_fields=["email_verified_at"])
+                send_email_verification(user)
+
+            notify_user_profile_updated(user, request)
+
+            response_serializer = UserProfileSerializer(
+                user,
+                context={"request": request},
+            )
+            return Response(response_serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
