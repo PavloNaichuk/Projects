@@ -58,18 +58,18 @@ Security-related improvements:
 
 GitHub Actions is configured for the Messenger project inside the monorepo.
 
-The pipeline checks:
+### The pipeline checks:
 
-* backend linting
-* backend dependency audit
-* backend security scan
+* Backend linting
+* Backend dependency audit
+* Backend security scan
 * Django system checks
 * Django deployment checks
-* backend tests with coverage
-* frontend dependency audit
-* frontend linting
-* frontend tests
-* frontend production build
+* Backend tests with coverage
+* Frontend dependency audit
+* Frontend linting
+* Frontend tests
+* Frontend production build
 * Docker Compose config validation
 * Docker image builds
 
