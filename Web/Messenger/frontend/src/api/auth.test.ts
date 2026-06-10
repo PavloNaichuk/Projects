@@ -1,12 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
+  confirmPasswordReset,
   deleteCurrentUserAvatar,
   getCurrentUser,
   login,
   logout,
   refreshAccessToken,
   register,
+  requestPasswordReset,
   resendEmailVerification,
   updateContactNickname,
   updateCurrentUserAvatar,
@@ -243,6 +245,133 @@ describe("auth api", () => {
     await expect(resendEmailVerification(accessToken)).rejects.toThrow(
       "Failed to resend verification email."
     );
+  });
+
+  it("requests password reset", async () => {
+    const responseData = {
+      detail: [
+        "If an account with this email exists,",
+        "a password reset email was sent.",
+      ].join(" "),
+    };
+
+    fetchMock.mockResolvedValue(createJsonResponse(responseData));
+
+    const result = await requestPasswordReset("pavlo@test.ua");
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `${API_BASE_URL}/auth/password-reset/request/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "pavlo@test.ua",
+        }),
+      }
+    );
+    expect(result).toEqual(responseData);
+  });
+
+  it("formats password reset request validation errors", async () => {
+    fetchMock.mockResolvedValue(
+      createJsonResponse(
+        {
+          email: ["Enter a valid email address."],
+        },
+        false
+      )
+    );
+
+    await expect(requestPasswordReset("invalid-email")).rejects.toThrow(
+      "Email: Enter a valid email address."
+    );
+  });
+
+  it("uses fallback password reset request error for non-json response", async () => {
+    fetchMock.mockResolvedValue({
+      ok: false,
+      json: vi.fn().mockRejectedValue(new Error("Invalid JSON")),
+    } as unknown as Response);
+
+    await expect(requestPasswordReset("pavlo@test.ua")).rejects.toThrow(
+      "Failed to request password reset."
+    );
+  });
+
+  it("confirms password reset", async () => {
+    const responseData = {
+      detail: "Password reset successfully.",
+    };
+
+    fetchMock.mockResolvedValue(createJsonResponse(responseData));
+
+    const result = await confirmPasswordReset(
+      "user-uid",
+      "reset-token",
+      "newpassword123",
+      "newpassword123"
+    );
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `${API_BASE_URL}/auth/password-reset/confirm/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: "user-uid",
+          token: "reset-token",
+          password: "newpassword123",
+          password_confirm: "newpassword123",
+        }),
+      }
+    );
+    expect(result).toEqual(responseData);
+  });
+
+  it("formats password reset confirm validation errors", async () => {
+    fetchMock.mockResolvedValue(
+      createJsonResponse(
+        {
+          token: ["Invalid or expired password reset token."],
+          password_confirm: ["Passwords do not match."],
+        },
+        false
+      )
+    );
+
+    await expect(
+      confirmPasswordReset(
+        "user-uid",
+        "bad-token",
+        "newpassword123",
+        "differentpassword123"
+      )
+    ).rejects.toThrow(
+      [
+        "Token: Invalid or expired password reset token.",
+        "Confirm password: Passwords do not match.",
+      ].join("\n")
+    );
+  });
+
+  it("uses fallback password reset confirm error for non-json response", async () => {
+    fetchMock.mockResolvedValue({
+      ok: false,
+      json: vi.fn().mockRejectedValue(new Error("Invalid JSON")),
+    } as unknown as Response);
+
+    await expect(
+      confirmPasswordReset(
+        "user-uid",
+        "reset-token",
+        "newpassword123",
+        "newpassword123"
+      )
+    ).rejects.toThrow("Failed to reset password.");
   });
 
   it("refreshes access token", async () => {

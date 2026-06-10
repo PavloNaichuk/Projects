@@ -37,6 +37,14 @@ export type ResendEmailVerificationResponse = {
   detail: string;
 };
 
+export type PasswordResetRequestResponse = {
+  detail: string;
+};
+
+export type PasswordResetConfirmResponse = {
+  detail: string;
+};
+
 export type UpdateCurrentUserProfileData = {
   username: string;
   email: string;
@@ -59,6 +67,7 @@ function getApiErrorMessage(errorData: unknown) {
     password: "Password",
     password_confirm: "Confirm password",
     token: "Token",
+    uid: "User ID",
     non_field_errors: "Error",
     detail: "Error",
   };
@@ -135,6 +144,44 @@ export async function resendEmailVerification(
     parseError: (response) =>
       parseApiError(response, "Failed to resend verification email."),
   });
+}
+
+export async function requestPasswordReset(
+  email: string
+): Promise<PasswordResetRequestResponse> {
+  return apiRequest<PasswordResetRequestResponse>(
+    "/auth/password-reset/request/",
+    {
+      method: "POST",
+      json: { email },
+      errorMessage: "Failed to request password reset.",
+      parseError: (response) =>
+        parseApiError(response, "Failed to request password reset."),
+    }
+  );
+}
+
+export async function confirmPasswordReset(
+  uid: string,
+  token: string,
+  password: string,
+  passwordConfirm: string
+): Promise<PasswordResetConfirmResponse> {
+  return apiRequest<PasswordResetConfirmResponse>(
+    "/auth/password-reset/confirm/",
+    {
+      method: "POST",
+      json: {
+        uid,
+        token,
+        password,
+        password_confirm: passwordConfirm,
+      },
+      errorMessage: "Failed to reset password.",
+      parseError: (response) =>
+        parseApiError(response, "Failed to reset password."),
+    }
+  );
 }
 
 export async function refreshAccessToken(
