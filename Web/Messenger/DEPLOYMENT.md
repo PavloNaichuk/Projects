@@ -161,6 +161,25 @@ VITE_API_BASE_URL=https://your-backend-domain.com/api
 VITE_WS_BASE_URL=wss://your-backend-domain.com/ws
 ```
 
+## Redis and WebSocket stability
+
+Django Channels uses Redis for WebSocket channel layer communication.
+
+For Docker Compose deployments, use Docker service names:
+
+```env
+REDIS_HOST=redis
+REDIS_PORT=6379
+```
+
+The Redis service should have a health check, and the backend should wait for
+Redis to become healthy before starting. This helps avoid startup races where the
+backend starts before Redis is ready.
+
+The channel layer configuration also uses Redis socket timeout and health check
+settings to reduce noisy WebSocket timeout logs during local development and
+container restarts.
+
 ## Validate production config
 
 Run this from the project root:
