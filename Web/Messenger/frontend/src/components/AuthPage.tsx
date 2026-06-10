@@ -125,6 +125,12 @@ function AuthPage({
             : "Sign in"}
         </button>
 
+        {!isRegisterMode && (
+          <a className="auth-secondary-link" href="/forgot-password">
+            Forgot password?
+          </a>
+        )}
+
         <button
           type="button"
           className="auth-switch-button"

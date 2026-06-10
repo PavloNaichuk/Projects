@@ -2338,3 +2338,30 @@
   color: #991b1b;
 }
 
+.auth-card .auth-secondary-link {
+  align-self: flex-start;
+  width: auto;
+  margin: -2px 0 2px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.auth-card .auth-secondary-link:hover {
+  text-decoration: underline;
+}
+
+.auth-card .auth-success {
+  padding: 9px 10px;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  background: #ecfdf5;
+  color: #166534;
+  font-size: 13px;
+  line-height: 1.4;
+}

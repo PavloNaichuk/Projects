@@ -8,6 +8,8 @@ import {
   type Message,
 } from "./api/conversations";
 import AuthPage from "./components/AuthPage";
+import ForgotPasswordPage from "./components/ForgotPasswordPage";
+import ResetPasswordPage from "./components/ResetPasswordPage";
 import ChatWindow from "./components/ChatWindow";
 import Sidebar from "./components/Sidebar";
 import ProfileSettingsModal from "./components/ProfileSettingsModal";
@@ -167,6 +169,8 @@ function App() {
   });
 
   const isEmailVerificationPage = window.location.pathname === "/verify-email";
+  const isForgotPasswordPage = window.location.pathname === "/forgot-password";
+  const isResetPasswordPage = window.location.pathname === "/reset-password";
 
   const handleEmailVerified = useCallback(
     (verifiedUser: User) => {
@@ -524,6 +528,14 @@ function App() {
 
   if (isEmailVerificationPage) {
     return <VerifyEmailPage handleVerified={handleEmailVerified} />;
+  }
+
+  if (isForgotPasswordPage) {
+    return <ForgotPasswordPage />;
+  }
+
+  if (isResetPasswordPage) {
+    return <ResetPasswordPage />;
   }
 
   if (!currentUser || !accessToken) {
