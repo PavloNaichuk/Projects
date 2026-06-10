@@ -62,6 +62,21 @@ function ProfileSettingsModal({
   }
 
   const initial = currentUser.username.trim().charAt(0).toUpperCase() || "?";
+  const normalizedEmail = email.trim().toLowerCase();
+  const savedEmail = currentUser.email.trim().toLowerCase();
+  const isEmailChanged = normalizedEmail !== savedEmail;
+
+  const emailStatusClass = isEmailChanged
+    ? "changed"
+    : currentUser.is_email_verified
+      ? "verified"
+      : "unverified";
+
+  const emailStatusText = isEmailChanged
+    ? "Unsaved email change"
+    : currentUser.is_email_verified
+      ? "Verified ✅"
+      : "Not verified ⚠️";
 
   return (
     <div className="modal-backdrop">
@@ -130,15 +145,12 @@ function ProfileSettingsModal({
             />
           </label>
 
-          <div
-            className={`profile-email-status ${
-              currentUser.is_email_verified ? "verified" : "unverified"
-            }`}
-            role="status"
-          >
-            Email status:{" "}
-            {currentUser.is_email_verified ? "Verified ✅" : "Not verified ⚠️"}
-          </div>
+        <div
+          className={`profile-email-status ${emailStatusClass}`}
+          role="status"
+        >
+          Email status: {emailStatusText}
+        </div>
 
           {profileError && (
             <div className="profile-modal-error">{profileError}</div>

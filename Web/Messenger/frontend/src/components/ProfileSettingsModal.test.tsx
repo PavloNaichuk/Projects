@@ -92,6 +92,25 @@ describe("ProfileSettingsModal", () => {
     );
   });
 
+  it("shows unsaved email change status when email is changed", async () => {
+    const user = userEvent.setup();
+
+    renderProfileSettingsModal({
+      currentUser: {
+        ...currentUser,
+        email_verified_at: "2026-06-10T10:00:00Z",
+        is_email_verified: true,
+      },
+    });
+
+    await user.clear(screen.getByLabelText("Email"));
+    await user.type(screen.getByLabelText("Email"), "newemail@test.ua");
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Email status: Unsaved email change"
+    );
+  });
+
   it("submits updated username and email", async () => {
     const user = userEvent.setup();
     const props = renderProfileSettingsModal();
