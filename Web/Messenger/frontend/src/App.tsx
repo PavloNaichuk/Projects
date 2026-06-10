@@ -1,6 +1,10 @@
 import { useCallback, useState } from "react";
 import "./App.css";
-import { resendEmailVerification, type User } from "./api/auth";
+import {
+  getCurrentUser,
+  resendEmailVerification,
+  type User,
+} from "./api/auth";
 import {
   getConversationMessagesPage,
   markConversationAsRead,
@@ -197,15 +201,30 @@ function App() {
       const response = await resendEmailVerification(accessToken);
       setEmailVerificationMessage(response.detail);
     } catch (error) {
-      setEmailVerificationError(
+      const errorMessage =
         error instanceof Error
           ? error.message
-          : "Failed to resend verification email."
-      );
+          : "Failed to resend verification email.";
+
+      if (errorMessage.includes("Email is already verified.")) {
+        try {
+          const freshUser = await getCurrentUser(accessToken);
+
+          setCurrentUser(freshUser);
+          setEmailVerificationMessage("Email is already verified.");
+          setEmailVerificationError("");
+        } catch {
+          setEmailVerificationError(errorMessage);
+        }
+
+        return;
+      }
+
+      setEmailVerificationError(errorMessage);
     } finally {
       setIsResendingEmailVerification(false);
     }
-  }, [accessToken]);
+  }, [accessToken, setCurrentUser]);
 
   const currentUserId = currentUser?.id ?? null;
   const selectedConversationId = selectedConversation?.id ?? null;
