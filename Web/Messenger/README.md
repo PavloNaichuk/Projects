@@ -23,6 +23,30 @@ A full-stack real-time messaging application built with Django, Django REST Fram
 
 ## Screenshots
 
+### Real-time Chat
+
+The real-time chat demo shows two users exchanging messages instantly through WebSockets.
+
+![Real-time Chat](docs/screenshots/realtimeChat.gif)
+
+### Message Actions
+
+The message actions demo shows replies, message editing, read status, and message interaction features.
+
+![Message Actions](docs/screenshots/messageActions.gif)
+
+### Profile Settings
+
+The profile settings demo shows user profile management and email verification status behavior.
+
+![Profile Settings](docs/screenshots/profileSettings.gif)
+
+### Authentication Flow
+
+The authentication flow shows the sign-in page and successful login into the Messenger application.
+
+![Authentication Flow](docs/screenshots/authFlow.gif)
+
 ## Architecture
 
 * **Frontend:** React + TypeScript + Vite
