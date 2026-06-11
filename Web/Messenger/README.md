@@ -47,6 +47,17 @@ The authentication flow shows the sign-in page and successful login into the Mes
 
 ![Authentication Flow](docs/screenshots/authFlow.gif)
 
+### Forgot Password
+
+The forgot password demo shows the reset link request form and the confirmation message after submitting an email address.
+![Forgot Password](docs/screenshots/forgotPassword.gif)
+
+### Password Reset
+
+The password reset demo shows the email-based password recovery flow, including reset link request and new password confirmation forms.
+
+![Password Reset](docs/screenshots/resetPassword.gif)
+
 ## Architecture
 
 * **Frontend:** React + TypeScript + Vite
