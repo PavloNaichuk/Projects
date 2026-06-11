@@ -1,7 +1,7 @@
  ## Project Overview
 A full-stack real-time messaging application built with Django, Django REST Framework, Django Channels, Redis, PostgreSQL, React, TypeScript, Vite, and Docker Compose.
 
-## Key features
+## Key Features
 
 * JWT authentication and user authorization
 * User registration, login, logout, and profile management
@@ -50,11 +50,12 @@ The authentication flow shows the sign-in page and successful login into the Mes
 ### Forgot Password
 
 The forgot password demo shows the reset link request form and the confirmation message after submitting an email address.
+
 ![Forgot Password](docs/screenshots/forgotPassword.gif)
 
 ### Password Reset
 
-The password reset demo shows the email-based password recovery flow, including reset link request and new password confirmation forms.
+The password reset demo shows the new password confirmation form used after opening a valid reset link.
 
 ![Password Reset](docs/screenshots/resetPassword.gif)
 
@@ -130,7 +131,7 @@ The project includes automated quality and security checks to keep the codebase 
 
 GitHub Actions is configured for the Messenger project inside the monorepo.
 
-### The pipeline checks:
+### The pipeline checks
 
 * Backend linting
 * Backend dependency audit
@@ -148,7 +149,7 @@ GitHub Actions is configured for the Messenger project inside the monorepo.
 ## Running the Project
 
 ### Clone the repository
-```bash
+```text
 git clone <repository-url>
 cd Web/Messenger
 ```
@@ -157,7 +158,7 @@ cd Web/Messenger
 Create a ```.env ``` file in the project root based on ```.env.example.```
 
 For Docker Compose, use service names as hosts:
-```bash
+```text
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=messenger_db
 DB_USER=messenger_user
@@ -169,7 +170,7 @@ REDIS_HOST=redis
 REDIS_PORT=6379
 ```
 For local backend development outside Docker, use localhost:
-```bash
+```text
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=messenger_db 
 DB_USER=messenger_user 
@@ -223,7 +224,7 @@ FRONTEND_URL=https://your-frontend-domain.com
 
 ## Docker Compose
 Run the project:
-```bash
+```text
 docker compose up --build
 ```
 This command starts:
@@ -241,16 +242,16 @@ Do not use ``` docker compose down -v ``` unless you intentionally want to remov
 ### Open the application
 
 Frontend:
-```bash
+```text
 http://localhost:5173/
 ```
 Backend:
-```bash
+```text
 http://localhost:8000/
 ```
 Backend health endpoint:
 
-```bash
+```text
 http://localhost:8000/api/health/
 ```
 
@@ -265,13 +266,13 @@ Expected response:
 You can also run backend and frontend locally outside Docker. In this case, PostgreSQL and Redis can still be started with Docker Compose.
 ### Start PostgreSQL and Redis:
 
-```bash
+```text
 docker compose up -d postgres redis
 ```
 
 ### Backend
 
-```bash
+```text
 cd Web/Messenger/backend
 python -m venv venv
 venv\Scripts\activate
@@ -282,7 +283,7 @@ python manage.py runserver
 
 ### Frontend
 
-```bash
+```text
 cd Web/Messenger/frontend
 npm install
 npm run dev
@@ -295,29 +296,29 @@ Run backend tests inside the backend container:
 docker compose exec backend python manage.py test
 ```
 Run frontend tests inside the frontend container:
-```bash
+```text
 docker compose run --rm frontend npm run test:run
 ```
 ### Local backend and frontend
 
 If you run the backend outside Docker, start PostgreSQL and Redis first:
-```bash
+```text
 docker compose up -d postgres redis
 ```
 Run backend tests locally:
-```bash
+```text
 cd Web/Messenger/backend
 python manage.py test
 ```
 Run frontend tests locally:
-```bash
+```text
 cd Web/Messenger/frontend
 npm run test:run
 ```
 
 Run backend quality and security checks locally:
 
-```bash
+```text
 cd Web/Messenger/backend
 python -m ruff check .
 python -m pip_audit -r requirements.txt
@@ -327,7 +328,7 @@ python -m coverage report -m
 ```
 Run frontend quality and security checks locally:
 
-```bash
+```text
 cd Web/Messenger/frontend
 npm audit --omit=dev --audit-level=high
 npm run lint
@@ -338,7 +339,7 @@ npm run build
 
 Production-style Docker Compose files are included:
 
-```bash
+```text
 docker-compose.prod.example.yml
 .env.production.example
 frontend/Dockerfile.prod
@@ -348,7 +349,7 @@ DEPLOYMENT.md
 
 For production deployment instructions, see:
 
-```bash
+```text
 DEPLOYMENT.md
 ```
 The production setup includes:
