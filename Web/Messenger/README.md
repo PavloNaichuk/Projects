@@ -361,21 +361,3 @@ The production setup includes:
 * media volume
 * production security settings through environment variables
 * deployment config validation
-
-## Files That Must Not Be Committed
-
-Never commit real environment files:
-
-```text
-.env
-.env.production
-.env.local
-.env.development
-```
-
-Only commit example files:
-
-```text
-.env.example
-.env.production.example
-```
