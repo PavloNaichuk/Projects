@@ -1,12 +1,11 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
+from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -27,7 +26,10 @@ from .serializers import (
     UserSearchSerializer,
     UserSerializer,
 )
-from .tasks import send_email_verification_email_task
+from .tasks import (
+    send_email_verification_email_task,
+    send_password_reset_email_task,
+)
 
 
 def get_profile_update_recipient_ids(user):
@@ -138,7 +140,10 @@ def notify_user_block_status_updated(blocker, blocked, request):
 
 def send_email_verification(user):
     verification_token = EmailVerificationToken.create_for_user(user)
-    send_email_verification_email_task.delay(verification_token.id)
+
+    transaction.on_commit(
+        lambda: send_email_verification_email_task.delay(verification_token.id)
+    )
 
     return verification_token
 
@@ -151,22 +156,7 @@ def expire_unused_email_verification_tokens(user):
 
 
 def send_password_reset_email(user):
-    uid = urlsafe_base64_encode(force_bytes(user.pk))
-    token = default_token_generator.make_token(user)
-    reset_url = f"{settings.FRONTEND_URL}/reset-password?uid={uid}&token={token}"
-
-    send_mail(
-        subject="Reset your Messenger password",
-        message=(
-            "You requested a password reset for your Messenger account.\n\n"
-            "Open this link to choose a new password:\n"
-            f"{reset_url}\n\n"
-            "If you did not request this, you can ignore this email."
-        ),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[user.email],
-        fail_silently=False,
-    )
+    transaction.on_commit(lambda: send_password_reset_email_task.delay(user.id))
 
 
 def get_user_from_password_reset_uid(uid):

@@ -1142,11 +1142,12 @@ class AccountsAPITests(TestCase):
     def test_password_reset_request_sends_email_for_existing_user(self):
         url = reverse("password-reset-request")
 
-        response = self.client.post(
-            url,
-            {"email": "  PAVLO@TEST.UA  "},
-            format="json",
-        )
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                url,
+                {"email": "  PAVLO@TEST.UA  "},
+                format="json",
+            )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
