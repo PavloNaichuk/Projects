@@ -27,7 +27,13 @@ TEST_CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
-@override_settings(CHANNEL_LAYERS=TEST_CHANNEL_LAYERS)
+
+
+@override_settings(
+    CHANNEL_LAYERS=TEST_CHANNEL_LAYERS,
+    CELERY_TASK_ALWAYS_EAGER=True,
+    CELERY_TASK_EAGER_PROPAGATES=True,
+)
 class AccountsAPITests(TestCase):
     def setUp(self):
         User = get_user_model()
@@ -643,14 +649,16 @@ class AccountsAPITests(TestCase):
         self.client.force_authenticate(user=self.user)
 
         url = reverse("user-profile")
-        response = self.client.patch(
-            url,
-            {
-                "username": "pavlo",
-                "email": "pavlo_new@test.ua",
-            },
-            format="json",
-        )
+
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.patch(
+                url,
+                {
+                    "username": "pavlo",
+                    "email": "pavlo_new@test.ua",
+                },
+                format="json",
+            )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["email"], "pavlo_new@test.ua")
@@ -973,16 +981,17 @@ class AccountsAPITests(TestCase):
     def test_register_creates_email_verification_token_and_sends_email(self):
         url = reverse("user-register")
 
-        response = self.client.post(
-            url,
-            {
-                "username": "emailuser",
-                "email": "emailuser@test.ua",
-                "password": "testpassword123",
-                "password_confirm": "testpassword123",
-            },
-            format="json",
-        )
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                url,
+                {
+                    "username": "emailuser",
+                    "email": "emailuser@test.ua",
+                    "password": "testpassword123",
+                    "password_confirm": "testpassword123",
+                },
+                format="json",
+            )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -1095,7 +1104,9 @@ class AccountsAPITests(TestCase):
         self.client.force_authenticate(user=self.user)
 
         url = reverse("email-resend")
-        response = self.client.post(url)
+
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["detail"], "Verification email sent.")

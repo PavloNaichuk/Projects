@@ -27,6 +27,7 @@ from .serializers import (
     UserSearchSerializer,
     UserSerializer,
 )
+from .tasks import send_email_verification_email_task
 
 
 def get_profile_update_recipient_ids(user):
@@ -137,22 +138,7 @@ def notify_user_block_status_updated(blocker, blocked, request):
 
 def send_email_verification(user):
     verification_token = EmailVerificationToken.create_for_user(user)
-    verification_url = (
-        f"{settings.FRONTEND_URL}/verify-email?token={verification_token.token}"
-    )
-
-    send_mail(
-        subject="Verify your Messenger email",
-        message=(
-            "Welcome to Messenger!\n\n"
-            "Please verify your email address by opening this link:\n"
-            f"{verification_url}\n\n"
-            "If you did not create this account, you can ignore this email."
-        ),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[user.email],
-        fail_silently=False,
-    )
+    send_email_verification_email_task.delay(verification_token.id)
 
     return verification_token
 
