@@ -241,6 +241,17 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = int(os.getenv("CELERY_TASK_TIME_LIMIT", "300"))
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
+EMAIL_VERIFICATION_TOKEN_CLEANUP_INTERVAL_SECONDS = int(
+    os.getenv("EMAIL_VERIFICATION_TOKEN_CLEANUP_INTERVAL_SECONDS", "86400")
+)
+
+CELERY_BEAT_SCHEDULE = {
+    "cleanup-email-verification-tokens": {
+        "task": "accounts.tasks.cleanup_email_verification_tokens_task",
+        "schedule": EMAIL_VERIFICATION_TOKEN_CLEANUP_INTERVAL_SECONDS,
+    },
+}
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",

@@ -1,5 +1,5 @@
  ## Project Overview
-A full-stack real-time messaging application built with Django, Django REST Framework, Django Channels, Redis, PostgreSQL, React, TypeScript, Vite, and Docker Compose.
+A full-stack real-time messaging application built with Django, Django REST Framework, Django Channels, Celery, Redis, PostgreSQL, React, TypeScript, Vite, and Docker Compose.
 
 ## Key Features
 
@@ -8,6 +8,8 @@ A full-stack real-time messaging application built with Django, Django REST Fram
 * Email verification with resend support
 * Email re-verification after profile email change
 * Password reset via email
+* Background email delivery with Celery and Redis
+* Periodic cleanup of expired and used email verification tokens
 * SMTP email configuration for verification and password reset flows
 * Profile email verification status in the UI
 * Automatic frontend sync for email verification state
@@ -64,6 +66,7 @@ The password reset demo shows the new password confirmation form used after open
 * **Frontend:** React + TypeScript + Vite
 * **Backend:** Django + Django REST Framework + Django Channels
 * **Realtime:** WebSockets + Redis
+* **Task Queue:** Celery + Redis
 * **Database:** PostgreSQL via Docker Compose
 * **Containerization:** Docker + Docker Compose
 * **Authentication:** JWT-based authentication
@@ -126,6 +129,7 @@ The project includes automated quality and security checks to keep the codebase 
 * Proxy SSL settings configurable for reverse proxy deployments
 * WebSocket test credentials loaded from environment variables instead of being hardcoded
 * Redis health checks and channel layer timeout settings for more stable WebSocket behavior
+* Celery background tasks for email verification, password reset, and token cleanup
 
 ## CI/CD
 
@@ -233,6 +237,8 @@ This command starts:
 * Redis
 * Django backend
 * React frontend
+* Celery worker
+* Celery beat scheduler
 
 Stop the project:
 ```bash
@@ -358,7 +364,8 @@ The production setup includes:
 * nginx frontend container
 * reverse proxy for `/api/`, `/ws/`, and `/media/`
 * PostgreSQL volume
-* Redis service for Django Channels
+* Redis service for Django Channels and Celery
+* Celery worker and Celery beat scheduler
 * media volume
 * production security settings through environment variables
 * deployment config validation

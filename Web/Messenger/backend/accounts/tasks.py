@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from django.db.models import Q
+from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
@@ -91,3 +93,11 @@ def send_password_reset_email_task(user_id: int) -> str:
 
     return f"Password reset email sent for user {user.id}."
 
+
+@shared_task
+def cleanup_email_verification_tokens_task() -> str:
+    deleted_count, _ = EmailVerificationToken.objects.filter(
+        Q(used_at__isnull=False) | Q(expires_at__lt=timezone.now())
+    ).delete()
+
+    return f"Deleted {deleted_count} email verification token(s)."

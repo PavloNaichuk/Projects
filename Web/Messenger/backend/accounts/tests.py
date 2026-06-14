@@ -21,6 +21,7 @@ from .serializers import (
     UserSearchSerializer,
     UserSerializer,
 )
+from .tasks import cleanup_email_verification_tokens_task
 
 TEST_CHANNEL_LAYERS = {
     "default": {
@@ -1297,4 +1298,27 @@ class AccountsAPITests(TestCase):
         self.assertEqual(
             second_response.data["token"][0],
             "Invalid or expired password reset token.",
+        )
+
+    def test_cleanup_email_verification_tokens_task_deletes_old_tokens(self):
+        valid_token = EmailVerificationToken.create_for_user(self.user)
+
+        expired_token = EmailVerificationToken.create_for_user(self.user)
+        expired_token.expires_at = timezone.now() - timezone.timedelta(hours=1)
+        expired_token.save(update_fields=["expires_at"])
+
+        used_token = EmailVerificationToken.create_for_user(self.user)
+        used_token.mark_used()
+
+        result = cleanup_email_verification_tokens_task()
+
+        self.assertEqual(result, "Deleted 2 email verification token(s).")
+        self.assertTrue(
+            EmailVerificationToken.objects.filter(id=valid_token.id).exists()
+        )
+        self.assertFalse(
+            EmailVerificationToken.objects.filter(id=expired_token.id).exists()
+        )
+        self.assertFalse(
+            EmailVerificationToken.objects.filter(id=used_token.id).exists()
         )
