@@ -156,6 +156,9 @@ class AccountsAPITests(TestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["id"], other_user.id)
         self.assertEqual(response.data[0]["username"], "user1")
+        self.assertNotIn("email", response.data[0])
+        self.assertNotIn("email_verified_at", response.data[0])
+        self.assertNotIn("is_email_verified", response.data[0])
 
     def test_search_does_not_return_current_user(self):
         self.client.force_authenticate(user=self.user)
@@ -339,6 +342,11 @@ class AccountsAPITests(TestCase):
         self.assertNotIn(not_blocked_user.id, blocked_user_ids)
         self.assertNotIn(self.user.id, blocked_user_ids)
 
+        for user_data in response.data:
+            self.assertNotIn("email", user_data)
+            self.assertNotIn("email_verified_at", user_data)
+            self.assertNotIn("is_email_verified", user_data)
+
     def get_serializer_request(self, user):
         factory = APIRequestFactory()
         request = factory.get("/")
@@ -378,6 +386,55 @@ class AccountsAPITests(TestCase):
         )
 
         self.assertEqual(serializer.data["display_name"], "pavlo")
+
+    def test_user_serializer_includes_private_fields_for_current_user(self):
+        request = self.get_serializer_request(self.user)
+
+        serializer = UserSerializer(
+            self.user,
+            context={"request": request},
+        )
+
+        self.assertEqual(serializer.data["email"], "pavlo@test.ua")
+        self.assertIn("email_verified_at", serializer.data)
+        self.assertIn("is_email_verified", serializer.data)
+
+    def test_user_serializer_hides_private_fields_for_other_user(self):
+        other_user = self.create_other_user()
+
+        request = self.get_serializer_request(self.user)
+
+        serializer = UserSerializer(
+            other_user,
+            context={"request": request},
+        )
+
+        self.assertNotIn("email", serializer.data)
+        self.assertNotIn("email_verified_at", serializer.data)
+        self.assertNotIn("is_email_verified", serializer.data)
+
+    def test_user_serializer_uses_viewer_for_private_fields(self):
+        other_user = self.create_other_user()
+
+        request = self.get_serializer_request(self.user)
+
+        current_user_for_other_viewer = UserSerializer(
+            self.user,
+            context={
+                "request": request,
+                "viewer": other_user,
+            },
+        )
+        other_user_for_other_viewer = UserSerializer(
+            other_user,
+            context={
+                "request": request,
+                "viewer": other_user,
+            },
+        )
+
+        self.assertNotIn("email", current_user_for_other_viewer.data)
+        self.assertEqual(other_user_for_other_viewer.data["email"], other_user.email)
 
     def test_user_serializer_returns_block_flags(self):
         User = get_user_model()
@@ -435,6 +492,20 @@ class AccountsAPITests(TestCase):
 
         self.assertIn("/media/", serializer.data["avatar_url"])
         self.assertIn("avatar", serializer.data["avatar_url"])
+
+    def test_user_search_serializer_hides_private_fields_for_other_user(self):
+        other_user = self.create_other_user()
+
+        request = self.get_serializer_request(self.user)
+
+        serializer = UserSearchSerializer(
+            other_user,
+            context={"request": request},
+        )
+
+        self.assertNotIn("email", serializer.data)
+        self.assertNotIn("email_verified_at", serializer.data)
+        self.assertNotIn("is_email_verified", serializer.data)
 
     def test_profile_serializer_normalizes_valid_username_and_email(self):
         serializer = UserProfileSerializer(

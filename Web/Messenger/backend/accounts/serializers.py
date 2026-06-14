@@ -2,6 +2,30 @@ from rest_framework import serializers
 
 from .models import BlockedUser, ContactNickname, User
 
+PRIVATE_USER_FIELDS = (
+    "email",
+    "email_verified_at",
+    "is_email_verified",
+)
+
+
+def can_view_private_user_fields(
+    user,
+    request,
+    viewer=None,
+    include_private_fields=False,
+):
+    if include_private_fields:
+        return True
+
+    if viewer and viewer.is_authenticated:
+        return viewer.id == user.id
+
+    if not request or not request.user or not request.user.is_authenticated:
+        return False
+
+    return request.user.id == user.id
+
 
 def get_user_display_name(user, request):
     if not request or not request.user or not request.user.is_authenticated:
@@ -53,6 +77,27 @@ class UserRepresentationMixin(serializers.Serializer):
     display_name = serializers.SerializerMethodField()
     is_blocked_by_me = serializers.SerializerMethodField()
     has_blocked_me = serializers.SerializerMethodField()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        if not self.should_include_private_fields(instance):
+            for field in PRIVATE_USER_FIELDS:
+                data.pop(field, None)
+
+        return data
+
+    def should_include_private_fields(self, obj):
+        request = self.context.get("request")
+        viewer = self.context.get("viewer")
+        include_private_fields = self.context.get("include_private_fields", False)
+
+        return can_view_private_user_fields(
+            obj,
+            request,
+            viewer=viewer,
+            include_private_fields=include_private_fields,
+        )
 
     def get_display_name(self, obj):
         request = self.context.get("request")
@@ -312,6 +357,7 @@ class EmailVerificationConfirmSerializer(serializers.Serializer):
             "blank": "Verification token is required.",
         },
     )
+
 
 class PasswordResetRequestSerializer(serializers.Serializer):
     email = serializers.EmailField(

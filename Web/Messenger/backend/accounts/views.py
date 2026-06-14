@@ -66,7 +66,10 @@ def get_user_display_name_for_owner(user, owner):
 def serialize_user_for_recipient(user, recipient, request):
     serializer = UserSerializer(
         user,
-        context={"request": request},
+        context={
+            "request": request,
+            "viewer": recipient,
+        },
     )
 
     data = dict(serializer.data)
@@ -470,7 +473,10 @@ class UserRegistrationView(APIView):
                 {
                     "user": UserSerializer(
                         user,
-                        context={"request": request},
+                        context={
+                            "request": request,
+                            "include_private_fields": True,
+                        },
                     ).data,
                     "refresh": str(refresh),
                     "access": str(refresh.access_token),
@@ -521,7 +527,10 @@ class EmailVerificationConfirmView(APIView):
 
         serializer = UserSerializer(
             user,
-            context={"request": request},
+            context={
+                "request": request,
+                "include_private_fields": True,
+            },
         )
 
         return Response(
