@@ -1,4 +1,4 @@
- ## Project Overview
+## Project Overview
 A full-stack real-time messaging application built with Django, Django REST Framework, Django Channels, Celery, Redis, PostgreSQL, React, TypeScript, Vite, and Docker Compose.
 
 ## Key Features
@@ -135,7 +135,7 @@ The project includes automated quality and security checks to keep the codebase 
 
 GitHub Actions is configured for the Messenger project inside the monorepo.
 
-### The pipeline checks
+### Pipeline Checks
 
 * Backend linting
 * Backend dependency audit
@@ -159,7 +159,7 @@ cd Web/Messenger
 ```
 ### Create environment file
 
-Create a ```.env ``` file in the project root based on ```.env.example.```
+Create a `.env` file in the project root based on `.env.example`.
 
 For Docker Compose, use service names as hosts:
 ```text

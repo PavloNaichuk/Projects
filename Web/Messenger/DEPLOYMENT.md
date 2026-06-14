@@ -161,6 +161,39 @@ VITE_API_BASE_URL=https://your-backend-domain.com/api
 VITE_WS_BASE_URL=wss://your-backend-domain.com/ws
 ```
 
+## Celery background tasks
+
+Celery is used for background email delivery and periodic maintenance tasks.
+The production Compose setup includes two Celery services:
+
+```text
+celery_worker  -> processes background jobs
+celery_beat    -> schedules periodic jobs
+```
+
+Redis is used as the Celery broker and result backend. For Docker Compose
+production deployments, use Redis service URLs:
+
+```env
+CELERY_BROKER_URL=redis://redis:6379/1
+CELERY_RESULT_BACKEND=redis://redis:6379/2
+CELERY_TASK_TIME_LIMIT=300
+EMAIL_VERIFICATION_TOKEN_CLEANUP_INTERVAL_SECONDS=86400
+```
+
+The cleanup interval controls how often Celery Beat schedules expired and used
+email verification token cleanup. The default value is `86400` seconds, which is
+one day.
+
+For quick local production-compose testing, you can temporarily reduce it:
+
+```env
+EMAIL_VERIFICATION_TOKEN_CLEANUP_INTERVAL_SECONDS=60
+```
+
+Do not use a very low interval in real production unless you intentionally need
+very frequent cleanup.
+
 ## Redis and WebSocket stability
 
 Django Channels uses Redis for WebSocket channel layer communication.
@@ -202,6 +235,8 @@ This starts:
 postgres
 redis
 backend
+celery_worker
+celery_beat
 frontend nginx
 ```
 
@@ -232,6 +267,18 @@ Frontend logs:
 
 ```bash
 docker compose --env-file .env.production -f docker-compose.prod.example.yml logs frontend --tail=100
+```
+
+Celery worker logs:
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.example.yml logs celery_worker --tail=100
+```
+
+Celery beat logs:
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.example.yml logs celery_beat --tail=100
 ```
 
 ## Health check
