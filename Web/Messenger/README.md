@@ -1,3 +1,5 @@
+[![Messenger CI](https://github.com/PavloNaichuk/Projects/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/PavloNaichuk/Projects/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/PavloNaichuk/Projects/actions/workflows/codeql.yml/badge.svg?branch=master)](https://github.com/PavloNaichuk/Projects/actions/workflows/codeql.yml)
 ## Project Overview
 A full-stack real-time messaging application built with Django, Django REST Framework, Django Channels, Celery, Redis, PostgreSQL, React, TypeScript, Vite, and Docker Compose.
 
