@@ -1,5 +1,5 @@
 # Chess
-
+![CI](https://github.com/PavloNaichuk/Projects/actions/workflows/ci.yml/badge.svg?branch=master)
 A desktop chess game built with **Python** and **Pygame**.
 
 The project includes local play, bot play, network mode, chess rule validation, move history, animations, sounds, timers, JSON save/load, and automated tests for core chess rules.
