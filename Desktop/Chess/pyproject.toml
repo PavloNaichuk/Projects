@@ -1,3 +1,14 @@
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["board", "bot", "game", "graphics", "mode_select", "network", "utils"]
