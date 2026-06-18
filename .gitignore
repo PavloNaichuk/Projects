@@ -18,3 +18,4 @@ PacMan/Debug/
 /Python/Сhess/__pycache__
 *.pyc
 autosave.json
+.pytest_cache/
