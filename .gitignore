@@ -15,7 +15,6 @@ PacMan/Debug/
 *.pkl
 /Python/Сhess/dist
 /Python/Сhess/__pycache__
-/Python/Сhess/__pycache__
 *.pyc
 autosave.json
 .pytest_cache/
