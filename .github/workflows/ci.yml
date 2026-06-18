@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - "Web/Messenger/**"
+      - "Desktop/Chess/**"
       - ".github/workflows/ci.yml"
   pull_request:
     paths:
       - "Web/Messenger/**"
+      - "Desktop/Chess/**"
       - ".github/workflows/ci.yml"
   workflow_dispatch:
 
@@ -161,3 +163,41 @@ jobs:
 
       - name: Build production Docker images
         run: docker compose -f docker-compose.prod.example.yml build
+
+  chess-tests:
+    name: Chess tests
+    runs-on: ubuntu-latest
+
+    env:
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+
+    defaults:
+      run:
+        working-directory: Desktop/Chess
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            Desktop/Chess/requirements.txt
+            Desktop/Chess/requirements-dev.txt
+
+      - name: Install Chess dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install -r requirements-dev.txt
+
+      - name: Compile Chess Python files
+        run: |
+          python -m py_compile main.py board.py game.py graphics.py bot.py network.py mode_select.py utils.py game_over_window.py
+
+      - name: Run Chess tests
+        run: python -m pytest -q
