@@ -191,6 +191,7 @@ class ChessApp:
                 self.bot_moved = False
 
             self.handle_events()
+            self.check_timeout()
 
             if self.animating:
                 self.anim_progress += 0.03
@@ -265,6 +266,27 @@ class ChessApp:
             else:
                 move_sound.play()
             
+    def check_timeout(self):
+        if self.game_over:
+            return
+
+        if not self.game.time_control or self.game.time_control[0] <= 0:
+            return
+
+        current_color = self.game.turn
+        if self.game.get_time_left(current_color) > 0:
+            return
+
+        self.game.time_remaining[current_color] = 0
+
+        winner = "Black" if current_color == "w" else "White"
+        self.result = f"Time out! {winner} wins."
+        self.game_over = True
+        self.game.game_over = True
+        self.game.game_over_message = self.result
+
+        move_sound.play()
+
     def _play_move_sound(self, piece, captured, is_check=False):
         if (
             captured
