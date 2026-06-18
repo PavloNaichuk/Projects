@@ -126,14 +126,15 @@ class ChessApp:
         self.status_time = 0.0
 
         self._promo    = None
+        self._pending_send_network = False
         self.bot_moved = False
         self.reset_game()
     def ask_save_filename(self):
         root = tk.Tk()
         root.withdraw()
         filename = filedialog.asksaveasfilename(
-            defaultextension=".sav",
-            filetypes=[("Pickle files","*.sav"),("All files","*.*")]
+            defaultextension=".json",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
         )
         root.destroy()
         return filename
@@ -142,8 +143,8 @@ class ChessApp:
         root = tk.Tk()
         root.withdraw()
         filename = filedialog.askopenfilename(
-            defaultextension=".sav",
-            filetypes=[("Pickle files","*.sav"),("All files","*.*")]
+            defaultextension=".json",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
         )
         root.destroy()
         return filename
@@ -168,11 +169,17 @@ class ChessApp:
         self.auto_scroll()
         start_sound.play()
         self._promo    = None
+        self._pending_send_network = False
         self.bot_moved = False
 
     def _on_remote_move(self, start, end, promotion=None):
+        piece = self.game.board[start[0]][start[1]]
+        captured = self.game.board[end[0]][end[1]]
+
         ok = self.game.move_piece(start, end, promotion=promotion)
         if ok:
+            is_check = self.game.is_in_check(self.game.turn)
+            self._play_move_sound(piece, captured, is_check)
             self.check_end()
             self.auto_scroll()
 
@@ -193,21 +200,29 @@ class ChessApp:
                     self.anim_progress = 0.0
                     if self._pending_move:
                         prev, dst = self._pending_move
-                        piece    = self.game.board[prev[0]][prev[1]]
+                        piece = self.game.board[prev[0]][prev[1]]
                         captured = self.game.board[dst[0]][dst[1]]
-                        self._play_move_sound(prev, dst, piece, captured)
 
                         if self._promo == 'ask':
-                            promo = self.prompt_promotion(prev, dst)
+                            actual_promo = self.prompt_promotion(prev, dst)
                             pygame.event.clear()
-                            ok = self.game.move_piece(prev, dst, promotion=promo)
                         else:
-                            ok = self.game.move_piece(prev, dst, promotion=self._promo)
+                            actual_promo = self._promo
+
+                        ok = self.game.move_piece(prev, dst, promotion=actual_promo)
                         if ok:
+                            is_check = self.game.is_in_check(self.game.turn)
+                            self._play_move_sound(piece, captured, is_check)
+
+                            if self.net and self._pending_send_network:
+                                self._send_network_move(prev, dst, actual_promo)
+
                             self.check_end()
                             self.auto_scroll()
+
                         self._pending_move = None
-                        self._promo        = None
+                        self._promo = None
+                        self._pending_send_network = False
 
                     self.anim_move = None
 
@@ -220,6 +235,7 @@ class ChessApp:
                     piece_img = self.images.get(piece)
                     self._pending_move = (mv[0], mv[1])
                     self._promo = promo
+                    self._pending_send_network = False
                     self.start_animation(mv[0], mv[1], piece_img)
                 self.bot_moved = True
 
@@ -227,8 +243,8 @@ class ChessApp:
             self.just_undid = False
         if hasattr(self, "game") and self.game is not None:
             try:
-                self.game.save_game("autosave.sav")
-                print("Game automatically saved to autosave.sav")
+                self.game.save_game("autosave.json")
+                print("Game automatically saved to autosave.json")
             except Exception as e:
                 print("Failed to autosave:", e)
         pygame.quit()
@@ -249,16 +265,30 @@ class ChessApp:
             else:
                 move_sound.play()
             
-    def _play_move_sound(self, start, end, piece, captured):
-        if (captured and piece
-                and isinstance(captured, str) and isinstance(piece, str)
-                and len(captured) > 1 and len(piece) > 1
-                and captured[0] != piece[0]):
+    def _play_move_sound(self, piece, captured, is_check=False):
+        if (
+            captured
+            and piece
+            and isinstance(captured, str)
+            and isinstance(piece, str)
+            and len(captured) > 1
+            and len(piece) > 1
+            and captured[0] != piece[0]
+        ):
             capture_sound.play()
-        elif piece and isinstance(piece, str) and len(piece) > 1 and self.game.is_in_check(self.game.turn):
+        elif is_check:
             check_sound.play()
         else:
             move_sound.play()
+
+    def _send_network_move(self, start, end, promotion=None):
+        if promotion:
+            try:
+                self.net.send_move(start, end, promotion=promotion)
+                return
+            except TypeError:
+                pass
+        self.net.send_move(start, end)
 
     def auto_scroll(self):
         move_log = self.game.move_log
@@ -392,7 +422,8 @@ class ChessApp:
                 pygame.draw.rect(self.win, (190, 190, 210), (x0, y, col_w, row_h))
             num_txt = font.render(f"{move_number}.", True, (0, 0, 0))
             self.win.blit(num_txt, (x0, y + 4))
-            start, end, piece, captured = move
+            start, end, piece, captured = move[:4]
+            promotion = move[4] if len(move) > 4 else None
             capture = captured is not None and captured != ''
             PIECE_LETTER = {
                 'P': '',
@@ -404,6 +435,8 @@ class ChessApp:
             }
             piece_letter = PIECE_LETTER.get(piece[1].upper(), '')
             move_alg = f"{piece_letter}{chr(start[1]+97)}{8-start[0]} - {chr(end[1]+97)}{8-end[0]}"
+            if promotion:
+                move_alg += f"={promotion}"
             if capture:
                 move_alg += " +"
             txt = font.render(move_alg, True, (0, 0, 0))
@@ -431,8 +464,7 @@ class ChessApp:
             self.win.blit(txt, txt.get_rect(center=(WIDTH // 2, HEIGHT // 2)))
         if self.ui_locked and time.time() - self.ui_locked_time > 2:
             self.ui_locked = False          
-        pygame.display.update()
-        
+
         if self.illegal_move_message:
             now = pygame.time.get_ticks()
             if now - self.illegal_move_time < 3000:
@@ -446,6 +478,8 @@ class ChessApp:
                 pygame.event.clear()
             else:
                 self.illegal_move_message = ""
+
+        pygame.display.update()
 
     def handle_events(self):
         if self.ui_locked:
@@ -507,6 +541,7 @@ class ChessApp:
                     filename = self.ask_save_filename()
                     if filename:
                         self.game.save_game(filename)
+                    self.ui_locked = False
                     continue
                 elif self.load_rect.collidepoint(x, y):
                     self.load_highlight = True
@@ -524,8 +559,11 @@ class ChessApp:
                     filename = self.ask_load_filename()
                     if filename:
                         self.game.load_game(filename)
+                        self.game_over = getattr(self.game, 'game_over', False)
+                        self.result = getattr(self.game, 'game_over_message', "")
                         self.check_end()
                         self.auto_scroll()
+                    self.ui_locked = False
                     continue
                 
                 elif self.hint_rect.collidepoint(x, y):
@@ -554,6 +592,7 @@ class ChessApp:
                                 reached_last = (piece and is_pawn and ((piece[0] == 'w' and r == 0) or (piece[0] == 'b' and r == 7)))
                                 piece_img = self.images.get(piece)
                                 self._pending_move = (prev, (r, c))
+                                self._pending_send_network = bool(self.net)
                                 if is_pawn and reached_last:
                                     self._promo = 'ask'
                                 else:
@@ -562,8 +601,6 @@ class ChessApp:
                                 self.game.selected = None
                                 self.hint_squares = []
                                 self.auto_scroll()
-                                if self.net and prev is not None:
-                                    self.net.send_move(prev, (r, c))
                             elif self.game.board[r][c] and self.game.board[r][c][0] == self.game.turn:
                                 self.game.selected = (r, c)
                                 if self.show_hints:
