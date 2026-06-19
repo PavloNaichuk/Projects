@@ -1,12 +1,11 @@
 import sys
 import time
-import tkinter as tk
-from tkinter import filedialog
 
 import pygame
 from PIL import Image, ImageFilter
 
 from bot import bot_move
+from file_dialogs import ask_load_filename, ask_save_filename
 from game import Game
 from game_over_window import GameOverWindow
 from mode_select import select_mode
@@ -132,26 +131,6 @@ class ChessApp:
         self._pending_send_network = False
         self.bot_moved = False
         self.reset_game()
-    def ask_save_filename(self):
-        root = tk.Tk()
-        root.withdraw()
-        filename = filedialog.asksaveasfilename(
-            defaultextension=".json",
-            filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
-        )
-        root.destroy()
-        return filename
-
-    def ask_load_filename(self):
-        root = tk.Tk()
-        root.withdraw()
-        filename = filedialog.askopenfilename(
-            defaultextension=".json",
-            filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
-        )
-        root.destroy()
-        return filename
-    
     def reset_game(self):
         self.game = Game()
         self.game.time_control   = self.time_control
@@ -564,7 +543,7 @@ class ChessApp:
                     pygame.display.update()
                     pygame.time.wait(10) 
 
-                    filename = self.ask_save_filename()
+                    filename = ask_save_filename()
                     if filename:
                         self.game.save_game(filename)
                     self.ui_locked = False
@@ -582,7 +561,7 @@ class ChessApp:
                     pygame.display.update()
                     pygame.time.wait(10)
 
-                    filename = self.ask_load_filename()
+                    filename = ask_load_filename()
                     if filename:
                         self.game.load_game(filename)
                         self.game_over = getattr(self.game, 'game_over', False)
