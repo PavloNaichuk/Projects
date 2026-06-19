@@ -172,13 +172,18 @@ jobs:
       SDL_VIDEODRIVER: dummy
       SDL_AUDIODRIVER: dummy
 
-    defaults:
-      run:
-        working-directory: Desktop/Chess
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      - name: Show repository structure
+        run: |
+          pwd
+          ls -la
+          echo "Desktop:"
+          ls -la Desktop || true
+          echo "Desktop/Chess:"
+          ls -la Desktop/Chess || true
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -191,16 +196,22 @@ jobs:
 
       - name: Install Chess dependencies
         run: |
+          cd Desktop/Chess
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install -r requirements-dev.txt
-      
+
       - name: Run Chess lint
-        run: python -m ruff check .
+        run: |
+          cd Desktop/Chess
+          python -m ruff check .
 
       - name: Compile Chess Python files
         run: |
+          cd Desktop/Chess
           python -m py_compile main.py board.py game.py graphics.py bot.py network.py mode_select.py utils.py game_over_window.py
 
       - name: Run Chess tests
-        run: python -m pytest -q
+        run: |
+          cd Desktop/Chess
+          python -m pytest -q
