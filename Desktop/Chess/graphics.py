@@ -11,6 +11,7 @@ from game_over_window import GameOverWindow
 from mode_select import select_mode
 from move_notation import format_move
 from network import GameClient, GameServer
+from sound_manager import SoundManager
 from utils import draw_board, draw_pieces, load_images
 
 WIDTH, HEIGHT = 640, 640
@@ -28,13 +29,6 @@ MOVE_BG = (220, 220, 220)
 MOVE_BG_ACTIVE = (180, 180, 200)
 LAST_BLACK_BG = (185, 185, 200)
 
-pygame.mixer.init()
-move_sound = pygame.mixer.Sound("sounds/move.wav")
-capture_sound = pygame.mixer.Sound("sounds/capture.wav")
-check_sound = pygame.mixer.Sound("sounds/check.wav")
-checkmate_sound = pygame.mixer.Sound("sounds/checkmate.wav")
-start_sound = pygame.mixer.Sound("sounds/start.wav")
-
 def gaussian_blur_surface(surf, radius=4):
     raw_str = pygame.image.tostring(surf, 'RGBA')
     img = Image.frombytes('RGBA', surf.get_size(), raw_str)
@@ -46,6 +40,7 @@ class ChessApp:
         pygame.init()
         self.win = pygame.display.set_mode((WIDTH + SIDE_WIDTH, HEIGHT))
         pygame.display.set_caption("Chess")
+        self.sounds = SoundManager()
         
         self.show_side_rect = False
         self.side_rect_time = 0
@@ -149,7 +144,7 @@ class ChessApp:
         self.anim_progress = 0.0
         self._pending_move = None
         self.auto_scroll()
-        start_sound.play()
+        self.sounds.play_start()
         self._promo    = None
         self._pending_send_network = False
         self.bot_moved = False
@@ -248,11 +243,11 @@ class ChessApp:
             self.result = msg
             self.game_over = True
             if "Checkmate" in msg:
-                checkmate_sound.play()
+                self.sounds.play_checkmate()
             elif "draw" in msg or "Draw" in msg:
-                move_sound.play()
+                self.sounds.play_move()
             else:
-                move_sound.play()
+                self.sounds.play_move()
             
     def check_timeout(self):
         if self.game_over:
@@ -273,7 +268,7 @@ class ChessApp:
         self.game.game_over = True
         self.game.game_over_message = self.result
 
-        move_sound.play()
+        self.sounds.play_move()
 
     def _play_move_sound(self, piece, captured, is_check=False):
         if (
@@ -285,11 +280,11 @@ class ChessApp:
             and len(piece) > 1
             and captured[0] != piece[0]
         ):
-            capture_sound.play()
+            self.sounds.play_capture()
         elif is_check:
-            check_sound.play()
+            self.sounds.play_check()
         else:
-            move_sound.play()
+            self.sounds.play_move()
 
     def _send_network_move(self, start, end, promotion=None):
         if promotion:
