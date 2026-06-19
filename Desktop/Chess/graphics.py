@@ -10,6 +10,7 @@ from bot import bot_move
 from game import Game
 from game_over_window import GameOverWindow
 from mode_select import select_mode
+from move_notation import format_move
 from network import GameClient, GameServer
 from utils import draw_board, draw_pieces, load_images
 
@@ -463,23 +464,7 @@ class ChessApp:
                 pygame.draw.rect(self.win, (190, 190, 210), (x0, y, col_w, row_h))
             num_txt = font.render(f"{move_number}.", True, (0, 0, 0))
             self.win.blit(num_txt, (x0, y + 4))
-            start, end, piece, captured = move[:4]
-            promotion = move[4] if len(move) > 4 else None
-            capture = captured is not None and captured != ''
-            PIECE_LETTER = {
-                'P': '',
-                'N': 'N',
-                'B': 'B',
-                'R': 'R',
-                'Q': 'Q',
-                'K': 'K'
-            }
-            piece_letter = PIECE_LETTER.get(piece[1].upper(), '')
-            move_alg = f"{piece_letter}{chr(start[1]+97)}{8-start[0]} - {chr(end[1]+97)}{8-end[0]}"
-            if promotion:
-                move_alg += f"={promotion}"
-            if capture:
-                move_alg += " +"
+            move_alg = format_move(move)
             txt = font.render(move_alg, True, (0, 0, 0))
             self.win.blit(txt, (x0 + 35, y + 4))
 
