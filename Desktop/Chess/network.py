@@ -1,6 +1,6 @@
+import json
 import socket
 import threading
-import json
 
 
 class NetEndpoint:

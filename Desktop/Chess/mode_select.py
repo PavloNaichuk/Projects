@@ -1,7 +1,8 @@
-import pygame
 import sys
 import tkinter as tk
 from tkinter import simpledialog
+
+import pygame
 
 BUTTON_BG = (200, 200, 200)
 BUTTON_TEXT = (0, 0, 0)

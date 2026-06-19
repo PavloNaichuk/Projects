@@ -1,6 +1,5 @@
 import pygame
 
-
 OVERLAY_COLOR = (0, 0, 0, 160)
 BUTTON_BG = (200, 200, 200)
 BUTTON_TEXT = (0, 0, 0)

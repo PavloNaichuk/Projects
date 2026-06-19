@@ -1,6 +1,6 @@
 from pathlib import Path
-import pygame
 
+import pygame
 
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_IMAGES_DIR = BASE_DIR / "images"

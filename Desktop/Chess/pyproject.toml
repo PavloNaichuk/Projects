@@ -3,12 +3,27 @@ testpaths = ["tests"]
 pythonpath = ["."]
 
 [tool.ruff]
-line-length = 88
+line-length = 120
 target-version = "py311"
+exclude = [
+    ".venv",
+    "__pycache__",
+    ".pytest_cache",
+    "build",
+    "dist",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B"]
 ignore = []
 
 [tool.ruff.lint.isort]
-known-first-party = ["board", "bot", "game", "graphics", "mode_select", "network", "utils"]
+known-first-party = [
+    "board",
+    "bot",
+    "game",
+    "graphics",
+    "mode_select",
+    "network",
+    "utils",
+]

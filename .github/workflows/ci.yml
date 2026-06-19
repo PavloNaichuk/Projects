@@ -194,6 +194,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install -r requirements-dev.txt
+      
+      - name: Run Chess lint
+        run: python -m ruff check .
 
       - name: Compile Chess Python files
         run: |

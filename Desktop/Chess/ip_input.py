@@ -1,5 +1,7 @@
-import pygame
 import sys
+
+import pygame
+
 
 def get_ip_from_user():
     pygame.init()

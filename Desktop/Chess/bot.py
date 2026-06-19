@@ -1,6 +1,6 @@
 import time
-from game import Game
 
+from game import Game
 
 PIECE_VALUES = {
     'P': 100,

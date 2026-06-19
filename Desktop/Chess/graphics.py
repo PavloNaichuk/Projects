@@ -1,15 +1,17 @@
-import sys 
-import pygame
-from PIL import Image, ImageFilter
+import sys
+import time
 import tkinter as tk
 from tkinter import filedialog
-import time
-from game import Game
-from utils import load_images, draw_board, draw_pieces
-from mode_select import select_mode
+
+import pygame
+from PIL import Image, ImageFilter
+
 from bot import bot_move
-from network import GameServer, GameClient
+from game import Game
 from game_over_window import GameOverWindow
+from mode_select import select_mode
+from network import GameClient, GameServer
+from utils import draw_board, draw_pieces, load_images
 
 WIDTH, HEIGHT = 640, 640
 SIDE_WIDTH = 180
@@ -192,7 +194,13 @@ class ChessApp:
 
             self.handle_events()
             self.check_timeout()
-
+            bot_should_move = (
+                self.vs_bot
+                and not self.game_over
+                and self.game.turn == "b"
+                and not self.bot_moved
+                and not self.just_undid
+            )
             if self.animating:
                 self.anim_progress += 0.03
                 if self.anim_progress >= 1.0:
@@ -227,7 +235,7 @@ class ChessApp:
 
                     self.anim_move = None
 
-            elif self.vs_bot and not self.game_over and self.game.turn == 'b' and not self.bot_moved and not self.just_undid:
+            elif bot_should_move:
                 pygame.time.wait(300)
                 mv = bot_move(self.game)
                 if mv:
@@ -356,14 +364,22 @@ class ChessApp:
         timer_y = self.hint_rect.bottom + 20
         y0 = timer_y + 30
         
-        undo_bg = (130, 100, 160) if self.show_side_rect and self.last_clicked_button_rect == self.undo_rect else BUTTON_COLOR
+        undo_bg = (
+            (130, 100, 160)
+            if self.show_side_rect and self.last_clicked_button_rect == self.undo_rect
+            else BUTTON_COLOR
+        )
         undo_border = (130, 100, 160) if self.undo_hover else (0, 0, 0)
         pygame.draw.rect(self.win, undo_bg, self.undo_rect, border_radius=8)
         pygame.draw.rect(self.win, undo_border, self.undo_rect, 2, border_radius=8)
         txt_undo = self.font.render("Undo", True, BUTTON_TEXT)
         self.win.blit(txt_undo, txt_undo.get_rect(center=self.undo_rect.center))
 
-        save_bg = (130, 100, 160) if self.show_side_rect and self.last_clicked_button_rect == self.save_rect else BUTTON_COLOR
+        save_bg = (
+            (130, 100, 160)
+            if self.show_side_rect and self.last_clicked_button_rect == self.save_rect
+            else BUTTON_COLOR
+        )
         save_border = (130, 100, 160) if self.save_hover else (0, 0, 0)
         pygame.draw.rect(self.win, save_bg, self.save_rect, border_radius=8)
         pygame.draw.rect(self.win, save_border, self.save_rect, 2, border_radius=8)
@@ -371,7 +387,11 @@ class ChessApp:
         self.win.blit(txt_save, txt_save.get_rect(center=self.save_rect.center))
 
 
-        load_bg = (130, 100, 160) if self.show_side_rect and self.last_clicked_button_rect == self.load_rect else BUTTON_COLOR
+        load_bg = (
+            (130, 100, 160)
+            if self.show_side_rect and self.last_clicked_button_rect == self.load_rect
+            else BUTTON_COLOR
+        )
         load_border = (130, 100, 160) if self.load_hover else (0, 0, 0)
         pygame.draw.rect(self.win, load_bg, self.load_rect, border_radius=8)
         pygame.draw.rect(self.win, load_border, self.load_rect, 2, border_radius=8)
@@ -426,7 +446,6 @@ class ChessApp:
             pygame.draw.rect(self.win, (220, 220, 220), (bar_x, bar_y, bar_w, bar_h), border_radius=6)
             ratio = self.max_visible_moves / total_moves
             scroll_h = max(int(bar_h * ratio), 20)
-            scroll_max_y = bar_y + bar_h - scroll_h
             if max_scroll == 0:
                 scroll_y = bar_y
             else:
@@ -595,7 +614,11 @@ class ChessApp:
                     else:
                         self.hint_squares = []
                 elif x < WIDTH and not self.game_over:
-                    allowed = (self.mode=="local" or (self.vs_bot and self.game.turn=='w') or (self.net and self.game.turn==self.local_turn))
+                    allowed = (
+                        self.mode == "local"
+                        or (self.vs_bot and self.game.turn == "w")
+                        or (self.net and self.game.turn == self.local_turn)
+                    )
                     if allowed:
                         r, c = y//SQUARE_SIZE, x//SQUARE_SIZE
                         if self.game.selected is None:
@@ -611,7 +634,14 @@ class ChessApp:
                                 prev = self.game.selected
                                 piece = self.game.board[prev[0]][prev[1]]
                                 is_pawn = piece and piece[1] == 'P'
-                                reached_last = (piece and is_pawn and ((piece[0] == 'w' and r == 0) or (piece[0] == 'b' and r == 7)))
+                                reached_last = (
+                                    piece
+                                    and is_pawn
+                                    and (
+                                        (piece[0] == "w" and r == 0)
+                                        or (piece[0] == "b" and r == 7)
+                                    )
+                                )
                                 piece_img = self.images.get(piece)
                                 self._pending_move = (prev, (r, c))
                                 self._pending_send_network = bool(self.net)
