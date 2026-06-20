@@ -16,6 +16,11 @@ from mouse_utils import (
 )
 from network import GameClient, GameServer
 from promotion_dialog import prompt_promotion as ask_promotion
+from scroll_utils import (
+    calculate_scroll_from_drag,
+    get_max_scroll,
+    update_scroll_from_wheel,
+)
 from sidebar import draw_sidebar
 from sound_manager import SoundManager
 from ui_overlays import (
@@ -552,22 +557,31 @@ class ChessApp:
                     bar_y = self._scrollbar_area.y
                     bar_h = self._scrollbar_area.height
                     total_moves = len(self.game.move_log)
-                    max_scroll = max(0, total_moves - self.max_visible_moves)
+                    max_scroll = get_max_scroll(total_moves, self.max_visible_moves)
+
                     if total_moves > self.max_visible_moves:
-                        scroll_h = max(int(bar_h * self.max_visible_moves / total_moves), 20)
-                        my = ev.pos[1]
-                        rel = (my - bar_y - getattr(self, "_drag_offset", 0))
-                        rel = max(0, min(rel, bar_h - scroll_h))
-                        scroll_pos = rel / (bar_h - scroll_h) if (bar_h - scroll_h) > 0 else 0
-                        self.moves_scroll = int(scroll_pos * max_scroll)
+                        scroll_h = max(
+                            int(bar_h * self.max_visible_moves / total_moves),
+                            20,
+                        )
+                        self.moves_scroll = calculate_scroll_from_drag(
+                            mouse_y=ev.pos[1],
+                            bar_y=bar_y,
+                            bar_h=bar_h,
+                            scroll_h=scroll_h,
+                            drag_offset=getattr(self, "_drag_offset", 0),
+                            max_scroll=max_scroll,
+                        )
             elif ev.type == pygame.MOUSEWHEEL:
-                move_log = self.game.move_log
-                total_moves = len(move_log)
-                max_scroll = max(0, total_moves - self.max_visible_moves)
-                if ev.y > 0:
-                    self.moves_scroll = max(0, self.moves_scroll - 1)
-                elif ev.y < 0:
-                    self.moves_scroll = min(self.moves_scroll + 1, max_scroll)
+                max_scroll = get_max_scroll(
+                    len(self.game.move_log),
+                    self.max_visible_moves,
+                )
+                self.moves_scroll = update_scroll_from_wheel(
+                    current_scroll=self.moves_scroll,
+                    wheel_y=ev.y,
+                    max_scroll=max_scroll,
+                )
             elif ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_z and (pygame.key.get_mods() & pygame.KMOD_CTRL):
                     self.game.undo_move()
