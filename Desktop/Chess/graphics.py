@@ -2,7 +2,6 @@ import sys
 import time
 
 import pygame
-from PIL import Image, ImageFilter
 
 from bot import bot_move
 from file_dialogs import ask_load_filename, ask_save_filename
@@ -11,6 +10,7 @@ from game_over_window import GameOverWindow
 from mode_select import select_mode
 from move_notation import format_move
 from network import GameClient, GameServer
+from promotion_dialog import prompt_promotion as ask_promotion
 from sound_manager import SoundManager
 from utils import draw_board, draw_pieces, load_images
 
@@ -29,11 +29,6 @@ MOVE_BG = (220, 220, 220)
 MOVE_BG_ACTIVE = (180, 180, 200)
 LAST_BLACK_BG = (185, 185, 200)
 
-def gaussian_blur_surface(surf, radius=4):
-    raw_str = pygame.image.tostring(surf, 'RGBA')
-    img = Image.frombytes('RGBA', surf.get_size(), raw_str)
-    img = img.filter(ImageFilter.GaussianBlur(radius))
-    return pygame.image.fromstring(img.tobytes(), img.size, 'RGBA')
 
 class ChessApp:
     def __init__(self):
@@ -657,61 +652,16 @@ class ChessApp:
         self.anim_progress = 0.0
         
     def prompt_promotion(self, prev, dst):
-        self.draw()
-        background = self.win.copy()
-
-        color   = self.game.board[prev[0]][prev[1]][0]
-        options = ['Q','R','B','N']
-        imgs    = [self.images[color + opt] for opt in options]
-        width   = SQUARE_SIZE * 4
-        height  = SQUARE_SIZE
-        x0 = WIDTH//2 - width//2
-        y0 = HEIGHT//2 - height//2
-        rects   = [
-            pygame.Rect(x0 + i*SQUARE_SIZE, y0, SQUARE_SIZE, SQUARE_SIZE)
-            for i in range(4)
-        ]
-
-        selecting = True
-        choice     = 'Q'
-        while selecting:
-            board_bg = background.subsurface((0,0,WIDTH,HEIGHT)).copy()
-            blurred = gaussian_blur_surface(board_bg, radius = 3)
-            self.win.blit(blurred, (0, 0))
-
-            panel_bg = background.subsurface((WIDTH, 0, SIDE_WIDTH, HEIGHT)).copy()
-            self.win.blit(panel_bg, (WIDTH, 0))
-
-            bg_rect   = pygame.Rect(x0-5, y0-5, width+10, height+10)
-            panel_surf = pygame.Surface(
-                (bg_rect.width, bg_rect.height), pygame.SRCALPHA
-            )
-            panel_surf.fill((210, 180, 140, 200))
-            self.win.blit(panel_surf, (bg_rect.x, bg_rect.y))
-
-            mx, my = pygame.mouse.get_pos()
-            for i, img in enumerate(imgs):
-                rect = rects[i]
-                if rect.collidepoint(mx, my):
-                    hl = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
-                    hl.fill((210, 180, 140, 150))
-                    self.win.blit(hl, rect.topleft)
-                    pygame.draw.rect(self.win, HOVER_COLOR, rect, 3)
-                self.win.blit(img, rect)
-
-            pygame.display.update()
-
-            for ev in pygame.event.get():
-                if ev.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif ev.type == pygame.MOUSEBUTTONDOWN:
-                    mx, my = ev.pos
-                    for i, rect in enumerate(rects):
-                        if rect.collidepoint(mx, my):
-                            choice = options[i]
-                            selecting = False
-
-            self.clock.tick(30)
-
-        return choice
+        return ask_promotion(
+            win=self.win,
+            clock=self.clock,
+            draw_callback=self.draw,
+            board=self.game.board,
+            images=self.images,
+            prev=prev,
+            board_width=WIDTH,
+            board_height=HEIGHT,
+            side_width=SIDE_WIDTH,
+            square_size=SQUARE_SIZE,
+            hover_color=HOVER_COLOR,
+        )
