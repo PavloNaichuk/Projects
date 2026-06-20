@@ -54,18 +54,20 @@ def test_threefold_repetition_detected_after_move_piece_sets_game_over():
 def test_repetition_counter_is_restored_after_undo():
     game = Game()
 
-    initial_fen = game.board.fen()
+    initial_key = game.board.position_key()
 
-    assert game.move_piece((7, 6), (5, 5)) is True
-    assert game.move_piece((0, 6), (2, 5)) is True
-    assert game.move_piece((5, 5), (7, 6)) is True
-    assert game.move_piece((2, 5), (0, 6)) is True
+    assert game.move_piece((7, 6), (5, 5)) is True  # Ng1 -> f3
+    assert game.move_piece((0, 6), (2, 5)) is True  # Ng8 -> f6
+    assert game.move_piece((5, 5), (7, 6)) is True  # Nf3 -> g1
+    assert game.move_piece((2, 5), (0, 6)) is True  # Nf6 -> g8
 
-    assert game.board.fen() == initial_fen
+    assert game.board.position_key() == initial_key
+    assert game.board.is_threefold_repetition() is False
+
     assert game.undo_move() is True
 
+    assert game.board.position_key() != initial_key
     assert game.board.is_threefold_repetition() is False
-    assert game.game_over is False
 
 
 def test_position_key_distinguishes_side_to_move_for_repetition():
