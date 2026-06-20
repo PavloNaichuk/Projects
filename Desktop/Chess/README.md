@@ -1,63 +1,48 @@
 # Chess
+
 ![CI](https://github.com/PavloNaichuk/Projects/actions/workflows/ci.yml/badge.svg?branch=master)
 
 A desktop chess game built with **Python** and **Pygame**.
 
-The project includes local play, bot play, network mode, chess rule validation, move history, animations, sounds, timers, JSON save/load, and automated tests for core chess rules.
+The project includes local play, bot play, network mode, chess rule validation, move history, animations, sounds, timers, JSON save/load, code quality checks, CI, and automated tests for core chess rules.
 
 ## Features
 
-- Local 1 vs 1 chess mode
-- Play against an Alpha-Beta bot
-- Network mode: host or join a game
-- Legal move validation
-- Check, checkmate, and stalemate detection
-- Castling
-- En passant
-- Pawn promotion
-- Move history panel
-- Undo move
-- Timers with increment
-- Save/load game state using JSON
-- Sound effects
-- Move animations
-- Automated tests for important chess rules
+* Local 1 vs 1 chess mode
+* Play against an Alpha-Beta bot
+* Network mode: host or join a game
+* Legal move validation
+* Check, checkmate, and stalemate detection
+* Castling
+* En passant
+* Pawn promotion
+* Threefold repetition detection
+* Fifty-move rule
+* Insufficient material detection
+* Move history panel with scrolling
+* Undo move
+* Timers with increment
+* Save/load game state using JSON
+* Autosave support
+* Sound effects
+* Move animations
+* Promotion selection dialog
+* UI overlays for hints, illegal moves, and waiting state
+* Automated tests for chess rules and UI helper logic
+* Ruff linting
+* GitHub Actions CI
 
 ## Tech Stack
 
-- Python
-- Pygame
-- Pillow
-- Pytest
-- Socket networking
-- Tkinter file dialogs
+* Python
+* Pygame
+* Pillow
+* Pytest
+* Ruff
+* Socket networking
+* Tkinter file dialogs
+* GitHub Actions
 
-## Project Structure
-
-```text
-Chess/
-├── board.py
-├── bot.py
-├── game.py
-├── game_over_window.py
-├── graphics.py
-├── main.py
-├── mode_select.py
-├── network.py
-├── utils.py
-├── requirements.txt
-├── requirements-dev.txt
-├── tests/
-│   └── test_game_rules.py
-├── images/
-│   ├── wK.png
-│   ├── wQ.png
-│   └── ...
-└── sounds/
-    ├── move.wav
-    ├── capture.wav
-    └── ...
-```
 
 ## Installation
 
@@ -65,7 +50,7 @@ Clone the repository:
 
 ```bash
 git clone <your-repository-url>
-cd Chess
+cd Projects/Desktop/Chess
 ```
 
 Create and activate a virtual environment:
@@ -83,7 +68,14 @@ On Windows PowerShell:
 Install dependencies:
 
 ```bash
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+```
+
+For development and testing, install development dependencies:
+
+```bash
+python -m pip install -r requirements-dev.txt
 ```
 
 ## Run the Game
@@ -94,16 +86,20 @@ python main.py
 
 ## Run Tests
 
-Install development dependencies:
-
-```bash
-python -m pip install -r requirements-dev.txt
-```
-
-Run tests:
-
 ```bash
 python -m pytest -q
+```
+
+## Run Linting
+
+```bash
+python -m ruff check .
+```
+
+To auto-fix formatting/import issues:
+
+```bash
+python -m ruff check . --fix
 ```
 
 ## Game Modes
@@ -118,16 +114,63 @@ The player controls White and the bot controls Black.
 
 The bot uses:
 
-- Alpha-Beta search
-- Move ordering
-- Basic evaluation
-- Quiescence search for capture moves
+* Alpha-Beta search
+* Move ordering
+* Basic evaluation
+* Quiescence search for capture moves
 
 ### Network Mode
 
 One player hosts the game and another player joins by entering the host IP address.
 
-The network mode supports normal moves and pawn promotion.
+Network mode supports normal moves and pawn promotion.
+
+## Chess Logic Coverage
+
+Automated tests cover important chess rules and edge cases, including:
+
+* Legal and illegal piece movement
+* Pawn movement and captures
+* Knight, bishop, rook, queen, and king movement
+* Check detection
+* Checkmate detection
+* Stalemate detection
+* King safety
+* Pinned pieces
+* Blocking check
+* Capturing checking pieces
+* Double check
+* Castling rules
+* Castling rights after king/rook movement or rook capture
+* En passant
+* En passant edge cases that expose the king
+* Pawn promotion
+* Promotion with capture
+* Invalid promotion rejection
+* Undo after special moves
+* FEN parsing and serialization
+* Position keys for repetition detection
+* Threefold repetition
+* Fifty-move rule
+* Insufficient material
+* Move generation integrity
+* Basic perft checks
+* Bot smoke tests
+* JSON save/load behavior
+
+## UI and Helper Modules
+
+The UI code has been split into smaller modules:
+
+* `graphics.py` — main game loop and event handling
+* `sidebar.py` — right panel, buttons, timers, move history, scrollbar
+* `ui_overlays.py` — last-move highlight, selected square, hints, wait overlay, illegal move overlay
+* `promotion_dialog.py` — pawn promotion selection dialog
+* `file_dialogs.py` — save/load file dialogs
+* `sound_manager.py` — sound loading and playback
+* `mouse_utils.py` — mouse position and board-click helpers
+* `scroll_utils.py` — move history scrolling helpers
+* `move_notation.py` — move formatting for the history panel
 
 ## Save and Load
 
@@ -141,27 +184,41 @@ autosave.json
 
 This file should not be committed to Git.
 
+## Continuous Integration
+
+The project uses GitHub Actions CI.
+
+CI checks include:
+
+* Ruff linting
+* Python file compilation
+* Pytest test suite
+
 ## Notes
 
 This project is focused on Python desktop development and chess game logic.
 
 It demonstrates:
 
-- Object-oriented programming
-- Game loop architecture
-- Board state management
-- Legal move generation
-- Basic AI search
-- Socket communication
-- JSON persistence
-- Automated testing
+* Object-oriented programming
+* Game loop architecture
+* Board state management
+* Legal move generation
+* Special chess rules
+* Basic AI search
+* Socket communication
+* JSON persistence
+* UI refactoring
+* Automated testing
+* CI/CD basics
 
 ## Future Improvements
 
-- Improve UI layout and responsiveness
-- Add stronger chess notation
-- Add captured pieces panel
-- Add online matchmaking or lobby
-- Add difficulty levels for the bot
-- Add CI with GitHub Actions
-- Add screenshots and demo GIF to README
+* Add screenshots and demo GIF to README
+* Add captured pieces panel
+* Add difficulty levels for the bot
+* Improve chess notation
+* Improve UI layout and responsiveness
+* Add online lobby or matchmaking
+* Add stronger bot evaluation
+* Add packaging support for Windows executable
