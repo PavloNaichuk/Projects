@@ -8,9 +8,9 @@ from file_dialogs import ask_load_filename, ask_save_filename
 from game import Game
 from game_over_window import GameOverWindow
 from mode_select import select_mode
-from move_notation import format_move
 from network import GameClient, GameServer
 from promotion_dialog import prompt_promotion as ask_promotion
+from sidebar import draw_sidebar
 from sound_manager import SoundManager
 from utils import draw_board, draw_pieces, load_images
 
@@ -318,124 +318,36 @@ class ChessApp:
             self.win.blit(highlight_surf, (end[1] * SQUARE_SIZE, end[0] * SQUARE_SIZE))
             
         draw_pieces(self.win, self.game.board, self.images, SQUARE_SIZE, skip_piece=skip_piece)
-        pygame.draw.rect(self.win, PANEL_COLOR, (WIDTH, 0, SIDE_WIDTH, HEIGHT))
-
-        if self.game.time_control and self.game.time_control[0] > 0:
-            t_w = self.game.get_time_left('w')
-            mins, secs = divmod(int(t_w), 60)
-            txt = self.font.render(f"White: {mins:02d}:{secs:02d}", True, (0,0,0))
-            self.win.blit(txt, (WIDTH+20, 20))
-
-            t_b = self.game.get_time_left('b')
-            mins_b, secs_b = divmod(int(t_b), 60)
-            txt_b = self.font.render(f"Black: {mins_b:02d}:{secs_b:02d}", True, (0,0,0))
-            self.win.blit(txt_b, (WIDTH+20, self.hint_rect.bottom + 20))
-        
-        timer_y = self.hint_rect.bottom + 20
-        y0 = timer_y + 30
-        
-        undo_bg = (
-            (130, 100, 160)
-            if self.show_side_rect and self.last_clicked_button_rect == self.undo_rect
-            else BUTTON_COLOR
+        (
+            self.moves_scroll,
+            self._scrollbar_rect,
+            self._scrollbar_area,
+        ) = draw_sidebar(
+            win=self.win,
+            font=self.font,
+            game=self.game,
+            width=WIDTH,
+            side_width=SIDE_WIDTH,
+            height=HEIGHT,
+            hint_rect=self.hint_rect,
+            undo_rect=self.undo_rect,
+            save_rect=self.save_rect,
+            load_rect=self.load_rect,
+            show_side_rect=self.show_side_rect,
+            last_clicked_button_rect=self.last_clicked_button_rect,
+            undo_hover=self.undo_hover,
+            save_hover=self.save_hover,
+            load_hover=self.load_hover,
+            hint_hover=self.hint_hover,
+            show_hints=self.show_hints,
+            moves_scroll=self.moves_scroll,
+            max_visible_moves=self.max_visible_moves,
+            panel_color=PANEL_COLOR,
+            button_color=BUTTON_COLOR,
+            button_text=BUTTON_TEXT,
+            hint_active_bg=HINT_ACTIVE_BG,
+            active_color=HIGHLIGHT_COLOR,
         )
-        undo_border = (130, 100, 160) if self.undo_hover else (0, 0, 0)
-        pygame.draw.rect(self.win, undo_bg, self.undo_rect, border_radius=8)
-        pygame.draw.rect(self.win, undo_border, self.undo_rect, 2, border_radius=8)
-        txt_undo = self.font.render("Undo", True, BUTTON_TEXT)
-        self.win.blit(txt_undo, txt_undo.get_rect(center=self.undo_rect.center))
-
-        save_bg = (
-            (130, 100, 160)
-            if self.show_side_rect and self.last_clicked_button_rect == self.save_rect
-            else BUTTON_COLOR
-        )
-        save_border = (130, 100, 160) if self.save_hover else (0, 0, 0)
-        pygame.draw.rect(self.win, save_bg, self.save_rect, border_radius=8)
-        pygame.draw.rect(self.win, save_border, self.save_rect, 2, border_radius=8)
-        txt_save = self.font.render("Save", True, BUTTON_TEXT)
-        self.win.blit(txt_save, txt_save.get_rect(center=self.save_rect.center))
-
-
-        load_bg = (
-            (130, 100, 160)
-            if self.show_side_rect and self.last_clicked_button_rect == self.load_rect
-            else BUTTON_COLOR
-        )
-        load_border = (130, 100, 160) if self.load_hover else (0, 0, 0)
-        pygame.draw.rect(self.win, load_bg, self.load_rect, border_radius=8)
-        pygame.draw.rect(self.win, load_border, self.load_rect, 2, border_radius=8)
-        txt_load = self.font.render("Load", True, BUTTON_TEXT)
-        self.win.blit(txt_load, txt_load.get_rect(center=self.load_rect.center))
-
-
-        hint_bg = HINT_ACTIVE_BG if self.show_hints else BUTTON_COLOR
-        hint_border = (130, 100, 160) if self.hint_hover else (0, 0, 0)
-        pygame.draw.rect(self.win, hint_bg, self.hint_rect, border_radius=8)
-        pygame.draw.rect(self.win, hint_border, self.hint_rect, 2, border_radius=8)
-        txt_hint = self.font.render("Hint", True, BUTTON_TEXT)
-        self.win.blit(txt_hint, txt_hint.get_rect(center=self.hint_rect.center))
-
-        if self.game.selected:
-            r, c = self.game.selected
-            pygame.draw.rect(self.win, HIGHLIGHT_COLOR, (c*SQUARE_SIZE, r*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 4)
-        if self.show_hints and self.game.selected:
-            for hr, hc in self.hint_squares:
-                surf = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
-                pygame.draw.rect(surf, (*HIGHLIGHT_COLOR, 100), surf.get_rect())
-                self.win.blit(surf, (hc*SQUARE_SIZE, hr*SQUARE_SIZE))
-        mx, my = pygame.mouse.get_pos()
-        if mx < WIDTH:
-            hr, hc = my//SQUARE_SIZE, mx//SQUARE_SIZE
-            p = self.game.board.board[hr][hc]
-            if p and (hr, hc) != self.game.selected and p[0] == self.game.turn:
-                surf = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE), pygame.SRCALPHA)
-                pygame.draw.rect(surf, (*HOVER_COLOR, 255), surf.get_rect(), 4)
-                self.win.blit(surf, (hc*SQUARE_SIZE, hr*SQUARE_SIZE))
-                
-        move_log = self.game.move_log
-        font = self.font
-        x0 = WIDTH + 10
-        y0 = timer_y  + 30
-        row_h = 28
-        col_w = 130
-
-        total_moves = len(move_log)
-        max_scroll = max(0, total_moves - self.max_visible_moves)
-        self.moves_scroll = min(self.moves_scroll, max_scroll)
-        start_idx = self.moves_scroll
-        end_idx = min(total_moves, start_idx + self.max_visible_moves)
-        visible_moves = move_log[start_idx:end_idx]
-
-        bar_x = x0 + col_w + 6
-        bar_y = y0
-        bar_w = 13
-        bar_h = self.max_visible_moves * row_h
-
-        if total_moves > self.max_visible_moves:
-            pygame.draw.rect(self.win, (220, 220, 220), (bar_x, bar_y, bar_w, bar_h), border_radius=6)
-            ratio = self.max_visible_moves / total_moves
-            scroll_h = max(int(bar_h * ratio), 20)
-            if max_scroll == 0:
-                scroll_y = bar_y
-            else:
-                scroll_y = int(bar_y + (bar_h - scroll_h) * (self.moves_scroll / max_scroll))
-            pygame.draw.rect(self.win, (180, 180, 180), (bar_x, scroll_y, bar_w, scroll_h), border_radius=5)
-            self._scrollbar_rect = pygame.Rect(bar_x, scroll_y, bar_w, scroll_h)
-            self._scrollbar_area = pygame.Rect(bar_x, bar_y, bar_w, bar_h)
-        else:
-            self._scrollbar_rect = None
-            self._scrollbar_area = None
-        for idx, move in enumerate(visible_moves):
-            y = y0 + idx * row_h
-            move_number = start_idx + idx + 1
-            if move_number % 2 == 0:
-                pygame.draw.rect(self.win, (190, 190, 210), (x0, y, col_w, row_h))
-            num_txt = font.render(f"{move_number}.", True, (0, 0, 0))
-            self.win.blit(num_txt, (x0, y + 4))
-            move_alg = format_move(move)
-            txt = font.render(move_alg, True, (0, 0, 0))
-            self.win.blit(txt, (x0 + 35, y + 4))
 
         if self.game_over:
             self.over_window.draw(self.win, self.result)
