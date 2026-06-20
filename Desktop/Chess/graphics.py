@@ -8,6 +8,12 @@ from file_dialogs import ask_load_filename, ask_save_filename
 from game import Game
 from game_over_window import GameOverWindow
 from mode_select import select_mode
+from mouse_utils import (
+    get_board_square,
+    has_pawn_reached_last_rank,
+    is_board_click,
+    is_move_allowed,
+)
 from network import GameClient, GameServer
 from promotion_dialog import prompt_promotion as ask_promotion
 from sidebar import draw_sidebar
@@ -494,14 +500,16 @@ class ChessApp:
                         self.hint_squares = self.game.get_legal_moves(self.game.selected)
                     else:
                         self.hint_squares = []
-                elif x < WIDTH and not self.game_over:
-                    allowed = (
-                        self.mode == "local"
-                        or (self.vs_bot and self.game.turn == "w")
-                        or (self.net and self.game.turn == self.local_turn)
+                elif is_board_click(ev.pos, WIDTH) and not self.game_over:
+                    allowed = is_move_allowed(
+                        mode=self.mode,
+                        vs_bot=self.vs_bot,
+                        game_turn=self.game.turn,
+                        net=self.net,
+                        local_turn=self.local_turn,
                     )
                     if allowed:
-                        r, c = y//SQUARE_SIZE, x//SQUARE_SIZE
+                        r, c = get_board_square(ev.pos, SQUARE_SIZE)
                         if self.game.selected is None:
                             piece = self.game.board[r][c]
                             if piece and piece[0] == self.game.turn:
@@ -514,19 +522,11 @@ class ChessApp:
                             if (r, c) in self.game.get_legal_moves(self.game.selected):
                                 prev = self.game.selected
                                 piece = self.game.board[prev[0]][prev[1]]
-                                is_pawn = piece and piece[1] == 'P'
-                                reached_last = (
-                                    piece
-                                    and is_pawn
-                                    and (
-                                        (piece[0] == "w" and r == 0)
-                                        or (piece[0] == "b" and r == 7)
-                                    )
-                                )
+                                reached_last = has_pawn_reached_last_rank(piece, r)
                                 piece_img = self.images.get(piece)
                                 self._pending_move = (prev, (r, c))
                                 self._pending_send_network = bool(self.net)
-                                if is_pawn and reached_last:
+                                if reached_last:
                                     self._promo = 'ask'
                                 else:
                                     self._promo = None
