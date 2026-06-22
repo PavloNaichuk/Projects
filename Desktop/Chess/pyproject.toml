@@ -9,6 +9,7 @@ exclude = [
     ".venv",
     "__pycache__",
     ".pytest_cache",
+    ".ruff_cache",
     "build",
     "dist",
 ]
@@ -21,9 +22,18 @@ ignore = []
 known-first-party = [
     "board",
     "bot",
+    "file_dialogs",
     "game",
+    "game_over_window",
     "graphics",
     "mode_select",
+    "mouse_utils",
+    "move_notation",
     "network",
+    "promotion_dialog",
+    "scroll_utils",
+    "sidebar",
+    "sound_manager",
+    "ui_overlays",
     "utils",
 ]
