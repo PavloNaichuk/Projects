@@ -12,10 +12,31 @@ PacMan/Debug/
 /Tic Tac Toe/.vs
 /Tic Tac Toe/Tic Tac Toe/Debug
 
-*.pkl
+
+*.py[cod]
+*$py.class
+
+
 .venv/
+venv/
+env/
+
+
 .pytest_cache/
 .ruff_cache/
-__pycache__/
+.coverage
+htmlcov/
+
+build/
 dist/
+*.spec
+
+
 autosave.json
+*.sav
+*.pkl
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
