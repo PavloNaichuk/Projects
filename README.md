@@ -33,6 +33,21 @@ A full-stack real-time messaging application inspired by Telegram-style communic
 * Real-time sidebar and profile updates
 
 ## 🔹 Desktop Projects
+## Chess
+
+A desktop chess game built with Python and Pygame.
+
+**Technologies:** Python, Pygame, Pytest, Ruff, Socket networking, JSON
+
+**Key features:**
+
+* Local play, bot play, and network mode
+* Legal move generation and full chess rule validation
+* Check, checkmate, stalemate, castling, en passant, promotion, and draw rules
+* Alpha-Beta bot with basic evaluation
+* Move history, timers, undo, animations, sounds, and JSON save/load
+* Modular UI structure and automated tests for core chess logic
+* Ruff linting and GitHub Actions CI
 
 ## Battle City
 
