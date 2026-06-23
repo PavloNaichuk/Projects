@@ -211,14 +211,3 @@ It demonstrates:
 * UI refactoring
 * Automated testing
 * CI/CD basics
-
-## Future Improvements
-
-* Add screenshots and demo GIF to README
-* Add captured pieces panel
-* Add difficulty levels for the bot
-* Improve chess notation
-* Improve UI layout and responsiveness
-* Add online lobby or matchmaking
-* Add stronger bot evaluation
-* Add packaging support for Windows executable
