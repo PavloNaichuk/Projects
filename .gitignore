@@ -8,11 +8,6 @@ Qt/build-MemoryPuzzle-Desktop_Qt_5_5_1_MSVC2013_64bit-Debug/
 build-Math-Desktop_Qt_5_7_1_MSVC2015_64bit-Debug/
 *.opendb
 *.db
-PacMan/Debug/
-/Tic Tac Toe/.vs
-/Tic Tac Toe/Tic Tac Toe/Debug
-
-
 *.py[cod]
 *$py.class
 
@@ -40,3 +35,37 @@ autosave.json
 Thumbs.db
 .idea/
 .vscode/
+
+/Desktop/**/.vs/
+/Desktop/**/*.user
+/Desktop/**/*.suo
+/Desktop/**/*.wsuo
+/Desktop/**/*.vcxproj.user
+/Desktop/**/*.VC.db
+/Desktop/**/*.VC.opendb
+/Desktop/**/*.opendb
+/Desktop/**/*.sdf
+/Desktop/**/*.opensdf
+/Desktop/**/*.ipch
+/Desktop/**/*.db
+/Desktop/**/x64/
+/Desktop/**/Win32/
+/Desktop/**/Debug/
+/Desktop/**/Release/
+/Desktop/**/build/
+/Desktop/**/build-*/
+/Desktop/**/*.obj
+/Desktop/**/*.pch
+/Desktop/**/*.pdb
+/Desktop/**/*.idb
+/Desktop/**/*.ilk
+/Desktop/**/*.tlog
+/Desktop/**/*.lastbuildstate
+/Desktop/**/*.recipe
+/Desktop/**/*.FileListAbsolute.txt
+/Desktop/**/*.Build.CppClean.log
+/Desktop/**/*.pro.user
+/Desktop/**/.qmake.stash
+/Desktop/**/Makefile*
+
+
