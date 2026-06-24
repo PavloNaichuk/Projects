@@ -117,6 +117,11 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)External\SDL2-2.0.5\lib\x64;$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x64;$(SolutionDir)External\SDL2_image-2.0.1\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)External\SDL2-2.0.5\lib\$(Platform)\*.dll" "$(OutDir)"
+xcopy /Y /D "$(ProjectDir)External\SDL2_image-2.0.1\lib\$(Platform)\*.dll" "$(OutDir)"
+xcopy /Y /D "$(ProjectDir)External\SDL2_ttf-2.0.14\lib\$(Platform)\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -161,6 +166,11 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)External\SDL2-2.0.5\lib\x64;$(SolutionDir)External\SDL2_ttf-2.0.14\lib\x64;$(SolutionDir)External\SDL2_image-2.0.1\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)External\SDL2-2.0.5\lib\$(Platform)\*.dll" "$(OutDir)"
+xcopy /Y /D "$(ProjectDir)External\SDL2_image-2.0.1\lib\$(Platform)\*.dll" "$(OutDir)"
+xcopy /Y /D "$(ProjectDir)External\SDL2_ttf-2.0.14\lib\$(Platform)\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BoxComponent.h" />
