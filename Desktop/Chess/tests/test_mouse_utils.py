@@ -47,7 +47,7 @@ def test_is_move_allowed_for_bot_only_when_white_to_move():
         game_turn="b",
         net=None,
         local_turn=None,
-    ) is None
+    ) is False
 
 
 def test_is_move_allowed_for_network_only_on_local_turn():

@@ -11,12 +11,11 @@ def get_board_square(mouse_pos, square_size):
 
 
 def is_move_allowed(mode, vs_bot, game_turn, net, local_turn):
-    return (
+    return bool(
         mode == "local"
         or (vs_bot and game_turn == "w")
         or (net and game_turn == local_turn)
     )
-
 
 def is_pawn(piece):
     return bool(piece and len(piece) > 1 and piece[1] == "P")
