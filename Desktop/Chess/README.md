@@ -32,23 +32,33 @@ The project includes local play, bot play, network mode, chess rule validation, 
 * Ruff linting
 * GitHub Actions CI
 ## Demo
-
 ### Main Menu
+
+The main menu allows the player to choose between local play, bot mode, and network mode.
+After selecting a game mode, the player can choose a time control before starting the game.
 
 ![Main Menu](docs/images/mainMenu.gif)
 
 ### Gameplay
 
+The gameplay demo shows piece selection, legal move hints, move animation, last-move highlighting, timers, and the move history panel.
+The game validates legal moves and updates the board state after every move.
+
 ![Gameplay](docs/images/gameplay.gif)
 
 ### Pawn Promotion
+
+The promotion demo shows a pawn reaching the last rank and opening the promotion dialog.
+The player can choose a queen, rook, bishop, or knight, and the selected piece is placed on the board.
 
 ![Pawn Promotion](docs/images/promotion.gif)
 
 ### Bot Mode
 
-![Bot Mode](docs/images/botMode.gif)
+The bot mode demo shows the player making a move as White and the computer responding as Black.
+The bot uses Alpha-Beta search with basic evaluation to choose its move.
 
+![Bot Mode](docs/images/botMode.gif)
 
 ## Tech Stack
 
