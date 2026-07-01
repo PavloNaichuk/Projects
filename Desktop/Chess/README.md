@@ -21,7 +21,7 @@ The project includes local play, bot play, network mode, chess rule validation, 
 * Insufficient material detection
 * Move history panel with scrolling
 * Undo move
-* Timers with increment
+* Time control selection
 * Save/load game state using JSON
 * Autosave support
 * Sound effects
@@ -31,6 +31,7 @@ The project includes local play, bot play, network mode, chess rule validation, 
 * Automated tests for chess rules and UI helper logic
 * Ruff linting
 * GitHub Actions CI
+  
 ## Demo
 ### Main Menu
 
@@ -46,6 +47,13 @@ The game validates legal moves and updates the board state after every move.
 
 ![Gameplay](docs/images/gameplay.gif)
 
+### Bot Mode
+
+The bot mode demo shows the player making a move as White and the computer responding as Black.
+The bot uses Alpha-Beta search with basic evaluation to choose its move.
+
+![Bot Mode](docs/images/botMode.gif)
+
 ### Pawn Promotion
 
 The promotion demo shows a pawn reaching the last rank and opening the promotion dialog.
@@ -53,12 +61,6 @@ The player can choose a queen, rook, bishop, or knight, and the selected piece i
 
 ![Pawn Promotion](docs/images/promotion.gif)
 
-### Bot Mode
-
-The bot mode demo shows the player making a move as White and the computer responding as Black.
-The bot uses Alpha-Beta search with basic evaluation to choose its move.
-
-![Bot Mode](docs/images/botMode.gif)
 
 ## Tech Stack
 
@@ -77,7 +79,7 @@ The bot uses Alpha-Beta search with basic evaluation to choose its move.
 Clone the repository:
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/PavloNaichuk/Projects.git
 cd Projects/Desktop/Chess
 ```
 
