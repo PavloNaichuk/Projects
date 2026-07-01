@@ -1,8 +1,8 @@
 import sys
 import time
+from pathlib import Path
 
 import pygame
-from pathlib import Path
 
 from bot import bot_move
 from file_dialogs import ask_load_filename, ask_save_filename
