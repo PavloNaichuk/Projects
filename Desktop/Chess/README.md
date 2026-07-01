@@ -31,6 +31,24 @@ The project includes local play, bot play, network mode, chess rule validation, 
 * Automated tests for chess rules and UI helper logic
 * Ruff linting
 * GitHub Actions CI
+## Demo
+
+### Main Menu
+
+![Main Menu](docs/images/mainMenu.gif)
+
+### Gameplay
+
+![Gameplay](docs/images/gameplay.gif)
+
+### Pawn Promotion
+
+![Pawn Promotion](docs/images/promotion.gif)
+
+### Bot Mode
+
+![Bot Mode](docs/images/botMode.gif)
+
 
 ## Tech Stack
 
