@@ -182,9 +182,9 @@ def select_time_control(win):
     result = {}
 
     options = [
-        ("3 + 2", (3 * 60, 2)),
-        ("5 + 0", (5 * 60, 0)),
-        ("10 + 5", (10 * 60, 5)),
+        ("3 minutes", (3 * 60, 0)),
+        ("5 minutes", (5 * 60, 0)),
+        ("10 minutes", (10 * 60, 0)),
         ("No timer", (0, 0)),
     ]
 

@@ -2,6 +2,7 @@ import sys
 import time
 
 import pygame
+from pathlib import Path
 
 from bot import bot_move
 from file_dialogs import ask_load_filename, ask_save_filename
@@ -53,6 +54,11 @@ LAST_BLACK_BG = (185, 185, 200)
 class ChessApp:
     def __init__(self):
         pygame.init()
+        icon_path = Path(__file__).resolve().parent / "images" / "chess_icon.png"
+        if icon_path.exists():
+            icon = pygame.image.load(str(icon_path))
+            pygame.display.set_icon(icon)
+            
         self.win = pygame.display.set_mode((WIDTH + SIDE_WIDTH, HEIGHT))
         pygame.display.set_caption("Chess")
         self.sounds = SoundManager()
