@@ -1,6 +1,7 @@
+import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
+from jwt.exceptions import InvalidTokenError
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
@@ -37,7 +38,7 @@ def get_current_user(
 
         user_id = int(user_id)
 
-    except (JWTError, ValueError):
+    except (InvalidTokenError, ValueError):
         raise credentials_exception
 
     user = db.get(User, user_id)
