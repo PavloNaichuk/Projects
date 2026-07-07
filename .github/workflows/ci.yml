@@ -1,21 +1,25 @@
-name: Messenger CI
+name: Projects CI
 
 on:
   push:
     paths:
       - "Web/Messenger/**"
+      - "Web/FitnessTrackerAPI/**"
       - "Desktop/Chess/**"
       - ".github/workflows/ci.yml"
+
   pull_request:
     paths:
       - "Web/Messenger/**"
+      - "Web/FitnessTrackerAPI/**"
       - "Desktop/Chess/**"
       - ".github/workflows/ci.yml"
+
   workflow_dispatch:
 
 jobs:
   backend-tests:
-    name: Backend tests
+    name: Messenger backend tests
     runs-on: ubuntu-latest
 
     services:
@@ -90,7 +94,6 @@ jobs:
           SESSION_COOKIE_SECURE: "True"
           CSRF_COOKIE_SECURE: "True"
           SECURE_HSTS_SECONDS: 31536000
-
           SECURE_HSTS_INCLUDE_SUBDOMAINS: "True"
           SECURE_HSTS_PRELOAD: "True"
         run: python manage.py check --deploy
@@ -101,7 +104,7 @@ jobs:
           python -m coverage report -m --fail-under=70
 
   frontend-tests:
-    name: Frontend tests and build
+    name: Messenger frontend tests and build
     runs-on: ubuntu-latest
 
     defaults:
@@ -135,7 +138,7 @@ jobs:
         run: npm run build
 
   docker-check:
-    name: Docker Compose check
+    name: Messenger Docker Compose check
     runs-on: ubuntu-latest
 
     defaults:
@@ -163,6 +166,43 @@ jobs:
 
       - name: Build production Docker images
         run: docker compose -f docker-compose.prod.example.yml build
+
+  fitness-tracker-tests:
+    name: FitnessTrackerAPI tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Web/FitnessTrackerAPI
+
+    env:
+      PROJECT_NAME: Fitness Tracker API
+      DATABASE_URL: sqlite:///./test.db
+      SECRET_KEY: test-secret-key
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: Web/FitnessTrackerAPI/requirements.txt
+
+      - name: Install FitnessTrackerAPI dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run FitnessTrackerAPI lint
+        run: python -m ruff check .
+
+      - name: Run FitnessTrackerAPI tests
+        run: python -m pytest -q
 
   chess-tests:
     name: Chess tests
