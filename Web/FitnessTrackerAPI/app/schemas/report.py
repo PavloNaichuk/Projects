@@ -18,3 +18,14 @@ class WeeklyReportRead(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+
+class TaskRead(BaseModel):
+    task_id: str
+    status: str
+
+
+class TaskStatusRead(BaseModel):
+    task_id: str
+    status: str
+    result: dict | None = None
