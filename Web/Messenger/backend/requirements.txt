@@ -20,7 +20,7 @@ idna==3.18
 Incremental==24.11.0
 msgpack==1.2.1
 packaging==26.2
-pillow==12.2.0
+pillow==12.3.0
 psycopg==3.3.4
 psycopg-binary==3.3.4
 pyasn1==0.6.3
