@@ -4,9 +4,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+import app.models  # noqa: F401
 from app.core.database import Base, get_db
 from app.main import app
-from app.models import BodyMeasurement, Exercise, User, WeeklyReport, Workout, WorkoutSet
 
 
 engine = create_engine(
