@@ -47,12 +47,24 @@ The project is built as a backend-focused portfolio project using FastAPI, Postg
 
 ## Environment Variables
 
-Create a `.env` file in the project root:
+The project uses environment variables for database connection, JWT authentication, Redis, and Celery settings.
+
+Create a local `.env` file from the example file:
+
+```powershell
+copy .env.example .env
+```
+
+Then update the values in `.env` if needed.
+
+Example:
 
 ```env
 PROJECT_NAME=Fitness Tracker API
+
 DATABASE_URL=postgresql+psycopg://postgres:postgres@localhost:5432/fitness_tracker_db
-SECRET_KEY=change-this-secret-key
+
+SECRET_KEY=replace-this-with-a-long-secure-secret-key-at-least-32-characters
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
@@ -60,6 +72,8 @@ REDIS_URL=redis://localhost:6379/0
 CELERY_BROKER_URL=redis://localhost:6379/0
 CELERY_RESULT_BACKEND=redis://localhost:6379/1
 ```
+
+The `.env` file is ignored by Git and should not be committed.
 
 ## Run Locally
 
@@ -286,12 +300,24 @@ Run tests:
 python -m pytest -q
 ```
 
-Current tests cover:
+Current test coverage includes:
 
+- Auth API tests
+- Exercises API tests
+- Workouts API tests
+- Progress API tests
+- Reports API tests
+- Measurements API tests
 - Workout set volume calculation
 - Estimated one-rep max calculation
 - Weekly report generation
 - Updating existing weekly reports
+
+Current result:
+
+```text
+36 passed
+```
 
 ## Linting
 
