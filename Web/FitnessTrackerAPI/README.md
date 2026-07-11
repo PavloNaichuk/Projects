@@ -2,19 +2,18 @@
 
 A backend API for tracking workouts, exercises, body measurements, personal records, weekly progress, and generated weekly reports.
 
-The project is built as a backend-focused portfolio project using FastAPI, PostgreSQL, SQLAlchemy, Alembic, Redis, Celery, Docker, and pytest.
+The project is built as a backend-focused portfolio project using FastAPI, PostgreSQL, SQLAlchemy, Alembic, Redis, Celery, Docker, pytest, Ruff, and GitHub Actions CI.
 
 ## Features
 
 - User registration and login
 - JWT authentication
 - Password hashing
-- Protected user route
+- Protected user routes
 - Exercise database
 - Workout sessions
 - Workout sets with weight, reps, and exercise relation
 - Workout history
-- Workout filtering by date and exercise
 - Weekly progress calculation
 - Exercise records
 - Estimated one-rep max calculation
@@ -25,9 +24,12 @@ The project is built as a backend-focused portfolio project using FastAPI, Postg
 - PostgreSQL database
 - Alembic migrations
 - Docker Compose setup
-- Unit tests with pytest
+- Simple HTML dashboard
+- API tests with pytest
+- Test coverage with coverage.py
 - Ruff linting
 - GitHub Actions CI
+- Docker build check in CI
 
 ## Tech Stack
 
@@ -43,7 +45,25 @@ The project is built as a backend-focused portfolio project using FastAPI, Postg
 - Celery
 - Docker Compose
 - pytest
+- coverage.py
 - Ruff
+- GitHub Actions
+
+## Demo UI
+
+The project includes a simple HTML dashboard for testing the main API features.
+
+After starting the server, open:
+
+```text
+http://127.0.0.1:8000/ui
+```
+
+API documentation is available at:
+
+```text
+http://127.0.0.1:8000/docs
+```
 
 ## Environment Variables
 
@@ -108,6 +128,12 @@ Start the FastAPI server:
 uvicorn app.main:app --reload
 ```
 
+Open the dashboard:
+
+```text
+http://127.0.0.1:8000/ui
+```
+
 Open API documentation:
 
 ```text
@@ -128,10 +154,10 @@ Run migrations inside the app container:
 docker compose exec app alembic upgrade head
 ```
 
-Open API documentation:
+Open the dashboard:
 
 ```text
-http://127.0.0.1:8000/docs
+http://127.0.0.1:8000/ui
 ```
 
 Services:
@@ -319,6 +345,25 @@ Current result:
 36 passed
 ```
 
+## Test Coverage
+
+The project uses coverage.py to measure test coverage for the application code.
+
+Run tests with coverage:
+
+```powershell
+python -m coverage run -m pytest
+python -m coverage report -m
+```
+
+Current application coverage:
+
+```text
+94%
+```
+
+GitHub Actions checks that coverage does not fall below 85%.
+
 ## Linting
 
 Run Ruff:
@@ -363,6 +408,15 @@ Check task status:
 GET /reports/tasks/{task_id}
 ```
 
+## CI Checks
+
+GitHub Actions runs automated checks for the project:
+
+- Ruff linting
+- pytest test suite
+- coverage check
+- Docker image build
+
 ## Portfolio Summary
 
 Fitness Tracker API is a backend-focused FastAPI project that demonstrates:
@@ -376,5 +430,6 @@ Fitness Tracker API is a backend-focused FastAPI project that demonstrates:
 - Background jobs with Celery
 - Redis integration
 - Dockerized development environment
-- Automated tests
-- CI checks
+- Automated API tests
+- Test coverage checks
+- CI/CD checks with GitHub Actions
