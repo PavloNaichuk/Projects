@@ -204,8 +204,10 @@ jobs:
       - name: Run FitnessTrackerAPI lint
         run: python -m ruff check .
 
-      - name: Run FitnessTrackerAPI tests
-        run: python -m pytest -q
+      - name: Run FitnessTrackerAPI tests with coverage
+        run: |
+          python -m coverage run -m pytest
+          python -m coverage report -m --fail-under=85
 
   fitness-tracker-docker-build:
     name: FitnessTrackerAPI Docker build
