@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fitness Tracker API</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #111827;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 28px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 34px;
+        }
+
+        .header p {
+            margin: 0 0 18px;
+            color: #d1d5db;
+        }
+
+        .top-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .status {
+            height: 42px;
+            min-width: 105px;
+            padding: 0 16px;
+            border-radius: 999px;
+            background: #374151;
+            color: white;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status.logged {
+            background: #047857;
+        }
+
+        .logout {
+            display: none;
+            height: 42px;
+            min-width: 82px;
+            padding: 0 16px;
+            border-radius: 10px;
+            background: #dc2626;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .logout.show {
+            margin: 0;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.show {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 20px;
+            background: #ffffff;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 14px;
+            margin-right: 8px;
+            padding: 11px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button.gray {
+            background: #374151;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 16px;
+            border-radius: 10px;
+            overflow-x: auto;
+            min-height: 90px;
+            margin-top: 16px;
+            font-size: 13px;
+        }
+
+        .message {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 18px;
+            color: #374151;
+        }
+
+        @media (max-width: 800px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+    <div class="header">
+        <h1>Fitness Tracker API</h1>
+        <p>Simple demo page for testing FastAPI backend</p>
+
+        <div class="top-row">
+            <span id="loginStatus" class="status">Not logged in</span>
+            <button id="logoutButton" class="logout" onclick="logoutUser()">Logout</button>
+        </div>
+    </div>
+
+    <div id="authPanel" class="panel">
+        <h2>Authentication</h2>
+
+        <div class="message">
+            Register a new user or log in. After login, the dashboard will be available.
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Register</h3>
+
+                <label>Email</label>
+                <input id="registerEmail" value="test@example.com">
+
+                <label>Username</label>
+                <input id="registerUsername" value="testuser">
+
+                <label>Password</label>
+                <input id="registerPassword" type="password" value="password123">
+
+                <button onclick="registerUser()">Register</button>
+
+            </div>
+
+            <div class="card">
+                <h3>Login</h3>
+
+                <label>Username</label>
+                <input id="loginUsername" value="testuser">
+
+                <label>Password</label>
+                <input id="loginPassword" type="password" value="password123">
+
+                <button onclick="loginUser()">Login</button>
+                <button class="gray" onclick="getCurrentUser()">Current User</button>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard" class="dashboard">
+        <div class="panel">
+            <h2>Dashboard</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>Exercises</h3>
+
+                    <label>Name</label>
+                    <input id="exerciseName" value="Bench Press">
+
+                    <label>Muscle Group</label>
+                    <input id="muscleGroup" value="Chest">
+
+                    <label>Equipment</label>
+                    <input id="equipment" value="Barbell">
+
+                    <button onclick="createExercise()">Create Exercise</button>
+                    <button class="gray" onclick="getExercises()">Load Exercises</button>
+
+                    <pre id="exerciseResult"></pre>
+                </div>
+
+                <div class="card">
+                    <h3>Workouts</h3>
+
+                    <label>Title</label>
+                    <input id="workoutTitle" value="Chest Day">
+
+                    <label>Date</label>
+                    <input id="workoutDate" value="2026-07-05">
+
+                    <label>Notes</label>
+                    <input id="workoutNotes" value="Bench press training">
+
+                    <label>Exercise ID</label>
+                    <input id="workoutExerciseId" value="1">
+
+                    <label>Weight</label>
+                    <input id="workoutWeight" value="80">
+
+                    <label>Reps</label>
+                    <input id="workoutReps" value="10">
+
+                    <button onclick="createWorkout()">Create Workout</button>
+                    <button class="gray" onclick="getWorkouts()">Load Workouts</button>
+
+                    <pre id="workoutResult"></pre>
+                </div>
+
+                <div class="card">
+                    <h3>Measurements</h3>
+
+                    <label>Date</label>
+                    <input id="measuredAt" value="2026-07-05">
+
+                    <label>Body Weight</label>
+                    <input id="bodyWeight" value="82.5">
+
+                    <label>Body Fat</label>
+                    <input id="bodyFat" value="18.5">
+
+                    <label>Waist</label>
+                    <input id="waist" value="88">
+
+                    <button onclick="createMeasurement()">Create Measurement</button>
+                    <button class="gray" onclick="getMeasurements()">Load All</button>
+                    <button class="gray" onclick="getLatestMeasurement()">Latest</button>
+
+                    <pre id="measurementResult"></pre>
+                </div>
+
+                <div class="card">
+                    <h3>Progress</h3>
+
+                    <label>Week Start</label>
+                    <input id="weekStart" value="2026-07-05">
+
+                    <button onclick="getWeeklyProgress()">Weekly Progress</button>
+
+                    <label>Exercise ID</label>
+                    <input id="recordExerciseId" value="1">
+
+                    <button onclick="getExerciseRecords()">Exercise Records</button>
+
+                    <pre id="progressResult"></pre>
+                </div>
+
+                <div class="card">
+                    <h3>Reports</h3>
+
+                    <label>Week Start</label>
+                    <input id="reportWeekStart" value="2026-07-05">
+
+                    <button onclick="generateWeeklyReport()">Generate Report</button>
+                    <button class="gray" onclick="getWeeklyReports()">Load Reports</button>
+
+                    <pre id="reportResult"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let accessToken = localStorage.getItem("accessToken") || "";
+
+    updatePage();
+
+    function updatePage() {
+        const status = document.getElementById("loginStatus");
+        const logoutButton = document.getElementById("logoutButton");
+        const dashboard = document.getElementById("dashboard");
+
+        if (accessToken) {
+            status.textContent = "Logged in";
+            status.classList.add("logged");
+            logoutButton.classList.add("show");
+            dashboard.classList.add("show");
+        } else {
+            status.textContent = "Not logged in";
+            status.classList.remove("logged");
+            logoutButton.classList.remove("show");
+            dashboard.classList.remove("show");
+        }
+    }
+
+    function logoutUser() {
+        accessToken = "";
+        localStorage.removeItem("accessToken");
+        clearResults();
+        updatePage();
+    }
+
+    function clearResults() {
+        const resultIds = [
+            "authResult",
+            "registerResult",
+            "exerciseResult",
+            "workoutResult",
+            "measurementResult",
+            "progressResult",
+            "reportResult"
+        ];
+
+        resultIds.forEach(id => {
+            const element = document.getElementById(id);
+
+            if (element) {
+                element.textContent = "";
+            }
+        });
+    }
+
+    function headersWithAuth() {
+        return {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        };
+    }
+
+    function showResult(id, data) {
+        document.getElementById(id).textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function registerUser() {
+        const response = await fetch("/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: document.getElementById("registerEmail").value,
+                username: document.getElementById("registerUsername").value,
+                password: document.getElementById("registerPassword").value
+            })
+        });
+
+        if (response.ok) {
+            alert("User registered successfully");
+        } else {
+            const data = await response.json();
+            alert(data.detail || "Registration failed");
+        }
+    }
+
+    async function loginUser() {
+        const formData = new URLSearchParams();
+
+        formData.append("username", document.getElementById("loginUsername").value);
+        formData.append("password", document.getElementById("loginPassword").value);
+
+        const response = await fetch("/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.access_token) {
+            accessToken = data.access_token;
+            localStorage.setItem("accessToken", accessToken);
+            updatePage();
+            alert("Logged in successfully");
+        } else {
+            alert(data.detail || "Login failed");
+        }
+    }
+
+    async function getCurrentUser() {
+        const response = await fetch("/auth/me", {
+            headers: headersWithAuth()
+        });
+
+        showResult("authResult", await response.json());
+    }
+
+    async function createExercise() {
+        const response = await fetch("/exercises", {
+            method: "POST",
+            headers: headersWithAuth(),
+            body: JSON.stringify({
+                name: document.getElementById("exerciseName").value,
+                muscle_group: document.getElementById("muscleGroup").value,
+                equipment: document.getElementById("equipment").value
+            })
+        });
+
+        showResult("exerciseResult", await response.json());
+    }
+
+    async function getExercises() {
+        const response = await fetch("/exercises");
+        showResult("exerciseResult", await response.json());
+    }
+
+    async function createWorkout() {
+        const response = await fetch("/workouts", {
+            method: "POST",
+            headers: headersWithAuth(),
+            body: JSON.stringify({
+                title: document.getElementById("workoutTitle").value,
+                workout_date: document.getElementById("workoutDate").value,
+                notes: document.getElementById("workoutNotes").value,
+                sets: [
+                    {
+                        exercise_id: Number(document.getElementById("workoutExerciseId").value),
+                        set_number: 1,
+                        weight: Number(document.getElementById("workoutWeight").value),
+                        reps: Number(document.getElementById("workoutReps").value)
+                    }
+                ]
+            })
+        });
+
+        showResult("workoutResult", await response.json());
+    }
+
+    async function getWorkouts() {
+        const response = await fetch("/workouts", {
+            headers: headersWithAuth()
+        });
+
+        showResult("workoutResult", await response.json());
+    }
+
+    async function createMeasurement() {
+        const response = await fetch("/measurements", {
+            method: "POST",
+            headers: headersWithAuth(),
+            body: JSON.stringify({
+                measured_at: document.getElementById("measuredAt").value,
+                body_weight: Number(document.getElementById("bodyWeight").value),
+                body_fat: Number(document.getElementById("bodyFat").value),
+                waist: Number(document.getElementById("waist").value)
+            })
+        });
+
+        showResult("measurementResult", await response.json());
+    }
+
+    async function getMeasurements() {
+        const response = await fetch("/measurements", {
+            headers: headersWithAuth()
+        });
+
+        showResult("measurementResult", await response.json());
+    }
+
+    async function getLatestMeasurement() {
+        const response = await fetch("/measurements/latest", {
+            headers: headersWithAuth()
+        });
+
+        showResult("measurementResult", await response.json());
+    }
+
+    async function getWeeklyProgress() {
+        const weekStart = document.getElementById("weekStart").value;
+
+        const response = await fetch(`/progress/weekly?week_start=${weekStart}`, {
+            headers: headersWithAuth()
+        });
+
+        showResult("progressResult", await response.json());
+    }
+
+    async function getExerciseRecords() {
+        const exerciseId = document.getElementById("recordExerciseId").value;
+
+        const response = await fetch(`/progress/exercises/${exerciseId}/records`, {
+            headers: headersWithAuth()
+        });
+
+        showResult("progressResult", await response.json());
+    }
+
+    async function generateWeeklyReport() {
+        const weekStart = document.getElementById("reportWeekStart").value;
+
+        const response = await fetch(`/reports/weekly/generate?week_start=${weekStart}`, {
+            method: "POST",
+            headers: headersWithAuth()
+        });
+
+        showResult("reportResult", await response.json());
+    }
+
+    async function getWeeklyReports() {
+        const response = await fetch("/reports/weekly", {
+            headers: headersWithAuth()
+        });
+
+        showResult("reportResult", await response.json());
+    }
+</script>
+</body>
+</html>

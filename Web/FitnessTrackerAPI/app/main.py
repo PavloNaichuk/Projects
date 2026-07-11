@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from app.api.routes.auth import router as auth_router
 from app.api.routes.exercises import router as exercises_router
@@ -20,6 +21,12 @@ app.include_router(workouts_router)
 app.include_router(progress_router)
 app.include_router(measurements_router)
 app.include_router(reports_router)
+
+app.mount(
+    "/ui",
+    StaticFiles(directory="app/static", html=True),
+    name="ui",
+)
 
 
 @app.get("/")
