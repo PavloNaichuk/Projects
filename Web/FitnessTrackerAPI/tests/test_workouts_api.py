@@ -1,40 +1,4 @@
-def get_auth_headers(client):
-    client.post(
-        "/auth/register",
-        json={
-            "email": "test@example.com",
-            "username": "testuser",
-            "password": "password123",
-        },
-    )
-
-    login_response = client.post(
-        "/auth/login",
-        data={
-            "username": "testuser",
-            "password": "password123",
-        },
-    )
-
-    token = login_response.json()["access_token"]
-
-    return {
-        "Authorization": f"Bearer {token}",
-    }
-
-
-def create_exercise(client, headers):
-    response = client.post(
-        "/exercises",
-        json={
-            "name": "Bench Press",
-            "muscle_group": "Chest",
-            "equipment": "Barbell",
-        },
-        headers=headers,
-    )
-
-    return response.json()["id"]
+from tests.helpers import create_exercise, get_auth_headers
 
 
 def test_create_workout(client):

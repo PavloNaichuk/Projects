@@ -1,26 +1,4 @@
-def get_auth_headers(client):
-    client.post(
-        "/auth/register",
-        json={
-            "email": "test@example.com",
-            "username": "testuser",
-            "password": "password123",
-        },
-    )
-
-    login_response = client.post(
-        "/auth/login",
-        data={
-            "username": "testuser",
-            "password": "password123",
-        },
-    )
-
-    token = login_response.json()["access_token"]
-
-    return {
-        "Authorization": f"Bearer {token}",
-    }
+from tests.helpers import get_auth_headers
 
 
 def test_create_measurement(client):
