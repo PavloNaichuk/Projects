@@ -37,7 +37,7 @@ tomli==2.4.1
 Twisted==26.4.0
 txaio==25.9.2
 typing_extensions==4.16.0
-tzdata==2026.2
+tzdata==2026.3
 urllib3==2.7.0
 websockets==16.0
 zope.interface==8.5
