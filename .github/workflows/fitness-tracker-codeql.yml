@@ -1,0 +1,37 @@
+name: FitnessTrackerAPI CodeQL
+
+on:
+  push:
+    paths:
+      - "Web/FitnessTrackerAPI/**"
+      - ".github/workflows/fitness-tracker-codeql.yml"
+
+  pull_request:
+    paths:
+      - "Web/FitnessTrackerAPI/**"
+      - ".github/workflows/fitness-tracker-codeql.yml"
+
+  workflow_dispatch:
+
+permissions:
+  security-events: write
+  packages: read
+  actions: read
+  contents: read
+
+jobs:
+  analyze:
+    name: CodeQL analysis (python)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: python
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v4
