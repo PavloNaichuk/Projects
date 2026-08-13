@@ -4,11 +4,11 @@ on:
   push:
     paths:
       - "Web/Messenger/**"
-      - ".github/workflows/codeql.yml"
+      - ".github/workflows/messenger-codeql.yml"
   pull_request:
     paths:
       - "Web/Messenger/**"
-      - ".github/workflows/codeql.yml"
+      - ".github/workflows/messenger-codeql.yml"
   schedule:
     - cron: "0 6 * * 1"
   workflow_dispatch:
