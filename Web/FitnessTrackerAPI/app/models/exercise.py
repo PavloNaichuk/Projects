@@ -13,7 +13,6 @@ class Exercise(Base):
 
     name: Mapped[str] = mapped_column(
         String(150),
-        unique=True,
         index=True,
         nullable=False,
     )

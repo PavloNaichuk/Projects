@@ -25,16 +25,6 @@ def create_exercise(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    existing_exercise = db.scalar(
-        select(Exercise).where(Exercise.name == exercise_data.name)
-    )
-
-    if existing_exercise:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Exercise already exists",
-        )
-
     exercise = Exercise(
         name=exercise_data.name,
         muscle_group=exercise_data.muscle_group,
@@ -46,7 +36,6 @@ def create_exercise(
     db.refresh(exercise)
 
     return exercise
-
 
 @router.get(
     "",

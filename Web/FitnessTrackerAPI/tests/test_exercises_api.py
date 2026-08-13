@@ -60,10 +60,15 @@ def test_create_duplicate_exercise(client):
     )
 
     assert first_response.status_code == 201
-    assert second_response.status_code == 400
-    assert second_response.json()["detail"] == "Exercise already exists"
+    assert second_response.status_code == 201
 
+    first_data = first_response.json()
+    second_data = second_response.json()
 
+    assert first_data["name"] == "Deadlift"
+    assert second_data["name"] == "Deadlift"
+    assert first_data["id"] != second_data["id"]
+    
 def test_get_exercises(client):
     headers = get_auth_headers(client)
 
