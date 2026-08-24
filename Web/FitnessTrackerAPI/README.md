@@ -1,3 +1,6 @@
+[![FitnessTrackerAPI CI](https://github.com/PavloNaichuk/Projects/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/PavloNaichuk/Projects/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/PavloNaichuk/Projects/actions/workflows/fitness-tracker-codeql.yml/badge.svg?branch=master)](https://github.com/PavloNaichuk/Projects/actions/workflows/fitness-tracker-codeql.yml)
+
 # Fitness Tracker API
 
 ## Project Overview
@@ -72,6 +75,7 @@ http://127.0.0.1:8000/ui
 * **Coverage:** coverage.py
 * **Linting:** Ruff
 * **CI:** GitHub Actions
+* **Security Scanning:** CodeQL
 
 ## Database Structure
 
@@ -131,10 +135,11 @@ The project includes automated checks to keep the codebase reliable and maintain
 * pytest API and service tests
 * Application test coverage with coverage.py
 * Docker image build check
+* CodeQL security analysis for Python
 
-### GitHub Actions Pipeline
+### GitHub Actions Workflows
 
-The CI pipeline runs:
+The `Projects CI` workflow runs:
 
 * Ruff linting
 * pytest test suite
@@ -142,6 +147,8 @@ The CI pipeline runs:
 * Docker image build
 
 The CI coverage threshold is **85%**.
+
+The dedicated `FitnessTrackerAPI CodeQL` workflow performs automated Python security analysis for changes inside `Web/FitnessTrackerAPI`.
 
 ### Current Test Result
 
@@ -587,3 +594,4 @@ Fitness Tracker API demonstrates:
 * Automated API and service testing
 * High application test coverage
 * CI checks with GitHub Actions
+* Automated Python security scanning with CodeQL
