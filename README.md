@@ -12,7 +12,7 @@ Collection of personal projects in web and desktop application development.
 
 ## 🔹 Web Projects
 
-### Messenger
+## Messenger
 
 A full-stack real-time messaging application inspired by Telegram-style communication platforms.
 
@@ -32,7 +32,7 @@ A full-stack real-time messaging application inspired by Telegram-style communic
 * Conversation pinning, muting, clearing, and deletion
 * Real-time sidebar and profile updates
   
-### Fitness Tracker API
+## Fitness Tracker API
 
 A backend-focused fitness tracking application for managing workouts, body measurements, personal exercise records, weekly progress, and generated reports.
 
