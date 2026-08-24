@@ -1,53 +1,24 @@
 # Fitness Tracker API
 
-A backend API for tracking workouts, exercises, body measurements, personal records, weekly progress, and generated weekly reports.
+## Project Overview
 
-The project is built as a backend-focused portfolio project using FastAPI, PostgreSQL, SQLAlchemy, Alembic, Redis, Celery, Docker, pytest, Ruff, and GitHub Actions CI.
+A backend-focused API for tracking workouts, exercises, body measurements, personal records, weekly progress, and generated weekly reports.
 
-## Features
+The project is built as a portfolio project using FastAPI, PostgreSQL, SQLAlchemy, Alembic, Redis, Celery, Docker Compose, pytest, Ruff, and GitHub Actions CI.
 
-- User registration and login
-- JWT authentication
-- Password hashing
-- Protected user routes
-- Exercise database
-- Workout sessions
-- Workout sets with weight, reps, and exercise relation
-- Workout history
-- Weekly progress calculation
-- Exercise records
-- Estimated one-rep max calculation
-- Body measurements tracking
-- Weekly report generation
-- Background weekly report generation with Celery
-- Redis broker and result backend
-- PostgreSQL database
-- Alembic migrations
-- Docker Compose setup
-- Simple HTML dashboard
-- API tests with pytest
-- Test coverage with coverage.py
-- Ruff linting
-- GitHub Actions CI
-- Docker build check in CI
+## Key Features
 
-## Tech Stack
-
-- Python
-- FastAPI
-- PostgreSQL
-- SQLAlchemy
-- Alembic
-- Pydantic
-- PyJWT
-- pwdlib
-- Redis
-- Celery
-- Docker Compose
-- pytest
-- coverage.py
-- Ruff
-- GitHub Actions
+* User registration and login
+* JWT authentication, password hashing, and protected user routes
+* Exercise database with workout set relations
+* Workout creation, history, and deletion
+* Weekly workout progress calculation
+* Personal exercise records and estimated one-rep max calculation
+* Body measurements tracking
+* Weekly report generation and retrieval
+* Background weekly report generation with Celery and Redis
+* PostgreSQL database with Alembic migrations
+* Simple HTML dashboard for testing the main API features
 
 ## Demo UI
 
@@ -59,15 +30,56 @@ After starting the server, open:
 http://127.0.0.1:8000/ui
 ```
 
-API documentation is available at:
+Interactive API documentation is available at:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-## Environment Variables
+## Architecture
 
-The project uses environment variables for database connection, JWT authentication, Redis, and Celery settings.
+* **Backend:** FastAPI + Pydantic
+* **Database:** PostgreSQL + SQLAlchemy
+* **Migrations:** Alembic
+* **Authentication:** JWT-based authentication with password hashing
+* **Task Queue:** Celery + Redis
+* **Containerization:** Docker + Docker Compose
+* **Testing:** pytest + coverage.py
+* **Code Quality:** Ruff + GitHub Actions CI
+
+## Quality and CI
+
+The project includes automated checks to keep the codebase reliable and maintainable:
+
+* API tests with pytest
+* Test coverage reporting with coverage.py
+* Ruff linting
+* GitHub Actions CI
+* Docker image build check in CI
+* Coverage threshold of 85% in CI
+
+### Current Test Result
+
+```text
+36 passed
+```
+
+### Current Application Coverage
+
+```text
+94%
+```
+
+## Running the Project
+
+### Clone the repository
+
+```text
+git clone <repository-url>
+cd Fitness-Tracker-API
+```
+
+### Create environment file
 
 Create a local `.env` file from the example file:
 
@@ -75,9 +87,7 @@ Create a local `.env` file from the example file:
 copy .env.example .env
 ```
 
-Then update the values in `.env` if needed.
-
-Example:
+Then update the values in `.env` if needed:
 
 ```env
 PROJECT_NAME=Fitness Tracker API
@@ -95,7 +105,7 @@ CELERY_RESULT_BACKEND=redis://localhost:6379/1
 
 The `.env` file is ignored by Git and should not be committed.
 
-## Run Locally
+### Run locally
 
 Create and activate a virtual environment:
 
@@ -110,13 +120,13 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Start PostgreSQL and Redis using Docker Compose:
+Start PostgreSQL and Redis:
 
 ```powershell
 docker compose up -d db redis
 ```
 
-Run Alembic migrations:
+Apply migrations:
 
 ```powershell
 alembic upgrade head
@@ -128,19 +138,7 @@ Start the FastAPI server:
 uvicorn app.main:app --reload
 ```
 
-Open the dashboard:
-
-```text
-http://127.0.0.1:8000/ui
-```
-
-Open API documentation:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-## Run with Docker Compose
+### Run with Docker Compose
 
 Build and start all services:
 
@@ -148,30 +146,22 @@ Build and start all services:
 docker compose up -d --build
 ```
 
-Run migrations inside the app container:
+Apply migrations inside the application container:
 
 ```powershell
 docker compose exec app alembic upgrade head
 ```
 
-Open the dashboard:
+This starts:
 
-```text
-http://127.0.0.1:8000/ui
-```
-
-Services:
-
-```text
-app              FastAPI backend
-db               PostgreSQL database
-redis            Redis broker
-celery_worker    Celery background worker
-```
+* FastAPI application
+* PostgreSQL database
+* Redis broker
+* Celery worker
 
 ## API Endpoints
 
-### Auth
+### Authentication
 
 ```text
 POST /auth/register
@@ -220,7 +210,9 @@ GET  /reports/tasks/{task_id}
 GET  /reports/weekly
 ```
 
-## Example Register Request
+## Example Requests
+
+### Register
 
 ```json
 {
@@ -230,16 +222,16 @@ GET  /reports/weekly
 }
 ```
 
-## Example Login
+### Login
 
-The login endpoint uses OAuth2 form data.
+The login endpoint uses OAuth2 form data:
 
 ```text
 username: testuser
 password: password123
 ```
 
-Response:
+Example response:
 
 ```json
 {
@@ -248,7 +240,7 @@ Response:
 }
 ```
 
-## Example Exercise
+### Exercise
 
 ```json
 {
@@ -258,7 +250,7 @@ Response:
 }
 ```
 
-## Example Workout
+### Workout
 
 ```json
 {
@@ -282,7 +274,7 @@ Response:
 }
 ```
 
-## Example Weekly Progress
+### Weekly Progress
 
 ```text
 GET /progress/weekly?week_start=2026-07-05
@@ -303,7 +295,7 @@ Example response:
 
 ## Business Logic
 
-The project includes backend business logic for workout analytics:
+The API calculates workout analytics using the following formulas:
 
 ```text
 set volume = weight * reps
@@ -318,36 +310,25 @@ Example:
 80 * (1 + 10 / 30) = 106.67 estimated 1RM
 ```
 
-## Tests
+## Tests and Local Checks
 
-Run tests:
+Run the test suite:
 
 ```powershell
 python -m pytest -q
 ```
 
-Current test coverage includes:
+The test suite covers:
 
-- Auth API tests
-- Exercises API tests
-- Workouts API tests
-- Progress API tests
-- Reports API tests
-- Measurements API tests
-- Workout set volume calculation
-- Estimated one-rep max calculation
-- Weekly report generation
-- Updating existing weekly reports
-
-Current result:
-
-```text
-36 passed
-```
-
-## Test Coverage
-
-The project uses coverage.py to measure test coverage for the application code.
+* Authentication API
+* Exercises API
+* Workouts API
+* Progress API
+* Reports API
+* Measurements API
+* Workout set volume calculation
+* Estimated one-rep max calculation
+* Weekly report generation and updates
 
 Run tests with coverage:
 
@@ -355,16 +336,6 @@ Run tests with coverage:
 python -m coverage run -m pytest
 python -m coverage report -m
 ```
-
-Current application coverage:
-
-```text
-94%
-```
-
-GitHub Actions checks that coverage does not fall below 85%.
-
-## Linting
 
 Run Ruff:
 
@@ -388,7 +359,7 @@ alembic upgrade head
 
 ## Background Tasks
 
-Celery is used for background weekly report generation.
+Celery generates weekly reports in the background.
 
 Start all services:
 
@@ -396,40 +367,27 @@ Start all services:
 docker compose up -d --build
 ```
 
-Generate weekly report asynchronously:
+Generate a weekly report asynchronously:
 
 ```text
 POST /reports/weekly/generate-async?week_start=2026-07-05
 ```
 
-Check task status:
+Check the task status:
 
 ```text
 GET /reports/tasks/{task_id}
 ```
 
-## CI Checks
-
-GitHub Actions runs automated checks for the project:
-
-- Ruff linting
-- pytest test suite
-- coverage check
-- Docker image build
-
 ## Portfolio Summary
 
-Fitness Tracker API is a backend-focused FastAPI project that demonstrates:
+Fitness Tracker API demonstrates:
 
-- REST API design
-- JWT authentication
-- Database modeling
-- SQLAlchemy relationships
-- Alembic migrations
-- Business logic implementation
-- Background jobs with Celery
-- Redis integration
-- Dockerized development environment
-- Automated API tests
-- Test coverage checks
-- CI/CD checks with GitHub Actions
+* REST API design
+* JWT authentication and authorization
+* Database modeling and SQLAlchemy relationships
+* Alembic migrations
+* Backend business logic for workout analytics
+* Background jobs with Celery and Redis
+* Dockerized development environment
+* Automated API tests, coverage checks, and CI/CD
