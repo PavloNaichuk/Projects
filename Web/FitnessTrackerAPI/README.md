@@ -58,6 +58,40 @@ After starting the application, open:
 http://127.0.0.1:8000/ui
 ```
 
+## Screenshots
+
+The following animated demos show the main Fitness Tracker workflows through the browser dashboard.
+
+### Authentication Flow
+
+The authentication demo shows user registration, JWT-based login, and access to the protected dashboard.
+
+![Authentication Flow](docs/screenshots/authFlow.gif)
+
+### Workout Tracking
+
+The workout tracking demo shows exercise creation, workout creation with a linked exercise set, and retrieval of saved workout history.
+
+![Workout Tracking](docs/screenshots/workoutTracking.gif)
+
+### Progress and Personal Records
+
+The progress demo shows weekly workout totals and personal exercise records, including maximum weight, repetitions, set volume, and estimated one-rep max.
+
+![Progress and Personal Records](docs/screenshots/progressAnalytics.gif)
+
+### Body Measurements
+
+The body measurements demo shows the creation of dated measurements, measurement history, and retrieval of the latest recorded values.
+
+![Body Measurements](docs/screenshots/bodyMeasurements.gif)
+
+### Weekly Reports
+
+The weekly reports demo shows report generation for a selected seven-day period and retrieval of the saved report history.
+
+![Weekly Reports](docs/screenshots/weeklyReports.gif)
+
 ## Architecture
 
 * **Runtime:** Python 3.13
