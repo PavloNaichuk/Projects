@@ -1,6 +1,7 @@
 # Chess
 
 ![CI](https://github.com/PavloNaichuk/Projects/actions/workflows/ci.yml/badge.svg?branch=master)
+[![CodeQL](https://github.com/PavloNaichuk/Projects/actions/workflows/chess-codeql.yml/badge.svg?branch=master)](https://github.com/PavloNaichuk/Projects/actions/workflows/chess-codeql.yml)
 
 A desktop chess game built with **Python** and **Pygame**.
 
