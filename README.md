@@ -31,6 +31,29 @@ A full-stack real-time messaging application inspired by Telegram-style communic
 * User blocking and unblocking
 * Conversation pinning, muting, clearing, and deletion
 * Real-time sidebar and profile updates
+  
+### Fitness Tracker API
+
+A backend-focused fitness tracking application for managing workouts, body measurements, personal exercise records, weekly progress, and generated reports.
+
+**Technologies:** Python, FastAPI, PostgreSQL, SQLAlchemy, Alembic, Pydantic, JWT, Redis, Celery, Docker, Pytest, Ruff, GitHub Actions
+
+**Key features:**
+
+* User registration and login using JWT authentication
+* Login with either username or email
+* Secure password hashing and protected user-specific data
+* Public exercise catalog with muscle group and equipment filters
+* Workout creation with multiple exercise sets
+* Workout history with date and exercise filters
+* Weekly statistics for workouts, sets, repetitions, and training volume
+* Personal records for maximum weight, repetitions, volume, and estimated one-rep max
+* Body measurement history and latest measurement retrieval
+* Synchronous and background weekly report generation with Celery and Redis
+* PostgreSQL database with SQLAlchemy models and Alembic migrations
+* Docker Compose environment with FastAPI, PostgreSQL, Redis, and a Celery worker
+* Simple browser dashboard and interactive API documentation
+* Ruff linting and GitHub Actions CI
 
 ## 🔹 Desktop Projects
 ## Chess
