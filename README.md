@@ -53,7 +53,6 @@ A backend-focused fitness tracking application for managing workouts, body measu
 * PostgreSQL database with SQLAlchemy models and Alembic migrations
 * Docker Compose environment with FastAPI, PostgreSQL, Redis, and a Celery worker
 * Simple browser dashboard and interactive API documentation
-* 36 automated tests with 94% application coverage
 * Ruff linting and GitHub Actions CI
 
 ## 🔹 Desktop Projects
