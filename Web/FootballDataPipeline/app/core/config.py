@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field, SecretStr
+from pydantic import AnyHttpUrl, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 
@@ -21,6 +21,14 @@ class Settings(BaseSettings):
     postgres_db: str = "football"
     postgres_user: str = "football"
     postgres_password: SecretStr
+
+    api_football_base_url: AnyHttpUrl = "https://v3.football.api-sports.io"
+    api_football_key: SecretStr
+    api_football_timeout_seconds: float = Field(
+        default=10.0,
+        gt=0,
+        le=60,
+    )
 
     @property
     def database_url(self) -> URL:
