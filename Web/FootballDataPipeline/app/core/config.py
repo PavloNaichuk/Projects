@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import quote
 
 from pydantic import AnyHttpUrl, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -22,6 +23,15 @@ class Settings(BaseSettings):
     postgres_user: str = "football"
     postgres_password: SecretStr
 
+    redis_host: str = "127.0.0.1"
+    redis_port: int = Field(default=6380, ge=1, le=65535)
+    redis_db: int = Field(default=0, ge=0)
+
+    rabbitmq_host: str = "127.0.0.1"
+    rabbitmq_port: int = Field(default=5673, ge=1, le=65535)
+    rabbitmq_user: str = "football"
+    rabbitmq_password: SecretStr
+
     api_football_base_url: AnyHttpUrl = "https://v3.football.api-sports.io"
     api_football_key: SecretStr
     api_football_timeout_seconds: float = Field(
@@ -40,6 +50,22 @@ class Settings(BaseSettings):
             port=self.postgres_port,
             database=self.postgres_db,
         )
+
+    @property
+    def celery_broker_url(self) -> str:
+        username = quote(self.rabbitmq_user, safe="")
+        password = quote(
+            self.rabbitmq_password.get_secret_value(),
+            safe="",
+        )
+
+        return (
+            f"amqp://{username}:{password}@{self.rabbitmq_host}:{self.rabbitmq_port}//"
+        )
+
+    @property
+    def celery_result_backend(self) -> str:
+        return f"redis://{self.redis_host}:{self.redis_port}/{self.redis_db}"
 
 
 @lru_cache(maxsize=1)
