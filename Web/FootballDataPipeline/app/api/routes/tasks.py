@@ -4,9 +4,11 @@ from app.schemas.tasks import (
     LeagueSyncRequest,
     TaskStatusResponse,
     TaskSubmittedResponse,
+    TeamSyncRequest,
 )
 from app.tasks.celery_app import celery_app
 from app.tasks.league_tasks import sync_leagues_task
+from app.tasks.team_tasks import sync_teams_task
 
 router = APIRouter(
     prefix="/tasks",
@@ -23,6 +25,25 @@ def submit_league_sync(
     payload: LeagueSyncRequest,
 ) -> TaskSubmittedResponse:
     task = sync_leagues_task.delay(payload.league_id)
+
+    return TaskSubmittedResponse(
+        task_id=task.id,
+        status=task.state,
+    )
+
+
+@router.post(
+    "/teams/sync",
+    response_model=TaskSubmittedResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+def submit_team_sync(
+    payload: TeamSyncRequest,
+) -> TaskSubmittedResponse:
+    task = sync_teams_task.delay(
+        payload.league_id,
+        payload.season,
+    )
 
     return TaskSubmittedResponse(
         task_id=task.id,

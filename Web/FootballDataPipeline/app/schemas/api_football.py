@@ -28,3 +28,17 @@ class APIFootballLeagueEntry(BaseModel):
     league: APIFootballLeague
     country: APIFootballCountry
     seasons: list[APIFootballSeason]
+
+
+class APIFootballTeam(BaseModel):
+    id: int = Field(gt=0)
+    name: str = Field(min_length=1, max_length=150)
+    code: str | None = Field(default=None, max_length=10)
+    country: str | None = Field(default=None, max_length=100)
+    founded: int | None = Field(default=None, ge=1800, le=9999)
+    national: bool
+    logo: str | None = Field(default=None, max_length=500)
+
+
+class APIFootballTeamEntry(BaseModel):
+    team: APIFootballTeam

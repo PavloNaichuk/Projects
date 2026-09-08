@@ -8,7 +8,10 @@ celery_app = Celery(
     "football_data_pipeline",
     broker=settings.celery_broker_url,
     backend=settings.celery_result_backend,
-    include=["app.tasks.league_tasks"],
+    include=[
+        "app.tasks.league_tasks",
+        "app.tasks.team_tasks",
+    ],
 )
 
 celery_app.conf.update(

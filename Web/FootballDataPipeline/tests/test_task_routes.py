@@ -88,3 +88,42 @@ def test_get_failed_task_status() -> None:
         "result": None,
         "error": "Synchronization failed",
     }
+
+
+def test_submit_team_sync_returns_task_id() -> None:
+    task = MagicMock()
+    task.id = "team-task-123"
+    task.state = "PENDING"
+
+    with patch(
+        "app.api.routes.tasks.sync_teams_task.delay",
+        return_value=task,
+    ) as delay:
+        with TestClient(app) as client:
+            response = client.post(
+                "/tasks/teams/sync",
+                json={
+                    "league_id": 39,
+                    "season": 2024,
+                },
+            )
+
+    assert response.status_code == 202
+    assert response.json() == {
+        "task_id": "team-task-123",
+        "status": "PENDING",
+    }
+    delay.assert_called_once_with(39, 2024)
+
+
+def test_submit_team_sync_rejects_invalid_season() -> None:
+    with TestClient(app) as client:
+        response = client.post(
+            "/tasks/teams/sync",
+            json={
+                "league_id": 39,
+                "season": 0,
+            },
+        )
+
+    assert response.status_code == 422
