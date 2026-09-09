@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import BaseModel, Field
 
@@ -42,3 +42,63 @@ class APIFootballTeam(BaseModel):
 
 class APIFootballTeamEntry(BaseModel):
     team: APIFootballTeam
+
+
+class APIFootballVenue(BaseModel):
+    id: int | None = Field(default=None, gt=0)
+    name: str | None = Field(default=None, max_length=150)
+    city: str | None = Field(default=None, max_length=100)
+
+
+class APIFootballFixtureStatus(BaseModel):
+    long: str = Field(min_length=1, max_length=50)
+    short: str = Field(min_length=1, max_length=10)
+    elapsed: int | None = Field(default=None, ge=0)
+    extra: int | None = Field(default=None, ge=0)
+
+
+class APIFootballFixtureInfo(BaseModel):
+    id: int = Field(gt=0)
+    referee: str | None = Field(default=None, max_length=150)
+    timezone: str = Field(min_length=1, max_length=50)
+    date: datetime
+    venue: APIFootballVenue
+    status: APIFootballFixtureStatus
+
+
+class APIFootballFixtureLeague(BaseModel):
+    id: int = Field(gt=0)
+    season: int = Field(ge=1800, le=9999)
+    round: str | None = Field(default=None, max_length=100)
+
+
+class APIFootballFixtureTeam(BaseModel):
+    id: int = Field(gt=0)
+    name: str = Field(min_length=1, max_length=150)
+    logo: str | None = Field(default=None, max_length=500)
+    winner: bool | None = None
+
+
+class APIFootballFixtureTeams(BaseModel):
+    home: APIFootballFixtureTeam
+    away: APIFootballFixtureTeam
+
+
+class APIFootballScorePair(BaseModel):
+    home: int | None = Field(default=None, ge=0)
+    away: int | None = Field(default=None, ge=0)
+
+
+class APIFootballFixtureScore(BaseModel):
+    halftime: APIFootballScorePair
+    fulltime: APIFootballScorePair
+    extratime: APIFootballScorePair
+    penalty: APIFootballScorePair
+
+
+class APIFootballFixtureEntry(BaseModel):
+    fixture: APIFootballFixtureInfo
+    league: APIFootballFixtureLeague
+    teams: APIFootballFixtureTeams
+    goals: APIFootballScorePair
+    score: APIFootballFixtureScore
