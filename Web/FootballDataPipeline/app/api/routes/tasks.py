@@ -1,12 +1,14 @@
 from fastapi import APIRouter, status
 
 from app.schemas.tasks import (
+    FixtureSyncRequest,
     LeagueSyncRequest,
     TaskStatusResponse,
     TaskSubmittedResponse,
     TeamSyncRequest,
 )
 from app.tasks.celery_app import celery_app
+from app.tasks.fixture_tasks import sync_fixtures_task
 from app.tasks.league_tasks import sync_leagues_task
 from app.tasks.team_tasks import sync_teams_task
 
@@ -41,6 +43,25 @@ def submit_team_sync(
     payload: TeamSyncRequest,
 ) -> TaskSubmittedResponse:
     task = sync_teams_task.delay(
+        payload.league_id,
+        payload.season,
+    )
+
+    return TaskSubmittedResponse(
+        task_id=task.id,
+        status=task.state,
+    )
+
+
+@router.post(
+    "/fixtures/sync",
+    response_model=TaskSubmittedResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+def submit_fixture_sync(
+    payload: FixtureSyncRequest,
+) -> TaskSubmittedResponse:
+    task = sync_fixtures_task.delay(
         payload.league_id,
         payload.season,
     )
