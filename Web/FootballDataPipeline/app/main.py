@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.api.routes.fixtures import router as fixtures_router
 from app.api.routes.health import router as health_router
 from app.api.routes.leagues import router as leagues_router
 from app.api.routes.tasks import router as tasks_router
@@ -31,3 +32,4 @@ app.include_router(health_router)
 app.include_router(leagues_router)
 app.include_router(teams_router)
 app.include_router(tasks_router)
+app.include_router(fixtures_router)
