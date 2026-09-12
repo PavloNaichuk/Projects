@@ -102,3 +102,48 @@ class APIFootballFixtureEntry(BaseModel):
     teams: APIFootballFixtureTeams
     goals: APIFootballScorePair
     score: APIFootballFixtureScore
+
+
+class APIFootballStandingTeam(BaseModel):
+    id: int = Field(gt=0)
+    name: str = Field(min_length=1, max_length=150)
+    logo: str | None = Field(default=None, max_length=500)
+
+
+class APIFootballStandingGoals(BaseModel):
+    goals_for: int = Field(alias="for", ge=0)
+    against: int = Field(ge=0)
+
+
+class APIFootballStandingStats(BaseModel):
+    played: int = Field(ge=0)
+    win: int = Field(ge=0)
+    draw: int = Field(ge=0)
+    lose: int = Field(ge=0)
+    goals: APIFootballStandingGoals
+
+
+class APIFootballStandingEntry(BaseModel):
+    rank: int = Field(gt=0)
+    team: APIFootballStandingTeam
+    points: int
+    goals_diff: int = Field(alias="goalsDiff")
+    group: str | None = Field(default=None, max_length=100)
+    form: str | None = Field(default=None, max_length=100)
+    status: str | None = Field(default=None, max_length=50)
+    description: str | None = Field(default=None, max_length=255)
+    all: APIFootballStandingStats
+    home: APIFootballStandingStats
+    away: APIFootballStandingStats
+    update: datetime | None = None
+
+
+class APIFootballStandingLeague(BaseModel):
+    id: int = Field(gt=0)
+    name: str = Field(min_length=1, max_length=150)
+    season: int = Field(ge=1800, le=9999)
+    standings: list[list[APIFootballStandingEntry]]
+
+
+class APIFootballStandingsResponseEntry(BaseModel):
+    league: APIFootballStandingLeague
