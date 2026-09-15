@@ -63,3 +63,28 @@ def test_start_fixture_sync_rejects_invalid_parameters(
 
     assert response.status_code == 422
     delay_mock.assert_not_called()
+
+
+def test_start_live_fixture_sync_task() -> None:
+    task_result = MagicMock()
+    task_result.id = "live-fixture-task-id"
+    task_result.state = "PENDING"
+
+    with patch(
+        "app.api.routes.tasks.sync_live_fixtures_task.delay",
+        return_value=task_result,
+    ) as delay_mock:
+        response = client.post(
+            "/tasks/fixtures/live/sync",
+            json={
+                "league_id": 39,
+                "season": 2024,
+            },
+        )
+
+    assert response.status_code == 202
+    assert response.json() == {
+        "task_id": "live-fixture-task-id",
+        "status": "PENDING",
+    }
+    delay_mock.assert_called_once_with(39, 2024)

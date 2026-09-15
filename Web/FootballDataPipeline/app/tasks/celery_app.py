@@ -1,6 +1,42 @@
 from celery import Celery
 
-from app.core.config import get_settings
+from app.core.config import Settings, get_settings
+
+
+def build_beat_schedule(
+    settings: Settings,
+) -> dict[str, dict[str, object]]:
+    schedule: dict[str, dict[str, object]] = {
+        "sync-fixtures-periodically": {
+            "task": "football.sync_fixtures",
+            "schedule": (settings.fixture_sync_interval_seconds),
+            "args": (
+                settings.sync_league_id,
+                settings.sync_season,
+            ),
+        },
+        "sync-standings-periodically": {
+            "task": "football.sync_standings",
+            "schedule": (settings.standing_sync_interval_seconds),
+            "args": (
+                settings.sync_league_id,
+                settings.sync_season,
+            ),
+        },
+    }
+
+    if settings.live_fixture_sync_enabled:
+        schedule["sync-live-fixtures-periodically"] = {
+            "task": "football.sync_live_fixtures",
+            "schedule": (settings.live_fixture_sync_interval_seconds),
+            "args": (
+                settings.sync_league_id,
+                settings.sync_season,
+            ),
+        }
+
+    return schedule
+
 
 settings = get_settings()
 
@@ -30,4 +66,5 @@ celery_app.conf.update(
     worker_cancel_long_running_tasks_on_connection_loss=True,
     broker_connection_retry_on_startup=True,
     result_expires=3600,
+    beat_schedule=build_beat_schedule(settings),
 )

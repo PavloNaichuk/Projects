@@ -8,69 +8,9 @@ from app.services.fixture_sync import (
     FixtureDependencyError,
     sync_fixtures,
 )
-
-
-def make_fixture_payload() -> dict[str, object]:
-    return {
-        "fixture": {
-            "id": 1208028,
-            "referee": "Robert Jones, England",
-            "timezone": "UTC",
-            "date": "2024-08-16T19:00:00+00:00",
-            "venue": {
-                "id": 556,
-                "name": "Old Trafford",
-                "city": "Manchester",
-            },
-            "status": {
-                "long": "Match Finished",
-                "short": "FT",
-                "elapsed": 90,
-                "extra": None,
-            },
-        },
-        "league": {
-            "id": 39,
-            "season": 2024,
-            "round": "Regular Season - 1",
-        },
-        "teams": {
-            "home": {
-                "id": 33,
-                "name": "Manchester United",
-                "logo": None,
-                "winner": True,
-            },
-            "away": {
-                "id": 36,
-                "name": "Fulham",
-                "logo": None,
-                "winner": False,
-            },
-        },
-        "goals": {
-            "home": 1,
-            "away": 0,
-        },
-        "score": {
-            "halftime": {
-                "home": 0,
-                "away": 0,
-            },
-            "fulltime": {
-                "home": 1,
-                "away": 0,
-            },
-            "extratime": {
-                "home": None,
-                "away": None,
-            },
-            "penalty": {
-                "home": None,
-                "away": None,
-            },
-        },
-    }
+from tests.test_api_football_fixture_schemas import (
+    make_fixture_payload,
+)
 
 
 def make_session() -> MagicMock:
@@ -236,3 +176,78 @@ async def test_sync_fixtures_requires_existing_teams() -> None:
         )
 
     upsert_fixtures_mock.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_sync_live_fixtures() -> None:
+    session = make_session()
+    client = AsyncMock(spec=APIFootballClient)
+    client.get.return_value = {
+        "response": [make_fixture_payload()],
+    }
+
+    get_season_id_mock = AsyncMock(return_value=17)
+    get_team_ids_mock = AsyncMock(
+        return_value={
+            33: 101,
+            36: 102,
+        },
+    )
+    upsert_fixtures_mock = AsyncMock(return_value=1)
+
+    with (
+        patch(
+            "app.services.fixture_sync.get_season_id",
+            get_season_id_mock,
+        ),
+        patch(
+            "app.services.fixture_sync.get_team_ids",
+            get_team_ids_mock,
+        ),
+        patch(
+            "app.services.fixture_sync.upsert_fixtures",
+            upsert_fixtures_mock,
+        ),
+    ):
+        result = await sync_fixtures(
+            session,
+            client,
+            league_id=39,
+            season=2024,
+            live=True,
+        )
+
+    client.get.assert_awaited_once_with(
+        "/fixtures",
+        params={
+            "live": 39,
+        },
+    )
+    assert result.fixtures_synced == 1
+    upsert_fixtures_mock.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_sync_live_fixtures_returns_zero_when_no_matches() -> None:
+    session = make_session()
+    client = AsyncMock(spec=APIFootballClient)
+    client.get.return_value = {
+        "response": [],
+    }
+
+    result = await sync_fixtures(
+        session,
+        client,
+        league_id=39,
+        season=2024,
+        live=True,
+    )
+
+    client.get.assert_awaited_once_with(
+        "/fixtures",
+        params={
+            "live": 39,
+        },
+    )
+    assert result.fixtures_synced == 0
+    session.begin.assert_not_called()

@@ -8,7 +8,10 @@ from app.schemas.tasks import (
     TeamSyncRequest,
 )
 from app.tasks.celery_app import celery_app
-from app.tasks.fixture_tasks import sync_fixtures_task
+from app.tasks.fixture_tasks import (
+    sync_fixtures_task,
+    sync_live_fixtures_task,
+)
 from app.tasks.league_tasks import sync_leagues_task
 from app.tasks.team_tasks import sync_teams_task
 
@@ -43,6 +46,25 @@ def submit_team_sync(
     payload: TeamSyncRequest,
 ) -> TaskSubmittedResponse:
     task = sync_teams_task.delay(
+        payload.league_id,
+        payload.season,
+    )
+
+    return TaskSubmittedResponse(
+        task_id=task.id,
+        status=task.state,
+    )
+
+
+@router.post(
+    "/fixtures/live/sync",
+    response_model=TaskSubmittedResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+def submit_live_fixture_sync(
+    payload: FixtureSyncRequest,
+) -> TaskSubmittedResponse:
+    task = sync_live_fixtures_task.delay(
         payload.league_id,
         payload.season,
     )

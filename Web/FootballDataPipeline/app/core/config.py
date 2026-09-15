@@ -40,6 +40,30 @@ class Settings(BaseSettings):
         le=60,
     )
 
+    sync_league_id: int = Field(
+        default=39,
+        gt=0,
+    )
+    sync_season: int = Field(
+        default=2024,
+        ge=1800,
+        le=9999,
+    )
+    fixture_sync_interval_seconds: int = Field(
+        default=21600,
+        ge=60,
+    )
+    standing_sync_interval_seconds: int = Field(
+        default=21600,
+        ge=60,
+    )
+
+    live_fixture_sync_enabled: bool = False
+    live_fixture_sync_interval_seconds: int = Field(
+        default=30,
+        ge=15,
+    )
+
     @property
     def database_url(self) -> URL:
         return URL.create(
@@ -53,7 +77,10 @@ class Settings(BaseSettings):
 
     @property
     def celery_broker_url(self) -> str:
-        username = quote(self.rabbitmq_user, safe="")
+        username = quote(
+            self.rabbitmq_user,
+            safe="",
+        )
         password = quote(
             self.rabbitmq_password.get_secret_value(),
             safe="",

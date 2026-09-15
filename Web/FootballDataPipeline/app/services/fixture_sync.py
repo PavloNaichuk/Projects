@@ -70,6 +70,7 @@ async def sync_fixtures(
     *,
     league_id: int,
     season: int,
+    live: bool = False,
 ) -> FixtureSyncResult:
     if league_id < 1:
         raise ValueError("League ID must be greater than zero")
@@ -77,12 +78,20 @@ async def sync_fixtures(
     if season < 1:
         raise ValueError("Season must be greater than zero")
 
-    payload = await client.get(
-        "/fixtures",
-        params={
+    params = (
+        {
+            "live": league_id,
+        }
+        if live
+        else {
             "league": league_id,
             "season": season,
-        },
+        }
+    )
+
+    payload = await client.get(
+        "/fixtures",
+        params=params,
     )
 
     raw_entries = payload.get("response")
@@ -105,11 +114,25 @@ async def sync_fixtures(
                 "API-Football returned an invalid fixture entry",
             )
 
+        entry = APIFootballFixtureEntry.model_validate(
+            raw_entry,
+        )
+
+        if entry.league.id != league_id or entry.league.season != season:
+            raise APIFootballResponseError(
+                "API-Football returned fixtures for an unexpected league or season",
+            )
+
         entries_with_payload.append(
             (
-                APIFootballFixtureEntry.model_validate(raw_entry),
+                entry,
                 raw_entry,
             ),
+        )
+
+    if not entries_with_payload:
+        return FixtureSyncResult(
+            fixtures_synced=0,
         )
 
     team_api_ids = {
