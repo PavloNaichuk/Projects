@@ -147,3 +147,24 @@ class APIFootballStandingLeague(BaseModel):
 
 class APIFootballStandingsResponseEntry(BaseModel):
     league: APIFootballStandingLeague
+
+
+class APIFootballFixtureEventTime(BaseModel):
+    elapsed: int = Field(ge=0)
+    extra: int | None = Field(default=None, ge=0)
+
+
+class APIFootballFixtureEventParticipant(BaseModel):
+    id: int | None = Field(default=None, gt=0)
+    name: str | None = Field(default=None, max_length=150)
+
+
+class APIFootballFixtureEvent(BaseModel):
+    time: APIFootballFixtureEventTime
+    team: APIFootballFixtureTeam
+    player: APIFootballFixtureEventParticipant
+    assist: APIFootballFixtureEventParticipant
+
+    type: str = Field(min_length=1, max_length=50)
+    detail: str = Field(min_length=1, max_length=100)
+    comments: str | None = None

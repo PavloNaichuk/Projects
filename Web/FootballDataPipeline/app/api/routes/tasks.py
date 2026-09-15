@@ -1,4 +1,6 @@
-from fastapi import APIRouter, status
+from typing import Annotated
+
+from fastapi import APIRouter, Path, status
 
 from app.schemas.tasks import (
     FixtureSyncRequest,
@@ -8,6 +10,7 @@ from app.schemas.tasks import (
     TeamSyncRequest,
 )
 from app.tasks.celery_app import celery_app
+from app.tasks.fixture_event_tasks import sync_fixture_events_task
 from app.tasks.fixture_tasks import (
     sync_fixtures_task,
     sync_live_fixtures_task,
@@ -48,6 +51,24 @@ def submit_team_sync(
     task = sync_teams_task.delay(
         payload.league_id,
         payload.season,
+    )
+
+    return TaskSubmittedResponse(
+        task_id=task.id,
+        status=task.state,
+    )
+
+
+@router.post(
+    "/fixtures/{fixture_api_id}/events/sync",
+    response_model=TaskSubmittedResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+def submit_fixture_event_sync(
+    fixture_api_id: Annotated[int, Path(gt=0)],
+) -> TaskSubmittedResponse:
+    task = sync_fixture_events_task.delay(
+        fixture_api_id,
     )
 
     return TaskSubmittedResponse(

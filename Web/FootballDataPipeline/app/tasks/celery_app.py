@@ -47,6 +47,7 @@ celery_app = Celery(
     include=[
         "app.tasks.league_tasks",
         "app.tasks.team_tasks",
+        "app.tasks.fixture_event_tasks",
         "app.tasks.fixture_tasks",
         "app.tasks.standing_tasks",
     ],
