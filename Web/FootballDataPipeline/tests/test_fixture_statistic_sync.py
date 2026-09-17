@@ -4,10 +4,10 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.clients.api_football import APIFootballClient
-from app.services.fixture_event_sync import (
-    FixtureEventTeamNotFoundError,
+from app.services.fixture_statistic_sync import (
     FixtureNotFoundError,
-    sync_fixture_events,
+    FixtureStatisticTeamNotFoundError,
+    sync_fixture_statistics,
 )
 
 
@@ -22,41 +22,40 @@ def make_session() -> MagicMock:
     return session
 
 
-def make_event_payload(
+def make_statistic_payload(
     *,
     team_id: int = 33,
 ) -> dict[str, object]:
     return {
-        "time": {
-            "elapsed": 45,
-            "extra": 2,
-        },
         "team": {
             "id": team_id,
             "name": "Manchester United",
             "logo": "https://example.test/manchester-united.png",
         },
-        "player": {
-            "id": 874,
-            "name": "Bruno Fernandes",
-        },
-        "assist": {
-            "id": 1000,
-            "name": "Teammate",
-        },
-        "type": "Goal",
-        "detail": "Normal Goal",
-        "comments": None,
+        "statistics": [
+            {
+                "type": "Shots on Goal",
+                "value": 5,
+            },
+            {
+                "type": "Ball Possession",
+                "value": "56%",
+            },
+            {
+                "type": "expected_goals",
+                "value": 1.42,
+            },
+        ],
     }
 
 
 @pytest.mark.asyncio
-async def test_sync_fixture_events_replaces_events() -> None:
+async def test_sync_fixture_statistics_replaces_statistics() -> None:
     session = make_session()
     client = AsyncMock(spec=APIFootballClient)
-    raw_event = make_event_payload()
+    raw_entry = make_statistic_payload()
     client.get.return_value = {
-        "response": [raw_event],
+        "response": [raw_entry],
     }
 
     context_mock = AsyncMock(
@@ -72,22 +71,22 @@ async def test_sync_fixture_events_replaces_events() -> None:
 
     with (
         patch(
-            "app.services.fixture_event_sync.get_fixture_context",
+            "app.services.fixture_statistic_sync.get_fixture_context",
             context_mock,
         ),
         patch(
-            "app.services.fixture_event_sync.replace_fixture_events",
+            "app.services.fixture_statistic_sync.replace_fixture_statistics",
             replace_mock,
         ),
     ):
-        result = await sync_fixture_events(
+        result = await sync_fixture_statistics(
             session,
             client,
             fixture_api_id=1208021,
         )
 
     client.get.assert_awaited_once_with(
-        "/fixtures/events",
+        "/fixtures/statistics",
         params={
             "fixture": 1208021,
         },
@@ -98,25 +97,25 @@ async def test_sync_fixture_events_replaces_events() -> None:
     )
     replace_mock.assert_awaited_once()
 
-    assert result.events_synced == 1
+    assert result.statistics_synced == 1
     assert replace_mock.await_args.kwargs["fixture_id"] == 501
 
-    event_rows = replace_mock.await_args.kwargs["event_rows"]
-    assert len(event_rows) == 1
+    rows = replace_mock.await_args.kwargs["statistic_rows"]
+    assert len(rows) == 1
 
-    event_row = event_rows[0]
-    assert event_row["fixture_id"] == 501
-    assert event_row["team_id"] == 101
-    assert event_row["event_order"] == 0
-    assert event_row["elapsed"] == 45
-    assert event_row["extra_time"] == 2
-    assert event_row["player_api_id"] == 874
-    assert event_row["event_type"] == "Goal"
-    assert event_row["raw_payload"] == raw_event
+    row = rows[0]
+    assert row["fixture_id"] == 501
+    assert row["team_id"] == 101
+    assert row["statistics"] == {
+        "Shots on Goal": 5,
+        "Ball Possession": "56%",
+        "expected_goals": 1.42,
+    }
+    assert row["raw_payload"] == raw_entry
 
 
 @pytest.mark.asyncio
-async def test_sync_fixture_events_clears_old_events() -> None:
+async def test_sync_fixture_statistics_clears_old_statistics() -> None:
     session = make_session()
     client = AsyncMock(spec=APIFootballClient)
     client.get.return_value = {
@@ -136,26 +135,26 @@ async def test_sync_fixture_events_clears_old_events() -> None:
 
     with (
         patch(
-            "app.services.fixture_event_sync.get_fixture_context",
+            "app.services.fixture_statistic_sync.get_fixture_context",
             context_mock,
         ),
         patch(
-            "app.services.fixture_event_sync.replace_fixture_events",
+            "app.services.fixture_statistic_sync.replace_fixture_statistics",
             replace_mock,
         ),
     ):
-        result = await sync_fixture_events(
+        result = await sync_fixture_statistics(
             session,
             client,
             fixture_api_id=1208021,
         )
 
-    assert result.events_synced == 0
-    assert replace_mock.await_args.kwargs["event_rows"] == []
+    assert result.statistics_synced == 0
+    assert replace_mock.await_args.kwargs["statistic_rows"] == []
 
 
 @pytest.mark.asyncio
-async def test_sync_fixture_events_rejects_unknown_fixture() -> None:
+async def test_sync_fixture_statistics_rejects_unknown_fixture() -> None:
     session = make_session()
     client = AsyncMock(spec=APIFootballClient)
     client.get.return_value = {
@@ -167,11 +166,11 @@ async def test_sync_fixture_events_rejects_unknown_fixture() -> None:
 
     with (
         patch(
-            "app.services.fixture_event_sync.get_fixture_context",
+            "app.services.fixture_statistic_sync.get_fixture_context",
             context_mock,
         ),
         patch(
-            "app.services.fixture_event_sync.replace_fixture_events",
+            "app.services.fixture_statistic_sync.replace_fixture_statistics",
             replace_mock,
         ),
         pytest.raises(
@@ -179,7 +178,7 @@ async def test_sync_fixture_events_rejects_unknown_fixture() -> None:
             match="Fixture 1208021 was not found",
         ),
     ):
-        await sync_fixture_events(
+        await sync_fixture_statistics(
             session,
             client,
             fixture_api_id=1208021,
@@ -189,12 +188,12 @@ async def test_sync_fixture_events_rejects_unknown_fixture() -> None:
 
 
 @pytest.mark.asyncio
-async def test_sync_fixture_events_rejects_unrelated_team() -> None:
+async def test_sync_fixture_statistics_rejects_unrelated_team() -> None:
     session = make_session()
     client = AsyncMock(spec=APIFootballClient)
     client.get.return_value = {
         "response": [
-            make_event_payload(
+            make_statistic_payload(
                 team_id=999,
             ),
         ],
@@ -213,19 +212,19 @@ async def test_sync_fixture_events_rejects_unrelated_team() -> None:
 
     with (
         patch(
-            "app.services.fixture_event_sync.get_fixture_context",
+            "app.services.fixture_statistic_sync.get_fixture_context",
             context_mock,
         ),
         patch(
-            "app.services.fixture_event_sync.replace_fixture_events",
+            "app.services.fixture_statistic_sync.replace_fixture_statistics",
             replace_mock,
         ),
         pytest.raises(
-            FixtureEventTeamNotFoundError,
+            FixtureStatisticTeamNotFoundError,
             match="Team 999 does not belong to fixture 1208021",
         ),
     ):
-        await sync_fixture_events(
+        await sync_fixture_statistics(
             session,
             client,
             fixture_api_id=1208021,

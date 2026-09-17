@@ -168,3 +168,13 @@ class APIFootballFixtureEvent(BaseModel):
     type: str = Field(min_length=1, max_length=50)
     detail: str = Field(min_length=1, max_length=100)
     comments: str | None = None
+
+
+class APIFootballFixtureStatisticItem(BaseModel):
+    type: str = Field(min_length=1, max_length=100)
+    value: int | float | str | None = None
+
+
+class APIFootballFixtureStatisticEntry(BaseModel):
+    team: APIFootballFixtureTeam
+    statistics: list[APIFootballFixtureStatisticItem]

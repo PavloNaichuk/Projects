@@ -6,10 +6,8 @@ from app.clients.api_football import (
     APIFootballClient,
     APIFootballResponseError,
 )
-from app.repositories.fixture_events import (
-    get_fixture_event_context,
-    replace_fixture_events,
-)
+from app.repositories.fixture_context import get_fixture_context
+from app.repositories.fixture_events import replace_fixture_events
 from app.schemas.api_football import APIFootballFixtureEvent
 
 
@@ -69,7 +67,7 @@ async def sync_fixture_events(
         )
 
     async with session.begin():
-        context = await get_fixture_event_context(
+        context = await get_fixture_context(
             session,
             fixture_api_id,
         )
