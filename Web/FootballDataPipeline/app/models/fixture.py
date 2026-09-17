@@ -15,6 +15,7 @@ from app.db.mixins import TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.fixture_event import FixtureEvent
+    from app.models.fixture_statistic import FixtureStatistic
     from app.models.season import Season
     from app.models.team import Team
 
@@ -91,4 +92,11 @@ class Fixture(TimestampMixin, Base):
         cascade="all, delete-orphan",
         passive_deletes=True,
         order_by="FixtureEvent.event_order",
+    )
+
+    team_statistics: Mapped[list["FixtureStatistic"]] = relationship(
+        back_populates="fixture",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+        order_by="FixtureStatistic.team_id",
     )
