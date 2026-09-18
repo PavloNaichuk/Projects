@@ -178,3 +178,42 @@ class APIFootballFixtureStatisticItem(BaseModel):
 class APIFootballFixtureStatisticEntry(BaseModel):
     team: APIFootballFixtureTeam
     statistics: list[APIFootballFixtureStatisticItem]
+
+
+class APIFootballLineupTeam(BaseModel):
+    id: int = Field(gt=0)
+    name: str = Field(min_length=1, max_length=150)
+    logo: str | None = Field(default=None, max_length=500)
+    colors: dict[str, object] | None = None
+
+
+class APIFootballLineupCoach(BaseModel):
+    id: int | None = Field(default=None, gt=0)
+    name: str | None = Field(default=None, max_length=150)
+    photo: str | None = Field(default=None, max_length=500)
+
+
+class APIFootballLineupPlayer(BaseModel):
+    id: int | None = Field(default=None, gt=0)
+    name: str | None = Field(default=None, max_length=150)
+    number: int | None = Field(default=None, ge=0, le=999)
+    position: str | None = Field(
+        default=None,
+        alias="pos",
+        max_length=20,
+    )
+    grid: str | None = Field(default=None, max_length=20)
+
+
+class APIFootballLineupPlayerEntry(BaseModel):
+    player: APIFootballLineupPlayer
+
+
+class APIFootballFixtureLineupEntry(BaseModel):
+    team: APIFootballLineupTeam
+    coach: APIFootballLineupCoach
+    formation: str | None = Field(default=None, max_length=20)
+    starting_xi: list[APIFootballLineupPlayerEntry] = Field(
+        alias="startXI",
+    )
+    substitutes: list[APIFootballLineupPlayerEntry]
