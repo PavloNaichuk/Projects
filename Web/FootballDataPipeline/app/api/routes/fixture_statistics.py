@@ -4,31 +4,31 @@ from fastapi import APIRouter, HTTPException, Path, status
 
 from app.api.dependencies import DBSession
 from app.repositories.fixture_context import fixture_exists
-from app.repositories.fixture_event_queries import (
-    list_fixture_events,
+from app.repositories.fixture_statistic_queries import (
+    list_fixture_statistics,
 )
-from app.schemas.fixture_events import FixtureEventResponse
+from app.schemas.fixture_statistics import FixtureStatisticResponse
 
 router = APIRouter(
     prefix="/fixtures",
-    tags=["Fixture Events"],
+    tags=["Fixture Statistics"],
 )
 
 
 @router.get(
-    "/{fixture_api_id}/events",
-    response_model=list[FixtureEventResponse],
+    "/{fixture_api_id}/statistics",
+    response_model=list[FixtureStatisticResponse],
 )
-async def read_fixture_events(
+async def read_fixture_statistics(
     fixture_api_id: Annotated[int, Path(gt=0)],
     session: DBSession,
-) -> list[FixtureEventResponse]:
-    events = await list_fixture_events(
+) -> list[FixtureStatisticResponse]:
+    statistics = await list_fixture_statistics(
         session,
         fixture_api_id,
     )
 
-    if not events and not await fixture_exists(
+    if not statistics and not await fixture_exists(
         session,
         fixture_api_id,
     ):
@@ -37,4 +37,6 @@ async def read_fixture_events(
             detail="Fixture not found",
         )
 
-    return [FixtureEventResponse.model_validate(event) for event in events]
+    return [
+        FixtureStatisticResponse.model_validate(statistic) for statistic in statistics
+    ]

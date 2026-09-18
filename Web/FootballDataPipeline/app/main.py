@@ -4,6 +4,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.api.routes.fixture_events import router as fixture_events_router
+from app.api.routes.fixture_statistics import (
+    router as fixture_statistics_router,
+)
 from app.api.routes.fixtures import router as fixtures_router
 from app.api.routes.health import router as health_router
 from app.api.routes.leagues import router as leagues_router
@@ -30,6 +33,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.include_router(fixture_events_router)
+app.include_router(fixture_statistics_router)
 app.include_router(health_router)
 app.include_router(leagues_router)
 app.include_router(teams_router)

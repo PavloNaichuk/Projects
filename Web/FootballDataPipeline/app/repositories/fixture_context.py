@@ -44,3 +44,16 @@ async def get_fixture_context(
     }
 
     return row.fixture_id, team_ids
+
+
+async def fixture_exists(
+    session: AsyncSession,
+    fixture_api_id: int,
+) -> bool:
+    statement = select(Fixture.id).where(
+        Fixture.api_id == fixture_api_id,
+    )
+
+    fixture_id = await session.scalar(statement)
+
+    return fixture_id is not None

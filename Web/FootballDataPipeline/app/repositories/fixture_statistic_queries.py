@@ -2,27 +2,31 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from app.models import Fixture, FixtureEvent
+from app.models import Fixture, FixtureStatistic, Team
 
 
-async def list_fixture_events(
+async def list_fixture_statistics(
     session: AsyncSession,
     fixture_api_id: int,
-) -> list[FixtureEvent]:
+) -> list[FixtureStatistic]:
     statement = (
-        select(FixtureEvent)
+        select(FixtureStatistic)
         .join(
             Fixture,
-            FixtureEvent.fixture_id == Fixture.id,
+            FixtureStatistic.fixture_id == Fixture.id,
+        )
+        .join(
+            Team,
+            FixtureStatistic.team_id == Team.id,
         )
         .options(
-            joinedload(FixtureEvent.team),
+            joinedload(FixtureStatistic.team),
         )
         .where(
             Fixture.api_id == fixture_api_id,
         )
         .order_by(
-            FixtureEvent.event_order,
+            Team.name,
         )
     )
 
