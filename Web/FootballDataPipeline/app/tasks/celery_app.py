@@ -35,6 +35,16 @@ def build_beat_schedule(
             ),
         }
 
+    if settings.pipeline_sync_enabled:
+        schedule["sync-pipeline-periodically"] = {
+            "task": "football.sync_pipeline",
+            "schedule": settings.pipeline_sync_interval_seconds,
+            "args": (
+                settings.sync_league_id,
+                settings.sync_season,
+            ),
+        }
+
     return schedule
 
 
@@ -51,6 +61,7 @@ celery_app = Celery(
         "app.tasks.fixture_lineup_tasks",
         "app.tasks.fixture_statistic_tasks",
         "app.tasks.fixture_tasks",
+        "app.tasks.pipeline_tasks",
         "app.tasks.standing_tasks",
     ],
 )

@@ -15,6 +15,16 @@ class FixtureSyncRequest(BaseModel):
     season: int = Field(ge=1800, le=9999)
 
 
+class StandingSyncRequest(BaseModel):
+    league_id: int = Field(gt=0)
+    season: int = Field(ge=1800, le=9999)
+
+
+class PipelineSyncRequest(BaseModel):
+    league_id: int = Field(gt=0)
+    season: int = Field(ge=1800, le=9999)
+
+
 class TaskSubmittedResponse(BaseModel):
     task_id: str
     status: str

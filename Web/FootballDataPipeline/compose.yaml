@@ -1,5 +1,24 @@
 name: football-data-pipeline
 
+x-app-environment: &app-environment
+  ENVIRONMENT: production
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: 5432
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  RABBITMQ_HOST: rabbitmq
+  RABBITMQ_PORT: 5672
+
+x-app-service: &app-service
+  build:
+    context: .
+  image: football-data-pipeline:local
+  env_file:
+    - ${ENV_FILE:-.env}
+  environment: *app-environment
+  restart: unless-stopped
+
 services:
   postgres:
     image: postgres:17-alpine
@@ -13,7 +32,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", 'pg_isready -h 127.0.0.1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      test:
+        - CMD-SHELL
+        - pg_isready -h 127.0.0.1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
       interval: 5s
       timeout: 5s
       retries: 10
@@ -51,6 +72,86 @@ services:
       timeout: 10s
       retries: 12
       start_period: 20s
+
+  migrate:
+    <<: *app-service
+    restart: "no"
+    command: ["python", "-m", "alembic", "upgrade", "head"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    <<: *app-service
+    command:
+      - python
+      - -m
+      - uvicorn
+      - app.main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --proxy-headers
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import urllib.request;
+          urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=5)
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  worker:
+    <<: *app-service
+    command:
+      - python
+      - -m
+      - celery
+      - -A
+      - app.tasks.celery_app:celery_app
+      - worker
+      - --loglevel=${LOG_LEVEL:-INFO}
+      - --concurrency=${CELERY_WORKER_CONCURRENCY:-2}
+      - --without-mingle
+      - --without-gossip
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  beat:
+    <<: *app-service
+    command:
+      - python
+      - -m
+      - celery
+      - -A
+      - app.tasks.celery_app:celery_app
+      - beat
+      - --loglevel=${LOG_LEVEL:-INFO}
+      - --schedule=/tmp/celerybeat-schedule
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      rabbitmq:
+        condition: service_healthy
 
 volumes:
   postgres_data:

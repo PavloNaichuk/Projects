@@ -5,6 +5,8 @@ from fastapi import APIRouter, Path, status
 from app.schemas.tasks import (
     FixtureSyncRequest,
     LeagueSyncRequest,
+    PipelineSyncRequest,
+    StandingSyncRequest,
     TaskStatusResponse,
     TaskSubmittedResponse,
     TeamSyncRequest,
@@ -20,12 +22,33 @@ from app.tasks.fixture_tasks import (
     sync_live_fixtures_task,
 )
 from app.tasks.league_tasks import sync_leagues_task
+from app.tasks.pipeline_tasks import sync_pipeline_task
+from app.tasks.standing_tasks import sync_standings_task
 from app.tasks.team_tasks import sync_teams_task
 
 router = APIRouter(
     prefix="/tasks",
     tags=["Tasks"],
 )
+
+
+@router.post(
+    "/pipeline/sync",
+    response_model=TaskSubmittedResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+def submit_pipeline_sync(
+    payload: PipelineSyncRequest,
+) -> TaskSubmittedResponse:
+    task = sync_pipeline_task.delay(
+        payload.league_id,
+        payload.season,
+    )
+
+    return TaskSubmittedResponse(
+        task_id=task.id,
+        status=task.state,
+    )
 
 
 @router.post(
@@ -53,6 +76,25 @@ def submit_team_sync(
     payload: TeamSyncRequest,
 ) -> TaskSubmittedResponse:
     task = sync_teams_task.delay(
+        payload.league_id,
+        payload.season,
+    )
+
+    return TaskSubmittedResponse(
+        task_id=task.id,
+        status=task.state,
+    )
+
+
+@router.post(
+    "/standings/sync",
+    response_model=TaskSubmittedResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+def submit_standing_sync(
+    payload: StandingSyncRequest,
+) -> TaskSubmittedResponse:
+    task = sync_standings_task.delay(
         payload.league_id,
         payload.season,
     )

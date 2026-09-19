@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 from urllib.parse import quote
 
 from pydantic import AnyHttpUrl, Field, SecretStr
@@ -16,6 +17,9 @@ class Settings(BaseSettings):
         extra="ignore",
         hide_input_in_errors=True,
     )
+
+    environment: Literal["development", "test", "production"] = "development"
+    log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
 
     postgres_host: str = "127.0.0.1"
     postgres_port: int = Field(default=5433, ge=1, le=65535)
@@ -62,6 +66,11 @@ class Settings(BaseSettings):
     standing_sync_interval_seconds: int = Field(
         default=21600,
         ge=60,
+    )
+    pipeline_sync_enabled: bool = False
+    pipeline_sync_interval_seconds: int = Field(
+        default=86400,
+        ge=3600,
     )
 
     live_fixture_sync_enabled: bool = False

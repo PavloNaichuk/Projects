@@ -16,7 +16,13 @@ from app.api.routes.standings import router as standings_router
 from app.api.routes.tasks import router as tasks_router
 from app.api.routes.teams import router as teams_router
 from app.cache.client import create_redis_client
+from app.core.config import get_settings
+from app.core.logging import configure_logging
 from app.db.session import create_db_engine, create_session_factory
+from app.middleware.request_logging import RequestLoggingMiddleware
+
+settings = get_settings()
+configure_logging(settings.log_level)
 
 
 @asynccontextmanager
@@ -36,9 +42,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(
     title="Football Data Pipeline",
-    version="0.1.0",
+    description=(
+        "Asynchronous football data ingestion and read API backed by "
+        "PostgreSQL, RabbitMQ, Celery, and Redis."
+    ),
+    version="1.0.0",
     lifespan=lifespan,
 )
+
+app.add_middleware(RequestLoggingMiddleware)
 
 app.include_router(health_router)
 app.include_router(leagues_router)

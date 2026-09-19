@@ -28,6 +28,45 @@ def test_submit_league_sync_returns_task_id() -> None:
     delay.assert_called_once_with(39)
 
 
+def test_submit_pipeline_sync_returns_task_id() -> None:
+    task = MagicMock()
+    task.id = "pipeline-task-123"
+    task.state = "PENDING"
+
+    with patch(
+        "app.api.routes.tasks.sync_pipeline_task.delay",
+        return_value=task,
+    ) as delay:
+        with TestClient(app) as client:
+            response = client.post(
+                "/tasks/pipeline/sync",
+                json={
+                    "league_id": 39,
+                    "season": 2024,
+                },
+            )
+
+    assert response.status_code == 202
+    assert response.json() == {
+        "task_id": "pipeline-task-123",
+        "status": "PENDING",
+    }
+    delay.assert_called_once_with(39, 2024)
+
+
+def test_submit_pipeline_sync_rejects_invalid_input() -> None:
+    with TestClient(app) as client:
+        response = client.post(
+            "/tasks/pipeline/sync",
+            json={
+                "league_id": 0,
+                "season": 2024,
+            },
+        )
+
+    assert response.status_code == 422
+
+
 def test_submit_league_sync_rejects_invalid_id() -> None:
     with TestClient(app) as client:
         response = client.post(
@@ -127,3 +166,29 @@ def test_submit_team_sync_rejects_invalid_season() -> None:
         )
 
     assert response.status_code == 422
+
+
+def test_submit_standing_sync_returns_task_id() -> None:
+    task = MagicMock()
+    task.id = "standing-task-123"
+    task.state = "PENDING"
+
+    with patch(
+        "app.api.routes.tasks.sync_standings_task.delay",
+        return_value=task,
+    ) as delay:
+        with TestClient(app) as client:
+            response = client.post(
+                "/tasks/standings/sync",
+                json={
+                    "league_id": 39,
+                    "season": 2024,
+                },
+            )
+
+    assert response.status_code == 202
+    assert response.json() == {
+        "task_id": "standing-task-123",
+        "status": "PENDING",
+    }
+    delay.assert_called_once_with(39, 2024)

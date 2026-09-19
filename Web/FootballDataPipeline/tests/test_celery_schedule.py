@@ -59,3 +59,34 @@ def test_live_sync_is_scheduled_when_enabled() -> None:
         settings.sync_league_id,
         settings.sync_season,
     )
+
+
+def test_pipeline_sync_is_not_scheduled_when_disabled() -> None:
+    disabled_settings = settings.model_copy(
+        update={
+            "pipeline_sync_enabled": False,
+        },
+    )
+
+    schedule = build_beat_schedule(disabled_settings)
+
+    assert "sync-pipeline-periodically" not in schedule
+
+
+def test_pipeline_sync_is_scheduled_when_enabled() -> None:
+    enabled_settings = settings.model_copy(
+        update={
+            "pipeline_sync_enabled": True,
+            "pipeline_sync_interval_seconds": 86400,
+        },
+    )
+
+    schedule = build_beat_schedule(enabled_settings)
+    pipeline_schedule = schedule["sync-pipeline-periodically"]
+
+    assert pipeline_schedule["task"] == "football.sync_pipeline"
+    assert pipeline_schedule["schedule"] == 86400
+    assert pipeline_schedule["args"] == (
+        settings.sync_league_id,
+        settings.sync_season,
+    )
