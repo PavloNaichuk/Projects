@@ -57,3 +57,37 @@ async def set_cached_fixture_details(
         )
     except RedisError:
         pass
+
+
+async def delete_cached_fixture_details(
+    redis_client: Redis,
+    fixture_api_id: int,
+) -> None:
+    cache_key = fixture_details_cache_key(fixture_api_id)
+
+    try:
+        await redis_client.delete(cache_key)
+    except RedisError:
+        pass
+
+
+async def delete_all_cached_fixture_details(
+    redis_client: Redis,
+) -> None:
+    cursor = 0
+
+    try:
+        while True:
+            cursor, cache_keys = await redis_client.scan(
+                cursor=cursor,
+                match=f"{CACHE_KEY_PREFIX}:*",
+                count=100,
+            )
+
+            if cache_keys:
+                await redis_client.delete(*cache_keys)
+
+            if cursor == 0:
+                break
+    except RedisError:
+        pass

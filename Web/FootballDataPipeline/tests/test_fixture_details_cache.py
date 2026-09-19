@@ -5,6 +5,8 @@ from redis.asyncio import Redis
 from redis.exceptions import RedisError
 
 from app.cache.fixture_details import (
+    delete_all_cached_fixture_details,
+    delete_cached_fixture_details,
     fixture_details_cache_key,
     get_cached_fixture_details,
     set_cached_fixture_details,
@@ -120,4 +122,73 @@ async def test_set_cached_fixture_details_ignores_redis_error() -> None:
         1208021,
         fixture_details,
         ttl_seconds=60,
+    )
+
+
+@pytest.mark.asyncio
+async def test_delete_cached_fixture_details() -> None:
+    redis_client = MagicMock(spec=Redis)
+    redis_client.delete = AsyncMock()
+
+    await delete_cached_fixture_details(
+        redis_client,
+        1208021,
+    )
+
+    redis_client.delete.assert_awaited_once_with(
+        "fixture-details:1208021",
+    )
+
+
+@pytest.mark.asyncio
+async def test_delete_cached_fixture_details_ignores_error() -> None:
+    redis_client = MagicMock(spec=Redis)
+    redis_client.delete = AsyncMock(
+        side_effect=RedisError("Redis unavailable"),
+    )
+
+    await delete_cached_fixture_details(
+        redis_client,
+        1208021,
+    )
+
+
+@pytest.mark.asyncio
+async def test_delete_all_cached_fixture_details() -> None:
+    redis_client = MagicMock(spec=Redis)
+    redis_client.scan = AsyncMock(
+        return_value=(
+            0,
+            [
+                "fixture-details:1208021",
+                "fixture-details:1208022",
+            ],
+        ),
+    )
+    redis_client.delete = AsyncMock()
+
+    await delete_all_cached_fixture_details(
+        redis_client,
+    )
+
+    redis_client.scan.assert_awaited_once_with(
+        cursor=0,
+        match="fixture-details:*",
+        count=100,
+    )
+    redis_client.delete.assert_awaited_once_with(
+        "fixture-details:1208021",
+        "fixture-details:1208022",
+    )
+
+
+@pytest.mark.asyncio
+async def test_delete_all_cached_fixture_details_ignores_error() -> None:
+    redis_client = MagicMock(spec=Redis)
+    redis_client.scan = AsyncMock(
+        side_effect=RedisError("Redis unavailable"),
+    )
+
+    await delete_all_cached_fixture_details(
+        redis_client,
     )

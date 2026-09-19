@@ -1,5 +1,7 @@
 import asyncio
 
+from app.cache.client import create_redis_client
+from app.cache.fixture_details import delete_cached_fixture_details
 from app.clients.api_football import create_api_football_client
 from app.db.session import create_db_engine, create_session_factory
 from app.services.fixture_statistic_sync import (
@@ -13,6 +15,7 @@ async def run_fixture_statistic_sync(
 ) -> dict[str, int]:
     engine = create_db_engine()
     session_factory = create_session_factory(engine)
+    redis_client = create_redis_client()
 
     try:
         async with create_api_football_client() as client:
@@ -22,7 +25,13 @@ async def run_fixture_statistic_sync(
                     client,
                     fixture_api_id=fixture_api_id,
                 )
+
+        await delete_cached_fixture_details(
+            redis_client,
+            fixture_api_id,
+        )
     finally:
+        await redis_client.aclose()
         await engine.dispose()
 
     return {
