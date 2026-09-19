@@ -1,8 +1,13 @@
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Path, status
+from fastapi import APIRouter, HTTPException, Path, Response, status
 
-from app.api.dependencies import DBSession
+from app.api.dependencies import CacheClient, DBSession
+from app.cache.fixture_details import (
+    get_cached_fixture_details,
+    set_cached_fixture_details,
+)
+from app.core.config import get_settings
 from app.repositories.fixture_event_queries import (
     list_fixture_events,
 )
@@ -31,8 +36,19 @@ router = APIRouter(
 )
 async def read_fixture_details(
     fixture_api_id: Annotated[int, Path(gt=0)],
+    response: Response,
     session: DBSession,
+    cache_client: CacheClient,
 ) -> FixtureDetailsResponse:
+    cached_details = await get_cached_fixture_details(
+        cache_client,
+        fixture_api_id,
+    )
+
+    if cached_details is not None:
+        response.headers["X-Cache"] = "HIT"
+        return cached_details
+
     fixture = await get_fixture_by_api_id(
         session,
         fixture_api_id,
@@ -57,7 +73,7 @@ async def read_fixture_details(
         fixture_api_id,
     )
 
-    return FixtureDetailsResponse(
+    fixture_details = FixtureDetailsResponse(
         fixture=FixtureResponse.model_validate(fixture),
         events=[FixtureEventResponse.model_validate(event) for event in events],
         statistics=[
@@ -66,3 +82,16 @@ async def read_fixture_details(
         ],
         lineups=[FixtureLineupResponse.model_validate(lineup) for lineup in lineups],
     )
+
+    settings = get_settings()
+
+    await set_cached_fixture_details(
+        cache_client,
+        fixture_api_id,
+        fixture_details,
+        ttl_seconds=settings.cache_ttl_seconds,
+    )
+
+    response.headers["X-Cache"] = "MISS"
+
+    return fixture_details

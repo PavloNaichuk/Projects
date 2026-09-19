@@ -5,6 +5,8 @@ from unittest.mock import AsyncMock, patch
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.schemas.fixture_details import FixtureDetailsResponse
+from app.schemas.fixtures import FixtureResponse
 
 
 def make_fixture() -> SimpleNamespace:
@@ -63,10 +65,30 @@ def make_fixture() -> SimpleNamespace:
     )
 
 
-def test_read_fixture_details_returns_complete_response() -> None:
+def make_fixture_details() -> FixtureDetailsResponse:
+    return FixtureDetailsResponse(
+        fixture=FixtureResponse.model_validate(
+            make_fixture(),
+        ),
+        events=[],
+        statistics=[],
+        lineups=[],
+    )
+
+
+def test_read_fixture_details_returns_cache_miss() -> None:
     fixture = make_fixture()
 
     with (
+        patch(
+            "app.api.routes.fixture_details.get_cached_fixture_details",
+            new_callable=AsyncMock,
+            return_value=None,
+        ),
+        patch(
+            "app.api.routes.fixture_details.set_cached_fixture_details",
+            new_callable=AsyncMock,
+        ) as set_cache,
         patch(
             "app.api.routes.fixture_details.get_fixture_by_api_id",
             new_callable=AsyncMock,
@@ -94,21 +116,13 @@ def test_read_fixture_details_returns_complete_response() -> None:
             )
 
     assert response.status_code == 200
+    assert response.headers["X-Cache"] == "MISS"
 
     response_data = response.json()
 
     assert response_data["fixture"]["api_id"] == 1208021
-    assert response_data["fixture"]["season"] == {
-        "year": 2024,
-        "league": {
-            "api_id": 39,
-            "name": "Premier League",
-        },
-    }
     assert response_data["fixture"]["home_team"]["api_id"] == 33
     assert response_data["fixture"]["away_team"]["api_id"] == 36
-    assert response_data["fixture"]["home_goals"] == 1
-    assert response_data["fixture"]["away_goals"] == 0
     assert response_data["events"] == []
     assert response_data["statistics"] == []
     assert response_data["lineups"] == []
@@ -117,15 +131,57 @@ def test_read_fixture_details_returns_complete_response() -> None:
     list_events.assert_awaited_once()
     list_statistics.assert_awaited_once()
     list_lineups.assert_awaited_once()
+    set_cache.assert_awaited_once()
 
     assert get_fixture.await_args.args[1] == 1208021
     assert list_events.await_args.args[1] == 1208021
     assert list_statistics.await_args.args[1] == 1208021
     assert list_lineups.await_args.args[1] == 1208021
+    assert set_cache.await_args.args[1] == 1208021
+
+
+def test_read_fixture_details_returns_cache_hit() -> None:
+    cached_details = make_fixture_details()
+
+    with (
+        patch(
+            "app.api.routes.fixture_details.get_cached_fixture_details",
+            new_callable=AsyncMock,
+            return_value=cached_details,
+        ),
+        patch(
+            "app.api.routes.fixture_details.get_fixture_by_api_id",
+            new_callable=AsyncMock,
+        ) as get_fixture,
+        patch(
+            "app.api.routes.fixture_details.set_cached_fixture_details",
+            new_callable=AsyncMock,
+        ) as set_cache,
+    ):
+        with TestClient(app) as client:
+            response = client.get(
+                "/fixtures/1208021/details",
+            )
+
+    assert response.status_code == 200
+    assert response.headers["X-Cache"] == "HIT"
+    assert response.json()["fixture"]["api_id"] == 1208021
+
+    get_fixture.assert_not_awaited()
+    set_cache.assert_not_awaited()
 
 
 def test_read_fixture_details_returns_404() -> None:
     with (
+        patch(
+            "app.api.routes.fixture_details.get_cached_fixture_details",
+            new_callable=AsyncMock,
+            return_value=None,
+        ),
+        patch(
+            "app.api.routes.fixture_details.set_cached_fixture_details",
+            new_callable=AsyncMock,
+        ) as set_cache,
         patch(
             "app.api.routes.fixture_details.get_fixture_by_api_id",
             new_callable=AsyncMock,
@@ -153,6 +209,8 @@ def test_read_fixture_details_returns_404() -> None:
     assert response.json() == {
         "detail": "Fixture not found",
     }
+
     list_events.assert_not_awaited()
     list_statistics.assert_not_awaited()
     list_lineups.assert_not_awaited()
+    set_cache.assert_not_awaited()

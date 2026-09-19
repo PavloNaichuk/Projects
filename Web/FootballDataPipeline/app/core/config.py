@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     redis_host: str = "127.0.0.1"
     redis_port: int = Field(default=6380, ge=1, le=65535)
     redis_db: int = Field(default=0, ge=0)
+    redis_cache_db: int = Field(default=1, ge=0)
+    cache_ttl_seconds: int = Field(
+        default=60,
+        ge=1,
+        le=3600,
+    )
 
     rabbitmq_host: str = "127.0.0.1"
     rabbitmq_port: int = Field(default=5673, ge=1, le=65535)
@@ -93,6 +99,10 @@ class Settings(BaseSettings):
     @property
     def celery_result_backend(self) -> str:
         return f"redis://{self.redis_host}:{self.redis_port}/{self.redis_db}"
+
+    @property
+    def redis_cache_url(self) -> str:
+        return f"redis://{self.redis_host}:{self.redis_port}/{self.redis_cache_db}"
 
 
 @lru_cache(maxsize=1)

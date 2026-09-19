@@ -15,6 +15,7 @@ from app.api.routes.leagues import router as leagues_router
 from app.api.routes.standings import router as standings_router
 from app.api.routes.tasks import router as tasks_router
 from app.api.routes.teams import router as teams_router
+from app.cache.client import create_redis_client
 from app.db.session import create_db_engine, create_session_factory
 
 
@@ -23,9 +24,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     engine = create_db_engine()
     app.state.session_factory = create_session_factory(engine)
 
+    redis_client = create_redis_client()
+    app.state.redis_client = redis_client
+
     try:
         yield
     finally:
+        await redis_client.aclose()
         await engine.dispose()
 
 
@@ -34,13 +39,14 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
-app.include_router(fixture_events_router)
-app.include_router(fixture_statistics_router)
+
 app.include_router(health_router)
 app.include_router(leagues_router)
 app.include_router(teams_router)
 app.include_router(fixtures_router)
 app.include_router(fixture_details_router)
+app.include_router(fixture_events_router)
 app.include_router(fixture_lineups_router)
+app.include_router(fixture_statistics_router)
 app.include_router(standings_router)
 app.include_router(tasks_router)
